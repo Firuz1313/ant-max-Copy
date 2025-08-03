@@ -477,7 +477,7 @@ const StepsManager = () => {
 
   const getProblemTitle = (problemId: string) => {
     const problem = problems.find((p) => p.id === problemId);
-    return problem?.title || "Неизвестная проблема";
+    return problem?.title || "Н��известная проблема";
   };
 
   const getGroupedSteps = () => {
@@ -686,12 +686,7 @@ const StepsManager = () => {
           </Label>
           <Select
             value={formData.tvInterface}
-            onValueChange={(value) =>
-              setFormData({
-                ...formData,
-                tvInterface: value as DiagnosticStep["tvInterface"],
-              })
-            }
+            onValueChange={(value) => handleFieldChange("tvInterface", value)}
           >
             <SelectTrigger>
               <SelectValue />
