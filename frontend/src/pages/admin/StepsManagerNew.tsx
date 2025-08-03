@@ -440,6 +440,20 @@ const StepsManagerNew = () => {
     setTVInterfaces([]);
   };
 
+  const handleFieldChange = useCallback((field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  }, []);
+
+  const handleDeviceChange = useCallback((value: string) => {
+    const defaultRemote = getDefaultRemoteForDevice(value);
+    setFormData(prev => ({
+      ...prev,
+      deviceId: value,
+      problemId: "",
+      remoteId: defaultRemote?.id || "none",
+    }));
+  }, [getDefaultRemoteForDevice]);
+
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
     return device?.name || "Неизвестная приставка";
