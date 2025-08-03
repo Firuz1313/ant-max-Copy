@@ -379,7 +379,27 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     name: tvInterface.name,
     screenshotData: tvInterface.screenshotData ? 'present' : 'missing',
     screenshot_data: tvInterface.screenshot_data ? 'present' : 'missing',
-    tempScreenshot: tempScreenshot ? 'present' : 'missing'
+    tempScreenshot: tempScreenshot ? 'present' : 'missing',
+    clickableAreas: {
+      type: typeof tvInterface.clickableAreas,
+      isArray: Array.isArray(tvInterface.clickableAreas),
+      value: tvInterface.clickableAreas
+    },
+    clickable_areas: {
+      type: typeof tvInterface.clickable_areas,
+      isArray: Array.isArray(tvInterface.clickable_areas),
+      value: tvInterface.clickable_areas
+    },
+    highlightAreas: {
+      type: typeof tvInterface.highlightAreas,
+      isArray: Array.isArray(tvInterface.highlightAreas),
+      value: tvInterface.highlightAreas
+    },
+    highlight_areas: {
+      type: typeof tvInterface.highlight_areas,
+      isArray: Array.isArray(tvInterface.highlight_areas),
+      value: tvInterface.highlight_areas
+    }
   });
 
   if (!tvInterface.screenshotData && !tvInterface.screenshot_data && !tempScreenshot) {
@@ -617,7 +637,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
         {/* Highlight Areas */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Области подсветки ({Array.isArray(highlightAreas) ? highlightAreas.length : 0})</CardTitle>
+            <CardTitle className="text-base">Области подс��етки ({Array.isArray(highlightAreas) ? highlightAreas.length : 0})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-40 overflow-y-auto">
