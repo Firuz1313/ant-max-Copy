@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useData } from '@/contexts/DataContext';
 import { tvInterfacesAPI } from '@/api/tvInterfaces';
+import { cleanupAPI } from '@/api/cleanup';
 import {
   TVInterface,
   CreateTVInterfaceData,
@@ -758,7 +759,7 @@ const TVInterfaceBuilder = () => {
                   id="edit-name"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Введите название интерфейса"
+                  placeholder="Вве��ите название интерфейса"
                 />
               </div>
               <div>
