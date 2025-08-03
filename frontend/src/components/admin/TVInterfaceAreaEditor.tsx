@@ -86,6 +86,8 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
   // Load screenshot image
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+  const [tempScreenshot, setTempScreenshot] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const screenshotSrc = tempScreenshot || tvInterface.screenshotData || tvInterface.screenshot_data;
