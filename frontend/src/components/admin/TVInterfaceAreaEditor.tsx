@@ -298,7 +298,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
         y,
         width,
         height,
-        label: newAreaData.label || `Область ${selectedAreaType === 'clickable' ? clickableAreas.length + 1 : highlightAreas.length + 1}`,
+        label: newAreaData.label || `Область ${selectedAreaType === 'clickable' ? (Array.isArray(clickableAreas) ? clickableAreas.length + 1 : 1) : (Array.isArray(highlightAreas) ? highlightAreas.length + 1 : 1)}`,
         color: newAreaData.color,
         shape: currentTool as 'rectangle' | 'circle'
       };
