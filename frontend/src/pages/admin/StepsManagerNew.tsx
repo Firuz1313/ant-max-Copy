@@ -764,9 +764,7 @@ const StepsManagerNew = () => {
           </Label>
           <Select
             value={formData.problemId}
-            onValueChange={(value) =>
-              setFormData({ ...formData, problemId: value })
-            }
+            onValueChange={(value) => handleFieldChange("problemId", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Выберите проблему" />
@@ -788,7 +786,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
           onChange={(e) => handleFieldChange("title", e.target.value)}
-          placeholder="Введите название шага"
+          placeholder="Введит�� название шага"
         />
       </div>
 
