@@ -466,7 +466,7 @@ const StepsManagerNew = () => {
 
   const getTVInterfaceName = (tvInterfaceId: string) => {
     const tvInterface = getTVInterfaceById(tvInterfaceId);
-    return tvInterface?.name || "Неизвестны�� интерфейс";
+    return tvInterface?.name || "Неизвестный интерфейс";
   };
 
   const getGroupedSteps = () => {
@@ -858,9 +858,7 @@ const StepsManagerNew = () => {
         <div className="flex space-x-2">
           <Select
             value={formData.remoteId}
-            onValueChange={(value) =>
-              setFormData({ ...formData, remoteId: value })
-            }
+            onValueChange={(value) => handleFieldChange("remoteId", value)}
           >
             <SelectTrigger className="flex-1">
               <SelectValue placeholder="Выберите пульт" />
