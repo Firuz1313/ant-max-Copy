@@ -188,7 +188,7 @@ const TVInterfaceBuilder = () => {
     if (!formData.name.trim()) {
       toast({
         title: "Ошибка",
-        description: "Введите название интерфейса",
+        description: "Введите название интер��ейса",
         variant: "destructive",
       });
       return;
@@ -351,6 +351,36 @@ const TVInterfaceBuilder = () => {
         description: "Произошла ошибка при дублировании TV интерфейса",
         variant: "destructive",
       });
+    }
+  };
+
+  // Handle cleanup and create user TV interfaces
+  const handleCleanupTVInterfaces = async () => {
+    setIsLoading(true);
+    try {
+      const response = await cleanupAPI.cleanupTVInterfaces();
+      if (response.success) {
+        toast({
+          title: "Успех",
+          description: `Очистка завершена. Создано ${response.data?.created || 0} пользовательских интерфейсов`,
+        });
+        loadTVInterfaces();
+      } else {
+        toast({
+          title: "Ошибка",
+          description: response.error || "Не удалось выполнить очистку TV интерфейсов",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error cleaning up TV interfaces:', error);
+      toast({
+        title: "Ошибка",
+        description: "Произошла ошибка при очистке TV интерфейсов",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -581,7 +611,7 @@ const TVInterfaceBuilder = () => {
             <div className="w-48">
               <Select value={selectedTypeFilter} onValueChange={setSelectedTypeFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Фильтр по типу" />
+                  <SelectValue placeholder="Фильтр ��о типу" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все типы</SelectItem>
