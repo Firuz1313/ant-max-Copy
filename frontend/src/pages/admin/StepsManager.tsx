@@ -51,7 +51,7 @@ import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
-import QuickCleanupButton from "@/components/admin/QuickCleanupButton";
+import SimpleCleanupButton from "@/components/admin/SimpleCleanupButton";
 
 // Мемоизированный компонент формы для предотвращения потери фокуса
 const StepFormFieldsComponent = React.memo(({
@@ -223,7 +223,7 @@ const StepFormFieldsComponent = React.memo(({
             <SelectValue placeholder="Выберите пульт" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="none">Без пул��та</SelectItem>
+            <SelectItem value="none">Без пульта</SelectItem>
             {getAvailableRemotes().map((remote) => {
               const device = devices.find((d) => d.id === remote.deviceId);
               return (
@@ -821,7 +821,7 @@ const StepsManager = () => {
                 formData.buttonPosition.y > 0 && (
                   <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <p className="text-sm text-green-700 dark:text-green-300">
-                      Позиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
+                      Позиция ��ыбрана: ({Math.round(formData.buttonPosition.x)},{" "}
                       {Math.round(formData.buttonPosition.y)})
                     </p>
                   </div>
@@ -844,7 +844,7 @@ const StepsManager = () => {
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-orange-900 dark:text-orange-100">
-                ��� Проблема с TV интерфейсами
+                🚨 Проблема с TV интерфейсами
               </h3>
               <p className="text-orange-800 dark:text-orange-200 mb-4">
                 Обнаружена проблема: "Нет скриншота" в редакторе областей интерфейса.
