@@ -73,10 +73,10 @@ router.get('/docs', (req, res) => {
         devices: {
           description: 'Управление устройствами (ТВ приставки)',
           routes: {
-            'GET /devices': 'Получение списка устройств',
+            'GET /devices': 'Получени�� списка устройств',
             'GET /devices/:id': 'Получение устройства по ID',
             'POST /devices': 'Создание нового устройства',
-            'PUT /devices/:id': '��бновление устройства',
+            'PUT /devices/:id': 'Обновление устройства',
             'DELETE /devices/:id': 'Удаление устройства',
             'GET /devices/search': 'Поиск устройств',
             'GET /devices/popular': 'Популярные устройства',
@@ -115,7 +115,7 @@ router.get('/docs', (req, res) => {
             'GET /steps/:id': 'Получение шага по ID',
             'POST /steps': 'Создание нового шага',
             'PUT /steps/:id': 'Обновление шага',
-            'DELETE /steps/:id': 'Удале��ие шага',
+            'DELETE /steps/:id': 'Удаление шага',
             'GET /steps/search': 'Поиск шагов',
             'GET /steps/problem/:problemId': 'Шаги по проблеме',
             'GET /steps/:id/next': 'Следующий шаг',
@@ -154,7 +154,7 @@ router.get('/docs', (req, res) => {
             'GET /tv-interfaces': 'Получение списка интерфейсов ТВ',
             'GET /tv-interfaces/:id': 'Получение интерфейса ТВ по ID',
             'POST /tv-interfaces': 'Создание нового интерфейса ТВ',
-            'PUT /tv-interfaces/:id': 'Обновле��ие интерфейса ТВ',
+            'PUT /tv-interfaces/:id': 'Обновление интерфейса ТВ',
             'DELETE /tv-interfaces/:id': 'Удаление интерфейса ТВ',
             'POST /tv-interfaces/:id/duplicate': 'Дублирование интерфейса ТВ',
             'PATCH /tv-interfaces/:id/toggle': 'Активация/деактивация интерфейса ТВ',
@@ -172,7 +172,7 @@ router.get('/docs', (req, res) => {
         409: 'Conflict - Конфликт данных (дубликаты, ограничения)',
         422: 'Unprocessable Entity - Ошибка бизнес-логики',
         429: 'Too Many Requests - Превышен лимит запросов',
-        500: 'Internal Server Error - Внутренняя ошибка ��ервера',
+        500: 'Internal Server Error - Внутренняя ошибка сервера',
         503: 'Service Unavailable - Сервис временно недоступен'
       },
       responseFormat: {
@@ -208,6 +208,7 @@ router.use(`${API_V1_PREFIX}/problems`, problemRoutes);
 router.use(`${API_V1_PREFIX}/steps`, stepRoutes);
 router.use(`${API_V1_PREFIX}/sessions`, sessionRoutes);
 router.use(`${API_V1_PREFIX}/tv-interfaces`, tvInterfaceRoutes);
+router.use(`${API_V1_PREFIX}/cleanup`, cleanupRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use('*', (req, res) => {
