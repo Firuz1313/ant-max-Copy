@@ -604,15 +604,7 @@ const StepsManager = () => {
           </Label>
           <Select
             value={formData.deviceId}
-            onValueChange={(value) => {
-              const defaultRemote = getDefaultRemoteForDevice(value);
-              setFormData({
-                ...formData,
-                deviceId: value,
-                problemId: "",
-                remoteId: defaultRemote?.id || "none",
-              });
-            }}
+            onValueChange={handleDeviceChange}
           >
             <SelectTrigger>
               <SelectValue placeholder="В��берите приставку" />
