@@ -10,6 +10,38 @@ import {
 // Базовый URL для API
 const API_BASE_URL = '/api/v1/tv-interfaces';
 
+// Функция для п��вторных попыток
+const withRetry = async <T>(
+  fn: () => Promise<T>,
+  maxRetries: number = 3,
+  delay: number = 1000
+): Promise<T> => {
+  let lastError: Error;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error as Error;
+
+      // Если это сетевая ошибка и не последняя попытка, повторяем
+      if (
+        (error instanceof TypeError && error.message.includes('Failed to fetch')) &&
+        attempt < maxRetries
+      ) {
+        console.warn(`🔄 Retry attempt ${attempt}/${maxRetries} after ${delay}ms delay...`);
+        await new Promise(resolve => setTimeout(resolve, delay * attempt));
+        continue;
+      }
+
+      // Если это не сетевая ошибка или последняя попытка, прекращаем
+      throw error;
+    }
+  }
+
+  throw lastError!;
+};
+
 // Helper функция для HTTP запросов
 const apiRequest = async <T>(
   endpoint: string,
@@ -101,7 +133,7 @@ export const tvInterfacesAPI = {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Ошибка при загрузке TV интерфейсов'
+        error: error instanceof Error ? error.message : 'Ошиб��а при загрузке TV интерфейсов'
       };
     }
   },
@@ -125,7 +157,7 @@ export const tvInterfacesAPI = {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Ошибка при загрузке TV интерфе��са'
+        error: error instanceof Error ? error.message : 'Ошибка при загрузке TV интерфейса'
       };
     }
   },
@@ -149,7 +181,7 @@ export const tvInterfacesAPI = {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Ошибка при загрузке TV интерфейсов для устройства'
+        error: error instanceof Error ? error.message : '��шибка при загрузке TV интерфейсов для устройства'
       };
     }
   },
