@@ -126,7 +126,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
       };
       img.src = screenshotSrc;
     }
-  }, [tvInterface.screenshotData, tvInterface.screenshot_data, clickableAreas, highlightAreas, showAreas]);
+  }, [tempScreenshot, tvInterface.screenshotData, tvInterface.screenshot_data, clickableAreas, highlightAreas, showAreas]);
 
   const drawAreas = (ctx: CanvasRenderingContext2D) => {
     if (!showAreas || !canvasRef.current) return;
@@ -368,7 +368,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
       Object.assign(tvInterface, { screenshotData, screenshot_data: screenshotData });
       setImageLoaded(false); // Перезагружаем изображение
     } catch (error) {
-      console.error('Ошибка сохранения ск��иншота:', error);
+      console.error('Ошибка сохранения скриншота:', error);
     }
   };
 
