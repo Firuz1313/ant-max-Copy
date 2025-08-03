@@ -52,7 +52,7 @@ import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
-// Мемоизированный компонент формы для предотвращения потери фокуса
+// Мемоизированный компонент формы для предотвращения поте��и фокуса
 const StepFormFieldsComponent = React.memo(
   ({
     isEdit = false,
@@ -343,7 +343,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
     tvInterface: "home" as DiagnosticStep["tvInterface"],
-    tvInterfaceId: "none", // Добавлено для выбора созданного интерфейса
+    tvInterfaceId: "none", // Добавлено для выбора созданного ин��ерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -468,12 +468,17 @@ const StepsManager = () => {
         setSelectedTVInterface(fullInterface);
       } else {
         console.warn(
-          "⚠️ Failed to load full interface data, using cached data",
+          `⚠️ Failed to load full interface data for ${tvInterface.id}: ${response.error}. Using cached data.`,
         );
         setSelectedTVInterface(tvInterface);
       }
     } catch (error) {
-      console.error("❌ Error loading full interface data:", error);
+      console.error(`❌ Error loading full interface data for ${tvInterface.id}:`, error);
+      toast({
+        title: "Предупреждение",
+        description: `Не удалось загрузить полные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
+        variant: "destructive",
+      });
       setSelectedTVInterface(tvInterface);
     }
 
@@ -1222,7 +1227,7 @@ const StepsManager = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Редактироват�� шаг</DialogTitle>
+            <DialogTitle>Редактироват���� шаг</DialogTitle>
           </DialogHeader>
           <StepFormFieldsComponent
             isEdit={true}
