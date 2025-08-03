@@ -1,0 +1,566 @@
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { 
+  MousePointer, 
+  Plus, 
+  Trash2, 
+  Eye, 
+  EyeOff, 
+  Save, 
+  Undo,
+  Target,
+  Square,
+  Circle
+} from 'lucide-react';
+import { TVInterface } from '@/types/tvInterface';
+import { cn } from '@/lib/utils';
+
+interface ClickableArea {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  label: string;
+  action?: string;
+  color?: string;
+  shape: 'rectangle' | 'circle';
+}
+
+interface HighlightArea {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  label: string;
+  color?: string;
+  opacity?: number;
+  shape: 'rectangle' | 'circle';
+}
+
+interface TVInterfaceAreaEditorProps {
+  tvInterface: TVInterface;
+  onSave: (clickableAreas: ClickableArea[], highlightAreas: HighlightArea[]) => void;
+  className?: string;
+}
+
+const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
+  tvInterface,
+  onSave,
+  className
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [drawingArea, setDrawingArea] = useState<{
+    startX: number;
+    startY: number;
+    currentX: number;
+    currentY: number;
+  } | null>(null);
+  
+  const [clickableAreas, setClickableAreas] = useState<ClickableArea[]>(
+    (tvInterface.clickableAreas as ClickableArea[]) || []
+  );
+  const [highlightAreas, setHighlightAreas] = useState<HighlightArea[]>(
+    (tvInterface.highlightAreas as HighlightArea[]) || []
+  );
+  
+  const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null);
+  const [selectedAreaType, setSelectedAreaType] = useState<'clickable' | 'highlight'>('clickable');
+  const [showAreas, setShowAreas] = useState(true);
+  const [currentTool, setCurrentTool] = useState<'select' | 'rectangle' | 'circle'>('select');
+  
+  const [newAreaData, setNewAreaData] = useState({
+    label: '',
+    action: '',
+    color: '#3b82f6'
+  });
+
+  // Load screenshot image
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (tvInterface.screenshotData && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const img = new Image();
+      img.onload = () => {
+        // Set canvas size to match container while maintaining aspect ratio
+        const container = containerRef.current;
+        if (!container) return;
+
+        const containerWidth = container.clientWidth;
+        const containerHeight = container.clientHeight;
+        const aspectRatio = img.width / img.height;
+
+        let displayWidth = containerWidth;
+        let displayHeight = displayWidth / aspectRatio;
+
+        if (displayHeight > containerHeight) {
+          displayHeight = containerHeight;
+          displayWidth = displayHeight * aspectRatio;
+        }
+
+        canvas.width = displayWidth;
+        canvas.height = displayHeight;
+        
+        setImageDimensions({ width: img.width, height: img.height });
+        setImageLoaded(true);
+
+        // Draw the image
+        ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
+        
+        // Draw existing areas
+        drawAreas(ctx);
+      };
+      img.src = tvInterface.screenshotData;
+    }
+  }, [tvInterface.screenshotData, clickableAreas, highlightAreas, showAreas]);
+
+  const drawAreas = (ctx: CanvasRenderingContext2D) => {
+    if (!showAreas || !canvasRef.current) return;
+
+    const canvas = canvasRef.current;
+    const scaleX = canvas.width / imageDimensions.width;
+    const scaleY = canvas.height / imageDimensions.height;
+
+    // Draw highlight areas
+    highlightAreas.forEach(area => {
+      const x = area.x * scaleX;
+      const y = area.y * scaleY;
+      const width = area.width * scaleX;
+      const height = area.height * scaleY;
+
+      ctx.save();
+      ctx.fillStyle = area.color || '#fbbf24';
+      ctx.globalAlpha = area.opacity || 0.3;
+      
+      if (area.shape === 'circle') {
+        ctx.beginPath();
+        ctx.ellipse(x + width/2, y + height/2, width/2, height/2, 0, 0, 2 * Math.PI);
+        ctx.fill();
+      } else {
+        ctx.fillRect(x, y, width, height);
+      }
+      
+      ctx.restore();
+
+      // Draw label
+      ctx.fillStyle = area.color || '#fbbf24';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText(area.label, x, y - 5);
+    });
+
+    // Draw clickable areas
+    clickableAreas.forEach(area => {
+      const x = area.x * scaleX;
+      const y = area.y * scaleY;
+      const width = area.width * scaleX;
+      const height = area.height * scaleY;
+
+      ctx.strokeStyle = area.color || '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.setLineDash(selectedAreaId === area.id ? [5, 5] : []);
+      
+      if (area.shape === 'circle') {
+        ctx.beginPath();
+        ctx.ellipse(x + width/2, y + height/2, width/2, height/2, 0, 0, 2 * Math.PI);
+        ctx.stroke();
+      } else {
+        ctx.strokeRect(x, y, width, height);
+      }
+
+      // Draw label
+      ctx.fillStyle = area.color || '#3b82f6';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText(area.label, x, y - 5);
+    });
+
+    // Draw current drawing area
+    if (drawingArea && isDrawing) {
+      const { startX, startY, currentX, currentY } = drawingArea;
+      const x = Math.min(startX, currentX);
+      const y = Math.min(startY, currentY);
+      const width = Math.abs(currentX - startX);
+      const height = Math.abs(currentY - startY);
+
+      ctx.strokeStyle = newAreaData.color;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([3, 3]);
+      
+      if (currentTool === 'circle') {
+        ctx.beginPath();
+        ctx.ellipse(x + width/2, y + height/2, width/2, height/2, 0, 0, 2 * Math.PI);
+        ctx.stroke();
+      } else if (currentTool === 'rectangle') {
+        ctx.strokeRect(x, y, width, height);
+      }
+    }
+  };
+
+  const getCanvasCoordinates = (clientX: number, clientY: number) => {
+    if (!canvasRef.current) return { x: 0, y: 0 };
+    
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: clientX - rect.left,
+      y: clientY - rect.top
+    };
+  };
+
+  const convertToImageCoordinates = (canvasX: number, canvasY: number) => {
+    if (!canvasRef.current) return { x: 0, y: 0 };
+    
+    const canvas = canvasRef.current;
+    const scaleX = imageDimensions.width / canvas.width;
+    const scaleY = imageDimensions.height / canvas.height;
+    
+    return {
+      x: Math.round(canvasX * scaleX),
+      y: Math.round(canvasY * scaleY)
+    };
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (currentTool === 'select') return;
+    
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
+    setIsDrawing(true);
+    setDrawingArea({
+      startX: coords.x,
+      startY: coords.y,
+      currentX: coords.x,
+      currentY: coords.y
+    });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDrawing || !drawingArea) return;
+    
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
+    setDrawingArea(prev => prev ? {
+      ...prev,
+      currentX: coords.x,
+      currentY: coords.y
+    } : null);
+    
+    // Redraw canvas
+    if (canvasRef.current && tvInterface.screenshotData) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (ctx) {
+        const img = new Image();
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+          ctx.drawImage(img, 0, 0, canvasRef.current!.width, canvasRef.current!.height);
+          drawAreas(ctx);
+        };
+        img.src = tvInterface.screenshotData;
+      }
+    }
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDrawing || !drawingArea || currentTool === 'select') return;
+    
+    const coords = getCanvasCoordinates(e.clientX, e.clientY);
+    
+    // Convert to image coordinates
+    const startImg = convertToImageCoordinates(drawingArea.startX, drawingArea.startY);
+    const endImg = convertToImageCoordinates(coords.x, coords.y);
+    
+    const x = Math.min(startImg.x, endImg.x);
+    const y = Math.min(startImg.y, endImg.y);
+    const width = Math.abs(endImg.x - startImg.x);
+    const height = Math.abs(endImg.y - startImg.y);
+    
+    // Only create area if it has meaningful size
+    if (width > 10 && height > 10) {
+      const newArea = {
+        id: `area-${Date.now()}`,
+        x,
+        y,
+        width,
+        height,
+        label: newAreaData.label || `Область ${selectedAreaType === 'clickable' ? clickableAreas.length + 1 : highlightAreas.length + 1}`,
+        color: newAreaData.color,
+        shape: currentTool as 'rectangle' | 'circle'
+      };
+      
+      if (selectedAreaType === 'clickable') {
+        const clickableArea: ClickableArea = {
+          ...newArea,
+          action: newAreaData.action
+        };
+        setClickableAreas(prev => [...prev, clickableArea]);
+      } else {
+        const highlightArea: HighlightArea = {
+          ...newArea,
+          opacity: 0.3
+        };
+        setHighlightAreas(prev => [...prev, highlightArea]);
+      }
+    }
+    
+    setIsDrawing(false);
+    setDrawingArea(null);
+  };
+
+  const handleDeleteArea = (areaId: string, type: 'clickable' | 'highlight') => {
+    if (type === 'clickable') {
+      setClickableAreas(prev => prev.filter(area => area.id !== areaId));
+    } else {
+      setHighlightAreas(prev => prev.filter(area => area.id !== areaId));
+    }
+    
+    if (selectedAreaId === areaId) {
+      setSelectedAreaId(null);
+    }
+  };
+
+  const handleSave = () => {
+    onSave(clickableAreas, highlightAreas);
+  };
+
+  if (!tvInterface.screenshotData) {
+    return (
+      <Card className={className}>
+        <CardContent className="flex items-center justify-center h-96">
+          <div className="text-center text-gray-500">
+            <Target className="h-12 w-12 mx-auto mb-4" />
+            <p>Нет скриншота для редактирования областей</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <div className={cn("space-y-4", className)}>
+      {/* Toolbar */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Редактор областей интерфейса</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-4 items-center">
+            {/* Tool Selection */}
+            <div className="flex gap-2">
+              <Button
+                variant={currentTool === 'select' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setCurrentTool('select')}
+              >
+                <MousePointer className="h-4 w-4 mr-1" />
+                Выбор
+              </Button>
+              <Button
+                variant={currentTool === 'rectangle' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setCurrentTool('rectangle')}
+              >
+                <Square className="h-4 w-4 mr-1" />
+                Прямоугольник
+              </Button>
+              <Button
+                variant={currentTool === 'circle' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setCurrentTool('circle')}
+              >
+                <Circle className="h-4 w-4 mr-1" />
+                Круг
+              </Button>
+            </div>
+
+            {/* Area Type */}
+            <div className="flex gap-2">
+              <Badge 
+                variant={selectedAreaType === 'clickable' ? 'default' : 'outline'}
+                className="cursor-pointer"
+                onClick={() => setSelectedAreaType('clickable')}
+              >
+                Кликабельные области
+              </Badge>
+              <Badge 
+                variant={selectedAreaType === 'highlight' ? 'default' : 'outline'}
+                className="cursor-pointer"
+                onClick={() => setSelectedAreaType('highlight')}
+              >
+                Подсветка областей
+              </Badge>
+            </div>
+
+            {/* Area Data */}
+            <div className="flex gap-2 items-center">
+              <Input
+                placeholder="Название области"
+                value={newAreaData.label}
+                onChange={(e) => setNewAreaData(prev => ({ ...prev, label: e.target.value }))}
+                className="w-32"
+              />
+              {selectedAreaType === 'clickable' && (
+                <Input
+                  placeholder="Действие"
+                  value={newAreaData.action}
+                  onChange={(e) => setNewAreaData(prev => ({ ...prev, action: e.target.value }))}
+                  className="w-32"
+                />
+              )}
+              <input
+                type="color"
+                value={newAreaData.color}
+                onChange={(e) => setNewAreaData(prev => ({ ...prev, color: e.target.value }))}
+                className="w-8 h-8 rounded border"
+              />
+            </div>
+
+            {/* Controls */}
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowAreas(!showAreas)}
+              >
+                {showAreas ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+              </Button>
+              <Button
+                variant="default"
+                size="sm"
+                onClick={handleSave}
+              >
+                <Save className="h-4 w-4 mr-1" />
+                Сохранить
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Editor Canvas */}
+      <Card>
+        <CardContent className="p-4">
+          <div 
+            ref={containerRef}
+            className="relative w-full h-96 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border-2 border-dashed border-gray-300"
+          >
+            {imageLoaded && (
+              <canvas
+                ref={canvasRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                className="absolute inset-0 cursor-crosshair"
+                style={{ 
+                  cursor: currentTool === 'select' ? 'default' : 'crosshair'
+                }}
+              />
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Areas List */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Clickable Areas */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Кликабельные области ({clickableAreas.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {clickableAreas.map(area => (
+                <div
+                  key={area.id}
+                  className={cn(
+                    "flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded",
+                    selectedAreaId === area.id && "ring-2 ring-blue-500"
+                  )}
+                  onClick={() => setSelectedAreaId(area.id)}
+                >
+                  <div className="flex-1">
+                    <div className="font-medium text-sm">{area.label}</div>
+                    <div className="text-xs text-gray-500">
+                      {area.action && `Действие: ${area.action}`}
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {area.x}, {area.y} • {area.width}×{area.height}
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteArea(area.id, 'clickable');
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              {clickableAreas.length === 0 && (
+                <div className="text-center text-gray-500 py-4">
+                  Нет кликабельных областей
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Highlight Areas */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Области подсветки ({highlightAreas.length})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2 max-h-40 overflow-y-auto">
+              {highlightAreas.map(area => (
+                <div
+                  key={area.id}
+                  className={cn(
+                    "flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded",
+                    selectedAreaId === area.id && "ring-2 ring-blue-500"
+                  )}
+                  onClick={() => setSelectedAreaId(area.id)}
+                >
+                  <div className="flex-1">
+                    <div className="font-medium text-sm">{area.label}</div>
+                    <div className="text-xs text-gray-400">
+                      {area.x}, {area.y} • {area.width}×{area.height}
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteArea(area.id, 'highlight');
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              {highlightAreas.length === 0 && (
+                <div className="text-center text-gray-500 py-4">
+                  Нет областей подсветки
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default TVInterfaceAreaEditor;
