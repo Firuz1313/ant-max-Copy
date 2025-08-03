@@ -12,30 +12,62 @@ const API_BASE_URL = '/api/v1/tv-interfaces';
 
 // Helper функция для HTTP запросов
 const apiRequest = async <T>(
-  endpoint: string, 
+  endpoint: string,
   options: RequestInit = {}
 ): Promise<T> => {
   const url = `${API_BASE_URL}${endpoint}`;
-  
+
   const defaultOptions: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
     },
+    timeout: 30000, // 30 секунд
     ...options,
   };
 
   try {
+    // Добавляем отладочную информацию
+    console.log(`🔄 API Request: ${options.method || 'GET'} ${url}`);
+
     const response = await fetch(url, defaultOptions);
-    
+
+    console.log(`✅ API Response: ${response.status} for ${url}`);
+
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      let errorData: any = {};
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { error: `HTTP ${response.status}: ${response.statusText}` };
+      }
+
+      const errorMessage = errorData.error || errorData.message || `HTTP error! status: ${response.status} (${response.statusText})`;
+      console.error(`❌ API Error: ${errorMessage} for ${url}`);
+      throw new Error(errorMessage);
     }
-    
-    return await response.json();
+
+    const data = await response.json();
+    console.log(`📦 API Data received for ${url}:`, { size: JSON.stringify(data).length });
+    return data;
   } catch (error) {
-    console.error(`API Request failed for ${url}:`, error);
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      console.error(`🌐 Network Error for ${url}:`, {
+        message: error.message,
+        name: error.name,
+        stack: error.stack,
+        url,
+        options: defaultOptions
+      });
+      throw new Error(`Сетевая ошибка: Не удается подключиться к серверу. Проверьте интернет-соединение.`);
+    }
+
+    console.error(`💥 API Request failed for ${url}:`, {
+      error: error.message,
+      type: error.constructor.name,
+      url,
+      options: defaultOptions
+    });
     throw error;
   }
 };
@@ -93,7 +125,7 @@ export const tvInterfacesAPI = {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Ошибка при загрузке TV интерфейса'
+        error: error instanceof Error ? error.message : 'Ошибка при загрузке TV интерфе��са'
       };
     }
   },
