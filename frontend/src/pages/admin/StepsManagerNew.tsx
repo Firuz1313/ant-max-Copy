@@ -690,7 +690,7 @@ const StepsManagerNew = () => {
                   <Target className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-green-700 dark:text-green-300">
-                      Область выбрана: ({Math.round(formData.tvAreaPosition.x)},{" "}
+                      Область выбран��: ({Math.round(formData.tvAreaPosition.x)},{" "}
                       {Math.round(formData.tvAreaPosition.y)})
                     </p>
                   </AlertDescription>
@@ -902,9 +902,7 @@ const StepsManagerNew = () => {
         <Input
           id={isEdit ? "edit-requiredAction" : "requiredAction"}
           value={formData.requiredAction}
-          onChange={(e) =>
-            setFormData({ ...formData, requiredAction: e.target.value })
-          }
+          onChange={(e) => handleFieldChange("requiredAction", e.target.value)}
           placeholder="Действие для автоперехода"
         />
       </div>
