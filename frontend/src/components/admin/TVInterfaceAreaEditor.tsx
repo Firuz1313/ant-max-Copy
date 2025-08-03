@@ -331,13 +331,52 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     onSave(clickableAreas, highlightAreas);
   };
 
-  if (!tvInterface.screenshotData) {
+  if (!tvInterface.screenshotData && !tvInterface.screenshot_data) {
     return (
       <Card className={className}>
-        <CardContent className="flex items-center justify-center h-96">
+        <CardContent className="flex flex-col items-center justify-center h-96 space-y-4">
           <div className="text-center text-gray-500">
             <Target className="h-12 w-12 mx-auto mb-4" />
-            <p>Нет скриншота для редактирования областей</p>
+            <p className="text-lg font-medium mb-2">Нет скриншота для редактирования областей</p>
+            <p className="text-sm text-gray-400 mb-4">
+              Загрузите скриншот интерфейса, чтобы начать работу с областями
+            </p>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    const result = event.target?.result as string;
+                    if (result) {
+                      // Временно обновляем интерфейс с новым скриншотом
+                      const updatedInterface = {
+                        ...tvInterface,
+                        screenshotData: result
+                      };
+                      // Перезагружаем редактор с новым скриншотом
+                      window.location.reload();
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="hidden"
+              id="screenshot-upload"
+            />
+            <Button asChild variant="outline">
+              <label htmlFor="screenshot-upload" className="cursor-pointer">
+                <Plus className="h-4 w-4 mr-2" />
+                Загрузить скриншот
+              </label>
+            </Button>
+            <p className="text-xs text-gray-400 text-center">
+              Поддерживаются форматы: JPG, PNG, GIF
+            </p>
           </div>
         </CardContent>
       </Card>
