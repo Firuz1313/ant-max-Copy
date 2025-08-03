@@ -112,7 +112,7 @@ const TVInterfaceBuilder = () => {
       } else {
         toast({
           title: "Ошибка",
-          description: response.error || "Не удалось загрузить TV интерфейсы",
+          description: response.error || "Не удалось загрузить TV интерфе��сы",
           variant: "destructive",
         });
       }
@@ -207,7 +207,7 @@ const TVInterfaceBuilder = () => {
     if (!formData.deviceId) {
       toast({
         title: "Ошибка",
-        description: "Выберите устройство",
+        description: "Выбери��е устройство",
         variant: "destructive",
       });
       return;
@@ -318,7 +318,7 @@ const TVInterfaceBuilder = () => {
       if (response.success) {
         toast({
           title: "Успех",
-          description: response.message || "Стат��с изменен",
+          description: response.message || "Статус изменен",
         });
         loadTVInterfaces();
       } else {
@@ -464,11 +464,10 @@ const TVInterfaceBuilder = () => {
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Очистить TV интерфейсы?</AlertDialogTitle>
+                <AlertDialogTitle>Очистить все TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Это действие удалит все сущес��вующие TV ин��ерфейсы и создаст
-                  новые пользовательские интерфейсы для каждого устройства с
-                  реальными скриншотами.
+                  Это действие удалит все существующие TV интерфейсы.
+                  После очистки вы сможете создавать свои собственные интерфейсы вручную через UI.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -723,7 +722,7 @@ const TVInterfaceBuilder = () => {
           <div className="col-span-full text-center py-12">
             <Monitor className="h-12 w-12 mx-auto text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              Интерфейс�� не найдены
+              Интерфейсы не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               {searchTerm ||
