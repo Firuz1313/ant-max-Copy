@@ -798,9 +798,7 @@ const StepsManager = () => {
           </Label>
           <Select
             value={formData.highlightTVArea}
-            onValueChange={(value) =>
-              setFormData({ ...formData, highlightTVArea: value })
-            }
+            onValueChange={(value) => handleFieldChange("highlightTVArea", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Выберите область" />
