@@ -257,7 +257,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     } : null);
     
     // Redraw canvas
-    const screenshotSrc = tvInterface.screenshotData || tvInterface.screenshot_data;
+    const screenshotSrc = tempScreenshot || tvInterface.screenshotData || tvInterface.screenshot_data;
     if (canvasRef.current && screenshotSrc) {
       const ctx = canvasRef.current.getContext('2d');
       if (ctx) {
