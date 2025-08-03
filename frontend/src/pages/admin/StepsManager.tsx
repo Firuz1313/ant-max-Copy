@@ -119,7 +119,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
     tvInterface: "home" as DiagnosticStep["tvInterface"],
-    tvInterfaceId: "none", // Добавлено для выбора созданного интерфейса
+    tvInterfaceId: "none", // Добавлено для выбора созданног�� интерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -672,9 +672,7 @@ const StepsManager = () => {
         <Textarea
           id={isEdit ? "edit-description" : "description"}
           value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          onChange={(e) => handleFieldChange("description", e.target.value)}
           placeholder="Краткое описание шага"
         />
       </div>
@@ -860,7 +858,7 @@ const StepsManager = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => setFormData({ ...formData, hint: e.target.value })}
-          placeholder="Дополнительная подсказка для пользователя"
+          placeholder="Дополнительная подсказка для пользовател��"
         />
       </div>
 
