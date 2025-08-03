@@ -65,12 +65,14 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     currentY: number;
   } | null>(null);
   
-  const [clickableAreas, setClickableAreas] = useState<ClickableArea[]>(
-    (tvInterface.clickableAreas as ClickableArea[]) || []
-  );
-  const [highlightAreas, setHighlightAreas] = useState<HighlightArea[]>(
-    (tvInterface.highlightAreas as HighlightArea[]) || []
-  );
+  const [clickableAreas, setClickableAreas] = useState<ClickableArea[]>(() => {
+    const areas = tvInterface.clickableAreas || tvInterface.clickable_areas;
+    return Array.isArray(areas) ? areas : [];
+  });
+  const [highlightAreas, setHighlightAreas] = useState<HighlightArea[]>(() => {
+    const areas = tvInterface.highlightAreas || tvInterface.highlight_areas;
+    return Array.isArray(areas) ? areas : [];
+  });
   
   const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null);
   const [selectedAreaType, setSelectedAreaType] = useState<'clickable' | 'highlight'>('clickable');
