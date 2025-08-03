@@ -571,7 +571,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
         {/* Clickable Areas */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Кликабельные области ({clickableAreas.length})</CardTitle>
+            <CardTitle className="text-base">Кликабел��ные области ({Array.isArray(clickableAreas) ? clickableAreas.length : 0})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-40 overflow-y-auto">
