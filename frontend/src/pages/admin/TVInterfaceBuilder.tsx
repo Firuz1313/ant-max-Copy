@@ -112,7 +112,7 @@ const TVInterfaceBuilder = () => {
       } else {
         toast({
           title: "Ошибка",
-          description: response.error || "Не удалось загрузить TV интерфе��сы",
+          description: response.error || "Не удалось загрузить TV интерфейсы",
           variant: "destructive",
         });
       }
@@ -207,7 +207,7 @@ const TVInterfaceBuilder = () => {
     if (!formData.deviceId) {
       toast({
         title: "Ошибка",
-        description: "Выбери��е устройство",
+        description: "Выберите устройство",
         variant: "destructive",
       });
       return;
@@ -235,7 +235,7 @@ const TVInterfaceBuilder = () => {
       console.error("Error creating TV interface:", error);
       toast({
         title: "Ошибка",
-        description: "Произошла ошибка при создании TV интерфейса",
+        description: "Произо��ла ошибка при создании TV интерфейса",
         variant: "destructive",
       });
     } finally {
@@ -467,13 +467,13 @@ const TVInterfaceBuilder = () => {
                 <AlertDialogTitle>Очистить все TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
                   Это действие удалит все существующие TV интерфейсы.
-                  После очистки вы сможете создавать свои собственные интерфейсы вручную через UI.
+                  После очистки вы сможете ��оздавать свои собственные интерфейсы вручную через UI.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Отмена</AlertDialogCancel>
                 <AlertDialogAction onClick={handleCleanupTVInterfaces}>
-                  Очистить и создать
+                  Очистить все
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -594,7 +594,7 @@ const TVInterfaceBuilder = () => {
                         onClick={() => fileInputRef.current?.click()}
                       >
                         <Upload className="h-4 w-4 mr-2" />
-                        Загрузит�� файл
+                        Загру��ит�� файл
                       </Button>
                       <Button
                         type="button"
@@ -851,7 +851,7 @@ const TVInterfaceBuilder = () => {
                             Удалить интерфейс?
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            Это действие нельзя отменить. TV интерфейс "
+                            Это действие нельзя отмени��ь. TV интерфейс "
                             {tvInterface.name}" будет удален навсегда.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
@@ -946,7 +946,7 @@ const TVInterfaceBuilder = () => {
             </div>
 
             <div>
-              <Label htmlFor="edit-description">Описание</Label>
+              <Label htmlFor="edit-description">��писание</Label>
               <Textarea
                 id="edit-description"
                 value={formData.description || ""}
