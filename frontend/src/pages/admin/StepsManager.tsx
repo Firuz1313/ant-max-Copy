@@ -447,6 +447,7 @@ const StepsManager = () => {
       highlightRemoteButton: "none",
       highlightTVArea: "none",
       tvInterface: "home",
+      tvInterfaceId: "none",
       requiredAction: "",
       hint: "",
       remoteId: "none",
@@ -454,6 +455,20 @@ const StepsManager = () => {
     });
     setCustomRemoteImage(null);
   };
+
+  const handleFieldChange = useCallback((field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  }, []);
+
+  const handleDeviceChange = useCallback((value: string) => {
+    const defaultRemote = getDefaultRemoteForDevice(value);
+    setFormData(prev => ({
+      ...prev,
+      deviceId: value,
+      problemId: "",
+      remoteId: defaultRemote?.id || "none",
+    }));
+  }, [getDefaultRemoteForDevice]);
 
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
@@ -869,7 +884,7 @@ const StepsManager = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностик�� с привязкой к приставкам и проблемам
+            Создание шагов диагностики с привязкой к приставкам и проблемам
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
