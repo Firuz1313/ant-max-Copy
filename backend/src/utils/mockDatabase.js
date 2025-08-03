@@ -124,38 +124,7 @@ let mockData = {
       updated_at: new Date().toISOString()
     }
   ],
-  tv_interfaces: [
-    {
-      id: 'tv_int_1',
-      name: 'Главное меню OpenBox',
-      description: 'Основной интерфейс главного меню',
-      type: 'home',
-      device_id: 'openbox',
-      screenshot_url: null,
-      screenshot_data: null,
-      clickable_areas: '[]',
-      highlight_areas: '[]',
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      deleted_at: null
-    },
-    {
-      id: 'tv_int_2',
-      name: 'Настройки UCLAN',
-      description: 'Интерфейс настроек UCLAN HD',
-      type: 'settings',
-      device_id: 'uclan',
-      screenshot_url: null,
-      screenshot_data: null,
-      clickable_areas: '[]',
-      highlight_areas: '[]',
-      is_active: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      deleted_at: null
-    }
-  ]
+  tv_interfaces: []
 };
 
 // Mock query function that simulates PostgreSQL query interface
