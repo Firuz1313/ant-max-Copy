@@ -345,7 +345,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
     tvInterface: "home" as DiagnosticStep["tvInterface"],
-    tvInterfaceId: "none", // Добавлено для выбора ��озданного ��нтерфейса
+    tvInterfaceId: "none", // Добавлено для выбора ��озданного интерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -449,6 +449,21 @@ const StepsManager = () => {
       screenshotData: tvInterface.screenshotData ? "present" : "missing",
       screenshot_data: tvInterface.screenshot_data ? "present" : "missing",
     });
+
+    // Check if this interface still exists in our current list
+    const interfaceExists = tvInterfaces.find(ti => ti.id === tvInterface.id);
+    if (!interfaceExists) {
+      console.warn(`⚠️ TV interface ${tvInterface.id} not found in current list, reloading...`);
+      if (selectedDeviceId) {
+        await loadTVInterfacesForDevice(selectedDeviceId);
+      }
+      toast({
+        title: "Интерфейс не найден",
+        description: `TV интерфейс "${tvInterface.name}" больше не доступен. Список обновлён.`,
+        variant: "destructive",
+      });
+      return;
+    }
 
     // Validate interface ID and fetch full interface data
     if (!tvInterface.id) {
@@ -1294,7 +1309,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь фи��ь��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
