@@ -52,6 +52,288 @@ import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
+// Мемоизированный компонент формы для предотвращения потери фокуса
+const StepFormFieldsComponent = React.memo(({
+  isEdit = false,
+  formData,
+  handleFieldChange,
+  handleDeviceChange,
+  getActiveDevices,
+  getAvailableProblems,
+  getAvailableRemotes,
+  devices,
+  tvInterfaces,
+  loadingTVInterfaces,
+  openTVInterfaceEditor,
+  openRemoteEditor,
+  tvAreas
+}: {
+  isEdit?: boolean;
+  formData: any;
+  handleFieldChange: (field: string, value: any) => void;
+  handleDeviceChange: (value: string) => void;
+  getActiveDevices: () => any[];
+  getAvailableProblems: () => any[];
+  getAvailableRemotes: () => any[];
+  devices: any[];
+  tvInterfaces: any[];
+  loadingTVInterfaces: boolean;
+  openTVInterfaceEditor: (tvInterface: any) => void;
+  openRemoteEditor: () => void;
+  tvAreas: string[];
+}) => (
+  <div className="space-y-4 max-h-96 overflow-y-auto">
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <Label htmlFor={isEdit ? "edit-deviceId" : "deviceId"}>
+          Приставка
+        </Label>
+        <Select
+          value={formData.deviceId}
+          onValueChange={handleDeviceChange}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Выберите приставку" />
+          </SelectTrigger>
+          <SelectContent>
+            {getActiveDevices().map((device) => (
+              <SelectItem key={device.id} value={device.id}>
+                <div className="flex items-center">
+                  <div
+                    className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                  />
+                  {device.name}
+                </div>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label htmlFor={isEdit ? "edit-problemId" : "problemId"}>
+          Проблема
+        </Label>
+        <Select
+          value={formData.problemId}
+          onValueChange={(value) => handleFieldChange("problemId", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Выберите проблему" />
+          </SelectTrigger>
+          <SelectContent>
+            {getAvailableProblems().map((problem) => (
+              <SelectItem key={problem.id} value={problem.id}>
+                {problem.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+
+    <div>
+      <Label htmlFor={isEdit ? "edit-title" : "title"}>Название шага</Label>
+      <Input
+        id={isEdit ? "edit-title" : "title"}
+        value={formData.title}
+        onChange={(e) => handleFieldChange("title", e.target.value)}
+        placeholder="Введите название шага"
+      />
+    </div>
+
+    <div>
+      <Label htmlFor={isEdit ? "edit-description" : "description"}>
+        Описание
+      </Label>
+      <Textarea
+        id={isEdit ? "edit-description" : "description"}
+        value={formData.description}
+        onChange={(e) => handleFieldChange("description", e.target.value)}
+        placeholder="Краткое описание шага"
+      />
+    </div>
+
+    <div>
+      <Label htmlFor={isEdit ? "edit-instruction" : "instruction"}>
+        Инструкция
+      </Label>
+      <Textarea
+        id={isEdit ? "edit-instruction" : "instruction"}
+        value={formData.instruction}
+        onChange={(e) => handleFieldChange("instruction", e.target.value)}
+        placeholder="Подробная инструкция для пользователя"
+      />
+    </div>
+
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <Label htmlFor={isEdit ? "edit-tvInterface" : "tvInterface"}>
+          Интерфейс ТВ (базовый)
+        </Label>
+        <Select
+          value={formData.tvInterface}
+          onValueChange={(value) => handleFieldChange("tvInterface", value)}
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="home">Главное меню</SelectItem>
+            <SelectItem value="settings">Настройки</SelectItem>
+            <SelectItem value="channels">Каналы</SelectItem>
+            <SelectItem value="no-signal">Нет сигнала</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label htmlFor={isEdit ? "edit-tvInterfaceId" : "tvInterfaceId"}>
+          Созданный интерфейс
+        </Label>
+        <div className="flex space-x-2">
+          <Select
+            value={formData.tvInterfaceId}
+            onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
+          >
+            <SelectTrigger className="flex-1">
+              <SelectValue placeholder="Выберите интерфейс" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Без интерфейса</SelectItem>
+              {loadingTVInterfaces ? (
+                <SelectItem value="loading" disabled>
+                  Загрузка...
+                </SelectItem>
+              ) : (
+                tvInterfaces.map((tvInterface) => (
+                  <SelectItem key={tvInterface.id} value={tvInterface.id}>
+                    <div className="flex items-center">
+                      <Monitor className="w-3 h-3 mr-2" />
+                      {tvInterface.name}
+                      <span className="ml-2 text-xs text-gray-500">
+                        ({tvInterface.type})
+                      </span>
+                    </div>
+                  </SelectItem>
+                ))
+              )}
+            </SelectContent>
+          </Select>
+          {formData.tvInterfaceId !== "none" && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                const tvInterface = tvInterfaces.find(ti => ti.id === formData.tvInterfaceId);
+                if (tvInterface) openTVInterfaceEditor(tvInterface);
+              }}
+              size="sm"
+            >
+              <Target className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <Label htmlFor={isEdit ? "edit-remoteId" : "remoteId"}>Пульт</Label>
+      <div className="flex space-x-2">
+        <Select
+          value={formData.remoteId}
+          onValueChange={(value) => handleFieldChange("remoteId", value)}
+        >
+          <SelectTrigger className="flex-1">
+            <SelectValue placeholder="Выберите пульт" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">Без пульта</SelectItem>
+            {getAvailableRemotes().map((remote) => {
+              const device = devices.find((d) => d.id === remote.deviceId);
+              return (
+                <SelectItem key={remote.id} value={remote.id}>
+                  <div className="flex items-center">
+                    {device && (
+                      <div
+                        className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                      />
+                    )}
+                    {remote.name}
+                    {remote.isDefault && (
+                      <span className="ml-2 text-xs text-blue-600">
+                        (по умолчанию)
+                      </span>
+                    )}
+                  </div>
+                </SelectItem>
+              );
+            })}
+          </SelectContent>
+        </Select>
+        {formData.remoteId !== "none" && (
+          <Button variant="outline" onClick={openRemoteEditor} size="sm">
+            <MousePointer className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+    </div>
+
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <Label htmlFor={isEdit ? "edit-highlightTVArea" : "highlightTVArea"}>
+          Область ТВ
+        </Label>
+        <Select
+          value={formData.highlightTVArea}
+          onValueChange={(value) => handleFieldChange("highlightTVArea", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Выберите область" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">Без подсветки</SelectItem>
+            {tvAreas.map((area) => (
+              <SelectItem key={area} value={area}>
+                {area}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div>
+        <Label htmlFor={isEdit ? "edit-requiredAction" : "requiredAction"}>
+          Требуемое действие
+        </Label>
+        <Input
+          id={isEdit ? "edit-requiredAction" : "requiredAction"}
+          value={formData.requiredAction}
+          onChange={(e) => handleFieldChange("requiredAction", e.target.value)}
+          placeholder="Действие для автоперехода"
+        />
+      </div>
+    </div>
+
+    <div>
+      <Label htmlFor={isEdit ? "edit-hint" : "hint"}>Подсказка</Label>
+      <Textarea
+        id={isEdit ? "edit-hint" : "hint"}
+        value={formData.hint}
+        onChange={(e) => handleFieldChange("hint", e.target.value)}
+        placeholder="Дополнительная подсказка дл�� пользователя"
+      />
+    </div>
+
+    {formData.buttonPosition.x > 0 && formData.buttonPosition.y > 0 && (
+      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+        <p className="text-sm text-green-700 dark:text-green-300">
+          Позиция кнопки: ({Math.round(formData.buttonPosition.x)},{" "}
+          {Math.round(formData.buttonPosition.y)})
+        </p>
+      </div>
+    )}
+  </div>
+));
+
 interface DiagnosticStep {
   id: string;
   problemId: string;
@@ -541,7 +823,7 @@ const StepsManager = () => {
         <div className="w-full lg:w-80 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Выбор позиции</CardTitle>
+              <CardTitle className="text-lg">Выбор позиц��и</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-2">
@@ -607,7 +889,7 @@ const StepsManager = () => {
             onValueChange={handleDeviceChange}
           >
             <SelectTrigger>
-              <SelectValue placeholder="В��берите приставку" />
+              <SelectValue placeholder="В��бери��е приставку" />
             </SelectTrigger>
             <SelectContent>
               {getActiveDevices().map((device) => (
