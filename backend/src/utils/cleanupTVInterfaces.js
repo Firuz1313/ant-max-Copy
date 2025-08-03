@@ -17,7 +17,8 @@ export const cleanupAndCreateUserTVInterfaces = async () => {
     return {
       success: true,
       deleted: "all",
-      message: "Все TV интерфейсы удалены. Теперь пользователи могут создавать свои собственные интерфейсы."
+      message:
+        "Все TV интерфейсы удалены. Теперь пользователи могут создавать свои собственные интерфейсы.",
     };
   } catch (error) {
     console.error("❌ Ошибка при очистке TV интерфейсов:", error);

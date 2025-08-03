@@ -454,16 +454,22 @@ const StepsManager = () => {
       const response = await tvInterfacesAPI.getById(tvInterface.id);
 
       if (response.success && response.data) {
-        const fullInterface = tvInterfaceUtils.normalizeFromBackend(response.data);
+        const fullInterface = tvInterfaceUtils.normalizeFromBackend(
+          response.data,
+        );
         console.log("✅ Loaded full TV interface with screenshot:", {
           id: fullInterface.id,
           name: fullInterface.name,
           screenshotData: fullInterface.screenshotData ? "present" : "missing",
-          screenshot_data: fullInterface.screenshot_data ? "present" : "missing",
+          screenshot_data: fullInterface.screenshot_data
+            ? "present"
+            : "missing",
         });
         setSelectedTVInterface(fullInterface);
       } else {
-        console.warn("⚠️ Failed to load full interface data, using cached data");
+        console.warn(
+          "⚠️ Failed to load full interface data, using cached data",
+        );
         setSelectedTVInterface(tvInterface);
       }
     } catch (error) {

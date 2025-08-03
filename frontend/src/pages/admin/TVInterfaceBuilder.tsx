@@ -378,7 +378,8 @@ const TVInterfaceBuilder = () => {
       if (response.success) {
         toast({
           title: "Успех",
-          description: response.data?.message || "Все TV интерфейсы успешно удалены",
+          description:
+            response.data?.message || "Все TV интерфейсы успешно удалены",
         });
         loadTVInterfaces();
       } else {
@@ -466,8 +467,9 @@ const TVInterfaceBuilder = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Очистить все TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Это действие удалит все существующие TV интерфейсы.
-                  После очистки вы сможете создавать свои собственные интерфейсы вручную через UI.
+                  Это действие удалит все существующие TV интерфейсы. После
+                  очистки вы сможете создавать свои собственные интерфейсы
+                  вручную через UI.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

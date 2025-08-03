@@ -1,7 +1,7 @@
 // Mock database implementation for development environments where PostgreSQL is not available
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,242 +10,268 @@ const __dirname = path.dirname(__filename);
 let mockData = {
   devices: [
     {
-      id: 'openbox',
-      name: 'OpenBox',
-      brand: 'OpenBox',
-      model: 'Standard',
-      type: 'set_top_box',
-      description: 'Стандартные приставки OpenBox для цифрового телевидения',
-      color: 'from-blue-500 to-blue-600',
-      image_url: '/images/devices/openbox-standard.jpg',
+      id: "openbox",
+      name: "OpenBox",
+      brand: "OpenBox",
+      model: "Standard",
+      type: "set_top_box",
+      description: "Стандартные приставки OpenBox для цифрового телевидения",
+      color: "from-blue-500 to-blue-600",
+      image_url: "/images/devices/openbox-standard.jpg",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     },
     {
-      id: 'uclan',
-      name: 'UCLAN',
-      brand: 'UCLAN',
-      model: 'HD Series',
-      type: 'set_top_box',
-      description: 'Высококачественные HD приставки UCLAN',
-      color: 'from-green-500 to-green-600',
-      image_url: '/images/devices/uclan-hd.jpg',
+      id: "uclan",
+      name: "UCLAN",
+      brand: "UCLAN",
+      model: "HD Series",
+      type: "set_top_box",
+      description: "Высококачественные HD приставки UCLAN",
+      color: "from-green-500 to-green-600",
+      image_url: "/images/devices/uclan-hd.jpg",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     },
     {
-      id: 'hdbox',
-      name: 'HDBox',
-      brand: 'HDBox',
-      model: 'Pro',
-      type: 'set_top_box',
-      description: 'Профессиональные приставки HDBox',
-      color: 'from-purple-500 to-purple-600',
-      image_url: '/images/devices/hdbox-pro.jpg',
+      id: "hdbox",
+      name: "HDBox",
+      brand: "HDBox",
+      model: "Pro",
+      type: "set_top_box",
+      description: "Профессиональные приставки HDBox",
+      color: "from-purple-500 to-purple-600",
+      image_url: "/images/devices/hdbox-pro.jpg",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     },
     {
-      id: 'openbox_gold',
-      name: 'OpenBox Gold',
-      brand: 'OpenBox',
-      model: 'Gold Edition',
-      type: 'set_top_box',
-      description: 'Премиум приставки OpenBox Gold с расширенными возможностями',
-      color: 'from-yellow-500 to-yellow-600',
-      image_url: '/images/devices/openbox-gold.jpg',
+      id: "openbox_gold",
+      name: "OpenBox Gold",
+      brand: "OpenBox",
+      model: "Gold Edition",
+      type: "set_top_box",
+      description:
+        "Премиум приставки OpenBox Gold с расширенными возможностями",
+      color: "from-yellow-500 to-yellow-600",
+      image_url: "/images/devices/openbox-gold.jpg",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     },
     {
-      id: 'skyway',
-      name: 'SkyWay Light',
-      brand: 'SkyWay',
-      model: 'Light',
-      type: 'set_top_box',
-      description: 'Компактные приставки SkyWay Light',
-      color: 'from-orange-500 to-orange-600',
-      image_url: '/images/devices/skyway-light.jpg',
+      id: "skyway",
+      name: "SkyWay Light",
+      brand: "SkyWay",
+      model: "Light",
+      type: "set_top_box",
+      description: "Компактные приставки SkyWay Light",
+      color: "from-orange-500 to-orange-600",
+      image_url: "/images/devices/skyway-light.jpg",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
+      updated_at: new Date().toISOString(),
+    },
   ],
   problems: [
     {
       id: 1,
-      title: 'Нет сигнала на экране',
-      description: 'Экран остается черным, нет изображения',
-      severity: 'high',
-      category: 'display',
+      title: "Нет сигнала на экране",
+      description: "Экран остается черным, нет изображения",
+      severity: "high",
+      category: "display",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     },
     {
       id: 2,
-      title: 'Проблемы со звуком',
-      description: 'Звук не воспроизводится или искажен',
-      severity: 'medium',
-      category: 'audio',
+      title: "Проблемы со звуком",
+      description: "Звук не воспроизводится или искажен",
+      severity: "medium",
+      category: "audio",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
+      updated_at: new Date().toISOString(),
+    },
   ],
   diagnostic_steps: [
     {
       id: 1,
       problem_id: 1,
       step_number: 1,
-      title: 'Проверка подключения кабелей',
-      description: 'Убедитесь, что все кабели подключены правильно',
-      instruction: 'Проверьте HDMI кабе��ь, кабель питания',
-      expected_result: 'Кабели подключены надежно',
+      title: "Проверка подключения кабелей",
+      description: "Убедитесь, что все кабели подключены правильно",
+      instruction: "Проверьте HDMI кабе��ь, кабель питания",
+      expected_result: "Кабели подключены надежно",
       is_active: true,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
+      updated_at: new Date().toISOString(),
+    },
   ],
   diagnostic_sessions: [
     {
       id: 1,
       device_id: 1,
       problem_id: 1,
-      user_name: 'Тестовый пользователь',
-      status: 'in_progress',
+      user_name: "Тестовый пользователь",
+      status: "in_progress",
       start_time: new Date().toISOString(),
       end_time: null,
       created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    }
+      updated_at: new Date().toISOString(),
+    },
   ],
-  tv_interfaces: []
+  tv_interfaces: [],
 };
 
 // Mock query function that simulates PostgreSQL query interface
 export async function query(text, params = []) {
   // Simulate database latency
-  await new Promise(resolve => setTimeout(resolve, 10));
-  
+  await new Promise((resolve) => setTimeout(resolve, 10));
+
   const lowercaseText = text.toLowerCase().trim();
-  
+
   // Handle SELECT queries
-  if (lowercaseText.startsWith('select')) {
-    if (lowercaseText.includes('from devices')) {
-      if (lowercaseText.includes('where id =')) {
+  if (lowercaseText.startsWith("select")) {
+    if (lowercaseText.includes("from devices")) {
+      if (lowercaseText.includes("where id =")) {
         const id = params[0];
-        const device = mockData.devices.find(d => d.id === id);
+        const device = mockData.devices.find((d) => d.id === id);
         return { rows: device ? [device] : [], rowCount: device ? 1 : 0 };
       }
       return { rows: mockData.devices, rowCount: mockData.devices.length };
     }
 
-    if (lowercaseText.includes('from tv_interfaces')) {
-      if (lowercaseText.includes('where id =')) {
+    if (lowercaseText.includes("from tv_interfaces")) {
+      if (lowercaseText.includes("where id =")) {
         const id = params[0];
-        const tvInterface = mockData.tv_interfaces.find(t => t.id === id && !t.deleted_at);
+        const tvInterface = mockData.tv_interfaces.find(
+          (t) => t.id === id && !t.deleted_at,
+        );
         if (tvInterface) {
           // Join with device data
-          const device = mockData.devices.find(d => d.id === tvInterface.device_id);
+          const device = mockData.devices.find(
+            (d) => d.id === tvInterface.device_id,
+          );
           const result = {
             ...tvInterface,
             device_name: device?.name,
             device_brand: device?.brand,
-            device_model: device?.model
+            device_model: device?.model,
           };
           return { rows: [result], rowCount: 1 };
         }
         return { rows: [], rowCount: 0 };
       }
-      if (lowercaseText.includes('where device_id =')) {
+      if (lowercaseText.includes("where device_id =")) {
         const deviceId = params[0];
-        const interfaces = mockData.tv_interfaces.filter(t => t.device_id === deviceId && !t.deleted_at);
-        const result = interfaces.map(tvInterface => {
-          const device = mockData.devices.find(d => d.id === tvInterface.device_id);
+        const interfaces = mockData.tv_interfaces.filter(
+          (t) => t.device_id === deviceId && !t.deleted_at,
+        );
+        const result = interfaces.map((tvInterface) => {
+          const device = mockData.devices.find(
+            (d) => d.id === tvInterface.device_id,
+          );
           return {
             ...tvInterface,
             device_name: device?.name,
             device_brand: device?.brand,
-            device_model: device?.model
+            device_model: device?.model,
           };
         });
         return { rows: result, rowCount: result.length };
       }
       // Get all TV interfaces with device data
-      const interfaces = mockData.tv_interfaces.filter(t => !t.deleted_at);
-      const result = interfaces.map(tvInterface => {
-        const device = mockData.devices.find(d => d.id === tvInterface.device_id);
+      const interfaces = mockData.tv_interfaces.filter((t) => !t.deleted_at);
+      const result = interfaces.map((tvInterface) => {
+        const device = mockData.devices.find(
+          (d) => d.id === tvInterface.device_id,
+        );
         return {
           ...tvInterface,
           device_name: device?.name,
           device_brand: device?.brand,
-          device_model: device?.model
+          device_model: device?.model,
         };
       });
       return { rows: result, rowCount: result.length };
     }
-    
-    if (lowercaseText.includes('from problems')) {
-      if (lowercaseText.includes('where id =')) {
+
+    if (lowercaseText.includes("from problems")) {
+      if (lowercaseText.includes("where id =")) {
         const id = parseInt(params[0]);
-        const problem = mockData.problems.find(p => p.id === id);
+        const problem = mockData.problems.find((p) => p.id === id);
         return { rows: problem ? [problem] : [], rowCount: problem ? 1 : 0 };
       }
       return { rows: mockData.problems, rowCount: mockData.problems.length };
     }
-    
-    if (lowercaseText.includes('from diagnostic_steps')) {
-      if (lowercaseText.includes('where problem_id =')) {
+
+    if (lowercaseText.includes("from diagnostic_steps")) {
+      if (lowercaseText.includes("where problem_id =")) {
         const problemId = parseInt(params[0]);
-        const steps = mockData.diagnostic_steps.filter(s => s.problem_id === problemId);
+        const steps = mockData.diagnostic_steps.filter(
+          (s) => s.problem_id === problemId,
+        );
         return { rows: steps, rowCount: steps.length };
       }
-      return { rows: mockData.diagnostic_steps, rowCount: mockData.diagnostic_steps.length };
+      return {
+        rows: mockData.diagnostic_steps,
+        rowCount: mockData.diagnostic_steps.length,
+      };
     }
-    
-    if (lowercaseText.includes('from diagnostic_sessions')) {
-      return { rows: mockData.diagnostic_sessions, rowCount: mockData.diagnostic_sessions.length };
+
+    if (lowercaseText.includes("from diagnostic_sessions")) {
+      return {
+        rows: mockData.diagnostic_sessions,
+        rowCount: mockData.diagnostic_sessions.length,
+      };
     }
-    
+
     // Health check query
-    if (lowercaseText.includes('select now()') || lowercaseText.includes('select 1')) {
-      return { 
-        rows: [{ 
-          current_time: new Date().toISOString(), 
-          postgres_version: 'Mock Database v1.0.0'
-        }], 
-        rowCount: 1 
+    if (
+      lowercaseText.includes("select now()") ||
+      lowercaseText.includes("select 1")
+    ) {
+      return {
+        rows: [
+          {
+            current_time: new Date().toISOString(),
+            postgres_version: "Mock Database v1.0.0",
+          },
+        ],
+        rowCount: 1,
       };
     }
   }
-  
+
   // Handle INSERT queries
-  if (lowercaseText.startsWith('insert')) {
-    if (lowercaseText.includes('into tv_interfaces')) {
+  if (lowercaseText.startsWith("insert")) {
+    if (lowercaseText.includes("into tv_interfaces")) {
       // Extract VALUES from the query and simulate proper insertion
-      const newId = 'tv_int_' + (mockData.tv_interfaces.length + 1 + Math.floor(Math.random() * 1000));
+      const newId =
+        "tv_int_" +
+        (mockData.tv_interfaces.length + 1 + Math.floor(Math.random() * 1000));
       const now = new Date().toISOString();
 
       // Create a new TV interface record based on the parameters
       const newTVInterface = {
         id: newId,
-        name: params[0] || 'New Interface',
-        description: params[1] || '',
-        type: params[2] || 'home',
-        device_id: params[3] || 'openbox',
+        name: params[0] || "New Interface",
+        description: params[1] || "",
+        type: params[2] || "home",
+        device_id: params[3] || "openbox",
         screenshot_url: params[4] || null,
         screenshot_data: params[5] || null,
-        clickable_areas: params[6] || '[]',
-        highlight_areas: params[7] || '[]',
+        clickable_areas: params[6] || "[]",
+        highlight_areas: params[7] || "[]",
         is_active: params[8] !== undefined ? params[8] : true,
         created_at: params[9] || now,
         updated_at: params[10] || now,
-        deleted_at: null
+        deleted_at: null,
       };
 
       // Add to mock data
@@ -253,24 +279,26 @@ export async function query(text, params = []) {
 
       return {
         rows: [newTVInterface],
-        rowCount: 1
+        rowCount: 1,
       };
     }
     return { rows: [], rowCount: 1 };
   }
-  
+
   // Handle UPDATE queries
-  if (lowercaseText.startsWith('update')) {
+  if (lowercaseText.startsWith("update")) {
     return { rows: [], rowCount: 1 };
   }
-  
+
   // Handle DELETE queries
-  if (lowercaseText.startsWith('delete')) {
-    if (lowercaseText.includes('from tv_interfaces')) {
-      if (lowercaseText.includes('where id =')) {
+  if (lowercaseText.startsWith("delete")) {
+    if (lowercaseText.includes("from tv_interfaces")) {
+      if (lowercaseText.includes("where id =")) {
         // Delete specific TV interface by ID
         const id = params[0];
-        const interfaceIndex = mockData.tv_interfaces.findIndex(t => t.id === id);
+        const interfaceIndex = mockData.tv_interfaces.findIndex(
+          (t) => t.id === id,
+        );
 
         if (interfaceIndex >= 0) {
           // Remove the interface from the array
@@ -288,7 +316,7 @@ export async function query(text, params = []) {
     }
     return { rows: [], rowCount: 1 };
   }
-  
+
   // Default response
   return { rows: [], rowCount: 0 };
 }
@@ -297,49 +325,55 @@ export async function query(text, params = []) {
 export async function transaction(callback) {
   // For mock implementation, just execute the callback
   const mockClient = {
-    query: query
+    query: query,
   };
   return await callback(mockClient);
 }
 
 // Mock test connection function
 export async function testConnection() {
-  console.log('✅ Mock database connection successful');
+  console.log("✅ Mock database connection successful");
   return {
     success: true,
     serverTime: new Date().toISOString(),
-    version: 'Mock Database v1.0.0'
+    version: "Mock Database v1.0.0",
   };
 }
 
 // Mock database creation
 export async function createDatabase() {
-  console.log('📊 Mock database created (no-op)');
+  console.log("📊 Mock database created (no-op)");
 }
 
 // Mock migrations
 export async function runMigrations() {
-  console.log('🔄 Mock migrations completed (no-op)');
+  console.log("🔄 Mock migrations completed (no-op)");
 }
 
 // Mock database stats
 export async function getDatabaseStats() {
   return {
     tables: [
-      { tablename: 'devices', live_rows: mockData.devices.length },
-      { tablename: 'problems', live_rows: mockData.problems.length },
-      { tablename: 'diagnostic_steps', live_rows: mockData.diagnostic_steps.length },
-      { tablename: 'diagnostic_sessions', live_rows: mockData.diagnostic_sessions.length },
-      { tablename: 'tv_interfaces', live_rows: mockData.tv_interfaces.length }
+      { tablename: "devices", live_rows: mockData.devices.length },
+      { tablename: "problems", live_rows: mockData.problems.length },
+      {
+        tablename: "diagnostic_steps",
+        live_rows: mockData.diagnostic_steps.length,
+      },
+      {
+        tablename: "diagnostic_sessions",
+        live_rows: mockData.diagnostic_sessions.length,
+      },
+      { tablename: "tv_interfaces", live_rows: mockData.tv_interfaces.length },
     ],
-    databaseSize: '1.2 MB (mock)',
-    timestamp: new Date().toISOString()
+    databaseSize: "1.2 MB (mock)",
+    timestamp: new Date().toISOString(),
   };
 }
 
 // Mock close pool
 export async function closePool() {
-  console.log('✅ Mock database pool closed');
+  console.log("✅ Mock database pool closed");
 }
 
 // Create a mock pool object
@@ -349,7 +383,7 @@ export const pool = {
     release: () => {},
   }),
   on: () => {},
-  end: async () => {}
+  end: async () => {},
 };
 
 export default {
@@ -360,5 +394,5 @@ export default {
   runMigrations,
   getDatabaseStats,
   closePool,
-  pool
+  pool,
 };
