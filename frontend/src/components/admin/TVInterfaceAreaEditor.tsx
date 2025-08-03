@@ -359,23 +359,9 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
 
   const handleSaveScreenshot = async (screenshotData: string) => {
     try {
-      // Вызываем onSave с обновленными данными интерфейса
-      const updatedInterface = {
-        ...tvInterface,
-        screenshotData,
-        screenshot_data: screenshotData
-      };
-
-      // Вместо вызова onSave, который предназначен для областей,
-      // нужно обновить интерфейс через API
-      await fetch(`/api/v1/tv-interfaces/${tvInterface.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          screenshotData
-        })
+      // Обновляем интерфейс через API
+      await tvInterfacesAPI.update(tvInterface.id, {
+        screenshotData
       });
 
       // Обновляем локальное состояние
@@ -414,7 +400,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
             <Button asChild variant="outline" disabled={isUploading}>
               <label htmlFor="screenshot-upload" className="cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
-                {isUploading ? 'Загружается...' : 'Загрузить скриншот'}
+                {isUploading ? 'Загружается...' : 'Загрузи��ь скриншот'}
               </label>
             </Button>
             <p className="text-xs text-gray-400 text-center">
