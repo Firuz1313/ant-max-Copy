@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -869,7 +869,7 @@ const StepsManager = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам и проблемам
+            Создание шагов диагностик�� с привязкой к приставкам и проблемам
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
