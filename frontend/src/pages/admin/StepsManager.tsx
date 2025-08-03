@@ -52,7 +52,7 @@ import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
-// Мемоизированный компонент формы для предотвращения поте��и фокуса
+// Мемоизированный компонент формы для предотвращения потери фокуса
 const StepFormFieldsComponent = React.memo(
   ({
     isEdit = false,
@@ -151,7 +151,7 @@ const StepFormFieldsComponent = React.memo(
 
       <div>
         <Label htmlFor={isEdit ? "edit-instruction" : "instruction"}>
-          Инструкция
+          Инструкци��
         </Label>
         <Textarea
           id={isEdit ? "edit-instruction" : "instruction"}
@@ -219,7 +219,7 @@ const StepFormFieldsComponent = React.memo(
             onValueChange={(value) => handleFieldChange("remoteId", value)}
           >
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Выберите пульт" />
+              <SelectValue placeholder="Выб��рите пульт" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Без пульта</SelectItem>
@@ -343,7 +343,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
     tvInterface: "home" as DiagnosticStep["tvInterface"],
-    tvInterfaceId: "none", // Добавлено для выбора созданного ин��ерфейса
+    tvInterfaceId: "none", // Добавлено для выбора созданного интерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -448,7 +448,14 @@ const StepsManager = () => {
       screenshot_data: tvInterface.screenshot_data ? "present" : "missing",
     });
 
-    // Fetch full interface data to ensure we have the screenshot
+    // Validate interface ID and fetch full interface data
+    if (!tvInterface.id) {
+      console.warn("⚠️ TV interface has no ID, using cached data");
+      setSelectedTVInterface(tvInterface);
+      setIsTVInterfaceEditorOpen(true);
+      return;
+    }
+
     try {
       console.log(`🔄 Fetching full TV interface data for: ${tvInterface.id}`);
       const response = await tvInterfacesAPI.getById(tvInterface.id);
@@ -476,7 +483,7 @@ const StepsManager = () => {
       console.error(`❌ Error loading full interface data for ${tvInterface.id}:`, error);
       toast({
         title: "Предупреждение",
-        description: `Не удалось загрузить полные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
+        description: `Не удалось загрузить полные ��анные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
         variant: "destructive",
       });
       setSelectedTVInterface(tvInterface);
@@ -1227,7 +1234,7 @@ const StepsManager = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Редактироват���� шаг</DialogTitle>
+            <DialogTitle>Редактироват�� шаг</DialogTitle>
           </DialogHeader>
           <StepFormFieldsComponent
             isEdit={true}
