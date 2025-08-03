@@ -151,7 +151,7 @@ const StepFormFieldsComponent = React.memo(
 
       <div>
         <Label htmlFor={isEdit ? "edit-instruction" : "instruction"}>
-          Инструкци��
+          Инструкция
         </Label>
         <Textarea
           id={isEdit ? "edit-instruction" : "instruction"}
@@ -219,7 +219,7 @@ const StepFormFieldsComponent = React.memo(
             onValueChange={(value) => handleFieldChange("remoteId", value)}
           >
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Выб��рите пульт" />
+              <SelectValue placeholder="Выберите пульт" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Без пульта</SelectItem>
@@ -475,15 +475,30 @@ const StepsManager = () => {
         setSelectedTVInterface(fullInterface);
       } else {
         console.warn(
-          `⚠️ Failed to load full interface data for ${tvInterface.id}: ${response.error}. Using cached data.`,
+          `⚠️ Failed to load full interface data for ${tvInterface.id}: ${response.error}. Checking if interface still exists.`,
         );
+
+        // If interface not found, try reloading the TV interfaces list
+        if (response.error?.includes("404") || response.error?.includes("не найден")) {
+          console.log("🔄 Interface not found, reloading TV interfaces list...");
+          if (selectedDeviceId) {
+            await loadTVInterfacesForDevice(selectedDeviceId);
+          }
+          toast({
+            title: "Интерфейс не найден",
+            description: `TV интерфейс "${tvInterface.name}" больше не существует. Список интерфейсов обновлён.`,
+            variant: "destructive",
+          });
+          return; // Don't open editor for non-existent interface
+        }
+
         setSelectedTVInterface(tvInterface);
       }
     } catch (error) {
       console.error(`❌ Error loading full interface data for ${tvInterface.id}:`, error);
       toast({
         title: "Предупреждение",
-        description: `Не удалось загрузить полные ��анные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
+        description: `Не удалось загрузить по��ные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
         variant: "destructive",
       });
       setSelectedTVInterface(tvInterface);
