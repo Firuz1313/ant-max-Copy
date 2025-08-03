@@ -65,25 +65,46 @@ const QuickCleanupButton: React.FC = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>🎯 Создать пользовательские TV интерфейсы?</AlertDialogTitle>
-          <AlertDialogDescription className="space-y-2">
-            <p>
-              <strong>Это действие:</strong>
-            </p>
-            <ul className="list-disc list-inside space-y-1 text-sm">
-              <li>❌ Удалит все тестовые интерфейсы ("Главное меню OpenBox", "Настройки UCLAN")</li>
-              <li>✅ Создаст новые пользовательские интерфейсы с реальными скриншотами</li>
-              <li>✅ Исправит проблему "Нет скриншота" в редакторе областей</li>
-              <li>✅ До��авит кликабельные области для навигации</li>
-            </ul>
-            <p className="font-medium text-green-600">
-              После этого редактор областей интерфейса будет полностью работать!
-            </p>
+          <AlertDialogDescription asChild>
+            <div className="space-y-3">
+              <div className="text-sm text-muted-foreground">
+                <strong>Это действие:</strong>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-start gap-2">
+                  <span>❌</span>
+                  <span>Удалит все тестовые интерфейсы ("Главное меню OpenBox", "Настройки UCLAN")</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span>✅</span>
+                  <span>Создаст новые пользовательские интерфейсы с реальными скриншота��и</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span>✅</span>
+                  <span>Исправит проблему "Нет скриншота" в редакторе областей</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span>✅</span>
+                  <span>Добавит кликабельные области для навигации</span>
+                </div>
+              </div>
+              <div className="font-medium text-green-600 text-sm">
+                После этого редактор областей интерфейса будет полностью работать!
+              </div>
+            </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Отмена</AlertDialogCancel>
-          <AlertDialogAction onClick={handleCleanup}>
-            🚀 Создать пользовательские интерфейсы
+          <AlertDialogAction onClick={handleCleanup} disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Создание...
+              </>
+            ) : (
+              '🚀 Создать пользовательские интерфейсы'
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
