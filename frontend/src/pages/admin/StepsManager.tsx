@@ -51,7 +51,7 @@ import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
-import SimpleCleanupButton from "@/components/admin/SimpleCleanupButton";
+
 
 // Мемоизированный компонент формы для предотвращения потери фокуса
 const StepFormFieldsComponent = React.memo(({
@@ -136,7 +136,7 @@ const StepFormFieldsComponent = React.memo(({
         id={isEdit ? "edit-title" : "title"}
         value={formData.title}
         onChange={(e) => handleFieldChange("title", e.target.value)}
-        placeholder="Введите название шага"
+        placeholder="Введит�� название шага"
       />
     </div>
 
