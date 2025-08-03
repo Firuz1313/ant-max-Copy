@@ -451,9 +451,11 @@ const StepsManager = () => {
     });
 
     // Check if this interface still exists in our current list
-    const interfaceExists = tvInterfaces.find(ti => ti.id === tvInterface.id);
+    const interfaceExists = tvInterfaces.find((ti) => ti.id === tvInterface.id);
     if (!interfaceExists) {
-      console.warn(`⚠️ TV interface ${tvInterface.id} not found in current list, reloading...`);
+      console.warn(
+        `⚠️ TV interface ${tvInterface.id} not found in current list, reloading...`,
+      );
       if (selectedDeviceId) {
         await loadTVInterfacesForDevice(selectedDeviceId);
       }
@@ -496,8 +498,13 @@ const StepsManager = () => {
         );
 
         // If interface not found, try reloading the TV interfaces list
-        if (response.error?.includes("404") || response.error?.includes("не найден")) {
-          console.log("🔄 Interface not found, reloading TV interfaces list...");
+        if (
+          response.error?.includes("404") ||
+          response.error?.includes("не найден")
+        ) {
+          console.log(
+            "🔄 Interface not found, reloading TV interfaces list...",
+          );
           if (selectedDeviceId) {
             await loadTVInterfacesForDevice(selectedDeviceId);
           }
@@ -512,7 +519,10 @@ const StepsManager = () => {
         setSelectedTVInterface(tvInterface);
       }
     } catch (error) {
-      console.error(`❌ Error loading full interface data for ${tvInterface.id}:`, error);
+      console.error(
+        `❌ Error loading full interface data for ${tvInterface.id}:`,
+        error,
+      );
       toast({
         title: "Предупреждение",
         description: `Не удалось загрузить по��ные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
@@ -909,7 +919,8 @@ const StepsManager = () => {
               {isPickingButton && (
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <p className="text-sm text-blue-700 dark:text-blue-300">
-                    Кликнит�� на изображение пульта, чтобы указать позицию кнопки
+                    Кликнит�� на изображение пульта, чтобы указать позицию
+                    кнопки
                   </p>
                 </div>
               )}
@@ -1180,8 +1191,8 @@ const StepsManager = () => {
                               )}
                               {step.buttonPosition && (
                                 <span>
-                                  Пози��ия: ({Math.round(step.buttonPosition.x)},{" "}
-                                  {Math.round(step.buttonPosition.y)})
+                                  Пози��ия: ({Math.round(step.buttonPosition.x)}
+                                  , {Math.round(step.buttonPosition.y)})
                                 </span>
                               )}
                               {step.highlightTVArea && (

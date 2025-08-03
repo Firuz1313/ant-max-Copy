@@ -150,7 +150,10 @@ export async function query(text, params = []) {
       if (lowercaseText.includes("where id =")) {
         const id = params[0];
         console.log(`🔍 Mock DB: Looking for TV interface with ID: ${id}`);
-        console.log(`📊 Mock DB: Available interfaces:`, mockData.tv_interfaces.map(t => t.id));
+        console.log(
+          `📊 Mock DB: Available interfaces:`,
+          mockData.tv_interfaces.map((t) => t.id),
+        );
         const tvInterface = mockData.tv_interfaces.find(
           (t) => t.id === id && !t.deleted_at,
         );
