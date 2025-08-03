@@ -113,7 +113,7 @@ class TVInterface extends BaseModel {
   // Создать новый интерфейс
   async create(data) {
     try {
-      // Валидация обязательных полей
+      // Валидаци�� обязательных полей
       if (!data.name || !data.name.trim()) {
         throw new Error('Название интерфейса обязательно');
       }
@@ -190,7 +190,7 @@ class TVInterface extends BaseModel {
       if (data.highlight_areas !== undefined) updateData.highlight_areas = JSON.stringify(data.highlight_areas);
       if (data.is_active !== undefined) updateData.is_active = data.is_active;
 
-      await super.update(id, updateData);
+      await super.updateById(id, updateData);
       
       // Возвращаем обновленный интерфейс с данными устройства
       const updated = await this.getById(id);
