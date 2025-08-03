@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Trash2, Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { cleanupAPI } from '@/api/cleanup';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Trash2, Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { cleanupAPI } from "@/api/cleanup";
 
 const QuickCleanupButton: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,12 +35,13 @@ const QuickCleanupButton: React.FC = () => {
       } else {
         toast({
           title: "❌ Ошибка",
-          description: response.error || "Не удалось выполнить очистку TV интерфейсов",
+          description:
+            response.error || "Не удалось выполнить очистку TV интерфейсов",
           variant: "destructive",
         });
       }
     } catch (error) {
-      console.error('Error cleaning up TV interfaces:', error);
+      console.error("Error cleaning up TV interfaces:", error);
       toast({
         title: "❌ Ошибка",
         description: "Произошла ошибка при очистке TV интерфейсов",
@@ -44,11 +55,7 @@ const QuickCleanupButton: React.FC = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button 
-          variant="destructive" 
-          disabled={isLoading}
-          className="w-full"
-        >
+        <Button variant="destructive" disabled={isLoading} className="w-full">
           {isLoading ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -64,7 +71,9 @@ const QuickCleanupButton: React.FC = () => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>🎯 Создать пользовательские TV интерфейсы?</AlertDialogTitle>
+          <AlertDialogTitle>
+            🎯 Создать пользовательские TV интерфейсы?
+          </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <div className="space-y-3">
               <div className="text-sm text-muted-foreground">
@@ -73,15 +82,23 @@ const QuickCleanupButton: React.FC = () => {
               <div className="space-y-2 text-sm">
                 <div className="flex items-start gap-2">
                   <span>❌</span>
-                  <span>Удалит все тестовые интерфейсы ("Главное меню OpenBox", "Настройки UCLAN")</span>
+                  <span>
+                    Удалит все тестовые интерфейсы ("Главное меню OpenBox",
+                    "Настройки UCLAN")
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span>✅</span>
-                  <span>Создаст новые пользовательские интерфейсы с реальными скриншота��и</span>
+                  <span>
+                    Создаст новые пользовательские интерфейсы с реальными
+                    скриншота��и
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span>✅</span>
-                  <span>Исправит проблему "Нет скриншота" в редакторе областей</span>
+                  <span>
+                    Исправит проблему "Нет скриншота" в редакторе областей
+                  </span>
                 </div>
                 <div className="flex items-start gap-2">
                   <span>✅</span>
@@ -89,7 +106,8 @@ const QuickCleanupButton: React.FC = () => {
                 </div>
               </div>
               <div className="font-medium text-green-600 text-sm">
-                После этого редактор областей интерфейса будет полностью работать!
+                После этого редактор областей интерфейса будет полностью
+                работать!
               </div>
             </div>
           </AlertDialogDescription>
@@ -103,7 +121,7 @@ const QuickCleanupButton: React.FC = () => {
                 Создание...
               </>
             ) : (
-              '🚀 Создать пользовательские интерфейсы'
+              "🚀 Создать пользовательские интерфейсы"
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

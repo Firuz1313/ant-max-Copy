@@ -52,228 +52,228 @@ import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
-
 // Мемоизированный компонент формы для предотвращения потери фокуса
-const StepFormFieldsComponent = React.memo(({
-  isEdit = false,
-  formData,
-  handleFieldChange,
-  handleDeviceChange,
-  getActiveDevices,
-  getAvailableProblems,
-  getAvailableRemotes,
-  devices,
-  tvInterfaces,
-  loadingTVInterfaces,
-  openTVInterfaceEditor,
-  openRemoteEditor,
-}: {
-  isEdit?: boolean;
-  formData: any;
-  handleFieldChange: (field: string, value: any) => void;
-  handleDeviceChange: (value: string) => void;
-  getActiveDevices: () => any[];
-  getAvailableProblems: () => any[];
-  getAvailableRemotes: () => any[];
-  devices: any[];
-  tvInterfaces: any[];
-  loadingTVInterfaces: boolean;
-  openTVInterfaceEditor: (tvInterface: any) => void;
-  openRemoteEditor: () => void;
-}) => (
-  <div className="space-y-4 max-h-96 overflow-y-auto">
-    <div className="grid grid-cols-2 gap-4">
-      <div>
-        <Label htmlFor={isEdit ? "edit-deviceId" : "deviceId"}>
-          Приставка
-        </Label>
-        <Select
-          value={formData.deviceId}
-          onValueChange={handleDeviceChange}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Выберите приставку" />
-          </SelectTrigger>
-          <SelectContent>
-            {getActiveDevices().map((device) => (
-              <SelectItem key={device.id} value={device.id}>
-                <div className="flex items-center">
-                  <div
-                    className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                  />
-                  {device.name}
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-      <div>
-        <Label htmlFor={isEdit ? "edit-problemId" : "problemId"}>
-          Проблема
-        </Label>
-        <Select
-          value={formData.problemId}
-          onValueChange={(value) => handleFieldChange("problemId", value)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Выберите пробл��му" />
-          </SelectTrigger>
-          <SelectContent>
-            {getAvailableProblems().map((problem) => (
-              <SelectItem key={problem.id} value={problem.id}>
-                {problem.title}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
-
-    <div>
-      <Label htmlFor={isEdit ? "edit-title" : "title"}>Название шага</Label>
-      <Input
-        id={isEdit ? "edit-title" : "title"}
-        value={formData.title}
-        onChange={(e) => handleFieldChange("title", e.target.value)}
-        placeholder="Введит�� название шага"
-      />
-    </div>
-
-    <div>
-      <Label htmlFor={isEdit ? "edit-description" : "description"}>
-        Описание
-      </Label>
-      <Textarea
-        id={isEdit ? "edit-description" : "description"}
-        value={formData.description}
-        onChange={(e) => handleFieldChange("description", e.target.value)}
-        placeholder="Краткое описание шага"
-      />
-    </div>
-
-    <div>
-      <Label htmlFor={isEdit ? "edit-instruction" : "instruction"}>
-        Инструкция
-      </Label>
-      <Textarea
-        id={isEdit ? "edit-instruction" : "instruction"}
-        value={formData.instruction}
-        onChange={(e) => handleFieldChange("instruction", e.target.value)}
-        placeholder="Подробная инструкция для пользователя"
-      />
-    </div>
-
-    <div>
-      <Label htmlFor={isEdit ? "edit-tvInterfaceId" : "tvInterfaceId"}>
-        Созданный интерфейс
-      </Label>
-      <div className="flex space-x-2">
-        <Select
-          value={formData.tvInterfaceId}
-          onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
-        >
-          <SelectTrigger className="flex-1">
-            <SelectValue placeholder="Выберите интерфейс" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">Без интерфейса</SelectItem>
-            {loadingTVInterfaces ? (
-              <SelectItem value="loading" disabled>
-                Загрузка...
-              </SelectItem>
-            ) : (
-              tvInterfaces.map((tvInterface) => (
-                <SelectItem key={tvInterface.id} value={tvInterface.id}>
+const StepFormFieldsComponent = React.memo(
+  ({
+    isEdit = false,
+    formData,
+    handleFieldChange,
+    handleDeviceChange,
+    getActiveDevices,
+    getAvailableProblems,
+    getAvailableRemotes,
+    devices,
+    tvInterfaces,
+    loadingTVInterfaces,
+    openTVInterfaceEditor,
+    openRemoteEditor,
+  }: {
+    isEdit?: boolean;
+    formData: any;
+    handleFieldChange: (field: string, value: any) => void;
+    handleDeviceChange: (value: string) => void;
+    getActiveDevices: () => any[];
+    getAvailableProblems: () => any[];
+    getAvailableRemotes: () => any[];
+    devices: any[];
+    tvInterfaces: any[];
+    loadingTVInterfaces: boolean;
+    openTVInterfaceEditor: (tvInterface: any) => void;
+    openRemoteEditor: () => void;
+  }) => (
+    <div className="space-y-4 max-h-96 overflow-y-auto">
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor={isEdit ? "edit-deviceId" : "deviceId"}>
+            Приставка
+          </Label>
+          <Select value={formData.deviceId} onValueChange={handleDeviceChange}>
+            <SelectTrigger>
+              <SelectValue placeholder="Выберите приставку" />
+            </SelectTrigger>
+            <SelectContent>
+              {getActiveDevices().map((device) => (
+                <SelectItem key={device.id} value={device.id}>
                   <div className="flex items-center">
-                    <Monitor className="w-3 h-3 mr-2" />
-                    {tvInterface.name}
-                    <span className="ml-2 text-xs text-gray-500">
-                      ({tvInterface.type})
-                    </span>
+                    <div
+                      className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                    />
+                    {device.name}
                   </div>
                 </SelectItem>
-              ))
-            )}
-          </SelectContent>
-        </Select>
-        {formData.tvInterfaceId !== "none" && (
-          <Button
-            variant="outline"
-            onClick={() => {
-              const tvInterface = tvInterfaces.find(ti => ti.id === formData.tvInterfaceId);
-              if (tvInterface) openTVInterfaceEditor(tvInterface);
-            }}
-            size="sm"
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor={isEdit ? "edit-problemId" : "problemId"}>
+            Проблема
+          </Label>
+          <Select
+            value={formData.problemId}
+            onValueChange={(value) => handleFieldChange("problemId", value)}
           >
-            <Target className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
-    </div>
-
-    <div>
-      <Label htmlFor={isEdit ? "edit-remoteId" : "remoteId"}>Пульт</Label>
-      <div className="flex space-x-2">
-        <Select
-          value={formData.remoteId}
-          onValueChange={(value) => handleFieldChange("remoteId", value)}
-        >
-          <SelectTrigger className="flex-1">
-            <SelectValue placeholder="Выберите пульт" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="none">Без пульта</SelectItem>
-            {getAvailableRemotes().map((remote) => {
-              const device = devices.find((d) => d.id === remote.deviceId);
-              return (
-                <SelectItem key={remote.id} value={remote.id}>
-                  <div className="flex items-center">
-                    {device && (
-                      <div
-                        className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                      />
-                    )}
-                    {remote.name}
-                    {remote.isDefault && (
-                      <span className="ml-2 text-xs text-blue-600">
-                        (по умолчанию)
-                      </span>
-                    )}
-                  </div>
+            <SelectTrigger>
+              <SelectValue placeholder="Выберите пробл��му" />
+            </SelectTrigger>
+            <SelectContent>
+              {getAvailableProblems().map((problem) => (
+                <SelectItem key={problem.id} value={problem.id}>
+                  {problem.title}
                 </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
-        {formData.remoteId !== "none" && (
-          <Button variant="outline" onClick={openRemoteEditor} size="sm">
-            <MousePointer className="h-4 w-4" />
-          </Button>
-        )}
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
-    </div>
 
-    <div>
-      <Label htmlFor={isEdit ? "edit-hint" : "hint"}>Подсказка</Label>
-      <Textarea
-        id={isEdit ? "edit-hint" : "hint"}
-        value={formData.hint}
-        onChange={(e) => handleFieldChange("hint", e.target.value)}
-        placeholder="Главная ��одсказка данного шага решения"
-      />
-    </div>
-
-    {formData.buttonPosition.x > 0 && formData.buttonPosition.y > 0 && (
-      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-        <p className="text-sm text-green-700 dark:text-green-300">
-          Позиция кнопки: ({Math.round(formData.buttonPosition.x)},{" "}
-          {Math.round(formData.buttonPosition.y)})
-        </p>
+      <div>
+        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название шага</Label>
+        <Input
+          id={isEdit ? "edit-title" : "title"}
+          value={formData.title}
+          onChange={(e) => handleFieldChange("title", e.target.value)}
+          placeholder="Введит�� название шага"
+        />
       </div>
-    )}
-  </div>
-));
+
+      <div>
+        <Label htmlFor={isEdit ? "edit-description" : "description"}>
+          Описание
+        </Label>
+        <Textarea
+          id={isEdit ? "edit-description" : "description"}
+          value={formData.description}
+          onChange={(e) => handleFieldChange("description", e.target.value)}
+          placeholder="Краткое описание шага"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor={isEdit ? "edit-instruction" : "instruction"}>
+          Инструкция
+        </Label>
+        <Textarea
+          id={isEdit ? "edit-instruction" : "instruction"}
+          value={formData.instruction}
+          onChange={(e) => handleFieldChange("instruction", e.target.value)}
+          placeholder="Подробная инструкция для пользователя"
+        />
+      </div>
+
+      <div>
+        <Label htmlFor={isEdit ? "edit-tvInterfaceId" : "tvInterfaceId"}>
+          Созданный интерфейс
+        </Label>
+        <div className="flex space-x-2">
+          <Select
+            value={formData.tvInterfaceId}
+            onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
+          >
+            <SelectTrigger className="flex-1">
+              <SelectValue placeholder="Выберите интерфейс" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Без интерфейса</SelectItem>
+              {loadingTVInterfaces ? (
+                <SelectItem value="loading" disabled>
+                  Загрузка...
+                </SelectItem>
+              ) : (
+                tvInterfaces.map((tvInterface) => (
+                  <SelectItem key={tvInterface.id} value={tvInterface.id}>
+                    <div className="flex items-center">
+                      <Monitor className="w-3 h-3 mr-2" />
+                      {tvInterface.name}
+                      <span className="ml-2 text-xs text-gray-500">
+                        ({tvInterface.type})
+                      </span>
+                    </div>
+                  </SelectItem>
+                ))
+              )}
+            </SelectContent>
+          </Select>
+          {formData.tvInterfaceId !== "none" && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                const tvInterface = tvInterfaces.find(
+                  (ti) => ti.id === formData.tvInterfaceId,
+                );
+                if (tvInterface) openTVInterfaceEditor(tvInterface);
+              }}
+              size="sm"
+            >
+              <Target className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor={isEdit ? "edit-remoteId" : "remoteId"}>Пульт</Label>
+        <div className="flex space-x-2">
+          <Select
+            value={formData.remoteId}
+            onValueChange={(value) => handleFieldChange("remoteId", value)}
+          >
+            <SelectTrigger className="flex-1">
+              <SelectValue placeholder="Выберите пульт" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Без пульта</SelectItem>
+              {getAvailableRemotes().map((remote) => {
+                const device = devices.find((d) => d.id === remote.deviceId);
+                return (
+                  <SelectItem key={remote.id} value={remote.id}>
+                    <div className="flex items-center">
+                      {device && (
+                        <div
+                          className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                        />
+                      )}
+                      {remote.name}
+                      {remote.isDefault && (
+                        <span className="ml-2 text-xs text-blue-600">
+                          (по умолчанию)
+                        </span>
+                      )}
+                    </div>
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+          {formData.remoteId !== "none" && (
+            <Button variant="outline" onClick={openRemoteEditor} size="sm">
+              <MousePointer className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor={isEdit ? "edit-hint" : "hint"}>Подсказка</Label>
+        <Textarea
+          id={isEdit ? "edit-hint" : "hint"}
+          value={formData.hint}
+          onChange={(e) => handleFieldChange("hint", e.target.value)}
+          placeholder="Главная ��одсказка данного шага решения"
+        />
+      </div>
+
+      {formData.buttonPosition.x > 0 && formData.buttonPosition.y > 0 && (
+        <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+          <p className="text-sm text-green-700 dark:text-green-300">
+            Позиция кнопки: ({Math.round(formData.buttonPosition.x)},{" "}
+            {Math.round(formData.buttonPosition.y)})
+          </p>
+        </div>
+      )}
+    </div>
+  ),
+);
 
 interface DiagnosticStep {
   id: string;
@@ -329,7 +329,8 @@ const StepsManager = () => {
 
   // TV Interfaces state
   const [tvInterfaces, setTVInterfaces] = useState<TVInterface[]>([]);
-  const [selectedTVInterface, setSelectedTVInterface] = useState<TVInterface | null>(null);
+  const [selectedTVInterface, setSelectedTVInterface] =
+    useState<TVInterface | null>(null);
   const [loadingTVInterfaces, setLoadingTVInterfaces] = useState(false);
 
   // Form data state - moved before useEffect to fix initialization order
@@ -371,42 +372,60 @@ const StepsManager = () => {
 
       if (response.success && response.data) {
         // Нормализуем данные с бэкенда
-        const normalizedInterfaces = response.data.map(tvInterface => ({
+        const normalizedInterfaces = response.data.map((tvInterface) => ({
           ...tvInterface,
-          screenshotData: tvInterface.screenshotData || tvInterface.screenshot_data,
-          clickableAreas: tvInterface.clickableAreas || tvInterface.clickable_areas || [],
-          highlightAreas: tvInterface.highlightAreas || tvInterface.highlight_areas || [],
+          screenshotData:
+            tvInterface.screenshotData || tvInterface.screenshot_data,
+          clickableAreas:
+            tvInterface.clickableAreas || tvInterface.clickable_areas || [],
+          highlightAreas:
+            tvInterface.highlightAreas || tvInterface.highlight_areas || [],
           deviceId: tvInterface.deviceId || tvInterface.device_id,
-          isActive: tvInterface.isActive !== undefined ? tvInterface.isActive : tvInterface.is_active
+          isActive:
+            tvInterface.isActive !== undefined
+              ? tvInterface.isActive
+              : tvInterface.is_active,
         }));
 
         setTVInterfaces(normalizedInterfaces);
-        console.log(`✅ Loaded ${normalizedInterfaces.length} TV interfaces:`, normalizedInterfaces);
+        console.log(
+          `✅ Loaded ${normalizedInterfaces.length} TV interfaces:`,
+          normalizedInterfaces,
+        );
       } else {
-        console.warn(`⚠️ No TV interfaces found for device ${deviceId}:`, response.error);
+        console.warn(
+          `⚠️ No TV interfaces found for device ${deviceId}:`,
+          response.error,
+        );
         setTVInterfaces([]);
       }
     } catch (error) {
-      console.error(`❌ Error loading TV interfaces for device ${deviceId}:`, error);
+      console.error(
+        `❌ Error loading TV interfaces for device ${deviceId}:`,
+        error,
+      );
       setTVInterfaces([]);
 
       // Показываем пользователю информацию об ошибке
-      if (error instanceof Error && error.message.includes('Сетевая ошибка')) {
+      if (error instanceof Error && error.message.includes("Сетевая ошибка")) {
         // Можно добавить toast уведомление
-        console.error('Проблемы с подключением к серверу');
+        console.error("Проблемы с подключением к серверу");
       }
     } finally {
       setLoadingTVInterfaces(false);
     }
   };
 
-  const handleTVInterfaceAreaSave = async (clickableAreas: any[], highlightAreas: any[]) => {
+  const handleTVInterfaceAreaSave = async (
+    clickableAreas: any[],
+    highlightAreas: any[],
+  ) => {
     if (!selectedTVInterface) return;
 
     try {
       await tvInterfacesAPI.update(selectedTVInterface.id, {
         clickableAreas,
-        highlightAreas
+        highlightAreas,
       });
 
       // Refresh TV interfaces
@@ -417,16 +436,16 @@ const StepsManager = () => {
       setIsTVInterfaceEditorOpen(false);
       setSelectedTVInterface(null);
     } catch (error) {
-      console.error('Error saving TV interface areas:', error);
+      console.error("Error saving TV interface areas:", error);
     }
   };
 
   const openTVInterfaceEditor = (tvInterface: TVInterface) => {
-    console.log('Opening TV Interface Editor with:', {
+    console.log("Opening TV Interface Editor with:", {
       id: tvInterface.id,
       name: tvInterface.name,
-      screenshotData: tvInterface.screenshotData ? 'present' : 'missing',
-      screenshot_data: tvInterface.screenshot_data ? 'present' : 'missing'
+      screenshotData: tvInterface.screenshotData ? "present" : "missing",
+      screenshot_data: tvInterface.screenshot_data ? "present" : "missing",
     });
     setSelectedTVInterface(tvInterface);
     setIsTVInterfaceEditorOpen(true);
@@ -490,7 +509,8 @@ const StepsManager = () => {
           ? undefined
           : formData.highlightTVArea,
       remoteId: formData.remoteId === "none" ? undefined : formData.remoteId,
-      tvInterfaceId: formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
+      tvInterfaceId:
+        formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
       buttonPosition:
         formData.buttonPosition.x === 0 && formData.buttonPosition.y === 0
           ? undefined
@@ -524,7 +544,8 @@ const StepsManager = () => {
           ? undefined
           : formData.highlightTVArea,
       remoteId: formData.remoteId === "none" ? undefined : formData.remoteId,
-      tvInterfaceId: formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
+      tvInterfaceId:
+        formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
       buttonPosition:
         formData.buttonPosition.x === 0 && formData.buttonPosition.y === 0
           ? undefined
@@ -695,18 +716,21 @@ const StepsManager = () => {
   };
 
   const handleFieldChange = useCallback((field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   }, []);
 
-  const handleDeviceChange = useCallback((value: string) => {
-    const defaultRemote = getDefaultRemoteForDevice(value);
-    setFormData(prev => ({
-      ...prev,
-      deviceId: value,
-      problemId: "",
-      remoteId: defaultRemote?.id || "none",
-    }));
-  }, [getDefaultRemoteForDevice]);
+  const handleDeviceChange = useCallback(
+    (value: string) => {
+      const defaultRemote = getDefaultRemoteForDevice(value);
+      setFormData((prev) => ({
+        ...prev,
+        deviceId: value,
+        problemId: "",
+        remoteId: defaultRemote?.id || "none",
+      }));
+    },
+    [getDefaultRemoteForDevice],
+  );
 
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
@@ -1219,7 +1243,10 @@ const StepsManager = () => {
       )}
 
       {/* TV Interface Area Editor Dialog */}
-      <Dialog open={isTVInterfaceEditorOpen} onOpenChange={setIsTVInterfaceEditorOpen}>
+      <Dialog
+        open={isTVInterfaceEditorOpen}
+        onOpenChange={setIsTVInterfaceEditorOpen}
+      >
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
@@ -1244,76 +1271,91 @@ const StepsManager = () => {
       </Dialog>
 
       {/* Created TV Interfaces Section */}
-      {formData.deviceId && formData.deviceId !== "all" && tvInterfaces.length > 0 && (
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Monitor className="h-5 w-5 mr-2" />
-              Созданные интерфейсы для устройства
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {tvInterfaces.map((tvInterface) => (
-                <Card key={tvInterface.id} className="relative">
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      {/* Interface Preview */}
-                      <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
-                        {tvInterface.screenshotData ? (
-                          <img
-                            src={tvInterface.screenshotData}
-                            alt={tvInterface.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex items-center justify-center h-full">
-                            <Tv className="h-8 w-8 text-gray-400" />
-                          </div>
-                        )}
-                      </div>
+      {formData.deviceId &&
+        formData.deviceId !== "all" &&
+        tvInterfaces.length > 0 && (
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Monitor className="h-5 w-5 mr-2" />
+                Созданные интерфейсы для устройства
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {tvInterfaces.map((tvInterface) => (
+                  <Card key={tvInterface.id} className="relative">
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        {/* Interface Preview */}
+                        <div className="aspect-video bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden">
+                          {tvInterface.screenshotData ? (
+                            <img
+                              src={tvInterface.screenshotData}
+                              alt={tvInterface.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex items-center justify-center h-full">
+                              <Tv className="h-8 w-8 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
 
-                      {/* Interface Info */}
-                      <div>
-                        <h4 className="font-medium text-sm">{tvInterface.name}</h4>
-                        <p className="text-xs text-gray-500 capitalize">{tvInterface.type}</p>
-                        {tvInterface.description && (
-                          <p className="text-xs text-gray-600 mt-1 line-clamp-2">
-                            {tvInterface.description}
+                        {/* Interface Info */}
+                        <div>
+                          <h4 className="font-medium text-sm">
+                            {tvInterface.name}
+                          </h4>
+                          <p className="text-xs text-gray-500 capitalize">
+                            {tvInterface.type}
                           </p>
-                        )}
-                      </div>
+                          {tvInterface.description && (
+                            <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                              {tvInterface.description}
+                            </p>
+                          )}
+                        </div>
 
-                      {/* Actions */}
-                      <div className="flex items-center justify-between">
-                        <Badge variant={tvInterface.isActive ? "default" : "secondary"}>
-                          {tvInterface.isActive ? "Активен" : "Неактивен"}
-                        </Badge>
-                        <div className="flex space-x-1">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => openTVInterfaceEditor(tvInterface)}
+                        {/* Actions */}
+                        <div className="flex items-center justify-between">
+                          <Badge
+                            variant={
+                              tvInterface.isActive ? "default" : "secondary"
+                            }
                           >
-                            <Target className="h-3 w-3" />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setFormData({ ...formData, tvInterfaceId: tvInterface.id })}
-                          >
-                            <Plus className="h-3 w-3" />
-                          </Button>
+                            {tvInterface.isActive ? "Активен" : "Неактивен"}
+                          </Badge>
+                          <div className="flex space-x-1">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => openTVInterfaceEditor(tvInterface)}
+                            >
+                              <Target className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() =>
+                                setFormData({
+                                  ...formData,
+                                  tvInterfaceId: tvInterface.id,
+                                })
+                              }
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
     </div>
   );
 };
