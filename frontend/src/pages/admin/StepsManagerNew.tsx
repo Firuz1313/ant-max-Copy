@@ -795,7 +795,7 @@ const StepsManagerNew = () => {
         <Input
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          onChange={(e) => handleFieldChange("title", e.target.value)}
           placeholder="Введите название шага"
         />
       </div>
@@ -1089,7 +1089,7 @@ const StepsManagerNew = () => {
                           {remote.name}
                           {remote.isDefault && (
                             <span className="ml-2 text-xs text-blue-600">
-                              (по умолчанию)
+                              (по умолчан��ю)
                             </span>
                           )}
                         </div>
