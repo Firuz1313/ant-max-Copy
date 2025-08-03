@@ -420,8 +420,19 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
                 {isUploading ? 'Загружается...' : 'Загрузить скриншот'}
               </label>
             </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                // Переходим в TV Interface Builder для добавления скриншота
+                window.open(`/admin/tv-interface-builder?edit=${tvInterface.id}`, '_blank');
+              }}
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Редактировать в TV Builder
+            </Button>
             <p className="text-xs text-gray-400 text-center">
-              Поддерживаются форматы: JPG, PNG, GIF
+              Поддерживаются форматы: JPG, PNG, GIF<br />
+              Или добавьте скриншот через TV Interface Builder
             </p>
           </div>
         </CardContent>
