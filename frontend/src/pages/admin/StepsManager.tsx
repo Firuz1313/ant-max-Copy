@@ -259,7 +259,7 @@ const StepFormFieldsComponent = React.memo(({
         id={isEdit ? "edit-hint" : "hint"}
         value={formData.hint}
         onChange={(e) => handleFieldChange("hint", e.target.value)}
-        placeholder="Главная подсказка данного шага решения"
+        placeholder="Главная ��одсказка данного шага решения"
       />
     </div>
 
@@ -368,13 +368,13 @@ const StepsManager = () => {
       const response = await tvInterfacesAPI.getByDeviceId(deviceId);
       if (response.success && response.data) {
         // Нормализуем данные с бэкенда
-        const normalizedInterfaces = response.data.map(interface => ({
-          ...interface,
-          screenshotData: interface.screenshotData || interface.screenshot_data,
-          clickableAreas: interface.clickableAreas || interface.clickable_areas || [],
-          highlightAreas: interface.highlightAreas || interface.highlight_areas || [],
-          deviceId: interface.deviceId || interface.device_id,
-          isActive: interface.isActive !== undefined ? interface.isActive : interface.is_active
+        const normalizedInterfaces = response.data.map(tvInterface => ({
+          ...tvInterface,
+          screenshotData: tvInterface.screenshotData || tvInterface.screenshot_data,
+          clickableAreas: tvInterface.clickableAreas || tvInterface.clickable_areas || [],
+          highlightAreas: tvInterface.highlightAreas || tvInterface.highlight_areas || [],
+          deviceId: tvInterface.deviceId || tvInterface.device_id,
+          isActive: tvInterface.isActive !== undefined ? tvInterface.isActive : tvInterface.is_active
         }));
         setTVInterfaces(normalizedInterfaces);
         console.log('Loaded TV interfaces:', normalizedInterfaces);
