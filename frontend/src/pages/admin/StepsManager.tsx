@@ -821,9 +821,7 @@ const StepsManager = () => {
           <Input
             id={isEdit ? "edit-requiredAction" : "requiredAction"}
             value={formData.requiredAction}
-            onChange={(e) =>
-              setFormData({ ...formData, requiredAction: e.target.value })
-            }
+            onChange={(e) => handleFieldChange("requiredAction", e.target.value)}
             placeholder="Действие для автоперехода"
           />
         </div>
@@ -1124,7 +1122,7 @@ const StepsManager = () => {
                                 <Eye className="h-4 w-4 mr-2" />
                               )}
                               {step.isActive
-                                ? "Деактивировать"
+                                ? "Деак��ивировать"
                                 : "Активировать"}
                             </DropdownMenuItem>
                             <DropdownMenuItem
