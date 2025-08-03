@@ -754,9 +754,7 @@ const StepsManager = () => {
         <div className="flex space-x-2">
           <Select
             value={formData.remoteId}
-            onValueChange={(value) =>
-              setFormData({ ...formData, remoteId: value })
-            }
+            onValueChange={(value) => handleFieldChange("remoteId", value)}
           >
             <SelectTrigger className="flex-1">
               <SelectValue placeholder="Выберите пульт" />
