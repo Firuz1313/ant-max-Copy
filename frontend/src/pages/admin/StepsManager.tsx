@@ -832,7 +832,7 @@ const StepsManager = () => {
         <Textarea
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
-          onChange={(e) => setFormData({ ...formData, hint: e.target.value })}
+          onChange={(e) => handleFieldChange("hint", e.target.value)}
           placeholder="Дополнительная подсказка для пользователя"
         />
       </div>
@@ -1122,8 +1122,8 @@ const StepsManager = () => {
                                 <Eye className="h-4 w-4 mr-2" />
                               )}
                               {step.isActive
-                                ? "Деак��ивировать"
-                                : "Активировать"}
+                                ? "Деактивировать"
+                                : "Активирова��ь"}
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() => handleDelete(step.id)}
