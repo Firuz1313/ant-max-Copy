@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { TVInterface } from '@/types/tvInterface';
 import { cn } from '@/lib/utils';
+import { tvInterfacesAPI } from '@/api/tvInterfaces';
 
 interface ClickableArea {
   id: string;
