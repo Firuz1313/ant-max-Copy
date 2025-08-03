@@ -174,7 +174,7 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите интерфейс" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">Без интерфейса</SelectItem>
+              <SelectItem value="none">Без и��терфейса</SelectItem>
               {loadingTVInterfaces ? (
                 <SelectItem value="loading" disabled>
                   Загрузка...
@@ -440,14 +440,37 @@ const StepsManager = () => {
     }
   };
 
-  const openTVInterfaceEditor = (tvInterface: TVInterface) => {
+  const openTVInterfaceEditor = async (tvInterface: TVInterface) => {
     console.log("Opening TV Interface Editor with:", {
       id: tvInterface.id,
       name: tvInterface.name,
       screenshotData: tvInterface.screenshotData ? "present" : "missing",
       screenshot_data: tvInterface.screenshot_data ? "present" : "missing",
     });
-    setSelectedTVInterface(tvInterface);
+
+    // Fetch full interface data to ensure we have the screenshot
+    try {
+      console.log(`🔄 Fetching full TV interface data for: ${tvInterface.id}`);
+      const response = await tvInterfacesAPI.getById(tvInterface.id);
+
+      if (response.success && response.data) {
+        const fullInterface = tvInterfaceUtils.normalizeFromBackend(response.data);
+        console.log("✅ Loaded full TV interface with screenshot:", {
+          id: fullInterface.id,
+          name: fullInterface.name,
+          screenshotData: fullInterface.screenshotData ? "present" : "missing",
+          screenshot_data: fullInterface.screenshot_data ? "present" : "missing",
+        });
+        setSelectedTVInterface(fullInterface);
+      } else {
+        console.warn("⚠️ Failed to load full interface data, using cached data");
+        setSelectedTVInterface(tvInterface);
+      }
+    } catch (error) {
+      console.error("❌ Error loading full interface data:", error);
+      setSelectedTVInterface(tvInterface);
+    }
+
     setIsTVInterfaceEditorOpen(true);
   };
 
@@ -821,7 +844,7 @@ const StepsManager = () => {
                   className="w-full"
                 >
                   <ImageIcon className="h-4 w-4 mr-2" />
-                  Загрузить изображение
+                  Загруз��ть изображение
                 </Button>
               </div>
 
