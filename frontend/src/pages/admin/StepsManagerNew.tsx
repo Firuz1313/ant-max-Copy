@@ -786,7 +786,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
           onChange={(e) => handleFieldChange("title", e.target.value)}
-          placeholder="Введит�� название шага"
+          placeholder="Введите название шага"
         />
       </div>
 
@@ -921,7 +921,7 @@ const StepsManagerNew = () => {
         <Textarea
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
-          onChange={(e) => setFormData({ ...formData, hint: e.target.value })}
+          onChange={(e) => handleFieldChange("hint", e.target.value)}
           placeholder="Дополнительная подсказка для пользователя"
         />
       </div>
@@ -1213,7 +1213,7 @@ const StepsManagerNew = () => {
                               )}
                               {step.tvAreaPosition && (
                                 <span>
-                                  ТВ: ({Math.round(step.tvAreaPosition.x)},{" "}
+                                  ��В: ({Math.round(step.tvAreaPosition.x)},{" "}
                                   {Math.round(step.tvAreaPosition.y)})
                                 </span>
                               )}
@@ -1347,7 +1347,7 @@ const StepsManagerNew = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте изменить фильтры поиска или создайте новый шаг.
+              Попробуйте изменить фильтры поиска ��ли создайте новый шаг.
             </p>
           </CardContent>
         </Card>
