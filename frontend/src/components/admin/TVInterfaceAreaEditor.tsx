@@ -88,7 +88,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    const screenshotSrc = tvInterface.screenshotData || tvInterface.screenshot_data;
+    const screenshotSrc = tempScreenshot || tvInterface.screenshotData || tvInterface.screenshot_data;
     if (screenshotSrc && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
@@ -368,7 +368,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
       Object.assign(tvInterface, { screenshotData, screenshot_data: screenshotData });
       setImageLoaded(false); // Перезагружаем изображение
     } catch (error) {
-      console.error('Ошибка сохранения скриншота:', error);
+      console.error('Ошибка сохранения ск��иншота:', error);
     }
   };
 
@@ -400,7 +400,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
             <Button asChild variant="outline" disabled={isUploading}>
               <label htmlFor="screenshot-upload" className="cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
-                {isUploading ? 'Загружается...' : 'Загрузи��ь скриншот'}
+                {isUploading ? 'Загружается...' : 'Загрузить скриншот'}
               </label>
             </Button>
             <p className="text-xs text-gray-400 text-center">
