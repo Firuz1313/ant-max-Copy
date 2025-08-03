@@ -466,7 +466,7 @@ const StepsManagerNew = () => {
 
   const getTVInterfaceName = (tvInterfaceId: string) => {
     const tvInterface = getTVInterfaceById(tvInterfaceId);
-    return tvInterface?.name || "Неизвестный интерфейс";
+    return tvInterface?.name || "Неизвестны�� интерфейс";
   };
 
   const getGroupedSteps = () => {
@@ -821,12 +821,7 @@ const StepsManagerNew = () => {
         <div className="flex space-x-2">
           <Select
             value={formData.tvInterfaceId}
-            onValueChange={(value) =>
-              setFormData({
-                ...formData,
-                tvInterfaceId: value,
-              })
-            }
+            onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
           >
             <SelectTrigger className="flex-1">
               <SelectValue placeholder="Выберите интерфейс ТВ" />
@@ -1213,7 +1208,7 @@ const StepsManagerNew = () => {
                               )}
                               {step.tvAreaPosition && (
                                 <span>
-                                  ��В: ({Math.round(step.tvAreaPosition.x)},{" "}
+                                  ТВ: ({Math.round(step.tvAreaPosition.x)},{" "}
                                   {Math.round(step.tvAreaPosition.y)})
                                 </span>
                               )}
@@ -1347,7 +1342,7 @@ const StepsManagerNew = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте изменить фильтры поиска ��ли создайте новый шаг.
+              Попробуйте изменить фильтры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
