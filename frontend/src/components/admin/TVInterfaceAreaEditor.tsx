@@ -575,7 +575,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-40 overflow-y-auto">
-              {clickableAreas.map(area => (
+              {Array.isArray(clickableAreas) && clickableAreas.map(area => (
                 <div
                   key={area.id}
                   className={cn(
