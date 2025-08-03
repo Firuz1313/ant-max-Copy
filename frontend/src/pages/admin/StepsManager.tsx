@@ -477,7 +477,7 @@ const StepsManager = () => {
 
   const getProblemTitle = (problemId: string) => {
     const problem = problems.find((p) => p.id === problemId);
-    return problem?.title || "Н��известная проблема";
+    return problem?.title || "Неизвестная проблема";
   };
 
   const getGroupedSteps = () => {
@@ -707,9 +707,7 @@ const StepsManager = () => {
           <div className="flex space-x-2">
             <Select
               value={formData.tvInterfaceId}
-              onValueChange={(value) =>
-                setFormData({ ...formData, tvInterfaceId: value })
-              }
+              onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
             >
               <SelectTrigger className="flex-1">
                 <SelectValue placeholder="Выберите интерфейс" />
@@ -908,7 +906,7 @@ const StepsManager = () => {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
-                  placeholder="Поиск шагов..."
+                  placeholder="Поиск шаго��..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
