@@ -461,7 +461,7 @@ const StepsManagerNew = () => {
 
   const getProblemTitle = (problemId: string) => {
     const problem = problems.find((p) => p.id === problemId);
-    return problem?.title || "Неизвестная проблема";
+    return problem?.title || "Неиз��естная проблема";
   };
 
   const getTVInterfaceName = (tvInterfaceId: string) => {
@@ -807,9 +807,7 @@ const StepsManagerNew = () => {
         <Textarea
           id={isEdit ? "edit-description" : "description"}
           value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          onChange={(e) => handleFieldChange("description", e.target.value)}
           placeholder="Краткое описание шага"
         />
       </div>
@@ -1089,7 +1087,7 @@ const StepsManagerNew = () => {
                           {remote.name}
                           {remote.isDefault && (
                             <span className="ml-2 text-xs text-blue-600">
-                              (по умолчан��ю)
+                              (по умолчанию)
                             </span>
                           )}
                         </div>
@@ -1284,7 +1282,7 @@ const StepsManagerNew = () => {
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>
-              Выбор позиции на пульте: {selectedRemote?.name}
+              Выбор пози��ии на пульте: {selectedRemote?.name}
             </DialogTitle>
           </DialogHeader>
           <div className="flex-1 overflow-hidden">{renderRemoteEditor()}</div>
@@ -1317,7 +1315,7 @@ const StepsManagerNew = () => {
               variant="outline"
               onClick={() => setIsTVEditorOpen(false)}
             >
-              Отмена
+              Отмен��
             </Button>
             <Button onClick={() => setIsTVEditorOpen(false)}>
               <Save className="h-4 w-4 mr-2" />
