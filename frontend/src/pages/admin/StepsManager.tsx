@@ -188,7 +188,7 @@ const StepFormFieldsComponent = React.memo(({
 
       <div>
         <Label htmlFor={isEdit ? "edit-tvInterfaceId" : "tvInterfaceId"}>
-          Созданный инте��фейс
+          Созданный интерфейс
         </Label>
         <div className="flex space-x-2">
           <Select
@@ -260,7 +260,7 @@ const StepFormFieldsComponent = React.memo(({
                     {remote.name}
                     {remote.isDefault && (
                       <span className="ml-2 text-xs text-blue-600">
-                        (по умолчанию)
+                        (по ��молчанию)
                       </span>
                     )}
                   </div>
@@ -975,7 +975,7 @@ const StepsManager = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="home">Главное меню</SelectItem>
-              <SelectItem value="settings">Настройк��</SelectItem>
+              <SelectItem value="settings">Настройки</SelectItem>
               <SelectItem value="channels">Каналы</SelectItem>
               <SelectItem value="no-signal">Нет сигнала</SelectItem>
             </SelectContent>
@@ -1181,7 +1181,7 @@ const StepsManager = () => {
                   !formData.deviceId || !formData.problemId || !formData.title
                 }
               >
-                Создать
+                Созда��ь
               </Button>
             </div>
           </DialogContent>
@@ -1469,7 +1469,21 @@ const StepsManager = () => {
           <DialogHeader>
             <DialogTitle>Редактировать шаг</DialogTitle>
           </DialogHeader>
-          <StepFormFields isEdit={true} />
+          <StepFormFieldsComponent
+            isEdit={true}
+            formData={formData}
+            handleFieldChange={handleFieldChange}
+            handleDeviceChange={handleDeviceChange}
+            getActiveDevices={getActiveDevices}
+            getAvailableProblems={getAvailableProblems}
+            getAvailableRemotes={getAvailableRemotes}
+            devices={devices}
+            tvInterfaces={tvInterfaces}
+            loadingTVInterfaces={loadingTVInterfaces}
+            openTVInterfaceEditor={openTVInterfaceEditor}
+            openRemoteEditor={openRemoteEditor}
+            tvAreas={tvAreas}
+          />
           <div className="flex justify-end space-x-2">
             <Button
               variant="outline"
