@@ -47,12 +47,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
-// Мемоизированный компонент формы для предотвращения потери фокуса
+// Мемоизированный компонент формы для предот��ращения потери фокуса
 const StepFormFieldsComponent = React.memo(
   ({
     isEdit = false,
@@ -343,7 +344,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
     tvInterface: "home" as DiagnosticStep["tvInterface"],
-    tvInterfaceId: "none", // Добавлено для выбора созданного интерфейса
+    tvInterfaceId: "none", // Добавлено для выбора ��озданного интерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -892,7 +893,7 @@ const StepsManager = () => {
               {isPickingButton && (
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <p className="text-sm text-blue-700 dark:text-blue-300">
-                    Кликните на изображение пульта, чтобы указать позицию кнопки
+                    Кликнит�� на изображение пульта, чтобы указать позицию кнопки
                   </p>
                 </div>
               )}
@@ -1163,7 +1164,7 @@ const StepsManager = () => {
                               )}
                               {step.buttonPosition && (
                                 <span>
-                                  Позиция: ({Math.round(step.buttonPosition.x)},{" "}
+                                  Пози��ия: ({Math.round(step.buttonPosition.x)},{" "}
                                   {Math.round(step.buttonPosition.y)})
                                 </span>
                               )}
@@ -1292,7 +1293,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте изменить филь��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
