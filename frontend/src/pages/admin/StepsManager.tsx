@@ -821,7 +821,7 @@ const StepsManager = () => {
                 formData.buttonPosition.y > 0 && (
                   <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                     <p className="text-sm text-green-700 dark:text-green-300">
-                      Позиция ��ыбрана: ({Math.round(formData.buttonPosition.x)},{" "}
+                      Позиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
                       {Math.round(formData.buttonPosition.y)})
                     </p>
                   </div>
@@ -859,7 +859,7 @@ const StepsManager = () => {
                   <li>• Исправить работу редактора областей интерфейса</li>
                 </ul>
               </div>
-              <QuickCleanupButton />
+              <SimpleCleanupButton />
             </div>
           </div>
         </CardContent>
@@ -1242,7 +1242,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте изменить фильтры поиска или создайте новый шаг.
+              Попробуйте изменить филь��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
