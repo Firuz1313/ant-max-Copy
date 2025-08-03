@@ -411,6 +411,12 @@ const StepsManager = () => {
   };
 
   const openTVInterfaceEditor = (tvInterface: TVInterface) => {
+    console.log('Opening TV Interface Editor with:', {
+      id: tvInterface.id,
+      name: tvInterface.name,
+      screenshotData: tvInterface.screenshotData ? 'present' : 'missing',
+      screenshot_data: tvInterface.screenshot_data ? 'present' : 'missing'
+    });
     setSelectedTVInterface(tvInterface);
     setIsTVInterfaceEditorOpen(true);
   };
@@ -1142,7 +1148,7 @@ const StepsManager = () => {
             </Button>
             <Button onClick={() => setIsRemoteEditorOpen(false)}>
               <Save className="h-4 w-4 mr-2" />
-              Сохрани��ь позицию
+              Сохранить позицию
             </Button>
           </div>
         </DialogContent>
