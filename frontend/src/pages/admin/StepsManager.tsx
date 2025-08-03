@@ -47,12 +47,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
-import { TVInterface } from "@/types/tvInterface";
+import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
-// Мемоизированный компонент формы для предотвращения потери фокуса
+// Мемоизированный компонент формы для предот��ращения потери фокуса
 const StepFormFieldsComponent = React.memo(
   ({
     isEdit = false,
@@ -78,7 +79,7 @@ const StepFormFieldsComponent = React.memo(
     devices: any[];
     tvInterfaces: any[];
     loadingTVInterfaces: boolean;
-    openTVInterfaceEditor: (tvInterface: any) => void;
+    openTVInterfaceEditor: (tvInterface: any) => Promise<void>;
     openRemoteEditor: () => void;
   }) => (
     <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -157,7 +158,7 @@ const StepFormFieldsComponent = React.memo(
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для пользователя"
+          placeholder="Подробная инструкция для ��ользователя"
         />
       </div>
 
@@ -174,7 +175,7 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите интерфейс" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="none">Без интерфейса</SelectItem>
+              <SelectItem value="none">Без и��терфейса</SelectItem>
               {loadingTVInterfaces ? (
                 <SelectItem value="loading" disabled>
                   Загрузка...
@@ -259,7 +260,7 @@ const StepFormFieldsComponent = React.memo(
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Главная ��одсказка данного шага решения"
+          placeholder="Главна�� ��одсказка данного шага решения"
         />
       </div>
 
@@ -313,6 +314,7 @@ const StepsManager = () => {
     getRemotesForDevice,
     getDefaultRemoteForDevice,
   } = useData();
+  const { toast } = useToast();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -343,7 +345,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
     tvInterface: "home" as DiagnosticStep["tvInterface"],
-    tvInterfaceId: "none", // Добавлено для выбора созданного интерфейса
+    tvInterfaceId: "none", // Добавлено для выбора ��озданного интерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -409,7 +411,7 @@ const StepsManager = () => {
       // Показываем пользователю информацию об ошибке
       if (error instanceof Error && error.message.includes("Сетевая ошибка")) {
         // Можно добавить toast уведомление
-        console.error("Проблемы с подключением к серверу");
+        console.error("П��облемы с подключением к серверу");
       }
     } finally {
       setLoadingTVInterfaces(false);
@@ -440,14 +442,95 @@ const StepsManager = () => {
     }
   };
 
-  const openTVInterfaceEditor = (tvInterface: TVInterface) => {
+  const openTVInterfaceEditor = async (tvInterface: TVInterface) => {
     console.log("Opening TV Interface Editor with:", {
       id: tvInterface.id,
       name: tvInterface.name,
       screenshotData: tvInterface.screenshotData ? "present" : "missing",
       screenshot_data: tvInterface.screenshot_data ? "present" : "missing",
     });
-    setSelectedTVInterface(tvInterface);
+
+    // Check if this interface still exists in our current list
+    const interfaceExists = tvInterfaces.find((ti) => ti.id === tvInterface.id);
+    if (!interfaceExists) {
+      console.warn(
+        `⚠️ TV interface ${tvInterface.id} not found in current list, reloading...`,
+      );
+      if (selectedDeviceId) {
+        await loadTVInterfacesForDevice(selectedDeviceId);
+      }
+      toast({
+        title: "Интерфейс не найден",
+        description: `TV интерфейс "${tvInterface.name}" больше не доступен. Список обновлён.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate interface ID and fetch full interface data
+    if (!tvInterface.id) {
+      console.warn("⚠️ TV interface has no ID, using cached data");
+      setSelectedTVInterface(tvInterface);
+      setIsTVInterfaceEditorOpen(true);
+      return;
+    }
+
+    try {
+      console.log(`🔄 Fetching full TV interface data for: ${tvInterface.id}`);
+      const response = await tvInterfacesAPI.getById(tvInterface.id);
+
+      if (response.success && response.data) {
+        const fullInterface = tvInterfaceUtils.normalizeFromBackend(
+          response.data,
+        );
+        console.log("✅ Loaded full TV interface with screenshot:", {
+          id: fullInterface.id,
+          name: fullInterface.name,
+          screenshotData: fullInterface.screenshotData ? "present" : "missing",
+          screenshot_data: fullInterface.screenshot_data
+            ? "present"
+            : "missing",
+        });
+        setSelectedTVInterface(fullInterface);
+      } else {
+        console.warn(
+          `⚠️ Failed to load full interface data for ${tvInterface.id}: ${response.error}. Checking if interface still exists.`,
+        );
+
+        // If interface not found, try reloading the TV interfaces list
+        if (
+          response.error?.includes("404") ||
+          response.error?.includes("не найден")
+        ) {
+          console.log(
+            "🔄 Interface not found, reloading TV interfaces list...",
+          );
+          if (selectedDeviceId) {
+            await loadTVInterfacesForDevice(selectedDeviceId);
+          }
+          toast({
+            title: "Интерфейс не найден",
+            description: `TV интерфейс "${tvInterface.name}" больше не существует. Список интерфейсов обновлён.`,
+            variant: "destructive",
+          });
+          return; // Don't open editor for non-existent interface
+        }
+
+        setSelectedTVInterface(tvInterface);
+      }
+    } catch (error) {
+      console.error(
+        `❌ Error loading full interface data for ${tvInterface.id}:`,
+        error,
+      );
+      toast({
+        title: "Предупреждение",
+        description: `Не удалось загрузить по��ные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
+        variant: "destructive",
+      });
+      setSelectedTVInterface(tvInterface);
+    }
+
     setIsTVInterfaceEditorOpen(true);
   };
 
@@ -821,7 +904,7 @@ const StepsManager = () => {
                   className="w-full"
                 >
                   <ImageIcon className="h-4 w-4 mr-2" />
-                  Загрузить изображение
+                  Загруз��ть изображение
                 </Button>
               </div>
 
@@ -836,7 +919,8 @@ const StepsManager = () => {
               {isPickingButton && (
                 <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <p className="text-sm text-blue-700 dark:text-blue-300">
-                    Кликните на изображение пульта, чтобы указать позицию кнопки
+                    Кликнит�� на изображение пульта, чтобы указать позицию
+                    кнопки
                   </p>
                 </div>
               )}
@@ -1107,8 +1191,8 @@ const StepsManager = () => {
                               )}
                               {step.buttonPosition && (
                                 <span>
-                                  Позиция: ({Math.round(step.buttonPosition.x)},{" "}
-                                  {Math.round(step.buttonPosition.y)})
+                                  Пози��ия: ({Math.round(step.buttonPosition.x)}
+                                  , {Math.round(step.buttonPosition.y)})
                                 </span>
                               )}
                               {step.highlightTVArea && (
@@ -1193,7 +1277,7 @@ const StepsManager = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Редактировать шаг</DialogTitle>
+            <DialogTitle>Редактироват�� шаг</DialogTitle>
           </DialogHeader>
           <StepFormFieldsComponent
             isEdit={true}
@@ -1236,7 +1320,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте изменить филь��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>

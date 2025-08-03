@@ -350,7 +350,7 @@ const TVInterfaceBuilder = () => {
       if (response.success) {
         toast({
           title: "Успех",
-          description: response.message || "TV интерфейс дубл��рован",
+          description: response.message || "TV интерфейс дубл����рован",
         });
         loadTVInterfaces();
       } else {
@@ -378,7 +378,8 @@ const TVInterfaceBuilder = () => {
       if (response.success) {
         toast({
           title: "Успех",
-          description: `Очистка завершена. Создано ${response.data?.created || 0} пользовательских интерфейсов`,
+          description:
+            response.data?.message || "Все TV интерфейсы успешно удалены",
         });
         loadTVInterfaces();
       } else {
@@ -459,22 +460,22 @@ const TVInterfaceBuilder = () => {
             <AlertDialogTrigger asChild>
               <Button variant="outline" disabled={isLoading}>
                 <Trash2 className="h-4 w-4 mr-2" />
-                Очистить и создать пользовательские
+                Очистить все интерфейсы
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Очистить TV интерфейсы?</AlertDialogTitle>
+                <AlertDialogTitle>Очистить все TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Это действие удалит все существующие TV ин��ерфейсы и создаст
-                  новые пользовательские интерфейсы для каждого устройства с
-                  реальными скриншотами.
+                  Это действие удалит все существующие TV интерфейсы. После
+                  очистки вы сможете создавать свои собственные интерфейсы
+                  вручную через UI.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Отмена</AlertDialogCancel>
                 <AlertDialogAction onClick={handleCleanupTVInterfaces}>
-                  Очистить и создать
+                  Очистить все
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -689,7 +690,7 @@ const TVInterfaceBuilder = () => {
                 onValueChange={setSelectedTypeFilter}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Фильтр ��о типу" />
+                  <SelectValue placeholder="Ф��льтр ��о типу" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все типы</SelectItem>
