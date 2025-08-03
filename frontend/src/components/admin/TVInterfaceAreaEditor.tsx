@@ -360,7 +360,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
 
   const handleSaveScreenshot = async (screenshotData: string) => {
     try {
-      // Обновляем интерф��йс через API
+      // Обновляем интерфейс через API
       await tvInterfacesAPI.update(tvInterface.id, {
         screenshotData
       });
@@ -402,7 +402,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     ];
 
     items.forEach(item => {
-      // Рис��ем блок
+      // Рисуем блок
       ctx.fillStyle = item.color;
       ctx.fillRect(item.x, item.y, 150, 120);
 
@@ -496,6 +496,18 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
                 <Plus className="h-4 w-4 mr-2" />
                 {isUploading ? 'Загружается...' : 'Загрузить скриншот'}
               </label>
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                const testScreenshot = createTestScreenshot();
+                if (testScreenshot) {
+                  handleSaveScreenshot(testScreenshot);
+                }
+              }}
+            >
+              <ImageIcon className="h-4 w-4 mr-2" />
+              Создать тестовый скриншот
             </Button>
             <Button
               variant="secondary"
@@ -646,7 +658,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
         {/* Clickable Areas */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Кликабел��ные области ({Array.isArray(clickableAreas) ? clickableAreas.length : 0})</CardTitle>
+            <CardTitle className="text-base">Клик��бел��ные области ({Array.isArray(clickableAreas) ? clickableAreas.length : 0})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-40 overflow-y-auto">
