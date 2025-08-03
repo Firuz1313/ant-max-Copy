@@ -371,6 +371,15 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     }
   };
 
+  // Debug information
+  console.log('TV Interface Data:', {
+    id: tvInterface.id,
+    name: tvInterface.name,
+    screenshotData: tvInterface.screenshotData ? 'present' : 'missing',
+    screenshot_data: tvInterface.screenshot_data ? 'present' : 'missing',
+    tempScreenshot: tempScreenshot ? 'present' : 'missing'
+  });
+
   if (!tvInterface.screenshotData && !tvInterface.screenshot_data && !tempScreenshot) {
     return (
       <Card className={className}>
@@ -381,6 +390,15 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
             <p className="text-sm text-gray-400 mb-4">
               Загрузите скриншот интерфейса, чтобы начать работу с областями
             </p>
+            <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+              <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                <strong>Отладка:</strong> Интерфейс "{tvInterface.name}" (ID: {tvInterface.id})
+                <br />
+                screenshotData: {tvInterface.screenshotData ? '✓' : '✗'}
+                <br />
+                screenshot_data: {tvInterface.screenshot_data ? '✓' : '✗'}
+              </p>
+            </div>
           </div>
           <div className="flex flex-col space-y-2">
             <input
