@@ -266,6 +266,26 @@ export async function query(text, params = []) {
   
   // Handle DELETE queries
   if (lowercaseText.startsWith('delete')) {
+    if (lowercaseText.includes('from tv_interfaces')) {
+      if (lowercaseText.includes('where id =')) {
+        // Delete specific TV interface by ID
+        const id = params[0];
+        const interfaceIndex = mockData.tv_interfaces.findIndex(t => t.id === id);
+
+        if (interfaceIndex >= 0) {
+          // Remove the interface from the array
+          const deleted = mockData.tv_interfaces.splice(interfaceIndex, 1)[0];
+          return { rows: [deleted], rowCount: 1 };
+        } else {
+          return { rows: [], rowCount: 0 };
+        }
+      } else {
+        // Delete all TV interfaces (for cleanup)
+        const deletedCount = mockData.tv_interfaces.length;
+        mockData.tv_interfaces = [];
+        return { rows: [], rowCount: deletedCount };
+      }
+    }
     return { rows: [], rowCount: 1 };
   }
   
