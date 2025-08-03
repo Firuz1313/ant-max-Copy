@@ -78,7 +78,7 @@ const StepFormFieldsComponent = React.memo(
     devices: any[];
     tvInterfaces: any[];
     loadingTVInterfaces: boolean;
-    openTVInterfaceEditor: (tvInterface: any) => void;
+    openTVInterfaceEditor: (tvInterface: any) => Promise<void>;
     openRemoteEditor: () => void;
   }) => (
     <div className="space-y-4 max-h-96 overflow-y-auto">
@@ -157,7 +157,7 @@ const StepFormFieldsComponent = React.memo(
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для пользователя"
+          placeholder="Подробная инструкция для ��ользователя"
         />
       </div>
 
@@ -259,7 +259,7 @@ const StepFormFieldsComponent = React.memo(
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Главная ��одсказка данного шага решения"
+          placeholder="Главна�� ��одсказка данного шага решения"
         />
       </div>
 
@@ -409,7 +409,7 @@ const StepsManager = () => {
       // Показываем пользователю информацию об ошибке
       if (error instanceof Error && error.message.includes("Сетевая ошибка")) {
         // Можно добавить toast уведомление
-        console.error("Проблемы с подключением к серверу");
+        console.error("П��облемы с подключением к серверу");
       }
     } finally {
       setLoadingTVInterfaces(false);
@@ -999,7 +999,7 @@ const StepsManager = () => {
                   <SelectValue placeholder="Пульт" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Вс�� пульты</SelectItem>
+                  <SelectItem value="all">Все пульты</SelectItem>
                   <SelectItem value="none">Без пульта</SelectItem>
                   {getFilteredRemotes().map((remote) => {
                     const device = devices.find(
@@ -1216,7 +1216,7 @@ const StepsManager = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Редактировать шаг</DialogTitle>
+            <DialogTitle>Редактироват�� шаг</DialogTitle>
           </DialogHeader>
           <StepFormFieldsComponent
             isEdit={true}
