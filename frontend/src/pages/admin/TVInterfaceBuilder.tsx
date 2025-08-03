@@ -428,6 +428,28 @@ const TVInterfaceBuilder = () => {
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Обновить
           </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" disabled={isLoading}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Очистить и создать пользовательские
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Очистить TV интерфейсы?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Это действие удалит все существующие TV ин��ерфейсы и создаст новые пользовательские интерфейсы для каждого устройства с реальными скриншотами.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Отмена</AlertDialogCancel>
+                <AlertDialogAction onClick={handleCleanupTVInterfaces}>
+                  Очистить и создать
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button>
@@ -596,7 +618,7 @@ const TVInterfaceBuilder = () => {
             <div className="w-48">
               <Select value={selectedDeviceFilter} onValueChange={setSelectedDeviceFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Фильтр по устройству" />
+                  <SelectValue placeholder="Фильт�� по устройству" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все устройства</SelectItem>
