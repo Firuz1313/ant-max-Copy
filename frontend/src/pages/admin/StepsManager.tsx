@@ -660,7 +660,7 @@ const StepsManager = () => {
         <Input
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          onChange={(e) => handleFieldChange("title", e.target.value)}
           placeholder="Введите название шага"
         />
       </div>
