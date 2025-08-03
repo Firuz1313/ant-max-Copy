@@ -49,7 +49,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
-import { TVInterface } from "@/types/tvInterface";
+import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
 // Мемоизированный компонент формы для предотвращения потери фокуса
@@ -999,7 +999,7 @@ const StepsManager = () => {
                   <SelectValue placeholder="Пульт" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Все пульты</SelectItem>
+                  <SelectItem value="all">Вс�� пульты</SelectItem>
                   <SelectItem value="none">Без пульта</SelectItem>
                   {getFilteredRemotes().map((remote) => {
                     const device = devices.find(
