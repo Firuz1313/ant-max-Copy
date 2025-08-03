@@ -51,6 +51,7 @@ import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
+import QuickCleanupButton from "@/components/admin/QuickCleanupButton";
 
 // Мемоизированный компонент формы для предотвращения потери фокуса
 const StepFormFieldsComponent = React.memo(({
