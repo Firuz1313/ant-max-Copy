@@ -87,7 +87,8 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (tvInterface.screenshotData && canvasRef.current) {
+    const screenshotSrc = tvInterface.screenshotData || tvInterface.screenshot_data;
+    if (screenshotSrc && canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
@@ -112,19 +113,19 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
 
         canvas.width = displayWidth;
         canvas.height = displayHeight;
-        
+
         setImageDimensions({ width: img.width, height: img.height });
         setImageLoaded(true);
 
         // Draw the image
         ctx.drawImage(img, 0, 0, displayWidth, displayHeight);
-        
+
         // Draw existing areas
         drawAreas(ctx);
       };
-      img.src = tvInterface.screenshotData;
+      img.src = screenshotSrc;
     }
-  }, [tvInterface.screenshotData, clickableAreas, highlightAreas, showAreas]);
+  }, [tvInterface.screenshotData, tvInterface.screenshot_data, clickableAreas, highlightAreas, showAreas]);
 
   const drawAreas = (ctx: CanvasRenderingContext2D) => {
     if (!showAreas || !canvasRef.current) return;
