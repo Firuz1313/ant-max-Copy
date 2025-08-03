@@ -607,7 +607,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
               ))}
               {(!Array.isArray(clickableAreas) || clickableAreas.length === 0) && (
                 <div className="text-center text-gray-500 py-4">
-                  Нет ��ликабельных областей
+                  Нет ���ликабельных областей
                 </div>
               )}
             </div>
@@ -648,7 +648,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
                   </Button>
                 </div>
               ))}
-              {highlightAreas.length === 0 && (
+              {(!Array.isArray(highlightAreas) || highlightAreas.length === 0) && (
                 <div className="text-center text-gray-500 py-4">
                   Нет областей подсветки
                 </div>
