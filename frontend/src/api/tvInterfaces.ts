@@ -10,7 +10,7 @@ import {
 // Базовый URL для API
 const API_BASE_URL = '/api/v1/tv-interfaces';
 
-// Функция для п��вторных попыток
+// Функция для повторных ��опыток
 const withRetry = async <T>(
   fn: () => Promise<T>,
   maxRetries: number = 3,
@@ -91,7 +91,7 @@ const apiRequest = async <T>(
         url,
         options: defaultOptions
       });
-      throw new Error(`Сетевая ошибка: Не удается подключиться к серверу. Проверьте интернет-соединение.`);
+      throw new Error(`Сетевая ошибка: Не удается подключиться к с��рверу. Проверьте интернет-соединение.`);
     }
 
     console.error(`💥 API Request failed for ${url}:`, {
@@ -124,8 +124,8 @@ export const tvInterfacesAPI = {
   async getAll(filters?: TVInterfaceFilters): Promise<TVInterfaceListResponse> {
     try {
       const queryParams = buildQueryParams(filters || {});
-      const response = await apiRequest<TVInterfaceListResponse>(`${queryParams}`);
-      
+      const response = await withRetry(() => apiRequest<TVInterfaceListResponse>(`${queryParams}`));
+
       return {
         success: true,
         data: response.data || []
@@ -133,7 +133,7 @@ export const tvInterfacesAPI = {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Ошиб��а при загрузке TV интерфейсов'
+        error: error instanceof Error ? error.message : 'Ошибка при загрузке TV интерфейсов'
       };
     }
   },
@@ -181,7 +181,7 @@ export const tvInterfacesAPI = {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : '��шибка при загрузке TV интерфейсов для устройства'
+        error: error instanceof Error ? error.message : 'Оши��ка при загрузке TV интерфейсов для устройства'
       };
     }
   },
