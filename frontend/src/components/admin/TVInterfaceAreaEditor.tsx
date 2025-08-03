@@ -333,7 +333,59 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     onSave(clickableAreas, highlightAreas);
   };
 
-  if (!tvInterface.screenshotData && !tvInterface.screenshot_data) {
+  const [tempScreenshot, setTempScreenshot] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleScreenshotUpload = async (file: File) => {
+    setIsUploading(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const result = event.target?.result as string;
+        if (result) {
+          setTempScreenshot(result);
+          // Автоматически сохраняем загруженный скриншот
+          handleSaveScreenshot(result);
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Ошибка загрузки скриншота:', error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSaveScreenshot = async (screenshotData: string) => {
+    try {
+      // Вызываем onSave с обновленными данными интерфейса
+      const updatedInterface = {
+        ...tvInterface,
+        screenshotData,
+        screenshot_data: screenshotData
+      };
+
+      // Вместо вызова onSave, который предназначен для областей,
+      // нужно обновить интерфейс через API
+      await fetch(`/api/v1/tv-interfaces/${tvInterface.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          screenshotData
+        })
+      });
+
+      // Обновляем локальное состояние
+      Object.assign(tvInterface, { screenshotData, screenshot_data: screenshotData });
+      setImageLoaded(false); // Перезагружаем изображение
+    } catch (error) {
+      console.error('Ошибка сохранения скриншота:', error);
+    }
+  };
+
+  if (!tvInterface.screenshotData && !tvInterface.screenshot_data && !tempScreenshot) {
     return (
       <Card className={className}>
         <CardContent className="flex flex-col items-center justify-center h-96 space-y-4">
@@ -351,29 +403,17 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) {
-                  const reader = new FileReader();
-                  reader.onload = (event) => {
-                    const result = event.target?.result as string;
-                    if (result) {
-                      // Временно обновляем интерфейс с новым скриншотом
-                      const updatedInterface = {
-                        ...tvInterface,
-                        screenshotData: result
-                      };
-                      // Перезагружаем редактор с новым скриншотом
-                      window.location.reload();
-                    }
-                  };
-                  reader.readAsDataURL(file);
+                  handleScreenshotUpload(file);
                 }
               }}
               className="hidden"
               id="screenshot-upload"
+              disabled={isUploading}
             />
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" disabled={isUploading}>
               <label htmlFor="screenshot-upload" className="cursor-pointer">
                 <Plus className="h-4 w-4 mr-2" />
-                Загрузить скриншот
+                {isUploading ? 'Загружается...' : 'Загрузить скриншот'}
               </label>
             </Button>
             <p className="text-xs text-gray-400 text-center">
