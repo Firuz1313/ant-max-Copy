@@ -314,6 +314,7 @@ const StepsManager = () => {
     getRemotesForDevice,
     getDefaultRemoteForDevice,
   } = useData();
+  const { toast } = useToast();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -344,7 +345,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
     tvInterface: "home" as DiagnosticStep["tvInterface"],
-    tvInterfaceId: "none", // Добавлено для выбора ��озданного интерфейса
+    tvInterfaceId: "none", // Добавлено для выбора ��озданного ��нтерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -1293,7 +1294,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь фи��ь��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
