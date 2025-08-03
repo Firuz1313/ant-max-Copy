@@ -188,7 +188,7 @@ const StepFormFieldsComponent = React.memo(({
 
       <div>
         <Label htmlFor={isEdit ? "edit-tvInterfaceId" : "tvInterfaceId"}>
-          Созданный интерфейс
+          Созданный инте��фейс
         </Label>
         <div className="flex space-x-2">
           <Select
@@ -975,7 +975,7 @@ const StepsManager = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="home">Главное меню</SelectItem>
-              <SelectItem value="settings">Настройки</SelectItem>
+              <SelectItem value="settings">Настройк��</SelectItem>
               <SelectItem value="channels">Каналы</SelectItem>
               <SelectItem value="no-signal">Нет сигнала</SelectItem>
             </SelectContent>
@@ -1153,7 +1153,21 @@ const StepsManager = () => {
             <DialogHeader>
               <DialogTitle>Создать новый шаг</DialogTitle>
             </DialogHeader>
-            <StepFormFields />
+            <StepFormFieldsComponent
+              isEdit={false}
+              formData={formData}
+              handleFieldChange={handleFieldChange}
+              handleDeviceChange={handleDeviceChange}
+              getActiveDevices={getActiveDevices}
+              getAvailableProblems={getAvailableProblems}
+              getAvailableRemotes={getAvailableRemotes}
+              devices={devices}
+              tvInterfaces={tvInterfaces}
+              loadingTVInterfaces={loadingTVInterfaces}
+              openTVInterfaceEditor={openTVInterfaceEditor}
+              openRemoteEditor={openRemoteEditor}
+              tvAreas={tvAreas}
+            />
             <div className="flex justify-end space-x-2">
               <Button
                 variant="outline"
