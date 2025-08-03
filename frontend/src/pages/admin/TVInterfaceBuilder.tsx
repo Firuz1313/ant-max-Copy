@@ -318,7 +318,7 @@ const TVInterfaceBuilder = () => {
       if (response.success) {
         toast({
           title: "Успех",
-          description: response.message || "Статус изменен",
+          description: response.message || "Стат��с изменен",
         });
         loadTVInterfaces();
       } else {
@@ -459,14 +459,14 @@ const TVInterfaceBuilder = () => {
             <AlertDialogTrigger asChild>
               <Button variant="outline" disabled={isLoading}>
                 <Trash2 className="h-4 w-4 mr-2" />
-                Очистить и создать пользовательские
+                Очистить все интерфейсы
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Очистить TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Это действие удалит все существующие TV ин��ерфейсы и создаст
+                  Это действие удалит все сущес��вующие TV ин��ерфейсы и создаст
                   новые пользовательские интерфейсы для каждого устройства с
                   реальными скриншотами.
                 </AlertDialogDescription>
@@ -723,7 +723,7 @@ const TVInterfaceBuilder = () => {
           <div className="col-span-full text-center py-12">
             <Monitor className="h-12 w-12 mx-auto text-gray-400 mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              Интерфейсы не найдены
+              Интерфейс�� не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               {searchTerm ||
