@@ -116,7 +116,7 @@ const StepFormFieldsComponent = React.memo(({
           onValueChange={(value) => handleFieldChange("problemId", value)}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Выберите проблему" />
+            <SelectValue placeholder="Выберите пробл��му" />
           </SelectTrigger>
           <SelectContent>
             {getAvailableProblems().map((problem) => (
@@ -683,7 +683,7 @@ const StepsManager = () => {
 
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
-    return device?.name || "Неизвестная приставка";
+    return device?.name || "Неизв��стная приставка";
   };
 
   const getProblemTitle = (problemId: string) => {
@@ -1205,6 +1205,14 @@ const StepsManager = () => {
               onSave={handleTVInterfaceAreaSave}
             />
           )}
+          <div className="flex justify-end space-x-2 pt-4">
+            <Button
+              variant="outline"
+              onClick={() => setIsTVInterfaceEditorOpen(false)}
+            >
+              Отмена
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 
