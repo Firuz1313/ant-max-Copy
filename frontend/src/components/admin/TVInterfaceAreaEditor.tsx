@@ -4,17 +4,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { 
-  MousePointer, 
-  Plus, 
-  Trash2, 
-  Eye, 
-  EyeOff, 
-  Save, 
+import {
+  MousePointer,
+  Plus,
+  Trash2,
+  Eye,
+  EyeOff,
+  Save,
   Undo,
   Target,
   Square,
-  Circle
+  Circle,
+  ImageIcon,
+  Settings
 } from 'lucide-react';
 import { TVInterface } from '@/types/tvInterface';
 import { cn } from '@/lib/utils';
@@ -402,7 +404,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     ];
 
     items.forEach(item => {
-      // Рисуем блок
+      // Рису��м блок
       ctx.fillStyle = item.color;
       ctx.fillRect(item.x, item.y, 150, 120);
 
@@ -507,7 +509,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
               }}
             >
               <ImageIcon className="h-4 w-4 mr-2" />
-              Создать тестовый скриншот
+              Создать тестовый скри��шот
             </Button>
             <Button
               variant="secondary"
