@@ -360,7 +360,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
 
   const handleSaveScreenshot = async (screenshotData: string) => {
     try {
-      // Обновляем интерфейс через API
+      // Обновляем интерф��йс через API
       await tvInterfacesAPI.update(tvInterface.id, {
         screenshotData
       });
@@ -371,6 +371,61 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     } catch (error) {
       console.error('Ошибка сохранения скриншота:', error);
     }
+  };
+
+  const createTestScreenshot = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 800;
+    canvas.height = 600;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) return null;
+
+    // Заливаем фон
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, 800, 600);
+
+    // Рисуем заголовок
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('Главное меню', 400, 80);
+
+    // Рисуем псевдо-элементы интерфейса
+    const items = [
+      { x: 100, y: 150, text: 'Каналы', color: '#3b82f6' },
+      { x: 300, y: 150, text: 'Настройки', color: '#10b981' },
+      { x: 500, y: 150, text: 'Приложения', color: '#f59e0b' },
+      { x: 100, y: 320, text: 'Фильмы', color: '#ef4444' },
+      { x: 300, y: 320, text: 'Музыка', color: '#8b5cf6' },
+      { x: 500, y: 320, text: 'Игры', color: '#06b6d4' }
+    ];
+
+    items.forEach(item => {
+      // Рис��ем блок
+      ctx.fillStyle = item.color;
+      ctx.fillRect(item.x, item.y, 150, 120);
+
+      // Рамка
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(item.x, item.y, 150, 120);
+
+      // Текст
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 16px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(item.text, item.x + 75, item.y + 70);
+    });
+
+    // Добавляем время в углу
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '18px Arial';
+    ctx.textAlign = 'right';
+    const now = new Date();
+    ctx.fillText(now.toLocaleTimeString(), 780, 30);
+
+    return canvas.toDataURL('image/png');
   };
 
   // Debug information
@@ -637,7 +692,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
         {/* Highlight Areas */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Области подс��етки ({Array.isArray(highlightAreas) ? highlightAreas.length : 0})</CardTitle>
+            <CardTitle className="text-base">Области подсветки ({Array.isArray(highlightAreas) ? highlightAreas.length : 0})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-40 overflow-y-auto">
