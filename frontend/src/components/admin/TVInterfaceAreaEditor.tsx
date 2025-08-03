@@ -506,7 +506,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
                 onClick={handleSave}
               >
                 <Save className="h-4 w-4 mr-1" />
-                Сохранить
+                Сохранить области
               </Button>
             </div>
           </div>
