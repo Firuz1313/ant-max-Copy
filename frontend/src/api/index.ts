@@ -98,6 +98,7 @@ export const api = {
   problems: problemsApi,
   steps: stepsApi,
   sessions: sessionsApi,
+  cleanup: cleanupAPI,
   health: checkApiHealth,
   info: getApiInfo,
   docs: getApiDocs,
