@@ -617,7 +617,7 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
         {/* Highlight Areas */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Области подсветки ({highlightAreas.length})</CardTitle>
+            <CardTitle className="text-base">Области подсветки ({Array.isArray(highlightAreas) ? highlightAreas.length : 0})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 max-h-40 overflow-y-auto">
