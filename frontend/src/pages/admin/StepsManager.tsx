@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -319,7 +319,7 @@ const StepFormFieldsComponent = React.memo(({
         id={isEdit ? "edit-hint" : "hint"}
         value={formData.hint}
         onChange={(e) => handleFieldChange("hint", e.target.value)}
-        placeholder="Дополнительная подсказка дл�� пользователя"
+        placeholder="Дополнительная подсказка для пользователя"
       />
     </div>
 
@@ -823,7 +823,7 @@ const StepsManager = () => {
         <div className="w-full lg:w-80 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Выбор позиц��и</CardTitle>
+              <CardTitle className="text-lg">Выбор позиции</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-2">
@@ -889,7 +889,7 @@ const StepsManager = () => {
             onValueChange={handleDeviceChange}
           >
             <SelectTrigger>
-              <SelectValue placeholder="В��бери��е приставку" />
+              <SelectValue placeholder="В��берите приставку" />
             </SelectTrigger>
             <SelectContent>
               {getActiveDevices().map((device) => (
