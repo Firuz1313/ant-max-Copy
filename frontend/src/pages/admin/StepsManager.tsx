@@ -367,7 +367,17 @@ const StepsManager = () => {
     try {
       const response = await tvInterfacesAPI.getByDeviceId(deviceId);
       if (response.success && response.data) {
-        setTVInterfaces(response.data);
+        // Нормализуем данные с бэкенда
+        const normalizedInterfaces = response.data.map(interface => ({
+          ...interface,
+          screenshotData: interface.screenshotData || interface.screenshot_data,
+          clickableAreas: interface.clickableAreas || interface.clickable_areas || [],
+          highlightAreas: interface.highlightAreas || interface.highlight_areas || [],
+          deviceId: interface.deviceId || interface.device_id,
+          isActive: interface.isActive !== undefined ? interface.isActive : interface.is_active
+        }));
+        setTVInterfaces(normalizedInterfaces);
+        console.log('Loaded TV interfaces:', normalizedInterfaces);
       } else {
         setTVInterfaces([]);
       }
@@ -1132,7 +1142,7 @@ const StepsManager = () => {
             </Button>
             <Button onClick={() => setIsRemoteEditorOpen(false)}>
               <Save className="h-4 w-4 mr-2" />
-              Сохранить позицию
+              Сохрани��ь позицию
             </Button>
           </div>
         </DialogContent>
