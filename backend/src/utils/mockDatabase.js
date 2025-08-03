@@ -167,6 +167,8 @@ export async function query(text, params = []) {
             device_model: device?.model,
           };
           return { rows: [result], rowCount: 1 };
+        } else {
+          console.log(`❌ Mock DB: TV interface not found with ID: ${id}`);
         }
         return { rows: [], rowCount: 0 };
       }
