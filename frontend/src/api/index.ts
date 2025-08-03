@@ -1,21 +1,31 @@
 // Import and export client and error handling
-import { apiClient, ApiClient, ApiError, handleApiError, createPaginatedRequest } from './client';
-export { apiClient, ApiClient, ApiError, handleApiError, createPaginatedRequest };
+import {
+  apiClient,
+  ApiClient,
+  ApiError,
+  handleApiError,
+  createPaginatedRequest,
+} from "./client";
+export {
+  apiClient,
+  ApiClient,
+  ApiError,
+  handleApiError,
+  createPaginatedRequest,
+};
 
 // Import API services
-import { devicesApi } from './devices';
-import { problemsApi } from './problems';
-import { stepsApi } from './steps';
-import { sessionsApi } from './sessions';
+import { devicesApi } from "./devices";
+import { problemsApi } from "./problems";
+import { stepsApi } from "./steps";
+import { sessionsApi } from "./sessions";
+import { cleanupAPI } from "./cleanup";
 
 // Re-export API services
-export { devicesApi, problemsApi, stepsApi, sessionsApi };
+export { devicesApi, problemsApi, stepsApi, sessionsApi, cleanupAPI };
 
 // Export types for consumers
-export type {
-  ApiClientConfig,
-  RequestOptions,
-} from './client';
+export type { ApiClientConfig, RequestOptions } from "./client";
 
 export type {
   DeviceFilters,
@@ -23,7 +33,7 @@ export type {
   DeviceUpdateData,
   DeviceStats,
   BulkUpdateItem,
-} from './devices';
+} from "./devices";
 
 export type {
   ProblemFilters,
@@ -31,7 +41,7 @@ export type {
   ProblemUpdateData,
   ProblemStats,
   ProblemWithDetails,
-} from './problems';
+} from "./problems";
 
 export type {
   StepFilters,
@@ -42,7 +52,7 @@ export type {
   StepOrderValidation,
   StepReorderRequest,
   StepInsertRequest,
-} from './steps';
+} from "./steps";
 
 export type {
   SessionFilters,
@@ -56,17 +66,15 @@ export type {
   PopularProblem,
   TimeAnalytics,
   CleanupResult,
-} from './sessions';
-
-
+} from "./sessions";
 
 // API Health check
 export const checkApiHealth = async (): Promise<boolean> => {
   try {
-    const response = await apiClient.get('/health');
-    return response.status === 'OK';
+    const response = await apiClient.get("/health");
+    return response.status === "OK";
   } catch (error) {
-    console.error('API health check failed:', error);
+    console.error("API health check failed:", error);
     return false;
   }
 };
@@ -74,9 +82,9 @@ export const checkApiHealth = async (): Promise<boolean> => {
 // API Info
 export const getApiInfo = async () => {
   try {
-    return await apiClient.get('/info');
+    return await apiClient.get("/info");
   } catch (error) {
-    console.error('Failed to get API info:', error);
+    console.error("Failed to get API info:", error);
     throw error;
   }
 };
@@ -84,9 +92,9 @@ export const getApiInfo = async () => {
 // API Documentation
 export const getApiDocs = async () => {
   try {
-    return await apiClient.get('/docs');
+    return await apiClient.get("/docs");
   } catch (error) {
-    console.error('Failed to get API documentation:', error);
+    console.error("Failed to get API documentation:", error);
     throw error;
   }
 };
@@ -97,6 +105,7 @@ export const api = {
   problems: problemsApi,
   steps: stepsApi,
   sessions: sessionsApi,
+  cleanup: cleanupAPI,
   health: checkApiHealth,
   info: getApiInfo,
   docs: getApiDocs,

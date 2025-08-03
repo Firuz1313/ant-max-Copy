@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -440,6 +440,20 @@ const StepsManagerNew = () => {
     setTVInterfaces([]);
   };
 
+  const handleFieldChange = useCallback((field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  }, []);
+
+  const handleDeviceChange = useCallback((value: string) => {
+    const defaultRemote = getDefaultRemoteForDevice(value);
+    setFormData(prev => ({
+      ...prev,
+      deviceId: value,
+      problemId: "",
+      remoteId: defaultRemote?.id || "none",
+    }));
+  }, [getDefaultRemoteForDevice]);
+
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
     return device?.name || "Неизвестная приставка";
@@ -676,7 +690,7 @@ const StepsManagerNew = () => {
                   <Target className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-green-700 dark:text-green-300">
-                      Область выбрана: ({Math.round(formData.tvAreaPosition.x)},{" "}
+                      Область выбран��: ({Math.round(formData.tvAreaPosition.x)},{" "}
                       {Math.round(formData.tvAreaPosition.y)})
                     </p>
                   </AlertDescription>
@@ -725,15 +739,7 @@ const StepsManagerNew = () => {
           </Label>
           <Select
             value={formData.deviceId}
-            onValueChange={(value) => {
-              const defaultRemote = getDefaultRemoteForDevice(value);
-              setFormData({
-                ...formData,
-                deviceId: value,
-                problemId: "",
-                remoteId: defaultRemote?.id || "none",
-              });
-            }}
+            onValueChange={handleDeviceChange}
           >
             <SelectTrigger>
               <SelectValue placeholder="Выберите приставку" />
@@ -758,9 +764,7 @@ const StepsManagerNew = () => {
           </Label>
           <Select
             value={formData.problemId}
-            onValueChange={(value) =>
-              setFormData({ ...formData, problemId: value })
-            }
+            onValueChange={(value) => handleFieldChange("problemId", value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Выберите проблему" />
@@ -781,7 +785,7 @@ const StepsManagerNew = () => {
         <Input
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          onChange={(e) => handleFieldChange("title", e.target.value)}
           placeholder="Введите название шага"
         />
       </div>
@@ -793,9 +797,7 @@ const StepsManagerNew = () => {
         <Textarea
           id={isEdit ? "edit-description" : "description"}
           value={formData.description}
-          onChange={(e) =>
-            setFormData({ ...formData, description: e.target.value })
-          }
+          onChange={(e) => handleFieldChange("description", e.target.value)}
           placeholder="Краткое описание шага"
         />
       </div>
@@ -807,9 +809,7 @@ const StepsManagerNew = () => {
         <Textarea
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
-          onChange={(e) =>
-            setFormData({ ...formData, instruction: e.target.value })
-          }
+          onChange={(e) => handleFieldChange("instruction", e.target.value)}
           placeholder="Подробная инструкция для пользователя"
         />
       </div>
@@ -821,12 +821,7 @@ const StepsManagerNew = () => {
         <div className="flex space-x-2">
           <Select
             value={formData.tvInterfaceId}
-            onValueChange={(value) =>
-              setFormData({
-                ...formData,
-                tvInterfaceId: value,
-              })
-            }
+            onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
           >
             <SelectTrigger className="flex-1">
               <SelectValue placeholder="Выберите интерфейс ТВ" />
@@ -863,9 +858,7 @@ const StepsManagerNew = () => {
         <div className="flex space-x-2">
           <Select
             value={formData.remoteId}
-            onValueChange={(value) =>
-              setFormData({ ...formData, remoteId: value })
-            }
+            onValueChange={(value) => handleFieldChange("remoteId", value)}
           >
             <SelectTrigger className="flex-1">
               <SelectValue placeholder="Выберите пульт" />
@@ -909,9 +902,7 @@ const StepsManagerNew = () => {
         <Input
           id={isEdit ? "edit-requiredAction" : "requiredAction"}
           value={formData.requiredAction}
-          onChange={(e) =>
-            setFormData({ ...formData, requiredAction: e.target.value })
-          }
+          onChange={(e) => handleFieldChange("requiredAction", e.target.value)}
           placeholder="Действие для автоперехода"
         />
       </div>
@@ -921,7 +912,7 @@ const StepsManagerNew = () => {
         <Textarea
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
-          onChange={(e) => setFormData({ ...formData, hint: e.target.value })}
+          onChange={(e) => handleFieldChange("hint", e.target.value)}
           placeholder="Дополнительная подсказка для пользователя"
         />
       </div>

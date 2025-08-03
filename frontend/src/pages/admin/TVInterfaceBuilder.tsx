@@ -1,21 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { useData } from '@/contexts/DataContext';
-import { tvInterfacesAPI } from '@/api/tvInterfaces';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useData } from "@/contexts/DataContext";
+import { tvInterfacesAPI } from "@/api/tvInterfaces";
+import { cleanupAPI } from "@/api/cleanup";
 import {
   TVInterface,
   CreateTVInterfaceData,
   TVInterfaceType,
   TV_INTERFACE_TYPES,
-  tvInterfaceUtils
-} from '@/types/tvInterface';
+  tvInterfaceUtils,
+} from "@/types/tvInterface";
 import {
   Monitor,
   Upload,
@@ -33,16 +40,16 @@ import {
   RefreshCw,
   Download,
   Copy,
-  FolderOpen
-} from 'lucide-react';
-import ScreenshotBrowser from '@/components/admin/ScreenshotBrowser';
+  FolderOpen,
+} from "lucide-react";
+import ScreenshotBrowser from "@/components/admin/ScreenshotBrowser";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -53,33 +60,35 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+} from "@/components/ui/alert-dialog";
 
 const TVInterfaceBuilder = () => {
   const { devices } = useData();
   const { toast } = useToast();
-  
+
   // State
   const [tvInterfaces, setTVInterfaces] = useState<TVInterface[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [selectedInterface, setSelectedInterface] = useState<TVInterface | null>(null);
-  
+  const [selectedInterface, setSelectedInterface] =
+    useState<TVInterface | null>(null);
+
   // Filters
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDeviceFilter, setSelectedDeviceFilter] = useState<string>('all');
-  const [selectedTypeFilter, setSelectedTypeFilter] = useState<string>('all');
-  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDeviceFilter, setSelectedDeviceFilter] =
+    useState<string>("all");
+  const [selectedTypeFilter, setSelectedTypeFilter] = useState<string>("all");
+
   // Form state
   const [formData, setFormData] = useState<CreateTVInterfaceData>({
-    name: '',
-    description: '',
-    type: 'home',
-    deviceId: '',
-    screenshotData: undefined
+    name: "",
+    description: "",
+    type: "home",
+    deviceId: "",
+    screenshotData: undefined,
   });
-  
+
   // Image upload
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   const [isScreenshotBrowserOpen, setIsScreenshotBrowserOpen] = useState(false);
@@ -96,7 +105,9 @@ const TVInterfaceBuilder = () => {
       const response = await tvInterfacesAPI.getAll();
       if (response.success && response.data) {
         // Нормализуем данные с бэкенда
-        const normalizedInterfaces = response.data.map(iface => tvInterfaceUtils.normalizeFromBackend(iface));
+        const normalizedInterfaces = response.data.map((iface) =>
+          tvInterfaceUtils.normalizeFromBackend(iface),
+        );
         setTVInterfaces(normalizedInterfaces);
       } else {
         toast({
@@ -106,7 +117,7 @@ const TVInterfaceBuilder = () => {
         });
       }
     } catch (error) {
-      console.error('Error loading TV interfaces:', error);
+      console.error("Error loading TV interfaces:", error);
       toast({
         title: "Ошибка",
         description: "Произошла ошибка при загрузке TV интерфейсов",
@@ -123,7 +134,7 @@ const TVInterfaceBuilder = () => {
     if (!file) return;
 
     // Validate file type
-    if (!file.type.startsWith('image/')) {
+    if (!file.type.startsWith("image/")) {
       toast({
         title: "Ошибка",
         description: "Пожалуйста, выберите файл изображения",
@@ -145,7 +156,7 @@ const TVInterfaceBuilder = () => {
     const reader = new FileReader();
     reader.onload = () => {
       const base64String = reader.result as string;
-      setFormData(prev => ({ ...prev, screenshotData: base64String }));
+      setFormData((prev) => ({ ...prev, screenshotData: base64String }));
       setPreviewImageUrl(base64String);
     };
     reader.readAsDataURL(file);
@@ -153,32 +164,32 @@ const TVInterfaceBuilder = () => {
 
   // Remove uploaded image
   const removeImage = () => {
-    setFormData(prev => ({ ...prev, screenshotData: undefined }));
+    setFormData((prev) => ({ ...prev, screenshotData: undefined }));
     setPreviewImageUrl(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
   // Handle screenshot selection from browser
   const handleScreenshotSelect = (screenshotData: string) => {
-    setFormData(prev => ({ ...prev, screenshotData }));
+    setFormData((prev) => ({ ...prev, screenshotData }));
     setPreviewImageUrl(screenshotData);
   };
 
   // Reset form
   const resetForm = () => {
     setFormData({
-      name: '',
-      description: '',
-      type: 'home',
-      deviceId: '',
-      screenshotData: undefined
+      name: "",
+      description: "",
+      type: "home",
+      deviceId: "",
+      screenshotData: undefined,
     });
     setPreviewImageUrl(null);
     setSelectedInterface(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -187,7 +198,7 @@ const TVInterfaceBuilder = () => {
     if (!formData.name.trim()) {
       toast({
         title: "Ошибка",
-        description: "Введите название интерфейса",
+        description: "Введите название интер��ейса",
         variant: "destructive",
       });
       return;
@@ -221,7 +232,7 @@ const TVInterfaceBuilder = () => {
         });
       }
     } catch (error) {
-      console.error('Error creating TV interface:', error);
+      console.error("Error creating TV interface:", error);
       toast({
         title: "Ошибка",
         description: "Произошла ошибка при создании TV интерфейса",
@@ -238,7 +249,10 @@ const TVInterfaceBuilder = () => {
 
     setIsLoading(true);
     try {
-      const response = await tvInterfacesAPI.update(selectedInterface.id, formData);
+      const response = await tvInterfacesAPI.update(
+        selectedInterface.id,
+        formData,
+      );
       if (response.success) {
         toast({
           title: "Успех",
@@ -255,7 +269,7 @@ const TVInterfaceBuilder = () => {
         });
       }
     } catch (error) {
-      console.error('Error updating TV interface:', error);
+      console.error("Error updating TV interface:", error);
       toast({
         title: "Ошибка",
         description: "Произошла ошибка при обновлении TV интерфейса",
@@ -285,7 +299,7 @@ const TVInterfaceBuilder = () => {
         });
       }
     } catch (error) {
-      console.error('Error deleting TV interface:', error);
+      console.error("Error deleting TV interface:", error);
       toast({
         title: "Ошибка",
         description: "Произошла ошибка при удалении TV интерфейса",
@@ -315,7 +329,7 @@ const TVInterfaceBuilder = () => {
         });
       }
     } catch (error) {
-      console.error('Error toggling status:', error);
+      console.error("Error toggling status:", error);
       toast({
         title: "Ошибка",
         description: "Произошла ошибка при изменении статуса",
@@ -329,7 +343,10 @@ const TVInterfaceBuilder = () => {
   // Handle duplicate
   const handleDuplicate = async (interfaceId: string, name: string) => {
     try {
-      const response = await tvInterfacesAPI.duplicate(interfaceId, `${name} (копия)`);
+      const response = await tvInterfacesAPI.duplicate(
+        interfaceId,
+        `${name} (копия)`,
+      );
       if (response.success) {
         toast({
           title: "Успех",
@@ -344,12 +361,43 @@ const TVInterfaceBuilder = () => {
         });
       }
     } catch (error) {
-      console.error('Error duplicating TV interface:', error);
+      console.error("Error duplicating TV interface:", error);
       toast({
         title: "Ошибка",
         description: "Произошла ошибка при дублировании TV интерфейса",
         variant: "destructive",
       });
+    }
+  };
+
+  // Handle cleanup and create user TV interfaces
+  const handleCleanupTVInterfaces = async () => {
+    setIsLoading(true);
+    try {
+      const response = await cleanupAPI.cleanupTVInterfaces();
+      if (response.success) {
+        toast({
+          title: "Успех",
+          description: `Очистка завершена. Создано ${response.data?.created || 0} пользовательских интерфейсов`,
+        });
+        loadTVInterfaces();
+      } else {
+        toast({
+          title: "Ошибка",
+          description:
+            response.error || "Не удалось выполнить очистку TV интерфейсов",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error cleaning up TV interfaces:", error);
+      toast({
+        title: "Ошибка",
+        description: "Произошла ошибка при очистке TV интерфейсов",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -361,22 +409,25 @@ const TVInterfaceBuilder = () => {
       description: tvInterface.description,
       type: tvInterface.type,
       deviceId: tvInterface.deviceId,
-      screenshotData: tvInterfaceUtils.getScreenshotUrl(tvInterface)
+      screenshotData: tvInterfaceUtils.getScreenshotUrl(tvInterface),
     });
     setPreviewImageUrl(tvInterfaceUtils.getScreenshotUrl(tvInterface));
     setIsEditDialogOpen(true);
   };
 
   // Filter interfaces
-  const filteredInterfaces = tvInterfaces.filter(iface => {
-    const matchesSearch = searchTerm === '' || 
+  const filteredInterfaces = tvInterfaces.filter((iface) => {
+    const matchesSearch =
+      searchTerm === "" ||
       iface.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       iface.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       iface.deviceName?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesDevice = selectedDeviceFilter === 'all' || iface.deviceId === selectedDeviceFilter;
-    const matchesType = selectedTypeFilter === 'all' || iface.type === selectedTypeFilter;
-    
+
+    const matchesDevice =
+      selectedDeviceFilter === "all" || iface.deviceId === selectedDeviceFilter;
+    const matchesType =
+      selectedTypeFilter === "all" || iface.type === selectedTypeFilter;
+
     return matchesSearch && matchesDevice && matchesType;
   });
 
@@ -389,15 +440,49 @@ const TVInterfaceBuilder = () => {
             Конструктор интерфейса ТВ
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание и управление интерфейсами ТВ-приставок с полной интеграцией с бэкендом
+            Создание и управление интерфейсами ТВ-приставок с полной интеграцией
+            с бэкендом
           </p>
         </div>
         <div className="flex space-x-2">
-          <Button onClick={loadTVInterfaces} variant="outline" disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+          <Button
+            onClick={loadTVInterfaces}
+            variant="outline"
+            disabled={isLoading}
+          >
+            <RefreshCw
+              className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+            />
             Обновить
           </Button>
-          <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" disabled={isLoading}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Очистить и создать пользовательские
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Очистить TV интерфейсы?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Это действие удалит все существующие TV ин��ерфейсы и создаст
+                  новые пользовательские интерфейсы для каждого устройства с
+                  реальными скриншотами.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Отмена</AlertDialogCancel>
+                <AlertDialogAction onClick={handleCleanupTVInterfaces}>
+                  Очистить и создать
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+          <Dialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          >
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
@@ -415,7 +500,12 @@ const TVInterfaceBuilder = () => {
                     <Input
                       id="name"
                       value={formData.name}
-                      onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
                       placeholder="Введите название интерфейса"
                     />
                   </div>
@@ -423,7 +513,9 @@ const TVInterfaceBuilder = () => {
                     <Label htmlFor="type">Тип интерфейса</Label>
                     <Select
                       value={formData.type}
-                      onValueChange={(value: TVInterfaceType) => setFormData(prev => ({ ...prev, type: value }))}
+                      onValueChange={(value: TVInterfaceType) =>
+                        setFormData((prev) => ({ ...prev, type: value }))
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Выберите тип интерфейса" />
@@ -433,7 +525,9 @@ const TVInterfaceBuilder = () => {
                           <SelectItem key={type.value} value={type.value}>
                             <div>
                               <div className="font-medium">{type.label}</div>
-                              <div className="text-xs text-gray-500">{type.description}</div>
+                              <div className="text-xs text-gray-500">
+                                {type.description}
+                              </div>
                             </div>
                           </SelectItem>
                         ))}
@@ -441,12 +535,14 @@ const TVInterfaceBuilder = () => {
                     </Select>
                   </div>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="device">Устройство</Label>
                   <Select
                     value={formData.deviceId}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, deviceId: value }))}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({ ...prev, deviceId: value }))
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Выберите устройство" />
@@ -456,20 +552,27 @@ const TVInterfaceBuilder = () => {
                         <SelectItem key={device.id} value={device.id}>
                           <div>
                             <div className="font-medium">{device.name}</div>
-                            <div className="text-xs text-gray-500">{device.brand} {device.model}</div>
+                            <div className="text-xs text-gray-500">
+                              {device.brand} {device.model}
+                            </div>
                           </div>
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div>
                   <Label htmlFor="description">Описание</Label>
                   <Textarea
                     id="description"
-                    value={formData.description || ''}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    value={formData.description || ""}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
                     placeholder="Введите описание интерфейса"
                     rows={3}
                   />
@@ -513,7 +616,7 @@ const TVInterfaceBuilder = () => {
                         </Button>
                       )}
                     </div>
-                    
+
                     {previewImageUrl && (
                       <div className="border rounded-lg p-4">
                         <img
@@ -563,9 +666,12 @@ const TVInterfaceBuilder = () => {
               </div>
             </div>
             <div className="w-48">
-              <Select value={selectedDeviceFilter} onValueChange={setSelectedDeviceFilter}>
+              <Select
+                value={selectedDeviceFilter}
+                onValueChange={setSelectedDeviceFilter}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="Фильтр по устройству" />
+                  <SelectValue placeholder="Фильт�� по устройству" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все устройства</SelectItem>
@@ -578,9 +684,12 @@ const TVInterfaceBuilder = () => {
               </Select>
             </div>
             <div className="w-48">
-              <Select value={selectedTypeFilter} onValueChange={setSelectedTypeFilter}>
+              <Select
+                value={selectedTypeFilter}
+                onValueChange={setSelectedTypeFilter}
+              >
                 <SelectTrigger>
-                  <SelectValue placeholder="Фильтр по типу" />
+                  <SelectValue placeholder="Фильтр ��о типу" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все типы</SelectItem>
@@ -617,17 +726,20 @@ const TVInterfaceBuilder = () => {
               Интерфейсы не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
-              {searchTerm || selectedDeviceFilter !== 'all' || selectedTypeFilter !== 'all'
-                ? 'Попробуйте изменить фильтры поиска'
-                : 'Создайте первый TV интерфейс для начала работы'
-              }
+              {searchTerm ||
+              selectedDeviceFilter !== "all" ||
+              selectedTypeFilter !== "all"
+                ? "Попробуйте изменить фильтры поиска"
+                : "Создайте первый TV интерфейс для начала работы"}
             </p>
-            {!searchTerm && selectedDeviceFilter === 'all' && selectedTypeFilter === 'all' && (
-              <Button onClick={() => setIsCreateDialogOpen(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Создать интерфейс
-              </Button>
-            )}
+            {!searchTerm &&
+              selectedDeviceFilter === "all" &&
+              selectedTypeFilter === "all" && (
+                <Button onClick={() => setIsCreateDialogOpen(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Создать интерфейс
+                </Button>
+              )}
           </div>
         ) : (
           filteredInterfaces.map((tvInterface) => (
@@ -647,14 +759,22 @@ const TVInterfaceBuilder = () => {
                       <p className="text-sm text-gray-500">Нет скриншота</p>
                     </div>
                   )}
-                  
+
                   {/* Status Badge */}
                   <div className="absolute top-2 right-2">
-                    <Badge variant={tvInterfaceUtils.isActive(tvInterface) ? "default" : "secondary"}>
-                      {tvInterfaceUtils.isActive(tvInterface) ? "Активен" : "Неактивен"}
+                    <Badge
+                      variant={
+                        tvInterfaceUtils.isActive(tvInterface)
+                          ? "default"
+                          : "secondary"
+                      }
+                    >
+                      {tvInterfaceUtils.isActive(tvInterface)
+                        ? "Активен"
+                        : "Неактивен"}
                     </Badge>
                   </div>
-                  
+
                   {/* Type Badge */}
                   <div className="absolute top-2 left-2">
                     <Badge variant="outline" className="bg-white/80 text-black">
@@ -673,15 +793,18 @@ const TVInterfaceBuilder = () => {
                       {tvInterface.deviceName || tvInterface.device_name}
                     </p>
                   </div>
-                  
+
                   {tvInterface.description && (
                     <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
                       {tvInterface.description}
                     </p>
                   )}
-                  
+
                   <div className="text-xs text-gray-500">
-                    Создан: {new Date(tvInterface.createdAt || tvInterface.created_at!).toLocaleDateString('ru')}
+                    Создан:{" "}
+                    {new Date(
+                      tvInterface.createdAt || tvInterface.created_at!,
+                    ).toLocaleDateString("ru")}
                   </div>
 
                   {/* Actions */}
@@ -709,12 +832,14 @@ const TVInterfaceBuilder = () => {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => handleDuplicate(tvInterface.id, tvInterface.name)}
+                        onClick={() =>
+                          handleDuplicate(tvInterface.id, tvInterface.name)
+                        }
                       >
                         <Copy className="h-3 w-3" />
                       </Button>
                     </div>
-                    
+
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button size="sm" variant="outline">
@@ -723,14 +848,19 @@ const TVInterfaceBuilder = () => {
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>Удалить интерфейс?</AlertDialogTitle>
+                          <AlertDialogTitle>
+                            Удалить интерфейс?
+                          </AlertDialogTitle>
                           <AlertDialogDescription>
-                            Это действие нельзя отменить. TV интерфейс "{tvInterface.name}" будет удален навсегда.
+                            Это действие нельзя отменить. TV интерфейс "
+                            {tvInterface.name}" будет удален навсегда.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Отмена</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDelete(tvInterface.id)}>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(tvInterface.id)}
+                          >
                             Удалить
                           </AlertDialogAction>
                         </AlertDialogFooter>
@@ -757,15 +887,19 @@ const TVInterfaceBuilder = () => {
                 <Input
                   id="edit-name"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  placeholder="Введите название интерфейса"
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  placeholder="Вве��ите название интерфейса"
                 />
               </div>
               <div>
                 <Label htmlFor="edit-type">Тип интерфейса</Label>
                 <Select
                   value={formData.type}
-                  onValueChange={(value: TVInterfaceType) => setFormData(prev => ({ ...prev, type: value }))}
+                  onValueChange={(value: TVInterfaceType) =>
+                    setFormData((prev) => ({ ...prev, type: value }))
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите тип интерфейса" />
@@ -775,7 +909,9 @@ const TVInterfaceBuilder = () => {
                       <SelectItem key={type.value} value={type.value}>
                         <div>
                           <div className="font-medium">{type.label}</div>
-                          <div className="text-xs text-gray-500">{type.description}</div>
+                          <div className="text-xs text-gray-500">
+                            {type.description}
+                          </div>
                         </div>
                       </SelectItem>
                     ))}
@@ -783,12 +919,14 @@ const TVInterfaceBuilder = () => {
                 </Select>
               </div>
             </div>
-            
+
             <div>
               <Label htmlFor="edit-device">Устройство</Label>
               <Select
                 value={formData.deviceId}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, deviceId: value }))}
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, deviceId: value }))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Выбери��е устройство" />
@@ -798,20 +936,27 @@ const TVInterfaceBuilder = () => {
                     <SelectItem key={device.id} value={device.id}>
                       <div>
                         <div className="font-medium">{device.name}</div>
-                        <div className="text-xs text-gray-500">{device.brand} {device.model}</div>
+                        <div className="text-xs text-gray-500">
+                          {device.brand} {device.model}
+                        </div>
                       </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div>
               <Label htmlFor="edit-description">Описание</Label>
               <Textarea
                 id="edit-description"
-                value={formData.description || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                value={formData.description || ""}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
                 placeholder="Введите описание интерфейса"
                 rows={3}
               />
@@ -848,7 +993,7 @@ const TVInterfaceBuilder = () => {
                     </Button>
                   )}
                 </div>
-                
+
                 {previewImageUrl && (
                   <div className="border rounded-lg p-4">
                     <img
