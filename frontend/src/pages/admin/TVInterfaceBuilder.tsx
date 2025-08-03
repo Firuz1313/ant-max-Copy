@@ -235,7 +235,7 @@ const TVInterfaceBuilder = () => {
       console.error("Error creating TV interface:", error);
       toast({
         title: "Ошибка",
-        description: "Произо��ла ошибка при создании TV интерфейса",
+        description: "Произошла ошибка при создании TV интерфейса",
         variant: "destructive",
       });
     } finally {
@@ -350,7 +350,7 @@ const TVInterfaceBuilder = () => {
       if (response.success) {
         toast({
           title: "Успех",
-          description: response.message || "TV интерфейс дубл��рован",
+          description: response.message || "TV интерфейс дубл����рован",
         });
         loadTVInterfaces();
       } else {
@@ -378,7 +378,7 @@ const TVInterfaceBuilder = () => {
       if (response.success) {
         toast({
           title: "Успех",
-          description: `Очистка завершена. Создано ${response.data?.created || 0} пользовательских интерфейсов`,
+          description: response.data?.message || "Все TV интерфейсы успешно удалены",
         });
         loadTVInterfaces();
       } else {
@@ -467,7 +467,7 @@ const TVInterfaceBuilder = () => {
                 <AlertDialogTitle>Очистить все TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
                   Это действие удалит все существующие TV интерфейсы.
-                  После очистки вы сможете ��оздавать свои собственные интерфейсы вручную через UI.
+                  После очистки вы сможете создавать свои собственные интерфейсы вручную через UI.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -594,7 +594,7 @@ const TVInterfaceBuilder = () => {
                         onClick={() => fileInputRef.current?.click()}
                       >
                         <Upload className="h-4 w-4 mr-2" />
-                        Загру��ит�� файл
+                        Загрузит�� файл
                       </Button>
                       <Button
                         type="button"
@@ -688,7 +688,7 @@ const TVInterfaceBuilder = () => {
                 onValueChange={setSelectedTypeFilter}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Фильтр ��о типу" />
+                  <SelectValue placeholder="Ф��льтр ��о типу" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все типы</SelectItem>
@@ -851,7 +851,7 @@ const TVInterfaceBuilder = () => {
                             Удалить интерфейс?
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            Это действие нельзя отмени��ь. TV интерфейс "
+                            Это действие нельзя отменить. TV интерфейс "
                             {tvInterface.name}" будет удален навсегда.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
@@ -946,7 +946,7 @@ const TVInterfaceBuilder = () => {
             </div>
 
             <div>
-              <Label htmlFor="edit-description">��писание</Label>
+              <Label htmlFor="edit-description">Описание</Label>
               <Textarea
                 id="edit-description"
                 value={formData.description || ""}
