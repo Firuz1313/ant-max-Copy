@@ -365,7 +365,9 @@ const StepsManager = () => {
   const loadTVInterfacesForDevice = async (deviceId: string) => {
     setLoadingTVInterfaces(true);
     try {
+      console.log(`🔄 Loading TV interfaces for device: ${deviceId}`);
       const response = await tvInterfacesAPI.getByDeviceId(deviceId);
+
       if (response.success && response.data) {
         // Нормализуем данные с бэкенда
         const normalizedInterfaces = response.data.map(tvInterface => ({
@@ -376,14 +378,22 @@ const StepsManager = () => {
           deviceId: tvInterface.deviceId || tvInterface.device_id,
           isActive: tvInterface.isActive !== undefined ? tvInterface.isActive : tvInterface.is_active
         }));
+
         setTVInterfaces(normalizedInterfaces);
-        console.log('Loaded TV interfaces:', normalizedInterfaces);
+        console.log(`✅ Loaded ${normalizedInterfaces.length} TV interfaces:`, normalizedInterfaces);
       } else {
+        console.warn(`⚠️ No TV interfaces found for device ${deviceId}:`, response.error);
         setTVInterfaces([]);
       }
     } catch (error) {
-      console.error('Error loading TV interfaces:', error);
+      console.error(`❌ Error loading TV interfaces for device ${deviceId}:`, error);
       setTVInterfaces([]);
+
+      // Показываем пользователю информацию об ошибке
+      if (error instanceof Error && error.message.includes('Сетевая ошибка')) {
+        // Можно добавить toast уведомление
+        console.error('Проблемы с подключением к серверу');
+      }
     } finally {
       setLoadingTVInterfaces(false);
     }
