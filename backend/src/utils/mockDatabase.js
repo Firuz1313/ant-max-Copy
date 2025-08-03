@@ -149,10 +149,13 @@ export async function query(text, params = []) {
     if (lowercaseText.includes("from tv_interfaces")) {
       if (lowercaseText.includes("where id =")) {
         const id = params[0];
+        console.log(`🔍 Mock DB: Looking for TV interface with ID: ${id}`);
+        console.log(`📊 Mock DB: Available interfaces:`, mockData.tv_interfaces.map(t => t.id));
         const tvInterface = mockData.tv_interfaces.find(
           (t) => t.id === id && !t.deleted_at,
         );
         if (tvInterface) {
+          console.log(`✅ Mock DB: Found TV interface:`, tvInterface.name);
           // Join with device data
           const device = mockData.devices.find(
             (d) => d.id === tvInterface.device_id,
