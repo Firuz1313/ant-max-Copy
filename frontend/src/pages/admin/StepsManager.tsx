@@ -223,7 +223,7 @@ const StepFormFieldsComponent = React.memo(({
             <SelectValue placeholder="Выберите пульт" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="none">Без пульта</SelectItem>
+            <SelectItem value="none">Без пул��та</SelectItem>
             {getAvailableRemotes().map((remote) => {
               const device = devices.find((d) => d.id === remote.deviceId);
               return (
@@ -835,6 +835,36 @@ const StepsManager = () => {
 
   return (
     <div className="space-y-6">
+      {/* TV Interface Problem Alert */}
+      <Card className="border-orange-200 bg-orange-50 dark:bg-orange-950 dark:border-orange-800">
+        <CardContent className="pt-6">
+          <div className="flex items-start space-x-4">
+            <div className="flex-shrink-0">
+              <Monitor className="h-8 w-8 text-orange-600" />
+            </div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-orange-900 dark:text-orange-100">
+                ��� Проблема с TV интерфейсами
+              </h3>
+              <p className="text-orange-800 dark:text-orange-200 mb-4">
+                Обнаружена проблема: "Нет скриншота" в редакторе областей интерфейса.
+                Тестовые интерфейсы ("Главное меню OpenBox", "Настройки UCLAN") не имеют реальных скриншотов.
+              </p>
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-orange-200 dark:border-orange-700 mb-4">
+                <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">✅ Решение:</h4>
+                <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-1">
+                  <li>• Удалить тестовые интерфейсы</li>
+                  <li>• Создать пользовательские интерфейсы с реальными скриншотами</li>
+                  <li>• Добавить кликабельные области для навигации</li>
+                  <li>• Исправить работу редактора областей интерфейса</li>
+                </ul>
+              </div>
+              <QuickCleanupButton />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
