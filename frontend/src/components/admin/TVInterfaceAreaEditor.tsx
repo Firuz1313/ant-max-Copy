@@ -336,9 +336,6 @@ const TVInterfaceAreaEditor: React.FC<TVInterfaceAreaEditorProps> = ({
     onSave(clickableAreas, highlightAreas);
   };
 
-  const [tempScreenshot, setTempScreenshot] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
-
   const handleScreenshotUpload = async (file: File) => {
     setIsUploading(true);
     try {
