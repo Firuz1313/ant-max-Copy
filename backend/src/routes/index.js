@@ -72,7 +72,7 @@ router.get("/docs", (req, res) => {
       baseUrl: "/api/v1",
       endpoints: {
         devices: {
-          description: "Управление устройствами (��В приставки)",
+          description: "У��равление устройствами (ТВ приставки)",
           routes: {
             "GET /devices": "Получени�� списка устройств",
             "GET /devices/:id": "Получение устройства по ID",
@@ -92,7 +92,7 @@ router.get("/docs", (req, res) => {
         problems: {
           description: "Управление проблемами диагностики",
           routes: {
-            "GET /problems": "Получение списка ��роблем",
+            "GET /problems": "Получение списка проблем",
             "GET /problems/:id": "Получение проблемы по ID",
             "POST /problems": "Создание новой проблемы",
             "PUT /problems/:id": "Обновление проблемы",
@@ -128,7 +128,7 @@ router.get("/docs", (req, res) => {
             "POST /steps/insert": "Вставка шага",
             "POST /steps/fix-numbering/:problemId": "Исправление нумерации",
             "POST /steps/:id/duplicate": "Дублирование шага",
-            "POST /steps/:id/restore": "Восстановление архивированного шага",
+            "POST /steps/:id/restore": "Восстано��ление архивированного шага",
             "PUT /steps/reorder": "Переупорядочивание шагов",
           },
         },
@@ -147,7 +147,7 @@ router.get("/docs", (req, res) => {
             "GET /sessions/export": "Экспорт сессий",
             "POST /sessions/:id/complete": "Завершение сессии",
             "POST /sessions/:id/progress": "Обновление прогресса",
-            "POST /sessions/cleanup": "Очистка старых сессий",
+            "POST /sessions/cleanup": "Очистка с��арых сессий",
             "POST /sessions/:id/restore":
               "Восстановление архивированной сессии",
           },
@@ -165,7 +165,7 @@ router.get("/docs", (req, res) => {
               "Активация/деактивация интерфейса ТВ",
             "GET /tv-interfaces/device/:deviceId": "Интерфейсы по устройству",
             "GET /tv-interfaces/stats": "Статистика интерфейсов",
-            "GET /tv-interfaces/:id/export": "Экспорт интерфейса в JSON",
+            "GET /tv-interfaces/:id/export": "Экспорт интерфейс�� в JSON",
           },
         },
       },
@@ -213,6 +213,7 @@ router.use(`${API_V1_PREFIX}/problems`, problemRoutes);
 router.use(`${API_V1_PREFIX}/steps`, stepRoutes);
 router.use(`${API_V1_PREFIX}/sessions`, sessionRoutes);
 router.use(`${API_V1_PREFIX}/tv-interfaces`, tvInterfaceRoutes);
+router.use(`${API_V1_PREFIX}/tv-interface-marks`, tvInterfaceMarkRoutes);
 router.use(`${API_V1_PREFIX}/cleanup`, cleanupRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
