@@ -642,22 +642,38 @@ const StepsManagerNew = () => {
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 relative">
-            <canvas
-              ref={tvCanvasRef}
-              width={800}
-              height={450}
-              className="border border-gray-300 dark:border-gray-600 rounded cursor-crosshair mx-auto"
-              style={{
-                backgroundImage: selectedTVInterface.screenshot_data 
-                  ? `url(${selectedTVInterface.screenshot_data})` 
-                  : "none",
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                backgroundColor: selectedTVInterface.screenshot_data ? "transparent" : "#f3f4f6",
-              }}
-              onClick={handleTVCanvasClick}
-            />
+            {selectedTVInterface.screenshot_data ? (
+              <div className="relative w-full h-full flex items-center justify-center">
+                <img
+                  src={selectedTVInterface.screenshot_data}
+                  alt={selectedTVInterface.name}
+                  className="max-w-full max-h-full object-contain rounded"
+                  style={{ width: '800px', height: '450px', objectFit: 'contain' }}
+                />
+                <canvas
+                  ref={tvCanvasRef}
+                  width={800}
+                  height={450}
+                  className="absolute inset-0 cursor-crosshair"
+                  style={{
+                    width: '800px',
+                    height: '450px',
+                  }}
+                  onClick={handleTVCanvasClick}
+                />
+              </div>
+            ) : (
+              <canvas
+                ref={tvCanvasRef}
+                width={800}
+                height={450}
+                className="border border-gray-300 dark:border-gray-600 rounded cursor-crosshair mx-auto"
+                style={{
+                  backgroundColor: "#f3f4f6",
+                }}
+                onClick={handleTVCanvasClick}
+              />
+            )}
 
 
 
