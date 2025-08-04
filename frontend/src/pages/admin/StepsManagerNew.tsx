@@ -54,6 +54,8 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI, TVInterfaceAPI, ClickableArea, HighlightArea } from "@/api/tvInterfaces";
+import TVInterfaceEditor from "@/components/admin/TVInterfaceEditor";
+import { tvInterfaceMarksAPI, TVInterfaceMark } from "@/api/tvInterfaceMarks";
 
 interface DiagnosticStep {
   id: string;
@@ -347,7 +349,7 @@ const StepsManagerNew = () => {
       tvAreaPosition: step.tvAreaPosition || { x: 0, y: 0 },
     });
     
-    // Загрузить интерфейсы для текущего устройства
+    // Загрузить интерфейсы для текущего устро��ства
     if (step.deviceId) {
       loadTVInterfacesForDevice(step.deviceId);
     }
@@ -1151,7 +1153,7 @@ const StepsManagerNew = () => {
                               {step.requiredAction && (
                                 <Badge variant="outline">
                                   <PlayCircle className="h-3 w-3 mr-1" />
-                                  Автопереход
+                                  ��втопереход
                                 </Badge>
                               )}
                               {step.remoteId && (
