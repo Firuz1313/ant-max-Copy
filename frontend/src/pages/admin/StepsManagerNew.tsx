@@ -663,16 +663,25 @@ const StepsManagerNew = () => {
                 />
               </div>
             ) : (
-              <canvas
-                ref={tvCanvasRef}
-                width={800}
-                height={450}
-                className="border border-gray-300 dark:border-gray-600 rounded cursor-crosshair mx-auto"
-                style={{
-                  backgroundColor: "#f3f4f6",
-                }}
-                onClick={handleTVCanvasClick}
-              />
+              <div className="relative">
+                <canvas
+                  ref={tvCanvasRef}
+                  width={800}
+                  height={450}
+                  className="border border-gray-300 dark:border-gray-600 rounded cursor-crosshair mx-auto"
+                  style={{
+                    backgroundColor: "#f3f4f6",
+                  }}
+                  onClick={handleTVCanvasClick}
+                />
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="text-center text-gray-500">
+                    <Monitor className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium">Изображение интерфейса не загружено</p>
+                    <p className="text-sm">Загрузите изображение в разделе "Интерфейсы ТВ"</p>
+                  </div>
+                </div>
+              </div>
             )}
 
 
