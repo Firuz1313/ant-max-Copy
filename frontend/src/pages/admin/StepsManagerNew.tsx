@@ -778,31 +778,7 @@ const StepsManagerNew = () => {
               )}
 
               {/* Спис��к областей интерфейса */}
-              <div className="space-y-2">
-                <h4 className="font-medium">Доступные области:</h4>
-                <div className="space-y-1 max-h-32 overflow-y-auto">
-                  {selectedTVInterface.clickable_areas.map((area) => (
-                    <div key={area.id} className="text-xs p-2 bg-green-50 dark:bg-green-900/20 rounded">
-                      <span className="font-medium text-green-700 dark:text-green-300">
-                        {area.name}
-                      </span>
-                      <span className="text-green-600 dark:text-green-400 ml-2">
-                        (интерактивная)
-                      </span>
-                    </div>
-                  ))}
-                  {selectedTVInterface.highlight_areas.map((area) => (
-                    <div key={area.id} className="text-xs p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
-                      <span className="font-medium text-orange-700 dark:text-orange-300">
-                        {area.name}
-                      </span>
-                      <span className="text-orange-600 dark:text-orange-400 ml-2">
-                        (подсветка)
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+
             </CardContent>
           </Card>
         </div>
@@ -1384,7 +1360,7 @@ const StepsManagerNew = () => {
             </Button>
             <Button onClick={() => setIsRemoteEditorOpen(false)}>
               <Save className="h-4 w-4 mr-2" />
-              Сохранить позицию
+              С��хранить позицию
             </Button>
           </div>
         </DialogContent>
@@ -1444,7 +1420,7 @@ const StepsManagerNew = () => {
                     Нет изображения интерфейса
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 text-center mb-4">
-                    Для этой приставки не загружено изображение интерфейса.<br />
+                    Для этой прис��авки не загружено изображение интерфейса.<br />
                     Пожалуйста, загрузите интерфейс в разделе "Интерфейсы ТВ".
                   </p>
                   <Button
