@@ -197,7 +197,7 @@ const StepsManagerNew = () => {
   // Сохранение отметок TV интерфейса
   const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
     try {
-      // Здесь можно реализовать ло��ику сохранения всех отметок
+      // Здесь можно реализовать ло��ику сохранения всех отмет��к
       // Для простоты сейчас просто обновляем локальное состояние
       setTVInterfaceMarks(marks);
 
@@ -742,7 +742,7 @@ const StepsManagerNew = () => {
         <div className="w-full lg:w-80 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Выбор области на ТВ</CardTitle>
+              <CardTitle className="text-lg">Выбор позиции на ТВ</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Button
@@ -861,7 +861,7 @@ const StepsManagerNew = () => {
       </div>
 
       <div>
-        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название шага</Label>
+        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название ш��га</Label>
         <Input
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
@@ -1023,7 +1023,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Дополнительна�� подсказка для пользоват��ля"
+          placeholder="Дополнительна�� подсказка для ��ользоват��ля"
         />
       </div>
 
