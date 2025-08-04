@@ -931,7 +931,7 @@ const StepsManagerNew = () => {
               onClick={openTVEditor}
               size="sm"
               className="whitespace-nowrap"
-              title="Открыть редактор отметок интерфейса ТВ"
+              title="Открыть ��едактор отметок интерфейса ТВ"
             >
               <Target className="h-4 w-4 mr-1" />
               Отметки
@@ -939,22 +939,15 @@ const StepsManagerNew = () => {
           )}
         </div>
 
-        {/* TV Interface Marks Status */}
-        {formData.tvInterfaceId !== "none" && (
+        {/* TV Interface Position Status */}
+        {formData.tvInterfaceId !== "none" && formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
           <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <Target className="h-4 w-4 text-blue-600 mr-2" />
                 <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                  Отметки интерфейса
+                  Позиция на ТВ: ({formData.tvAreaPosition.x}, {formData.tvAreaPosition.y})
                 </span>
-                {isLoadingMarks ? (
-                  <Badge variant="secondary" className="ml-2">Загрузка...</Badge>
-                ) : (
-                  <Badge variant={tvInterfaceMarks.length > 0 ? "default" : "secondary"} className="ml-2">
-                    {tvInterfaceMarks.length} отметок
-                  </Badge>
-                )}
               </div>
               <Button
                 variant="ghost"
@@ -963,14 +956,9 @@ const StepsManagerNew = () => {
                 className="text-blue-600 hover:text-blue-800"
               >
                 <Settings className="h-3 w-3 mr-1" />
-                Редактировать
+                Изменить
               </Button>
             </div>
-            {tvInterfaceMarks.length > 0 && (
-              <div className="mt-2 text-xs text-blue-600 dark:text-blue-300">
-                Созданы отметки: {tvInterfaceMarks.map(mark => mark.name).join(", ")}
-              </div>
-            )}
           </div>
         )}
       </div>
@@ -1330,7 +1318,7 @@ const StepsManagerNew = () => {
                                   {Math.round(step.tvAreaPosition.y)})
                                 </span>
                               )}
-                              <span>Обно��лено: {step.updatedAt}</span>
+                              <span>Обновлено: {step.updatedAt}</span>
                             </div>
                           </div>
                         </div>
