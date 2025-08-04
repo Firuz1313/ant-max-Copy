@@ -4,9 +4,27 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  build: {
+    watch: null,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 999999,
+  },
+  optimizeDeps: {
+    noDiscovery: true,
+    include: [],
+  },
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  },
   server: {
     host: "::",
     port: 8080,
+    hmr: false,
+    watch: null,
+    middlewareMode: false,
+    force: true,
+    clearScreen: false,
+    strictPort: true,
     proxy: {
       "/api": {
         target: "http://localhost:3000",
@@ -39,7 +57,7 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  plugins: [react()],
+  plugins: [react({ fastRefresh: false })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
