@@ -1425,8 +1425,12 @@ const StepsManagerNew = () => {
                 <TVInterfaceEditor
                   tvInterfaceId={selectedTVInterface.id}
                   stepId={selectedStep?.id}
+                  imageUrl={selectedTVInterface.screenshot_data}
+                  imageData={selectedTVInterface.screenshot_data}
                   initialMarks={tvInterfaceMarks}
                   onMarksChange={saveTVInterfaceMarks}
+                  showControls={true}
+                  readonly={false}
                   className="w-full h-full"
                 />
               ) : (
