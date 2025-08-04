@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import TVDisplay from "@/components/TVDisplay";
+import TVInterfaceDisplay from "@/components/TVInterfaceDisplay";
 import RemoteControl from "@/components/RemoteControl";
 import { useData } from "@/contexts/DataContext";
 import {
