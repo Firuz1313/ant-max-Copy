@@ -14,28 +14,20 @@ export const cleanupAPI = {
   }> => {
     try {
       console.log(
-        "🧹 Attempting to call cleanup API: POST /cleanup/tv-interfaces",
+        "🧹 Attempting to call cleanup API: POST /v1/cleanup/tv-interfaces",
       );
-      const response = await apiClient.post("/cleanup/tv-interfaces");
+      const response = await apiClient.post("/v1/cleanup/tv-interfaces");
       console.log("✅ Cleanup API response:", response);
       return {
-        success: response.data.success,
-        data: response.data.data,
+        success: response.success,
+        data: response.data,
       };
     } catch (error: any) {
       console.error("❌ Error cleaning up TV interfaces:", error);
-      console.error("❌ Error details:", {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        message: error.message,
-        url: error.config?.url,
-        method: error.config?.method,
-      });
+      console.error("❌ Error details:", error);
       return {
         success: false,
         error:
-          error.response?.data?.error ||
           error.message ||
           "Произошла ошибка при очистке TV интерфейсов",
       };
