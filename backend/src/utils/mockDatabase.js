@@ -79,7 +79,7 @@ let mockData = {
   problems: [
     {
       id: 1,
-      title: "Нет си��нала на экране",
+      title: "Нет сигнала на э��ране",
       description: "Экран остается черным, нет изображения",
       severity: "high",
       category: "display",
@@ -117,7 +117,7 @@ let mockData = {
       id: 1,
       device_id: 1,
       problem_id: 1,
-      user_name: "��естовый пользователь",
+      user_name: "Тестовый пользователь",
       status: "in_progress",
       start_time: new Date().toISOString(),
       end_time: null,
@@ -451,6 +451,7 @@ export async function getDatabaseStats() {
         live_rows: mockData.diagnostic_sessions.length,
       },
       { tablename: "tv_interfaces", live_rows: mockData.tv_interfaces.length },
+      { tablename: "tv_interface_marks", live_rows: mockData.tv_interface_marks.length },
     ],
     databaseSize: "1.2 MB (mock)",
     timestamp: new Date().toISOString(),
