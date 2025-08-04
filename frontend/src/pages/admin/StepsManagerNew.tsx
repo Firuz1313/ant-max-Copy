@@ -99,9 +99,7 @@ const StepsManagerNew = () => {
   const [selectedTVInterface, setSelectedTVInterface] = useState<TVInterfaceAPI | null>(null);
   const [isLoadingTVInterfaces, setIsLoadingTVInterfaces] = useState(false);
 
-  // Состояние для отметок TV интерфейса
-  const [tvInterfaceMarks, setTVInterfaceMarks] = useState<TVInterfaceMark[]>([]);
-  const [isLoadingMarks, setIsLoadingMarks] = useState(false);
+
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tvCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -170,7 +168,7 @@ const StepsManagerNew = () => {
     }
   };
 
-  // Загрузка отметок для TV интерфейса
+  // Загрузка от��еток для TV интерфейса
   const loadTVInterfaceMarks = async (tvInterfaceId: string, stepId?: string) => {
     try {
       setIsLoadingMarks(true);
@@ -195,7 +193,7 @@ const StepsManagerNew = () => {
   const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
     try {
       // Здесь можно реализовать ло��ику сохранения всех отметок
-      // Для простоты сейчас прост�� обновляем локальное состояние
+      // Для простоты сейчас просто обновляем локальное состояние
       setTVInterfaceMarks(marks);
 
       // Если есть выбранный шаг, связываем отметки с этим шагом
@@ -533,7 +531,7 @@ const StepsManagerNew = () => {
 
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
-    return device?.name || "Неизвестная прист��вка";
+    return device?.name || "Неизвестная приставка";
   };
 
   const getProblemTitle = (problemId: string) => {
@@ -811,7 +809,7 @@ const StepsManagerNew = () => {
       </div>
 
       <div>
-        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название шага</Label>
+        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название ��ага</Label>
         <Input
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
@@ -1358,7 +1356,7 @@ const StepsManagerNew = () => {
             </Button>
             <Button onClick={() => setIsTVEditorOpen(false)}>
               <Save className="h-4 w-4 mr-2" />
-              ��охранить позицию
+              Сохранить позицию
             </Button>
           </div>
         </DialogContent>
@@ -1370,7 +1368,7 @@ const StepsManagerNew = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Редактировать шаг</DialogTitle>
+            <DialogTitle>Редактир��вать шаг</DialogTitle>
           </DialogHeader>
           <StepFormFields isEdit={true} />
           <div className="flex justify-end space-x-2">
