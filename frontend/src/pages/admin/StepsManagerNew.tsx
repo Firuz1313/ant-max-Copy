@@ -548,7 +548,7 @@ const StepsManagerNew = () => {
 
   const getTVInterfaceName = (tvInterfaceId: string) => {
     const tvInterface = getTVInterfaceById(tvInterfaceId);
-    return tvInterface?.name || "Неизвестный интерфейс";
+    return tvInterface?.name || "Неиз��естный интерфейс";
   };
 
   const getGroupedSteps = () => {
@@ -655,7 +655,7 @@ const StepsManagerNew = () => {
                   <Target className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-green-700 dark:text-green-300">
-                      ��озиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
+                      Позиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
                       {Math.round(formData.buttonPosition.y)})
                     </p>
                   </AlertDescription>
@@ -928,7 +928,13 @@ const StepsManagerNew = () => {
             </SelectContent>
           </Select>
           {formData.tvInterfaceId !== "none" && (
-            <Button variant="outline" onClick={openTVEditor} size="sm" className="whitespace-nowrap">
+            <Button
+              variant="outline"
+              onClick={openTVEditor}
+              size="sm"
+              className="whitespace-nowrap"
+              title="Открыть редактор отметок интерфейса ТВ"
+            >
               <Target className="h-4 w-4 mr-1" />
               Отметки
             </Button>
@@ -1070,7 +1076,7 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейса�� ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
