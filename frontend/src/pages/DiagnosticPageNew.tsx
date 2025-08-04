@@ -169,7 +169,7 @@ const DiagnosticPageNew = () => {
     setHoveredMark(mark);
   };
 
-  // Ренд��р пульта
+  // Рендер пульта
   const renderRemote = () => {
     if (!remote) {
       return (
@@ -267,7 +267,19 @@ const DiagnosticPageNew = () => {
         {/* TV Interface */}
         <div className="flex-1 flex items-center justify-end max-w-4xl min-w-0">
           <div className="w-full" style={{ aspectRatio: '16/9', maxHeight: '450px' }}>
-            {renderTVInterface()}
+            <TVInterfaceDisplay
+              tvInterfaceId={currentStepData?.tvInterfaceId}
+              stepId={currentStepData?.id}
+              currentStepNumber={currentStepNumber}
+              tvAreaPosition={currentStepData?.tvAreaPosition}
+              showAllMarks={true}
+              highlightActiveMarks={true}
+              showHints={true}
+              enableAnimations={true}
+              onMarkClick={handleMarkClick}
+              onMarkHover={handleMarkHover}
+              className="w-full h-full"
+            />
           </div>
         </div>
         
@@ -324,7 +336,7 @@ const DiagnosticPageNew = () => {
                     {currentStepData.buttonPosition && (
                       <Badge variant="outline" className="text-red-300 border-red-400">
                         <Target className="h-3 w-3 mr-1" />
-                        П��зиция кнопки
+                        Позиция кнопки
                       </Badge>
                     )}
                     {currentStepData.tvAreaPosition && (
