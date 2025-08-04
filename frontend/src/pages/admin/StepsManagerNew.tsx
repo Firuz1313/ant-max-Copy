@@ -151,7 +151,7 @@ const StepsManagerNew = () => {
   const loadTVInterfacesForDevice = async (deviceId: string) => {
     try {
       setIsLoadingTVInterfaces(true);
-      const response = await tvInterfacesAPI.getByDevice(deviceId);
+      const response = await tvInterfacesAPI.getByDeviceId(deviceId);
       if (response.success && response.data) {
         setTVInterfaces(response.data);
       }
@@ -160,6 +160,39 @@ const StepsManagerNew = () => {
       setTVInterfaces([]);
     } finally {
       setIsLoadingTVInterfaces(false);
+    }
+  };
+
+  // Загрузка отметок для TV интерфейса
+  const loadTVInterfaceMarks = async (tvInterfaceId: string, stepId?: string) => {
+    try {
+      setIsLoadingMarks(true);
+      const response = await tvInterfaceMarksAPI.getByTVInterfaceId(tvInterfaceId, {
+        step_id: stepId,
+      });
+      if (response.success && response.data) {
+        setTVInterfaceMarks(response.data);
+      } else {
+        console.error("Error loading TV interface marks:", response.error);
+        setTVInterfaceMarks([]);
+      }
+    } catch (error) {
+      console.error("Error loading TV interface marks:", error);
+      setTVInterfaceMarks([]);
+    } finally {
+      setIsLoadingMarks(false);
+    }
+  };
+
+  // Сохранение отметок TV интерфейса
+  const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
+    try {
+      // Здесь можно реализовать логику сохранения всех отметок
+      // Для простоты сейчас просто обновляем локальное состояние
+      setTVInterfaceMarks(marks);
+      console.log("TV interface marks saved:", marks);
+    } catch (error) {
+      console.error("Error saving TV interface marks:", error);
     }
   };
 
@@ -1291,7 +1324,7 @@ const StepsManagerNew = () => {
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>
-              Выбор области на ТВ: {selectedTVInterface?.name}
+              Выбор об��асти на ТВ: {selectedTVInterface?.name}
             </DialogTitle>
           </DialogHeader>
           <div className="flex-1 overflow-hidden">{renderTVEditor()}</div>
