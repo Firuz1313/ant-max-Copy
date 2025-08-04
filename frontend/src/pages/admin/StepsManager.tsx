@@ -343,7 +343,7 @@ const StepsManager = () => {
     instruction: "",
     highlightRemoteButton: "none",
     highlightTVArea: "none",
-    tvInterface: "home" as DiagnosticStep["tvInterface"],
+
     tvInterfaceId: "none", // Добавлено для выбора ��озданного интерфейса
     requiredAction: "",
     hint: "",
@@ -499,7 +499,7 @@ const StepsManager = () => {
         // If interface not found, try reloading the TV interfaces list
         if (
           response.error?.includes("404") ||
-          response.error?.includes("не найден")
+          response.error?.includes("н�� найден")
         ) {
           console.log(
             "🔄 Interface not found, reloading TV interfaces list...",
@@ -1330,7 +1330,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь ф��ль��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
