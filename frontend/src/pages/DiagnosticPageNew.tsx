@@ -110,7 +110,7 @@ const DiagnosticPageNew = () => {
     loadTVInterface();
   }, [currentStepData?.tvInterfaceId]);
 
-  // Проверка валидности данных
+  // Проверка валидности да��ных
   useEffect(() => {
     if (!deviceId || !problemId || steps.length === 0) {
       navigate("/devices");
@@ -366,7 +366,7 @@ const DiagnosticPageNew = () => {
                     {currentStepData.tvInterfaceId && (
                       <Badge variant="outline" className="text-blue-300 border-blue-400">
                         <Monitor className="h-3 w-3 mr-1" />
-                        ТВ интерфейс активе��
+                        ТВ интерфе��с активен
                       </Badge>
                     )}
                     {currentStepData.buttonPosition && (
@@ -379,6 +379,12 @@ const DiagnosticPageNew = () => {
                       <Badge variant="outline" className="text-orange-300 border-orange-400">
                         <Target className="h-3 w-3 mr-1" />
                         Область на ТВ
+                      </Badge>
+                    )}
+                    {selectedMark && (
+                      <Badge variant="outline" className="text-purple-300 border-purple-400">
+                        <Target className="h-3 w-3 mr-1" />
+                        Выбрана отметка
                       </Badge>
                     )}
                   </div>
