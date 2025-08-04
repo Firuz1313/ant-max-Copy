@@ -19,7 +19,15 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const adminMenuItems = [
+interface AdminMenuItem {
+  title: string;
+  path: string;
+  icon: any;
+  description: string;
+  titleStyle?: React.CSSProperties;
+}
+
+const adminMenuItems: AdminMenuItem[] = [
   {
     title: "Обзор",
     path: "/admin",
@@ -42,7 +50,7 @@ const adminMenuItems = [
     title: "Управление шагами",
     path: "/admin/steps",
     icon: Layers,
-    description: "Создание и редактирование шагов диагностики",
+    description: "Создан��е и редактирование шагов диагностики",
   },
   {
     title: "Конструктор пультов",
