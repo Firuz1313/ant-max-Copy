@@ -249,13 +249,7 @@ const StepsManagerNew = () => {
     }
   };
 
-  const getAvailableTVInterfaces = () => {
-    return tvInterfaces.filter(iface => iface.is_active);
-  };
 
-  const getTVInterfaceById = (id: string) => {
-    return tvInterfaces.find(iface => iface.id === id);
-  };
 
   const handleCreate = async () => {
     const deviceSteps = steps.filter(
