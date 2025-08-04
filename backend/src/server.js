@@ -27,6 +27,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
+// Trust proxy headers for cloud environments (Fly.io, Docker, etc.)
+app.set('trust proxy', true);
+
 // Настройка CORS
 const corsOptions = {
   origin: function (origin, callback) {
@@ -99,7 +102,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Статические файлы
 app.use('/media', express.static(path.join(__dirname, '../uploads')));
 
-// Кастомный middleware для логирования запросов
+// Кастом��ый middleware для логирования запросов
 app.use(requestLogger);
 
 // Дополнительное логирование для отладки
@@ -142,7 +145,7 @@ app.use(errorHandler);
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
-  console.log('📄 Получен сигнал SIGTERM. Изящное завершение работы...');
+  console.log('📄 Получен сигнал SIGTERM. Изящное ��авершение работы...');
   process.exit(0);
 });
 
