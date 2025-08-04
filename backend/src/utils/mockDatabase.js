@@ -79,7 +79,7 @@ let mockData = {
   problems: [
     {
       id: 1,
-      title: "Нет сигнала на экране",
+      title: "Нет си��нала на экране",
       description: "Экран остается черным, нет изображения",
       severity: "high",
       category: "display",
@@ -117,7 +117,7 @@ let mockData = {
       id: 1,
       device_id: 1,
       problem_id: 1,
-      user_name: "Тестовый пользователь",
+      user_name: "��естовый пользователь",
       status: "in_progress",
       start_time: new Date().toISOString(),
       end_time: null,
@@ -377,6 +377,27 @@ export async function query(text, params = []) {
         const deletedCount = mockData.tv_interfaces.length;
         mockData.tv_interfaces = [];
         return { rows: [], rowCount: deletedCount };
+      }
+    }
+
+    if (lowercaseText.includes("from tv_interface_marks")) {
+      if (lowercaseText.includes("where id =")) {
+        const id = params[0];
+        const markIndex = mockData.tv_interface_marks.findIndex((m) => m.id === id);
+        if (markIndex !== -1) {
+          const deleted = mockData.tv_interface_marks.splice(markIndex, 1)[0];
+          return { rows: [deleted], rowCount: 1 };
+        }
+      } else if (lowercaseText.includes("where tv_interface_id =")) {
+        const tvInterfaceId = params[0];
+        const deletedMarks = mockData.tv_interface_marks.filter((m) => m.tv_interface_id === tvInterfaceId);
+        mockData.tv_interface_marks = mockData.tv_interface_marks.filter((m) => m.tv_interface_id !== tvInterfaceId);
+        return { rows: deletedMarks, rowCount: deletedMarks.length };
+      } else if (lowercaseText.includes("where step_id =")) {
+        const stepId = params[0];
+        const deletedMarks = mockData.tv_interface_marks.filter((m) => m.step_id === stepId);
+        mockData.tv_interface_marks = mockData.tv_interface_marks.filter((m) => m.step_id !== stepId);
+        return { rows: deletedMarks, rowCount: deletedMarks.length };
       }
     }
     return { rows: [], rowCount: 1 };
