@@ -158,7 +158,7 @@ const StepFormFieldsComponent = React.memo(
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для ��ользо��ателя"
+          placeholder="Подробная инструкция для ��ользователя"
         />
       </div>
 
@@ -738,6 +738,12 @@ const StepsManager = () => {
       remoteId: step.remoteId || "none",
       buttonPosition: step.buttonPosition || { x: 0, y: 0 },
     });
+
+    // Загрузить TV интерфейсы для устройства шага при редактировании
+    if (step.deviceId && step.deviceId !== "all") {
+      loadTVInterfacesForDevice(step.deviceId);
+    }
+
     setIsEditDialogOpen(true);
   };
 
@@ -1325,7 +1331,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь филь��ры по��ска или создайте новый шаг.
+              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
