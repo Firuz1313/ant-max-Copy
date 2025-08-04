@@ -439,9 +439,7 @@ const StepsManagerNew = () => {
     const tvInterface = getTVInterfaceById(formData.tvInterfaceId);
     if (tvInterface) {
       setSelectedTVInterface(tvInterface);
-      // Load marks for this step and TV interface
-      loadTVInterfaceMarks(formData.tvInterfaceId, selectedStep?.id);
-      setIsTVInterfaceMarksEditorOpen(true);
+      setIsTVEditorOpen(true);
     }
   };
 
@@ -1332,7 +1330,7 @@ const StepsManagerNew = () => {
                                   {Math.round(step.tvAreaPosition.y)})
                                 </span>
                               )}
-                              <span>Обновлено: {step.updatedAt}</span>
+                              <span>Обно��лено: {step.updatedAt}</span>
                             </div>
                           </div>
                         </div>
