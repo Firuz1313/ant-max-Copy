@@ -53,7 +53,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useData } from "@/contexts/DataContext";
-import { tvInterfacesAPI, TVInterfaceAPI, ClickableArea, HighlightArea } from "@/api/tvInterfaces";
+import {
+  tvInterfacesAPI,
+  TVInterfaceAPI,
+  ClickableArea,
+  HighlightArea,
+} from "@/api/tvInterfaces";
 
 interface DiagnosticStep {
   id: string;
@@ -96,10 +101,9 @@ const StepsManagerNew = () => {
 
   // Состояние для ТВ интерфейсов
   const [tvInterfaces, setTVInterfaces] = useState<TVInterfaceAPI[]>([]);
-  const [selectedTVInterface, setSelectedTVInterface] = useState<TVInterfaceAPI | null>(null);
+  const [selectedTVInterface, setSelectedTVInterface] =
+    useState<TVInterfaceAPI | null>(null);
   const [isLoadingTVInterfaces, setIsLoadingTVInterfaces] = useState(false);
-
-
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tvCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -119,7 +123,9 @@ const StepsManagerNew = () => {
   const [selectedRemote, setSelectedRemote] = useState<any>(null);
   const [isPickingRemoteButton, setIsPickingRemoteButton] = useState(false);
   const [isPickingTVArea, setIsPickingTVArea] = useState(false);
-  const [customRemoteImage, setCustomRemoteImage] = useState<string | null>(null);
+  const [customRemoteImage, setCustomRemoteImage] = useState<string | null>(
+    null,
+  );
 
   const [formData, setFormData] = useState({
     deviceId: "",
@@ -144,8 +150,6 @@ const StepsManagerNew = () => {
     }
   }, [formData.deviceId]);
 
-
-
   const loadTVInterfacesForDevice = async (deviceId: string) => {
     try {
       setIsLoadingTVInterfaces(true);
@@ -163,13 +167,11 @@ const StepsManagerNew = () => {
 
   // Загрузка отметок для TV ��нтерфейса
 
-
   // Сохранение отметок TV интерфейса
   const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
     try {
       // Здесь можно реализовать ло��ику сохранения всех отметок
       // Для простоты сейчас просто обновляем локальное состояние
-
 
       // Если есть выбранный шаг, связываем отметки с эт��м шагом
       if (selectedStep?.id) {
@@ -225,11 +227,11 @@ const StepsManagerNew = () => {
   };
 
   const getAvailableTVInterfaces = () => {
-    return tvInterfaces.filter(iface => iface.is_active !== false);
+    return tvInterfaces.filter((iface) => iface.is_active !== false);
   };
 
   const getTVInterfaceById = (id: string) => {
-    return tvInterfaces.find(iface => iface.id === id);
+    return tvInterfaces.find((iface) => iface.id === id);
   };
 
   const openTVEditor = () => {
@@ -239,8 +241,6 @@ const StepsManagerNew = () => {
       setIsTVEditorOpen(true);
     }
   };
-
-
 
   const handleCreate = async () => {
     const deviceSteps = steps.filter(
@@ -263,7 +263,8 @@ const StepsManagerNew = () => {
         formData.highlightTVArea === "none"
           ? undefined
           : formData.highlightTVArea,
-      tvInterfaceId: formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
+      tvInterfaceId:
+        formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
       remoteId: formData.remoteId === "none" ? undefined : formData.remoteId,
       buttonPosition:
         formData.buttonPosition.x === 0 && formData.buttonPosition.y === 0
@@ -301,7 +302,8 @@ const StepsManagerNew = () => {
         formData.highlightTVArea === "none"
           ? undefined
           : formData.highlightTVArea,
-      tvInterfaceId: formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
+      tvInterfaceId:
+        formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
       remoteId: formData.remoteId === "none" ? undefined : formData.remoteId,
       buttonPosition:
         formData.buttonPosition.x === 0 && formData.buttonPosition.y === 0
@@ -387,12 +389,12 @@ const StepsManagerNew = () => {
       buttonPosition: step.buttonPosition || { x: 0, y: 0 },
       tvAreaPosition: step.tvAreaPosition || { x: 0, y: 0 },
     });
-    
+
     // Загрузить интерфейсы для текущего устро��ства
     if (step.deviceId) {
       loadTVInterfacesForDevice(step.deviceId);
     }
-    
+
     setIsEditDialogOpen(true);
   };
 
@@ -420,7 +422,9 @@ const StepsManagerNew = () => {
     }
   };
 
-  const handleRemoteCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleRemoteCanvasClick = (
+    event: React.MouseEvent<HTMLCanvasElement>,
+  ) => {
     if (!isPickingRemoteButton || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
@@ -490,18 +494,21 @@ const StepsManagerNew = () => {
   };
 
   const handleFieldChange = useCallback((field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   }, []);
 
-  const handleDeviceChange = useCallback((value: string) => {
-    const defaultRemote = getDefaultRemoteForDevice(value);
-    setFormData(prev => ({
-      ...prev,
-      deviceId: value,
-      problemId: "",
-      remoteId: defaultRemote?.id || "none",
-    }));
-  }, [getDefaultRemoteForDevice]);
+  const handleDeviceChange = useCallback(
+    (value: string) => {
+      const defaultRemote = getDefaultRemoteForDevice(value);
+      setFormData((prev) => ({
+        ...prev,
+        deviceId: value,
+        problemId: "",
+        remoteId: defaultRemote?.id || "none",
+      }));
+    },
+    [getDefaultRemoteForDevice],
+  );
 
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
@@ -582,7 +589,9 @@ const StepsManagerNew = () => {
               <div className="grid grid-cols-1 gap-2">
                 <Button
                   variant={isPickingRemoteButton ? "default" : "outline"}
-                  onClick={() => setIsPickingRemoteButton(!isPickingRemoteButton)}
+                  onClick={() =>
+                    setIsPickingRemoteButton(!isPickingRemoteButton)
+                  }
                   className="w-full"
                 >
                   <Target className="h-4 w-4 mr-2" />
@@ -611,23 +620,26 @@ const StepsManagerNew = () => {
                   <Crosshair className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
-                      Кликните на изображение пульта, чтобы указать позицию кнопки
+                      Кликните на изображение пульта, чтобы указать позицию
+                      кнопки
                     </p>
                   </AlertDescription>
                 </Alert>
               )}
 
-              {formData.buttonPosition.x > 0 && formData.buttonPosition.y > 0 && (
-                <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
-                  <Target className="h-4 w-4" />
-                  <AlertDescription>
-                    <p className="text-sm text-green-700 dark:text-green-300">
-                      Позиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
-                      {Math.round(formData.buttonPosition.y)})
-                    </p>
-                  </AlertDescription>
-                </Alert>
-              )}
+              {formData.buttonPosition.x > 0 &&
+                formData.buttonPosition.y > 0 && (
+                  <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
+                    <Target className="h-4 w-4" />
+                    <AlertDescription>
+                      <p className="text-sm text-green-700 dark:text-green-300">
+                        Позиция выбрана: (
+                        {Math.round(formData.buttonPosition.x)},{" "}
+                        {Math.round(formData.buttonPosition.y)})
+                      </p>
+                    </AlertDescription>
+                  </Alert>
+                )}
             </CardContent>
           </Card>
         </div>
@@ -648,7 +660,11 @@ const StepsManagerNew = () => {
                   src={selectedTVInterface.screenshot_data}
                   alt={selectedTVInterface.name}
                   className="max-w-full max-h-full object-contain rounded"
-                  style={{ width: '800px', height: '450px', objectFit: 'contain' }}
+                  style={{
+                    width: "800px",
+                    height: "450px",
+                    objectFit: "contain",
+                  }}
                 />
                 <canvas
                   ref={tvCanvasRef}
@@ -656,8 +672,8 @@ const StepsManagerNew = () => {
                   height={450}
                   className="absolute inset-0 cursor-crosshair"
                   style={{
-                    width: '800px',
-                    height: '450px',
+                    width: "800px",
+                    height: "450px",
                   }}
                   onClick={handleTVCanvasClick}
                 />
@@ -677,14 +693,16 @@ const StepsManagerNew = () => {
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="text-center text-gray-500">
                     <Monitor className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                    <p className="text-lg font-medium">Изображение интерфейса не загружено</p>
-                    <p className="text-sm">Загрузите изображение в разделе "Интерфейсы ТВ"</p>
+                    <p className="text-lg font-medium">
+                      Изображение интерфейса не загружено
+                    </p>
+                    <p className="text-sm">
+                      Загрузите изображение в разделе "Интерфейсы ТВ"
+                    </p>
                   </div>
                 </div>
               </div>
             )}
-
-
 
             {/* Выбранная позиция */}
             {formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
@@ -721,26 +739,28 @@ const StepsManagerNew = () => {
                   <Target className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
-                      Кликните на интерфейс Т��, чтобы указать область для подсветки
+                      Кликните на интерфейс Т��, чтобы указать область для
+                      подсветки
                     </p>
                   </AlertDescription>
                 </Alert>
               )}
 
-              {formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
-                <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
-                  <Target className="h-4 w-4" />
-                  <AlertDescription>
-                    <p className="text-sm text-green-700 dark:text-green-300">
-                      Область выбран��: ({Math.round(formData.tvAreaPosition.x)},{" "}
-                      {Math.round(formData.tvAreaPosition.y)})
-                    </p>
-                  </AlertDescription>
-                </Alert>
-              )}
+              {formData.tvAreaPosition.x > 0 &&
+                formData.tvAreaPosition.y > 0 && (
+                  <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
+                    <Target className="h-4 w-4" />
+                    <AlertDescription>
+                      <p className="text-sm text-green-700 dark:text-green-300">
+                        Область выбран��: (
+                        {Math.round(formData.tvAreaPosition.x)},{" "}
+                        {Math.round(formData.tvAreaPosition.y)})
+                      </p>
+                    </AlertDescription>
+                  </Alert>
+                )}
 
               {/* Спис��к областей интерфейса */}
-
             </CardContent>
           </Card>
         </div>
@@ -755,10 +775,7 @@ const StepsManagerNew = () => {
           <Label htmlFor={isEdit ? "edit-deviceId" : "deviceId"}>
             Приставка
           </Label>
-          <Select
-            value={formData.deviceId}
-            onValueChange={handleDeviceChange}
-          >
+          <Select value={formData.deviceId} onValueChange={handleDeviceChange}>
             <SelectTrigger>
               <SelectValue placeholder="Выбери��е приставку" />
             </SelectTrigger>
@@ -847,7 +864,9 @@ const StepsManagerNew = () => {
             <SelectContent>
               <SelectItem value="none">Без интерфейса</SelectItem>
               {isLoadingTVInterfaces ? (
-                <SelectItem value="loading" disabled>Загрузка...</SelectItem>
+                <SelectItem value="loading" disabled>
+                  Загрузка...
+                </SelectItem>
               ) : (
                 getAvailableTVInterfaces().map((tvInterface) => (
                   <SelectItem key={tvInterface.id} value={tvInterface.id}>
@@ -878,27 +897,30 @@ const StepsManagerNew = () => {
         </div>
 
         {/* TV Interface Position Status */}
-        {formData.tvInterfaceId !== "none" && formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
-          <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Target className="h-4 w-4 text-blue-600 mr-2" />
-                <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                  Позиция на ТВ: ({formData.tvAreaPosition.x}, {formData.tvAreaPosition.y})
-                </span>
+        {formData.tvInterfaceId !== "none" &&
+          formData.tvAreaPosition.x > 0 &&
+          formData.tvAreaPosition.y > 0 && (
+            <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Target className="h-4 w-4 text-blue-600 mr-2" />
+                  <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                    Позиция на ТВ: ({formData.tvAreaPosition.x},{" "}
+                    {formData.tvAreaPosition.y})
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={openTVEditor}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  <Settings className="h-3 w-3 mr-1" />
+                  Изменить
+                </Button>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={openTVEditor}
-                className="text-blue-600 hover:text-blue-800"
-              >
-                <Settings className="h-3 w-3 mr-1" />
-                Изменить
-              </Button>
             </div>
-          </div>
-        )}
+          )}
       </div>
 
       <div>
@@ -970,8 +992,8 @@ const StepsManagerNew = () => {
           <Target className="h-4 w-4" />
           <AlertDescription>
             <p className="text-sm text-green-700 dark:text-green-300">
-              Позиция кнопки на пульте: ({Math.round(formData.buttonPosition.x)},{" "}
-              {Math.round(formData.buttonPosition.y)})
+              Позиция кнопки на пульте: ({Math.round(formData.buttonPosition.x)}
+              , {Math.round(formData.buttonPosition.y)})
             </p>
           </AlertDescription>
         </Alert>
@@ -1000,7 +1022,8 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и
+            интерфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -1240,8 +1263,7 @@ const StepsManagerNew = () => {
                               )}
                               {step.tvInterfaceId && (
                                 <span>
-                                  ТВ:{" "}
-                                  {getTVInterfaceName(step.tvInterfaceId)}
+                                  ТВ: {getTVInterfaceName(step.tvInterfaceId)}
                                 </span>
                               )}
                               {step.buttonPosition && (
@@ -1338,10 +1360,7 @@ const StepsManagerNew = () => {
           </DialogHeader>
           <div className="flex-1 overflow-hidden">{renderTVEditor()}</div>
           <div className="flex justify-end space-x-2 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => setIsTVEditorOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsTVEditorOpen(false)}>
               Отмена
             </Button>
             <Button onClick={() => setIsTVEditorOpen(false)}>
@@ -1351,8 +1370,6 @@ const StepsManagerNew = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
