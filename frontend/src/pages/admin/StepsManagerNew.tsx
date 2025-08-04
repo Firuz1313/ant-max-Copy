@@ -169,7 +169,7 @@ const StepsManagerNew = () => {
     try {
       // Здесь можно реализовать ло��ику сохранения всех отметок
       // Для простоты сейчас просто обновляем локальное состояние
-      setTVInterfaceMarks(marks);
+
 
       // Если есть выбранный шаг, связываем отметки с этим шагом
       if (selectedStep?.id) {
@@ -516,7 +516,7 @@ const StepsManagerNew = () => {
 
   const getTVInterfaceName = (tvInterfaceId: string) => {
     const tvInterface = getTVInterfaceById(tvInterfaceId);
-    return tvInterface?.name || "Неиз��естный интерфейс";
+    return tvInterface?.name || "Не��з��естный интерфейс";
   };
 
   const getGroupedSteps = () => {
@@ -985,7 +985,7 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
+            Создание шагов диагностики с привязкой к приставк��м, проблемам и интерфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -1083,7 +1083,7 @@ const StepsManagerNew = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все пульты</SelectItem>
-                  <SelectItem value="none">Без пульта</SelectItem>
+                  <SelectItem value="none">Без ��ульта</SelectItem>
                   {getFilteredRemotes().map((remote) => {
                     const device = devices.find(
                       (d) => d.id === remote.deviceId,
