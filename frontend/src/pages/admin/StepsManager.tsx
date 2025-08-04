@@ -1203,14 +1203,15 @@ const StepsManager = () => {
                               {step.highlightTVArea && (
                                 <span>ТВ: {step.highlightTVArea}</span>
                               )}
-                              {step.tvInterfaceId && step.tvInterfaceId !== "none" && (
-                                <span>
-                                  Интерфейс: {
-                                    tvInterfaces.find(tv => tv.id === step.tvInterfaceId)?.name ||
-                                    "Неизвестный интерфейс"
-                                  }
-                                </span>
-                              )}
+                              {step.tvInterfaceId &&
+                                step.tvInterfaceId !== "none" && (
+                                  <span>
+                                    Интерфейс:{" "}
+                                    {tvInterfaces.find(
+                                      (tv) => tv.id === step.tvInterfaceId,
+                                    )?.name || "Неизвестный интерфейс"}
+                                  </span>
+                                )}
                               <span>Обновлено: {step.updatedAt}</span>
                             </div>
                           </div>
