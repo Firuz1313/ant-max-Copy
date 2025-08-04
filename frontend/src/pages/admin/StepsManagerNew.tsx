@@ -576,7 +576,7 @@ const StepsManagerNew = () => {
         <div className="w-full lg:w-80 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Выбор позиции на пульте</CardTitle>
+              <CardTitle className="text-lg">Выбор позиц��и на пульте</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-2">
@@ -664,7 +664,7 @@ const StepsManagerNew = () => {
             {/* Выбранная позиция */}
             {formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
               <div
-                className="absolute w-4 h-4 bg-red-500 rounded-full border-2 border-white transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
+                className="absolute w-4 h-4 bg-red-500 rounded-full border-2 border-white transform -translate-x-1/2 -translate-y-1/2 animate-pulse shadow-lg pointer-events-none z-10"
                 style={{
                   left: `${(formData.tvAreaPosition.x / 800) * 100}%`,
                   top: `${(formData.tvAreaPosition.y / 450) * 100}%`,
