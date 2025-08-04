@@ -54,8 +54,6 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI, TVInterfaceAPI, ClickableArea, HighlightArea } from "@/api/tvInterfaces";
-import TVInterfaceEditor from "@/components/admin/TVInterfaceEditor";
-import { tvInterfaceMarksAPI, TVInterfaceMark } from "@/api/tvInterfaceMarks";
 
 interface DiagnosticStep {
   id: string;
@@ -197,7 +195,7 @@ const StepsManagerNew = () => {
   const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
     try {
       // Здесь можно реализовать ло��ику сохранения всех отметок
-      // Для простоты сейчас просто обновляем локальное состояние
+      // Для простоты сейчас прост�� обновляем локальное состояние
       setTVInterfaceMarks(marks);
 
       // Если есть выбранный шаг, связываем отметки с этим шагом
@@ -535,7 +533,7 @@ const StepsManagerNew = () => {
 
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
-    return device?.name || "Неизвестная приставка";
+    return device?.name || "Неизвестная прист��вка";
   };
 
   const getProblemTitle = (problemId: string) => {
@@ -1026,7 +1024,7 @@ const StepsManagerNew = () => {
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>С��здать новый шаг</DialogTitle>
+              <DialogTitle>Создать новый шаг</DialogTitle>
             </DialogHeader>
             <StepFormFields />
             <div className="flex justify-end space-x-2">
@@ -1360,7 +1358,7 @@ const StepsManagerNew = () => {
             </Button>
             <Button onClick={() => setIsTVEditorOpen(false)}>
               <Save className="h-4 w-4 mr-2" />
-              Сохранить позицию
+              ��охранить позицию
             </Button>
           </div>
         </DialogContent>
