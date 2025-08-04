@@ -144,14 +144,7 @@ const StepsManagerNew = () => {
     }
   }, [formData.deviceId]);
 
-  // Загрузка отметок TV интерфейса при изменении интерфейса или шага
-  useEffect(() => {
-    if (formData.tvInterfaceId && formData.tvInterfaceId !== "none") {
-      loadTVInterfaceMarks(formData.tvInterfaceId, selectedStep?.id);
-    } else {
-      setTVInterfaceMarks([]);
-    }
-  }, [formData.tvInterfaceId, selectedStep?.id]);
+
 
   const loadTVInterfacesForDevice = async (deviceId: string) => {
     try {
@@ -168,7 +161,7 @@ const StepsManagerNew = () => {
     }
   };
 
-  // Загрузка от��еток для TV интерфейса
+  // Загрузка отметок для TV интерфейса
   const loadTVInterfaceMarks = async (tvInterfaceId: string, stepId?: string) => {
     try {
       setIsLoadingMarks(true);
@@ -809,12 +802,12 @@ const StepsManagerNew = () => {
       </div>
 
       <div>
-        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название ��ага</Label>
+        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название шага</Label>
         <Input
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
           onChange={(e) => handleFieldChange("title", e.target.value)}
-          placeholder="Введите название шага"
+          placeholder="Введ��те название шага"
         />
       </div>
 
@@ -1368,7 +1361,7 @@ const StepsManagerNew = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Редактир��вать шаг</DialogTitle>
+            <DialogTitle>Редактировать шаг</DialogTitle>
           </DialogHeader>
           <StepFormFields isEdit={true} />
           <div className="flex justify-end space-x-2">
