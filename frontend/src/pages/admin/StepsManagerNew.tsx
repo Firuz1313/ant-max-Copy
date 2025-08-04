@@ -188,7 +188,7 @@ const StepsManagerNew = () => {
   // Сохранение отметок TV интерфейса
   const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
     try {
-      // Здесь можно реализовать логику сохранени�� всех отметок
+      // Здесь можно реализовать ло��ику сохранения всех отметок
       // Для простоты сейчас просто обновляем локальное состояние
       setTVInterfaceMarks(marks);
       console.log("TV interface marks saved:", marks);
@@ -913,6 +913,41 @@ const StepsManagerNew = () => {
             </Button>
           )}
         </div>
+
+        {/* TV Interface Marks Status */}
+        {formData.tvInterfaceId !== "none" && (
+          <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Target className="h-4 w-4 text-blue-600 mr-2" />
+                <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                  Отметки интерфейса
+                </span>
+                {isLoadingMarks ? (
+                  <Badge variant="secondary" className="ml-2">Загрузка...</Badge>
+                ) : (
+                  <Badge variant={tvInterfaceMarks.length > 0 ? "default" : "secondary"} className="ml-2">
+                    {tvInterfaceMarks.length} отметок
+                  </Badge>
+                )}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={openTVEditor}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                <Settings className="h-3 w-3 mr-1" />
+                Редактировать
+              </Button>
+            </div>
+            {tvInterfaceMarks.length > 0 && (
+              <div className="mt-2 text-xs text-blue-600 dark:text-blue-300">
+                Созданы отметки: {tvInterfaceMarks.map(mark => mark.name).join(", ")}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div>
@@ -975,7 +1010,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Дополнительная подсказка для пользоват��ля"
+          placeholder="Дополнительна�� подсказка для пользоват��ля"
         />
       </div>
 
@@ -1014,7 +1049,7 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставка��, проблемам и интерфейсам ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -1112,7 +1147,7 @@ const StepsManagerNew = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все пульты</SelectItem>
-                  <SelectItem value="none">Без п��льта</SelectItem>
+                  <SelectItem value="none">Без пульта</SelectItem>
                   {getFilteredRemotes().map((remote) => {
                     const device = devices.find(
                       (d) => d.id === remote.deviceId,
