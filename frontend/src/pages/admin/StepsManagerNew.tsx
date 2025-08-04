@@ -72,7 +72,7 @@ interface DiagnosticStep {
   hint?: string;
   remoteId?: string;
   buttonPosition?: { x: number; y: number };
-  tvAreaPosition?: { x: number; y: number }; // Добавлено для позиций на ТВ
+  tvAreaPosition?: { x: number; y: number }; // Доба��лено для позиций на ТВ
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -1010,7 +1010,7 @@ const StepsManagerNew = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Управление шагами
+            У��равление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
@@ -1361,6 +1361,81 @@ const StepsManagerNew = () => {
               <Save className="h-4 w-4 mr-2" />
               Сохранить позицию
             </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* TV Interface Marks Editor Dialog */}
+      <Dialog open={isTVInterfaceMarksEditorOpen} onOpenChange={setIsTVInterfaceMarksEditorOpen}>
+        <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden">
+          <DialogHeader>
+            <DialogTitle>
+              Отметки интерфейса: {selectedTVInterface?.name}
+            </DialogTitle>
+          </DialogHeader>
+
+          {selectedTVInterface ? (
+            <div className="flex-1 overflow-hidden">
+              {selectedTVInterface.screenshot_data ? (
+                <TVInterfaceEditor
+                  tvInterfaceId={selectedTVInterface.id}
+                  stepId={selectedStep?.id}
+                  initialMarks={tvInterfaceMarks}
+                  onMarksChange={saveTVInterfaceMarks}
+                  className="w-full h-full"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center p-8 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <AlertTriangle className="h-16 w-16 text-yellow-500 mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Нет изображения интерфейса
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-center mb-4">
+                    Для этой приставки не загружено изображение интерфейса.<br />
+                    Пожалуйста, загрузите интерфейс в разделе "Интерфейсы ТВ".
+                  </p>
+                  <Button
+                    onClick={() => {
+                      setIsTVInterfaceMarksEditorOpen(false);
+                      // Navigate to TV interfaces section
+                      window.location.href = '/admin/tv-interfaces';
+                    }}
+                    className="flex items-center"
+                  >
+                    <Monitor className="h-4 w-4 mr-2" />
+                    Открыть интерфейсы ТВ
+                  </Button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center p-8">
+              <div className="text-center">
+                <Monitor className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600 dark:text-gray-400">
+                  Интерфейс ТВ не выбран
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-between items-center pt-4">
+            <div className="flex items-center text-sm text-gray-500">
+              {selectedTVInterface?.screenshot_data && (
+                <>
+                  <Grid3X3 className="h-4 w-4 mr-1" />
+                  Используйте инструменты для создания отметок на интерфейсе
+                </>
+              )}
+            </div>
+            <div className="flex space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => setIsTVInterfaceMarksEditorOpen(false)}
+              >
+                Готово
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
