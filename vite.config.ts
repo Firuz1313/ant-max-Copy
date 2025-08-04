@@ -6,6 +6,14 @@ import path from "path";
 export default defineConfig(({ mode }) => ({
   build: {
     watch: null,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 999999,
+  },
+  optimizeDeps: {
+    disabled: true,
+  },
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
   },
   server: {
     host: "::",
@@ -13,6 +21,9 @@ export default defineConfig(({ mode }) => ({
     hmr: false,
     watch: null,
     middlewareMode: false,
+    force: true,
+    clearScreen: false,
+    strictPort: true,
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
