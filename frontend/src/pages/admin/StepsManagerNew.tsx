@@ -233,6 +233,23 @@ const StepsManagerNew = () => {
   };
 
   const getAvailableTVInterfaces = () => {
+    return tvInterfaces.filter(iface => iface.is_active !== false);
+  };
+
+  const getTVInterfaceById = (id: string) => {
+    return tvInterfaces.find(iface => iface.id === id);
+  };
+
+  const openTVEditor = () => {
+    if (formData.tvInterfaceId && formData.tvInterfaceId !== "none") {
+      const tvInterface = getTVInterfaceById(formData.tvInterfaceId);
+      setSelectedTVInterface(tvInterface || null);
+      loadTVInterfaceMarks(formData.tvInterfaceId, selectedStep?.id);
+      setIsTVEditorOpen(true);
+    }
+  };
+
+  const getAvailableTVInterfaces = () => {
     return tvInterfaces.filter(iface => iface.is_active);
   };
 
@@ -718,7 +735,7 @@ const StepsManagerNew = () => {
                   <Crosshair className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
-                      Кликните на интерфейс ТВ, чтобы указать область для подсветки
+                      Кликните на интерфейс Т��, чтобы указать область для подсветки
                     </p>
                   </AlertDescription>
                 </Alert>
@@ -952,7 +969,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Дополнительная подсказка для пользователя"
+          placeholder="Дополнительная подсказка для пользоват��ля"
         />
       </div>
 
@@ -1377,7 +1394,7 @@ const StepsManagerNew = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте изменить фильтры поиска или создайте новый шаг.
+              Попробуйте изменит�� фильтры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
