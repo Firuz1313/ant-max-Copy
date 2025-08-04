@@ -286,7 +286,6 @@ interface DiagnosticStep {
   instruction: string;
   highlightRemoteButton?: string;
   highlightTVArea?: string;
-  tvInterface?: "home" | "settings" | "channels" | "no-signal";
   tvInterfaceId?: string; // ID созданного TV интерфейса
   requiredAction?: string;
   hint?: string;
@@ -510,7 +509,7 @@ const StepsManager = () => {
           }
           toast({
             title: "Интерфейс не найден",
-            description: `TV интерфейс "${tvInterface.name}" больше не существует. Список интерфейсов обновлён.`,
+            description: `TV интерфейс "${tvInterface.name}" больше не существует. Список интерфейсов обновл��н.`,
             variant: "destructive",
           });
           return; // Don't open editor for non-existent interface
