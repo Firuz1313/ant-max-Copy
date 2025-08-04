@@ -642,7 +642,7 @@ const StepsManagerNew = () => {
                   <Crosshair className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
-                      Кликните на изображение пульта, чтобы указать позицию кнопки
+                      Кликните на изобр��жение пульта, чтобы указать позицию кнопки
                     </p>
                   </AlertDescription>
                 </Alert>
@@ -711,14 +711,25 @@ const StepsManagerNew = () => {
               <CardTitle className="text-lg">Выбор позиции на ТВ</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button
-                variant={isPickingTVArea ? "default" : "outline"}
-                onClick={() => setIsPickingTVArea(!isPickingTVArea)}
-                className="w-full"
-              >
-                <Target className="h-4 w-4 mr-2" />
-                {isPickingTVArea ? "Отменить выбор" : "Выбрать позицию"}
-              </Button>
+              <div className="grid grid-cols-1 gap-2">
+                <Button
+                  variant={isPickingTVArea ? "default" : "outline"}
+                  onClick={() => setIsPickingTVArea(!isPickingTVArea)}
+                  className="w-full"
+                >
+                  <Target className="h-4 w-4 mr-2" />
+                  {isPickingTVArea ? "Отменить выбор" : "Выбрать позицию"}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => {/* Логика загрузки ТВ интерфейса */}}
+                  className="w-full"
+                  disabled
+                >
+                  <ImageIcon className="h-4 w-4 mr-2" />
+                  Загрузить изображение
+                </Button>
+              </div>
 
               {isPickingTVArea && (
                 <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
@@ -832,7 +843,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для ��ользователя"
+          placeholder="Подробная и��струкция для ��ользователя"
         />
       </div>
 
@@ -898,7 +909,7 @@ const StepsManagerNew = () => {
                 className="text-blue-600 hover:text-blue-800"
               >
                 <Settings className="h-3 w-3 mr-1" />
-                Изменить
+                Из��енить
               </Button>
             </div>
           </div>
@@ -965,7 +976,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Дополнительна�� подсказка для пользоват���ля"
+          placeholder="Дополнительна�� подсказка для пользоват�����ля"
         />
       </div>
 
