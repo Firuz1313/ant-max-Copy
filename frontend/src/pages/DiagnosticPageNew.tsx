@@ -110,7 +110,7 @@ const DiagnosticPageNew = () => {
     loadTVInterface();
   }, [currentStepData?.tvInterfaceId]);
 
-  // Проверка валидности да��ных
+  // Проверка валидности данных
   useEffect(() => {
     if (!deviceId || !problemId || steps.length === 0) {
       navigate("/devices");
@@ -118,6 +118,10 @@ const DiagnosticPageNew = () => {
   }, [deviceId, problemId, steps.length, navigate]);
 
   const handleNextStep = () => {
+    // Clear mark selections when moving to next step
+    setSelectedMark(null);
+    setHoveredMark(null);
+
     if (currentStepNumber < steps.length) {
       setCurrentStepNumber(currentStepNumber + 1);
       setManualProgress(true);
@@ -125,7 +129,7 @@ const DiagnosticPageNew = () => {
       // Все шаги завершены
       const sessionId = Date.now().toString(36) + Math.random().toString(36).substr(2);
       const sessionDuration = Math.round((Date.now() - sessionStartTime) / 1000);
-      
+
       // Можно сохранить сессию диагностики
       console.log('Diagnostic session completed:', {
         deviceId,
@@ -135,12 +139,16 @@ const DiagnosticPageNew = () => {
         completedSteps: steps.length,
         success: true
       });
-      
+
       navigate(`/success/${deviceId}/${sessionId}?problemId=${problemId}`);
     }
   };
 
   const handlePrevStep = () => {
+    // Clear mark selections when moving to previous step
+    setSelectedMark(null);
+    setHoveredMark(null);
+
     if (currentStepNumber > 1) {
       setCurrentStepNumber(currentStepNumber - 1);
     }
@@ -366,7 +374,7 @@ const DiagnosticPageNew = () => {
                     {currentStepData.tvInterfaceId && (
                       <Badge variant="outline" className="text-blue-300 border-blue-400">
                         <Monitor className="h-3 w-3 mr-1" />
-                        ТВ интерфе��с активен
+                        ТВ интерфейс активен
                       </Badge>
                     )}
                     {currentStepData.buttonPosition && (
