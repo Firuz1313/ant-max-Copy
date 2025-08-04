@@ -10,10 +10,10 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 999999,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react/jsx-runtime'],
+    include: ["react", "react-dom", "react/jsx-runtime"],
   },
   esbuild: {
-    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+    logOverride: { "this-is-undefined-in-esm": "silent" },
   },
   server: {
     host: "::",
@@ -56,9 +56,11 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  plugins: [react({
-    fastRefresh: false
-  })],
+  plugins: [
+    react({
+      fastRefresh: false,
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
