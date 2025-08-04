@@ -77,32 +77,42 @@ const MarkDisplay: React.FC<MarkDisplayProps> = ({
   };
 
   const getMarkStyles = () => {
-    const baseStyles: React.CSSProperties = {
+    // Determine border width and style based on state
+    const borderWidth = isActive ? 3 : mark.border_width;
+    const borderColor = mark.border_color || mark.color;
+
+    // Build transform with conditional scaling
+    let transform = 'translate(-50%, -50%)';
+    if (isHovered) {
+      transform = 'translate(-50%, -50%) scale(1.1)';
+    }
+
+    // Build box shadow based on state
+    let boxShadow = undefined;
+    if (isHovered) {
+      boxShadow = `0 0 20px ${mark.color}`;
+    }
+    if (isActive) {
+      boxShadow = `0 0 30px ${mark.color}, 0 0 60px ${mark.color}40`;
+    }
+
+    const styles: React.CSSProperties = {
       position: 'absolute',
       left: `${scaledPosition.x}px`,
       top: `${scaledPosition.y}px`,
       width: mark.shape === 'circle' ? `${scaledSize.height}px` : `${scaledSize.width}px`,
       height: `${scaledSize.height}px`,
       borderRadius: mark.shape === 'circle' ? '50%' : '4px',
-      border: `${mark.border_width}px solid ${mark.border_color || mark.color}`,
+      borderWidth: `${borderWidth}px`,
+      borderStyle: 'solid',
+      borderColor: borderColor,
       backgroundColor: mark.background_color || `${mark.color}${Math.round(mark.opacity * 255).toString(16).padStart(2, '0')}`,
       cursor: mark.is_clickable ? 'pointer' : 'default',
       zIndex: isActive ? 50 : 30,
       transition: 'all 0.3s ease',
-      transform: 'translate(-50%, -50%)',
+      transform,
+      boxShadow,
     };
-
-    // Add hover effects
-    if (isHovered) {
-      baseStyles.transform = 'translate(-50%, -50%) scale(1.1)';
-      baseStyles.boxShadow = `0 0 20px ${mark.color}`;
-    }
-
-    // Add active highlighting
-    if (isActive) {
-      baseStyles.boxShadow = `0 0 30px ${mark.color}, 0 0 60px ${mark.color}40`;
-      baseStyles.border = `3px solid ${mark.border_color || mark.color}`;
-    }
 
     // Add animation classes
     let animationClass = '';
@@ -122,7 +132,7 @@ const MarkDisplay: React.FC<MarkDisplayProps> = ({
       }
     }
 
-    return { styles: baseStyles, animationClass };
+    return { styles, animationClass };
   };
 
   const { styles, animationClass } = getMarkStyles();
@@ -378,7 +388,7 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
       <div className={`flex items-center justify-center bg-black rounded-lg ${className}`}>
         <div className="text-center text-white">
           <Loader2 className="h-8 w-8 mx-auto mb-2 animate-spin" />
-          <p className="text-sm">Загрузка интерфейса...</p>
+          <p className="text-sm">Загрузка и��терфейса...</p>
         </div>
       </div>
     );
