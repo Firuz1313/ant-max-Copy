@@ -197,7 +197,7 @@ const StepsManagerNew = () => {
   // Сохранение отметок TV интерфейса
   const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
     try {
-      // Здесь можно реализовать ло��ику сохранения всех отмет��к
+      // Здесь можно реализовать ло��ику сохранения всех отметок
       // Для простоты сейчас просто обновляем локальное состояние
       setTVInterfaceMarks(marks);
 
@@ -750,8 +750,8 @@ const StepsManagerNew = () => {
                 onClick={() => setIsPickingTVArea(!isPickingTVArea)}
                 className="w-full"
               >
-                <Crosshair className="h-4 w-4 mr-2" />
-                {isPickingTVArea ? "Отменить выбор" : "Выбрать область"}
+                <Target className="h-4 w-4 mr-2" />
+                {isPickingTVArea ? "Отменить выбор" : "Выбрать позицию"}
               </Button>
 
               {isPickingTVArea && (
@@ -861,7 +861,7 @@ const StepsManagerNew = () => {
       </div>
 
       <div>
-        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название ш��га</Label>
+        <Label htmlFor={isEdit ? "edit-title" : "title"}>Название шага</Label>
         <Input
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
@@ -1023,7 +1023,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Дополнительна�� подсказка для ��ользоват��ля"
+          placeholder="Дополнительна�� подсказка для пользоват���ля"
         />
       </div>
 
