@@ -162,25 +162,7 @@ const StepsManagerNew = () => {
   };
 
   // Загрузка отметок для TV интерфейса
-  const loadTVInterfaceMarks = async (tvInterfaceId: string, stepId?: string) => {
-    try {
-      setIsLoadingMarks(true);
-      const response = await tvInterfaceMarksAPI.getByTVInterfaceId(tvInterfaceId, {
-        step_id: stepId,
-      });
-      if (response.success && response.data) {
-        setTVInterfaceMarks(response.data);
-      } else {
-        console.error("Error loading TV interface marks:", response.error);
-        setTVInterfaceMarks([]);
-      }
-    } catch (error) {
-      console.error("Error loading TV interface marks:", error);
-      setTVInterfaceMarks([]);
-    } finally {
-      setIsLoadingMarks(false);
-    }
-  };
+
 
   // Сохранение отметок TV интерфейса
   const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
