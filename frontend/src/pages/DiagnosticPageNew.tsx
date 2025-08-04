@@ -65,6 +65,8 @@ const DiagnosticPageNew = () => {
   const [currentTVInterface, setCurrentTVInterface] = useState<TVInterfaceAPI | null>(null);
   const [loadingTVInterface, setLoadingTVInterface] = useState(false);
   const [sessionStartTime] = useState(Date.now());
+  const [hoveredMark, setHoveredMark] = useState<TVInterfaceMark | null>(null);
+  const [selectedMark, setSelectedMark] = useState<TVInterfaceMark | null>(null);
 
   // Данные
   const device = deviceId ? getDeviceById(deviceId) : null;
