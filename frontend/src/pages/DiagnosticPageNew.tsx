@@ -154,126 +154,22 @@ const DiagnosticPageNew = () => {
     return problem?.title || "Диагностика проблемы";
   };
 
-  // Рендер ТВ интерфейса
-  const renderTVInterface = () => {
-    if (loadingTVInterface) {
-      return (
-        <div className="w-full h-full flex items-center justify-center bg-black rounded-lg">
-          <div className="text-center text-white">
-            <Loader2 className="h-8 w-8 mx-auto mb-2 animate-spin" />
-            <p className="text-sm">Загрузка интерфейса...</p>
-          </div>
-        </div>
-      );
+  // Mark interaction handlers
+  const handleMarkClick = (mark: TVInterfaceMark) => {
+    setSelectedMark(mark);
+    console.log('Mark clicked:', mark);
+
+    // If the mark has a click action, we could trigger it here
+    if (mark.click_action && mark.action_value) {
+      console.log(`Triggering action: ${mark.click_action} - ${mark.action_value}`);
     }
-
-    if (currentTVInterface) {
-      return (
-        <div className="relative w-full h-full">
-          {/* Основное изображение интерфейса */}
-          {currentTVInterface.screenshot_data ? (
-            <img
-              src={currentTVInterface.screenshot_data}
-              alt={currentTVInterface.name}
-              className="w-full h-full object-contain bg-black rounded-lg"
-            />
-          ) : (
-            <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
-              <div className="text-center text-white">
-                <Monitor className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p>{currentTVInterface.name}</p>
-                <p className="text-sm opacity-75">{currentTVInterface.type}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Подсветка областей интерфейса */}
-          {currentTVInterface.highlight_areas.map((area) => (
-            <div
-              key={area.id}
-              className={`absolute border-2 border-orange-400 pointer-events-none ${
-                area.animation === 'pulse' ? 'animate-pulse' :
-                area.animation === 'blink' ? 'animate-ping' : ''
-              }`}
-              style={{
-                left: `${(area.position.x / 800) * 100}%`,
-                top: `${(area.position.y / 450) * 100}%`,
-                width: `${(area.size.width / 800) * 100}%`,
-                height: `${(area.size.height / 450) * 100}%`,
-                backgroundColor: area.color + Math.round(area.opacity * 255).toString(16).padStart(2, '0'),
-                borderRadius: '4px',
-              }}
-            >
-              {area.animation === 'glow' && (
-                <div 
-                  className="absolute inset-0 rounded animate-pulse"
-                  style={{
-                    boxShadow: `0 0 20px ${area.color}`,
-                    backgroundColor: area.color + '40',
-                  }}
-                />
-              )}
-            </div>
-          ))}
-
-          {/* Интерактивные области */}
-          {currentTVInterface.clickable_areas.map((area) => (
-            <div
-              key={area.id}
-              className="absolute border-2 border-green-400 bg-green-400/20 pointer-events-none"
-              style={{
-                left: `${(area.position.x / 800) * 100}%`,
-                top: `${(area.position.y / 450) * 100}%`,
-                width: `${(area.size.width / 800) * 100}%`,
-                height: `${(area.size.height / 450) * 100}%`,
-                borderRadius: area.shape === 'circle' ? '50%' : '4px',
-              }}
-            />
-          ))}
-
-          {/* Выделение конкретной позиции на ТВ */}
-          {currentStepData?.tvAreaPosition && (
-            <div
-              className="absolute w-8 h-8 bg-blue-500 rounded-full border-4 border-white transform -translate-x-1/2 -translate-y-1/2 animate-pulse shadow-lg z-10"
-              style={{
-                left: `${(currentStepData.tvAreaPosition.x / 800) * 100}%`,
-                top: `${(currentStepData.tvAreaPosition.y / 450) * 100}%`,
-              }}
-            >
-              <div className="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div>
-              <Target className="absolute inset-0 w-4 h-4 text-white m-auto" />
-            </div>
-          )}
-
-          {/* Название интерфейса */}
-          <div className="absolute top-2 left-2">
-            <Badge variant="outline" className="bg-black/70 text-white border-gray-500">
-              <Monitor className="h-3 w-3 mr-1" />
-              {currentTVInterface.name}
-            </Badge>
-          </div>
-
-          {/* Тип интерфейса */}
-          <div className="absolute top-2 right-2">
-            <Badge variant="secondary" className="bg-black/70 text-white">
-              {currentTVInterface.type}
-            </Badge>
-          </div>
-        </div>
-      );
-    }
-
-    // Fallback к стандартному TVDisplay
-    return (
-      <TVDisplay
-        currentStep={currentStepNumber}
-        highlightArea={currentStepData?.highlightTVArea}
-        interfaceScreen={currentStepData?.tvInterface}
-      />
-    );
   };
 
-  // Рендер пульта
+  const handleMarkHover = (mark: TVInterfaceMark | null) => {
+    setHoveredMark(mark);
+  };
+
+  // Ренд��р пульта
   const renderRemote = () => {
     if (!remote) {
       return (
@@ -428,7 +324,7 @@ const DiagnosticPageNew = () => {
                     {currentStepData.buttonPosition && (
                       <Badge variant="outline" className="text-red-300 border-red-400">
                         <Target className="h-3 w-3 mr-1" />
-                        Позиция кнопки
+                        П��зиция кнопки
                       </Badge>
                     )}
                     {currentStepData.tvAreaPosition && (
