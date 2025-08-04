@@ -7,11 +7,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    hmr: {
-      protocol: 'ws',
-      host: 'localhost',
-      port: 8081,
-    },
+    hmr: false,
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
