@@ -418,6 +418,16 @@ const StepsManagerNew = () => {
     const tvInterface = getTVInterfaceById(formData.tvInterfaceId);
     if (tvInterface) {
       setSelectedTVInterface(tvInterface);
+      // Load marks for this step and TV interface
+      loadTVInterfaceMarks(formData.tvInterfaceId, selectedStep?.id);
+      setIsTVInterfaceMarksEditorOpen(true);
+    }
+  };
+
+  const openTVAreaPicker = () => {
+    const tvInterface = getTVInterfaceById(formData.tvInterfaceId);
+    if (tvInterface) {
+      setSelectedTVInterface(tvInterface);
       setIsTVEditorOpen(true);
     }
   };
@@ -929,7 +939,7 @@ const StepsManagerNew = () => {
                       {remote.name}
                       {remote.isDefault && (
                         <span className="ml-2 text-xs text-blue-600">
-                          (по умолчанию)
+                          (по умолча��ию)
                         </span>
                       )}
                     </div>
