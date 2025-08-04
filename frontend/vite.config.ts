@@ -10,8 +10,7 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 999999,
   },
   optimizeDeps: {
-    noDiscovery: true,
-    include: [],
+    include: ['react', 'react-dom', 'react/jsx-runtime'],
   },
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' }
