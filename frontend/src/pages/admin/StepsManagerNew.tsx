@@ -388,7 +388,7 @@ const StepsManagerNew = () => {
       tvAreaPosition: step.tvAreaPosition || { x: 0, y: 0 },
     });
     
-    // Загрузить интерфейсы для текущего устро��ства
+    // Загрузить интерфейсы для текущего устро��ств��
     if (step.deviceId) {
       loadTVInterfacesForDevice(step.deviceId);
     }
@@ -680,17 +680,14 @@ const StepsManagerNew = () => {
               <CardTitle className="text-lg">Выбор позиции на ТВ</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 gap-2">
-                <Button
-                  variant={isPickingTVArea ? "default" : "outline"}
-                  onClick={() => setIsPickingTVArea(!isPickingTVArea)}
-                  className="w-full"
-                >
-                  <Target className="h-4 w-4 mr-2" />
-                  {isPickingTVArea ? "Отменить выбор" : "Выбрать позицию"}
-                </Button>
-
-              </div>
+              <Button
+                variant={isPickingTVArea ? "default" : "outline"}
+                onClick={() => setIsPickingTVArea(!isPickingTVArea)}
+                className="w-full"
+              >
+                <Target className="h-4 w-4 mr-2" />
+                {isPickingTVArea ? "Отменить выбор" : "Выбрать позицию"}
+              </Button>
 
               {isPickingTVArea && (
                 <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
