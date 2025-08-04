@@ -153,7 +153,7 @@ export const tvInterfacesAPI = {
         error:
           error instanceof Error
             ? error.message
-            : "Ошибка при загрузке TV интерфейсов",
+            : "Ошибка при загрузк�� TV интерфейсов",
       };
     }
   },
@@ -174,13 +174,27 @@ export const tvInterfacesAPI = {
         success: true,
         data: response.data,
       };
-    } catch (error) {
+    } catch (error: any) {
+      let errorMessage = "Ошибка при загрузке TV интерфейса";
+      let suggestion = "";
+      let availableIds: string[] = [];
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
+      // Try to extract additional error information from API response
+      if (error.response?.data) {
+        errorMessage = error.response.data.error || errorMessage;
+        suggestion = error.response.data.suggestion || "";
+        availableIds = error.response.data.availableIds || [];
+      }
+
       return {
         success: false,
-        error:
-          error instanceof Error
-            ? error.message
-            : "Ошибка при загрузке TV интерфейса",
+        error: errorMessage,
+        suggestion,
+        availableIds,
       };
     }
   },
@@ -235,7 +249,7 @@ export const tvInterfacesAPI = {
       if (!data.deviceId) {
         return {
           success: false,
-          error: "Выберите устройство",
+          error: "Выберите у��тройство",
         };
       }
 
@@ -280,7 +294,7 @@ export const tvInterfacesAPI = {
       if (!id) {
         return {
           success: false,
-          error: "ID TV интерфейса обязателен",
+          error: "ID TV интерфейса обяза��елен",
         };
       }
 
