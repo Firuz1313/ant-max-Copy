@@ -33,7 +33,7 @@ export interface TVInterface {
   description: string;
   type: TVInterfaceType;
   deviceId: string; // Переименован для консистентности с фронтендом
-  device_id: string; // Поле из бэкенда
+  device_id: string; // По��е из бэкенда
   deviceName?: string; // Для отображения (приходит из бэкенда как device_name)
   device_name?: string; // Поле из бэкенда
   device_brand?: string; // Поле из бэкенда
@@ -89,6 +89,8 @@ export interface TVInterfaceApiResponse {
   data?: TVInterface;
   error?: string;
   message?: string;
+  suggestion?: string;
+  availableIds?: string[];
   timestamp?: string;
 }
 
@@ -162,7 +164,7 @@ export const TV_INTERFACE_TYPES: TVInterfaceTypeOption[] = [
   {
     value: 'no-signal',
     label: 'Нет сигнала',
-    description: 'Экран отсутствия сигнала'
+    description: 'Экран отсут��твия сигнала'
   },
   {
     value: 'error',

@@ -77,32 +77,42 @@ const MarkDisplay: React.FC<MarkDisplayProps> = ({
   };
 
   const getMarkStyles = () => {
-    const baseStyles: React.CSSProperties = {
+    // Determine border width and style based on state
+    const borderWidth = isActive ? 3 : mark.border_width;
+    const borderColor = mark.border_color || mark.color;
+
+    // Build transform with conditional scaling
+    let transform = 'translate(-50%, -50%)';
+    if (isHovered) {
+      transform = 'translate(-50%, -50%) scale(1.1)';
+    }
+
+    // Build box shadow based on state
+    let boxShadow = undefined;
+    if (isHovered) {
+      boxShadow = `0 0 20px ${mark.color}`;
+    }
+    if (isActive) {
+      boxShadow = `0 0 30px ${mark.color}, 0 0 60px ${mark.color}40`;
+    }
+
+    const styles: React.CSSProperties = {
       position: 'absolute',
       left: `${scaledPosition.x}px`,
       top: `${scaledPosition.y}px`,
       width: mark.shape === 'circle' ? `${scaledSize.height}px` : `${scaledSize.width}px`,
       height: `${scaledSize.height}px`,
       borderRadius: mark.shape === 'circle' ? '50%' : '4px',
-      border: `${mark.border_width}px solid ${mark.border_color || mark.color}`,
+      borderWidth: `${borderWidth}px`,
+      borderStyle: 'solid',
+      borderColor: borderColor,
       backgroundColor: mark.background_color || `${mark.color}${Math.round(mark.opacity * 255).toString(16).padStart(2, '0')}`,
       cursor: mark.is_clickable ? 'pointer' : 'default',
       zIndex: isActive ? 50 : 30,
       transition: 'all 0.3s ease',
-      transform: 'translate(-50%, -50%)',
+      transform,
+      boxShadow,
     };
-
-    // Add hover effects
-    if (isHovered) {
-      baseStyles.transform = 'translate(-50%, -50%) scale(1.1)';
-      baseStyles.boxShadow = `0 0 20px ${mark.color}`;
-    }
-
-    // Add active highlighting
-    if (isActive) {
-      baseStyles.boxShadow = `0 0 30px ${mark.color}, 0 0 60px ${mark.color}40`;
-      baseStyles.borderWidth = '3px';
-    }
 
     // Add animation classes
     let animationClass = '';
@@ -122,7 +132,7 @@ const MarkDisplay: React.FC<MarkDisplayProps> = ({
       }
     }
 
-    return { styles: baseStyles, animationClass };
+    return { styles, animationClass };
   };
 
   const { styles, animationClass } = getMarkStyles();
@@ -271,7 +281,7 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
     loadTVInterface();
   }, [tvInterfaceId]);
 
-  // Load marks for TV interface
+  // Load marks for TV interface with rate limit handling
   useEffect(() => {
     const loadMarks = async () => {
       if (!tvInterfaceId) {
@@ -287,16 +297,27 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
 
         if (response.success && response.data) {
           setMarks(response.data);
+        } else if (response.error?.includes('429') || response.error?.includes('много запросов')) {
+          console.warn('Rate limited - will retry marks loading later');
+          // Retry after a delay
+          setTimeout(() => loadMarks(), 5000);
         }
-      } catch (err) {
-        console.error('Error loading TV interface marks:', err);
+      } catch (err: any) {
+        if (err.message?.includes('429') || err.message?.includes('много запросов')) {
+          console.warn('Rate limited - will retry marks loading later');
+          setTimeout(() => loadMarks(), 5000);
+        } else {
+          console.error('Error loading TV interface marks:', err);
+        }
       }
     };
 
-    loadMarks();
+    // Add a small delay to avoid rapid-fire API calls
+    const timeoutId = setTimeout(loadMarks, 100);
+    return () => clearTimeout(timeoutId);
   }, [tvInterfaceId]);
 
-  // Load marks for current step
+  // Load marks for current step with rate limit handling
   useEffect(() => {
     const loadStepMarks = async () => {
       if (!stepId) {
@@ -308,13 +329,23 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
         const response = await tvInterfaceMarksAPI.getByStepId(stepId);
         if (response.success && response.data) {
           setStepMarks(response.data);
+        } else if (response.error?.includes('429') || response.error?.includes('много запросов')) {
+          console.warn('Rate limited - will retry step marks loading later');
+          setTimeout(() => loadStepMarks(), 5000);
         }
-      } catch (err) {
-        console.error('Error loading step marks:', err);
+      } catch (err: any) {
+        if (err.message?.includes('429') || err.message?.includes('много запросов')) {
+          console.warn('Rate limited - will retry step marks loading later');
+          setTimeout(() => loadStepMarks(), 5000);
+        } else {
+          console.error('Error loading step marks:', err);
+        }
       }
     };
 
-    loadStepMarks();
+    // Add a small delay to avoid rapid-fire API calls, and delay step marks after tv interface marks
+    const timeoutId = setTimeout(loadStepMarks, 200);
+    return () => clearTimeout(timeoutId);
   }, [stepId]);
 
   // Update container size when component mounts or resizes
@@ -485,7 +516,7 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
           <div className="absolute bottom-2 right-2">
             <Badge className="bg-green-600 text-white">
               <Eye className="h-3 w-3 mr-1" />
-              {activeMarks.length} активных
+              {activeMarks.length} активны��
             </Badge>
           </div>
         )}

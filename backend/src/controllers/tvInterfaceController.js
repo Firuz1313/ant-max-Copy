@@ -57,7 +57,10 @@ export const getTVInterfaceById = async (req, res) => {
     if (!tvInterface) {
       return res.status(404).json({
         success: false,
-        error: 'TV интерфейс не найден',
+        error: `TV интерфейс с ID "${id}" не найден`,
+        errorType: 'NOT_FOUND',
+        suggestion: 'Проверьте правильность ID интерфейса',
+        availableIds: ['tv_int_825', 'tv_int_826', 'tv_int_827', 'tv_int_828', 'tv_int_829'],
         timestamp: new Date().toISOString()
       });
     }
@@ -306,7 +309,7 @@ export const toggleTVInterfaceStatus = async (req, res) => {
 
     res.status(500).json({
       success: false,
-      error: 'Ошибка при изменении статуса TV интерфейса',
+      error: 'Ошиб��а при изменении статуса TV интерфейса',
       details: error.message,
       timestamp: new Date().toISOString()
     });

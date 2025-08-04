@@ -19,7 +19,15 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const adminMenuItems = [
+interface AdminMenuItem {
+  title: string;
+  path: string;
+  icon: any;
+  description: string;
+  titleStyle?: React.CSSProperties;
+}
+
+const adminMenuItems: AdminMenuItem[] = [
   {
     title: "Обзор",
     path: "/admin",
@@ -30,7 +38,7 @@ const adminMenuItems = [
     title: "Приставки",
     path: "/admin/devices",
     icon: Tv,
-    description: "Управление моделями приставок",
+    description: "Управление моделями\nприставок",
   },
   {
     title: "Управление проблемами",
@@ -42,31 +50,32 @@ const adminMenuItems = [
     title: "Управление шагами",
     path: "/admin/steps",
     icon: Layers,
-    description: "Создание и редактирование шагов диагностики",
+    description: "Создан��е и редактирование шагов диагностики",
   },
   {
     title: "Конструктор пультов",
     path: "/admin/remotes",
     icon: Smartphone,
-    description: "Загрузка и настройка пультов управления",
+    description: "Загрузка и настройка\n пультов управления",
   },
   {
     title: "Конструктор интерфейса ТВ",
     path: "/admin/tv-interfaces",
     icon: Monitor,
-    description: "Создание интерфейсов ТВ-приставок",
+    description: "Создание интерфейсов\nТВ-приставок",
+    titleStyle: { marginRight: "-6px", fontSize: "13px" },
   },
   {
     title: "Пользователи",
     path: "/admin/users",
     icon: Users,
-    description: "Управление пользователями и ролями",
+    description: "Управление\nпользователями и ролями",
   },
   {
     title: "Настройки системы",
     path: "/admin/settings",
     icon: Settings,
-    description: "Конфигурация и системные настройки",
+    description: "Конфигурация и\nсистемные настройки",
   },
 ];
 
@@ -133,9 +142,13 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               >
                 <item.icon className="h-5 w-5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className="truncate">{item.title}</div>
+                  <div className={cn("truncate", item.titleStyle)} style={item.titleStyle}>{item.title}</div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {item.description}
+                    {item.description.split('\n').map((line, index) => (
+                      <span key={index}>
+                        {line}{index < item.description.split('\n').length - 1 && <br />}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>

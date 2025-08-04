@@ -105,7 +105,7 @@ let mockData = {
       step_number: 1,
       title: "Проверка подключения кабелей",
       description: "Убедитесь, что все кабели подключены правильно",
-      instruction: "Проверьте HDMI кабе��ь, кабель питания",
+      instruction: "Проверьте HDMI кабе��ь, кабель пи��ания",
       expected_result: "Кабели подключены надежно",
       is_active: true,
       created_at: new Date().toISOString(),
@@ -201,6 +201,21 @@ let mockData = {
       updated_at: new Date().toISOString(),
       deleted_at: null,
     },
+    {
+      id: "tv_int_502",
+      name: "Generic TV Interface",
+      description: "Generic interface for diagnostic purposes",
+      type: "custom",
+      device_id: "openbox",
+      screenshot_url: null,
+      screenshot_data: null,
+      clickable_areas: JSON.stringify([]),
+      highlight_areas: JSON.stringify([]),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      deleted_at: null,
+    },
   ],
   tv_interface_marks: [
     {
@@ -271,7 +286,7 @@ export async function query(text, params = []) {
     }
 
     if (lowercaseText.includes("from tv_interfaces")) {
-      if (lowercaseText.includes("where id =")) {
+      if (lowercaseText.includes("where ti.id =") || lowercaseText.includes("where id =")) {
         const id = params[0];
         console.log(`🔍 Mock DB: Looking for TV interface with ID: ${id}`);
         console.log(

@@ -286,7 +286,6 @@ interface DiagnosticStep {
   instruction: string;
   highlightRemoteButton?: string;
   highlightTVArea?: string;
-  tvInterface?: "home" | "settings" | "channels" | "no-signal";
   tvInterfaceId?: string; // ID созданного TV интерфейса
   requiredAction?: string;
   hint?: string;
@@ -344,7 +343,7 @@ const StepsManager = () => {
     instruction: "",
     highlightRemoteButton: "none",
     highlightTVArea: "none",
-    tvInterface: "home" as DiagnosticStep["tvInterface"],
+
     tvInterfaceId: "none", // Добавлено для выбора ��озданного интерфейса
     requiredAction: "",
     hint: "",
@@ -456,8 +455,8 @@ const StepsManager = () => {
       console.warn(
         `⚠️ TV interface ${tvInterface.id} not found in current list, reloading...`,
       );
-      if (selectedDeviceId) {
-        await loadTVInterfacesForDevice(selectedDeviceId);
+      if (formData.deviceId && formData.deviceId !== "all") {
+        await loadTVInterfacesForDevice(formData.deviceId);
       }
       toast({
         title: "Интерфейс не найден",
@@ -500,17 +499,17 @@ const StepsManager = () => {
         // If interface not found, try reloading the TV interfaces list
         if (
           response.error?.includes("404") ||
-          response.error?.includes("не найден")
+          response.error?.includes("н�� найден")
         ) {
           console.log(
             "🔄 Interface not found, reloading TV interfaces list...",
           );
-          if (selectedDeviceId) {
-            await loadTVInterfacesForDevice(selectedDeviceId);
+          if (formData.deviceId && formData.deviceId !== "all") {
+            await loadTVInterfacesForDevice(formData.deviceId);
           }
           toast({
             title: "Интерфейс не найден",
-            description: `TV интерфейс "${tvInterface.name}" больше не существует. Список интерфейсов обновлён.`,
+            description: `TV интерфейс "${tvInterface.name}" больше не существует. Список интерфейсов обновл��н.`,
             variant: "destructive",
           });
           return; // Don't open editor for non-existent interface
@@ -731,13 +730,19 @@ const StepsManager = () => {
       instruction: step.instruction,
       highlightRemoteButton: step.highlightRemoteButton || "none",
       highlightTVArea: step.highlightTVArea || "none",
-      tvInterface: step.tvInterface || "home",
+
       tvInterfaceId: step.tvInterfaceId || "none",
       requiredAction: step.requiredAction || "",
       hint: step.hint || "",
       remoteId: step.remoteId || "none",
       buttonPosition: step.buttonPosition || { x: 0, y: 0 },
     });
+
+    // Загрузить TV интерфейсы для устройства шага при редактировании
+    if (step.deviceId && step.deviceId !== "all") {
+      loadTVInterfacesForDevice(step.deviceId);
+    }
+
     setIsEditDialogOpen(true);
   };
 
@@ -788,7 +793,7 @@ const StepsManager = () => {
       instruction: "",
       highlightRemoteButton: "none",
       highlightTVArea: "none",
-      tvInterface: "home",
+
       tvInterfaceId: "none",
       requiredAction: "",
       hint: "",
@@ -1198,9 +1203,15 @@ const StepsManager = () => {
                               {step.highlightTVArea && (
                                 <span>ТВ: {step.highlightTVArea}</span>
                               )}
-                              {step.tvInterface && (
-                                <span>Интерфейс: {step.tvInterface}</span>
-                              )}
+                              {step.tvInterfaceId &&
+                                step.tvInterfaceId !== "none" && (
+                                  <span>
+                                    Интерфейс:{" "}
+                                    {tvInterfaces.find(
+                                      (tv) => tv.id === step.tvInterfaceId,
+                                    )?.name || "Неизвестный интерфейс"}
+                                  </span>
+                                )}
                               <span>Обновлено: {step.updatedAt}</span>
                             </div>
                           </div>
@@ -1320,7 +1331,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь ф��ль��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
