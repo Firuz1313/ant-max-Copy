@@ -210,6 +210,31 @@ export async function query(text, params = []) {
       return { rows: result, rowCount: result.length };
     }
 
+    if (lowercaseText.includes("from tv_interface_marks")) {
+      if (lowercaseText.includes("where tv_interface_id =")) {
+        const tvInterfaceId = params[0];
+        const marks = mockData.tv_interface_marks.filter(
+          (m) => m.tv_interface_id === tvInterfaceId && m.is_active !== false
+        );
+        return { rows: marks, rowCount: marks.length };
+      }
+      if (lowercaseText.includes("where step_id =")) {
+        const stepId = params[0];
+        const marks = mockData.tv_interface_marks.filter(
+          (m) => m.step_id === stepId && m.is_active !== false
+        );
+        return { rows: marks, rowCount: marks.length };
+      }
+      if (lowercaseText.includes("where id =")) {
+        const id = params[0];
+        const mark = mockData.tv_interface_marks.find((m) => m.id === id);
+        return { rows: mark ? [mark] : [], rowCount: mark ? 1 : 0 };
+      }
+      // Get all marks
+      const marks = mockData.tv_interface_marks.filter((m) => m.is_active !== false);
+      return { rows: marks, rowCount: marks.length };
+    }
+
     if (lowercaseText.includes("from problems")) {
       if (lowercaseText.includes("where id =")) {
         const id = parseInt(params[0]);
