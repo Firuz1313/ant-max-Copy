@@ -67,7 +67,7 @@ interface DiagnosticStep {
   instruction: string;
   highlightRemoteButton?: string;
   highlightTVArea?: string;
-  tvInterfaceId?: string; // Обновлено для работы с настоящими интерфейсами
+  tvInterfaceId?: string; // Обновлено для работы с настоя��ими интерфейсами
   requiredAction?: string;
   hint?: string;
   remoteId?: string;
@@ -100,6 +100,10 @@ const StepsManagerNew = () => {
   const [tvInterfaces, setTVInterfaces] = useState<TVInterfaceAPI[]>([]);
   const [selectedTVInterface, setSelectedTVInterface] = useState<TVInterfaceAPI | null>(null);
   const [isLoadingTVInterfaces, setIsLoadingTVInterfaces] = useState(false);
+
+  // Состояние для отметок TV интерфейса
+  const [tvInterfaceMarks, setTVInterfaceMarks] = useState<TVInterfaceMark[]>([]);
+  const [isLoadingMarks, setIsLoadingMarks] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tvCanvasRef = useRef<HTMLCanvasElement>(null);
