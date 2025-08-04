@@ -118,7 +118,6 @@ const StepsManagerNew = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isRemoteEditorOpen, setIsRemoteEditorOpen] = useState(false);
   const [isTVEditorOpen, setIsTVEditorOpen] = useState(false);
-  const [isTVInterfaceMarksEditorOpen, setIsTVInterfaceMarksEditorOpen] = useState(false);
 
   // Remote editor state
   const [selectedRemote, setSelectedRemote] = useState<any>(null);
@@ -205,7 +204,7 @@ const StepsManagerNew = () => {
       if (selectedStep?.id) {
         for (const mark of marks) {
           if (mark.step_id !== selectedStep.id) {
-            // Обновляем отметку, чтобы связат�� её с текущим шагом
+            // Обновляем отметку, чтобы связать её с текущим шагом
             const updateData = { step_id: selectedStep.id };
             await tvInterfaceMarksAPI.update(mark.id, updateData);
           }
@@ -857,7 +856,7 @@ const StepsManagerNew = () => {
             onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
           >
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Выберите интерфе��с ТВ" />
+              <SelectValue placeholder="Выберите интерфейс ТВ" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Без интерфейса</SelectItem>
@@ -1015,7 +1014,7 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам, проблемам и и��терфейсам ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -1027,7 +1026,7 @@ const StepsManagerNew = () => {
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Создать новый шаг</DialogTitle>
+              <DialogTitle>С��здать новый шаг</DialogTitle>
             </DialogHeader>
             <StepFormFields />
             <div className="flex justify-end space-x-2">
