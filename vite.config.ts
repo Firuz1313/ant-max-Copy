@@ -10,7 +10,8 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 999999,
   },
   optimizeDeps: {
-    disabled: true,
+    noDiscovery: true,
+    include: [],
   },
   esbuild: {
     logOverride: { 'this-is-undefined-in-esm': 'silent' }
