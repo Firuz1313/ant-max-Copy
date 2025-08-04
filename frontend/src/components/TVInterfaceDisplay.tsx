@@ -101,7 +101,7 @@ const MarkDisplay: React.FC<MarkDisplayProps> = ({
     // Add active highlighting
     if (isActive) {
       baseStyles.boxShadow = `0 0 30px ${mark.color}, 0 0 60px ${mark.color}40`;
-      baseStyles.borderWidth = '3px';
+      baseStyles.border = `3px solid ${mark.border_color || mark.color}`;
     }
 
     // Add animation classes
