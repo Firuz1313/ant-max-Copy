@@ -161,7 +161,7 @@ const StepsManagerNew = () => {
     }
   };
 
-  // Загрузка отметок для TV интерфейса
+  // Загрузка отметок для TV ��нтерфейса
 
 
   // Сохранение отметок TV интерфейса
@@ -388,7 +388,7 @@ const StepsManagerNew = () => {
       tvAreaPosition: step.tvAreaPosition || { x: 0, y: 0 },
     });
     
-    // Загрузить интерфейсы для текущего устро��ств��
+    // Загрузить интерфейсы для текущего устро��ства
     if (step.deviceId) {
       loadTVInterfacesForDevice(step.deviceId);
     }
@@ -664,7 +664,7 @@ const StepsManagerNew = () => {
             {/* Выбранная позиция */}
             {formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
               <div
-                className="absolute w-4 h-4 bg-blue-500 rounded-full border-2 border-white transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
+                className="absolute w-4 h-4 bg-red-500 rounded-full border-2 border-white transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
                 style={{
                   left: `${(formData.tvAreaPosition.x / 800) * 100}%`,
                   top: `${(formData.tvAreaPosition.y / 450) * 100}%`,
