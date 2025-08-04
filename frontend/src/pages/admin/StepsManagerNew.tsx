@@ -689,15 +689,7 @@ const StepsManagerNew = () => {
                   <Target className="h-4 w-4 mr-2" />
                   {isPickingTVArea ? "Отменить выбор" : "Выбрать позицию"}
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {/* Логика загрузки ТВ интерфейса */}}
-                  className="w-full"
-                  disabled
-                >
-                  <ImageIcon className="h-4 w-4 mr-2" />
-                  Загрузить изображение
-                </Button>
+
               </div>
 
               {isPickingTVArea && (
@@ -1189,7 +1181,7 @@ const StepsManagerNew = () => {
                               {step.remoteId && (
                                 <Badge variant="outline">
                                   <MousePointer className="h-3 w-3 mr-1" />
-                                  Пульт
+                                  Пу��ьт
                                 </Badge>
                               )}
                               {step.tvInterfaceId && (
