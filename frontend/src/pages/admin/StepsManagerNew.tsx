@@ -690,41 +690,7 @@ const StepsManagerNew = () => {
               onClick={handleTVCanvasClick}
             />
 
-            {/* Отображение существующих областей */}
-            {selectedTVInterface.clickable_areas.map((area) => (
-              <div
-                key={area.id}
-                className="absolute border-2 border-green-500 bg-green-500/20 pointer-events-none"
-                style={{
-                  left: `${(area.position.x / 800) * 100}%`,
-                  top: `${(area.position.y / 450) * 100}%`,
-                  width: `${(area.size.width / 800) * 100}%`,
-                  height: `${(area.size.height / 450) * 100}%`,
-                }}
-              >
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                  {area.name}
-                </span>
-              </div>
-            ))}
 
-            {selectedTVInterface.highlight_areas.map((area) => (
-              <div
-                key={area.id}
-                className="absolute border-2 border-orange-500 pointer-events-none"
-                style={{
-                  left: `${(area.position.x / 800) * 100}%`,
-                  top: `${(area.position.y / 450) * 100}%`,
-                  width: `${(area.size.width / 800) * 100}%`,
-                  height: `${(area.size.height / 450) * 100}%`,
-                  backgroundColor: area.color + Math.round(area.opacity * 255).toString(16).padStart(2, '0'),
-                }}
-              >
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                  {area.name}
-                </span>
-              </div>
-            ))}
 
             {/* Выбранная позиция */}
             {formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
@@ -1321,7 +1287,7 @@ const StepsManagerNew = () => {
                                 <Eye className="h-4 w-4 mr-2" />
                               )}
                               {step.isActive
-                                ? "Деактивировать"
+                                ? "Д��активировать"
                                 : "Активировать"}
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -1360,7 +1326,7 @@ const StepsManagerNew = () => {
             </Button>
             <Button onClick={() => setIsRemoteEditorOpen(false)}>
               <Save className="h-4 w-4 mr-2" />
-              С��хранить позицию
+              Сохранить позицию
             </Button>
           </div>
         </DialogContent>
@@ -1420,7 +1386,7 @@ const StepsManagerNew = () => {
                     Нет изображения интерфейса
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 text-center mb-4">
-                    Для этой прис��авки не загружено изображение интерфейса.<br />
+                    Для этой приставки не загружено изображение интерфейса.<br />
                     Пожалуйста, загрузите интерфейс в разделе "Интерфейсы ТВ".
                   </p>
                   <Button
