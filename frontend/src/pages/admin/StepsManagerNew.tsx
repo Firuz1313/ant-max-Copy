@@ -118,6 +118,7 @@ const StepsManagerNew = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isRemoteEditorOpen, setIsRemoteEditorOpen] = useState(false);
   const [isTVEditorOpen, setIsTVEditorOpen] = useState(false);
+  const [isTVInterfaceMarksEditorOpen, setIsTVInterfaceMarksEditorOpen] = useState(false);
 
   // Remote editor state
   const [selectedRemote, setSelectedRemote] = useState<any>(null);
