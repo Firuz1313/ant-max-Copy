@@ -309,13 +309,49 @@ const DiagnosticPageNew = () => {
                     {currentStepData.instruction}
                   </div>
                   
-                  {/* Hint */}
+                  {/* Step Hint */}
                   {currentStepData.hint && (
                     <div className="flex items-start gap-2 p-3 bg-yellow-500/20 border border-yellow-500/30 rounded-lg mb-4">
                       <Lightbulb className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
                       <p className="text-yellow-200 text-sm">
-                        {currentStepData.hint}
+                        <strong>Подсказка:</strong> {currentStepData.hint}
                       </p>
+                    </div>
+                  )}
+
+                  {/* Selected Mark Information */}
+                  {selectedMark && (
+                    <div className="flex items-start gap-2 p-3 bg-blue-500/20 border border-blue-500/30 rounded-lg mb-4">
+                      <Target className="h-5 w-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                      <div className="text-blue-200 text-sm">
+                        <p className="font-medium">{selectedMark.name}</p>
+                        {selectedMark.description && (
+                          <p className="mt-1">{selectedMark.description}</p>
+                        )}
+                        {selectedMark.action_description && (
+                          <p className="mt-1">
+                            <strong>Действие:</strong> {selectedMark.action_description}
+                          </p>
+                        )}
+                        {selectedMark.expected_result && (
+                          <p className="mt-1 text-green-300">
+                            <strong>Ожидаемый результат:</strong> {selectedMark.expected_result}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Hovered Mark Quick Info */}
+                  {hoveredMark && !selectedMark && (
+                    <div className="flex items-start gap-2 p-2 bg-gray-500/20 border border-gray-500/30 rounded-lg mb-4">
+                      <MousePointer className="h-4 w-4 text-gray-400 flex-shrink-0 mt-0.5" />
+                      <div className="text-gray-300 text-sm">
+                        <p className="font-medium">{hoveredMark.name}</p>
+                        {hoveredMark.hint_text && (
+                          <p className="mt-1 text-yellow-300">{hoveredMark.hint_text}</p>
+                        )}
+                      </div>
                     </div>
                   )}
 
@@ -330,7 +366,7 @@ const DiagnosticPageNew = () => {
                     {currentStepData.tvInterfaceId && (
                       <Badge variant="outline" className="text-blue-300 border-blue-400">
                         <Monitor className="h-3 w-3 mr-1" />
-                        ТВ интерфейс активен
+                        ТВ интерфейс активе��
                       </Badge>
                     )}
                     {currentStepData.buttonPosition && (
