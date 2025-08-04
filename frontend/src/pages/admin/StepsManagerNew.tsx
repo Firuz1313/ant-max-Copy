@@ -171,7 +171,7 @@ const StepsManagerNew = () => {
       // Для простоты сейчас просто обновляем локальное состояние
 
 
-      // Если есть выбранный шаг, связываем отметки с этим шагом
+      // Если есть выбранный шаг, связываем отметки с эт��м шагом
       if (selectedStep?.id) {
         for (const mark of marks) {
           if (mark.step_id !== selectedStep.id) {
@@ -236,7 +236,6 @@ const StepsManagerNew = () => {
     if (formData.tvInterfaceId && formData.tvInterfaceId !== "none") {
       const tvInterface = getTVInterfaceById(formData.tvInterfaceId);
       setSelectedTVInterface(tvInterface || null);
-      loadTVInterfaceMarks(formData.tvInterfaceId, selectedStep?.id);
       setIsTVEditorOpen(true);
     }
   };
@@ -516,7 +515,7 @@ const StepsManagerNew = () => {
 
   const getTVInterfaceName = (tvInterfaceId: string) => {
     const tvInterface = getTVInterfaceById(tvInterfaceId);
-    return tvInterface?.name || "Не��з��естный интерфейс";
+    return tvInterface?.name || "Неиз��естный интерфейс";
   };
 
   const getGroupedSteps = () => {
@@ -745,7 +744,7 @@ const StepsManagerNew = () => {
             onValueChange={handleDeviceChange}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Выберите приставку" />
+              <SelectValue placeholder="Выбери��е приставку" />
             </SelectTrigger>
             <SelectContent>
               {getActiveDevices().map((device) => (
@@ -985,7 +984,7 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставк��м, проблемам и интерфейсам ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -1083,7 +1082,7 @@ const StepsManagerNew = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все пульты</SelectItem>
-                  <SelectItem value="none">Без ��ульта</SelectItem>
+                  <SelectItem value="none">Без пульта</SelectItem>
                   {getFilteredRemotes().map((remote) => {
                     const device = devices.find(
                       (d) => d.id === remote.deviceId,
