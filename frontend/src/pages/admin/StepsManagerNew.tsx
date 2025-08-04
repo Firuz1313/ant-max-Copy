@@ -756,7 +756,7 @@ const StepsManagerNew = () => {
 
               {isPickingTVArea && (
                 <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
-                  <Crosshair className="h-4 w-4" />
+                  <Target className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
                       Кликните на интерфейс Т��, чтобы указать область для подсветки
@@ -890,7 +890,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для пользователя"
+          placeholder="Подробная инструкция для ��ользователя"
         />
       </div>
 
