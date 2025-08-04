@@ -158,7 +158,7 @@ const StepFormFieldsComponent = React.memo(
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для ��ользователя"
+          placeholder="Подробная инструкция для ��ользо��ателя"
         />
       </div>
 
@@ -1198,8 +1198,13 @@ const StepsManager = () => {
                               {step.highlightTVArea && (
                                 <span>ТВ: {step.highlightTVArea}</span>
                               )}
-                              {step.tvInterface && (
-                                <span>Интерфейс: {step.tvInterface}</span>
+                              {step.tvInterfaceId && step.tvInterfaceId !== "none" && (
+                                <span>
+                                  Интерфейс: {
+                                    tvInterfaces.find(tv => tv.id === step.tvInterfaceId)?.name ||
+                                    "Неизвестный интерфейс"
+                                  }
+                                </span>
                               )}
                               <span>Обновлено: {step.updatedAt}</span>
                             </div>
@@ -1320,7 +1325,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь филь��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь филь��ры по��ска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
