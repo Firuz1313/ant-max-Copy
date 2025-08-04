@@ -201,6 +201,21 @@ let mockData = {
       updated_at: new Date().toISOString(),
       deleted_at: null,
     },
+    {
+      id: "tv_int_502",
+      name: "Generic TV Interface",
+      description: "Generic interface for diagnostic purposes",
+      type: "custom",
+      device_id: "openbox",
+      screenshot_url: null,
+      screenshot_data: null,
+      clickable_areas: JSON.stringify([]),
+      highlight_areas: JSON.stringify([]),
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      deleted_at: null,
+    },
   ],
   tv_interface_marks: [
     {
