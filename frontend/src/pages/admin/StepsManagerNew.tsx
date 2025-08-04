@@ -70,7 +70,7 @@ interface DiagnosticStep {
   hint?: string;
   remoteId?: string;
   buttonPosition?: { x: number; y: number };
-  tvAreaPosition?: { x: number; y: number }; // Добавлено для позиций на ТВ
+  tvAreaPosition?: { x: number; y: number }; // Добавлено для ��озиций на ТВ
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -576,7 +576,7 @@ const StepsManagerNew = () => {
         <div className="w-full lg:w-80 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Выбор позиц��и на пульте</CardTitle>
+              <CardTitle className="text-lg">Выбор позиции на пульте</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 gap-2">
@@ -669,7 +669,9 @@ const StepsManagerNew = () => {
                   left: `${(formData.tvAreaPosition.x / 800) * 100}%`,
                   top: `${(formData.tvAreaPosition.y / 450) * 100}%`,
                 }}
-              />
+              >
+                <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-75"></div>
+              </div>
             )}
           </div>
         </div>
@@ -955,7 +957,7 @@ const StepsManagerNew = () => {
           <Target className="h-4 w-4" />
           <AlertDescription>
             <p className="text-sm text-orange-700 dark:text-orange-300">
-              Позиция области на ТВ: ({Math.round(formData.tvAreaPosition.x)},{" "}
+              Позиция обл��сти на ТВ: ({Math.round(formData.tvAreaPosition.x)},{" "}
               {Math.round(formData.tvAreaPosition.y)})
             </p>
           </AlertDescription>
