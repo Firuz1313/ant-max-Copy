@@ -53,7 +53,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useData } from "@/contexts/DataContext";
-import { tvInterfacesAPI, TVInterfaceAPI, ClickableArea, HighlightArea } from "@/api/tvInterfaces";
+import {
+  tvInterfacesAPI,
+  TVInterfaceAPI,
+  ClickableArea,
+  HighlightArea,
+} from "@/api/tvInterfaces";
 
 interface DiagnosticStep {
   id: string;
@@ -65,12 +70,12 @@ interface DiagnosticStep {
   instruction: string;
   highlightRemoteButton?: string;
   highlightTVArea?: string;
-  tvInterfaceId?: string; // Обновлено для работы с настоящими интерфейсами
+  tvInterfaceId?: string; // Обновлено для работы с настоя��ими интерфейсами
   requiredAction?: string;
   hint?: string;
   remoteId?: string;
   buttonPosition?: { x: number; y: number };
-  tvAreaPosition?: { x: number; y: number }; // Добавлено для позиций на ТВ
+  tvAreaPosition?: { x: number; y: number }; // Добавлено для ��озиций на ТВ
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -96,7 +101,8 @@ const StepsManagerNew = () => {
 
   // Состояние для ТВ интерфейсов
   const [tvInterfaces, setTVInterfaces] = useState<TVInterfaceAPI[]>([]);
-  const [selectedTVInterface, setSelectedTVInterface] = useState<TVInterfaceAPI | null>(null);
+  const [selectedTVInterface, setSelectedTVInterface] =
+    useState<TVInterfaceAPI | null>(null);
   const [isLoadingTVInterfaces, setIsLoadingTVInterfaces] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -117,7 +123,9 @@ const StepsManagerNew = () => {
   const [selectedRemote, setSelectedRemote] = useState<any>(null);
   const [isPickingRemoteButton, setIsPickingRemoteButton] = useState(false);
   const [isPickingTVArea, setIsPickingTVArea] = useState(false);
-  const [customRemoteImage, setCustomRemoteImage] = useState<string | null>(null);
+  const [customRemoteImage, setCustomRemoteImage] = useState<string | null>(
+    null,
+  );
 
   const [formData, setFormData] = useState({
     deviceId: "",
@@ -145,7 +153,7 @@ const StepsManagerNew = () => {
   const loadTVInterfacesForDevice = async (deviceId: string) => {
     try {
       setIsLoadingTVInterfaces(true);
-      const response = await tvInterfacesAPI.getByDevice(deviceId);
+      const response = await tvInterfacesAPI.getByDeviceId(deviceId);
       if (response.success && response.data) {
         setTVInterfaces(response.data);
       }
@@ -154,6 +162,31 @@ const StepsManagerNew = () => {
       setTVInterfaces([]);
     } finally {
       setIsLoadingTVInterfaces(false);
+    }
+  };
+
+  // Загрузка отметок для TV ��нтерфейса
+
+  // Сохранение отметок TV интерфейса
+  const saveTVInterfaceMarks = async (marks: TVInterfaceMark[]) => {
+    try {
+      // Здесь можно реализовать ло��ику сохранения всех отметок
+      // Для простоты сейчас просто обновляем локальное состояние
+
+      // Если есть выбранный шаг, связываем отметки с эт��м шагом
+      if (selectedStep?.id) {
+        for (const mark of marks) {
+          if (mark.step_id !== selectedStep.id) {
+            // Обновляем отметку, чтобы связать её с текущим шагом
+            const updateData = { step_id: selectedStep.id };
+            await tvInterfaceMarksAPI.update(mark.id, updateData);
+          }
+        }
+      }
+
+      console.log("TV interface marks saved:", marks);
+    } catch (error) {
+      console.error("Error saving TV interface marks:", error);
     }
   };
 
@@ -194,11 +227,19 @@ const StepsManagerNew = () => {
   };
 
   const getAvailableTVInterfaces = () => {
-    return tvInterfaces.filter(iface => iface.is_active);
+    return tvInterfaces.filter((iface) => iface.is_active !== false);
   };
 
   const getTVInterfaceById = (id: string) => {
-    return tvInterfaces.find(iface => iface.id === id);
+    return tvInterfaces.find((iface) => iface.id === id);
+  };
+
+  const openTVEditor = () => {
+    if (formData.tvInterfaceId && formData.tvInterfaceId !== "none") {
+      const tvInterface = getTVInterfaceById(formData.tvInterfaceId);
+      setSelectedTVInterface(tvInterface || null);
+      setIsTVEditorOpen(true);
+    }
   };
 
   const handleCreate = async () => {
@@ -222,7 +263,8 @@ const StepsManagerNew = () => {
         formData.highlightTVArea === "none"
           ? undefined
           : formData.highlightTVArea,
-      tvInterfaceId: formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
+      tvInterfaceId:
+        formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
       remoteId: formData.remoteId === "none" ? undefined : formData.remoteId,
       buttonPosition:
         formData.buttonPosition.x === 0 && formData.buttonPosition.y === 0
@@ -260,7 +302,8 @@ const StepsManagerNew = () => {
         formData.highlightTVArea === "none"
           ? undefined
           : formData.highlightTVArea,
-      tvInterfaceId: formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
+      tvInterfaceId:
+        formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
       remoteId: formData.remoteId === "none" ? undefined : formData.remoteId,
       buttonPosition:
         formData.buttonPosition.x === 0 && formData.buttonPosition.y === 0
@@ -346,12 +389,12 @@ const StepsManagerNew = () => {
       buttonPosition: step.buttonPosition || { x: 0, y: 0 },
       tvAreaPosition: step.tvAreaPosition || { x: 0, y: 0 },
     });
-    
-    // Загрузить интерфейсы для текущего устройства
+
+    // Загрузить интерфейсы для текущего устро��ства
     if (step.deviceId) {
       loadTVInterfacesForDevice(step.deviceId);
     }
-    
+
     setIsEditDialogOpen(true);
   };
 
@@ -371,7 +414,17 @@ const StepsManagerNew = () => {
     }
   };
 
-  const handleRemoteCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const openTVAreaPicker = () => {
+    const tvInterface = getTVInterfaceById(formData.tvInterfaceId);
+    if (tvInterface) {
+      setSelectedTVInterface(tvInterface);
+      setIsTVEditorOpen(true);
+    }
+  };
+
+  const handleRemoteCanvasClick = (
+    event: React.MouseEvent<HTMLCanvasElement>,
+  ) => {
     if (!isPickingRemoteButton || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
@@ -441,18 +494,21 @@ const StepsManagerNew = () => {
   };
 
   const handleFieldChange = useCallback((field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   }, []);
 
-  const handleDeviceChange = useCallback((value: string) => {
-    const defaultRemote = getDefaultRemoteForDevice(value);
-    setFormData(prev => ({
-      ...prev,
-      deviceId: value,
-      problemId: "",
-      remoteId: defaultRemote?.id || "none",
-    }));
-  }, [getDefaultRemoteForDevice]);
+  const handleDeviceChange = useCallback(
+    (value: string) => {
+      const defaultRemote = getDefaultRemoteForDevice(value);
+      setFormData((prev) => ({
+        ...prev,
+        deviceId: value,
+        problemId: "",
+        remoteId: defaultRemote?.id || "none",
+      }));
+    },
+    [getDefaultRemoteForDevice],
+  );
 
   const getDeviceName = (deviceId: string) => {
     const device = devices.find((d) => d.id === deviceId);
@@ -466,7 +522,7 @@ const StepsManagerNew = () => {
 
   const getTVInterfaceName = (tvInterfaceId: string) => {
     const tvInterface = getTVInterfaceById(tvInterfaceId);
-    return tvInterface?.name || "Неизвестный интерфейс";
+    return tvInterface?.name || "Неиз��естный интерфейс";
   };
 
   const getGroupedSteps = () => {
@@ -533,7 +589,9 @@ const StepsManagerNew = () => {
               <div className="grid grid-cols-1 gap-2">
                 <Button
                   variant={isPickingRemoteButton ? "default" : "outline"}
-                  onClick={() => setIsPickingRemoteButton(!isPickingRemoteButton)}
+                  onClick={() =>
+                    setIsPickingRemoteButton(!isPickingRemoteButton)
+                  }
                   className="w-full"
                 >
                   <Target className="h-4 w-4 mr-2" />
@@ -562,23 +620,26 @@ const StepsManagerNew = () => {
                   <Crosshair className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
-                      Кликните на изображение пульта, чтобы указать позицию кнопки
+                      Кликните на изображение пульта, чтобы указать позицию
+                      кнопки
                     </p>
                   </AlertDescription>
                 </Alert>
               )}
 
-              {formData.buttonPosition.x > 0 && formData.buttonPosition.y > 0 && (
-                <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
-                  <Target className="h-4 w-4" />
-                  <AlertDescription>
-                    <p className="text-sm text-green-700 dark:text-green-300">
-                      Позиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
-                      {Math.round(formData.buttonPosition.y)})
-                    </p>
-                  </AlertDescription>
-                </Alert>
-              )}
+              {formData.buttonPosition.x > 0 &&
+                formData.buttonPosition.y > 0 && (
+                  <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
+                    <Target className="h-4 w-4" />
+                    <AlertDescription>
+                      <p className="text-sm text-green-700 dark:text-green-300">
+                        Позиция выбрана: (
+                        {Math.round(formData.buttonPosition.x)},{" "}
+                        {Math.round(formData.buttonPosition.y)})
+                      </p>
+                    </AlertDescription>
+                  </Alert>
+                )}
             </CardContent>
           </Card>
         </div>
@@ -593,68 +654,67 @@ const StepsManagerNew = () => {
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-1">
           <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 relative">
-            <canvas
-              ref={tvCanvasRef}
-              width={800}
-              height={450}
-              className="border border-gray-300 dark:border-gray-600 rounded cursor-crosshair mx-auto"
-              style={{
-                backgroundImage: selectedTVInterface.screenshot_data 
-                  ? `url(${selectedTVInterface.screenshot_data})` 
-                  : "none",
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "center",
-                backgroundColor: selectedTVInterface.screenshot_data ? "transparent" : "#f3f4f6",
-              }}
-              onClick={handleTVCanvasClick}
-            />
-
-            {/* Отображение существующих областей */}
-            {selectedTVInterface.clickable_areas.map((area) => (
-              <div
-                key={area.id}
-                className="absolute border-2 border-green-500 bg-green-500/20 pointer-events-none"
-                style={{
-                  left: `${(area.position.x / 800) * 100}%`,
-                  top: `${(area.position.y / 450) * 100}%`,
-                  width: `${(area.size.width / 800) * 100}%`,
-                  height: `${(area.size.height / 450) * 100}%`,
-                }}
-              >
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                  {area.name}
-                </span>
+            {selectedTVInterface.screenshot_data ? (
+              <div className="relative w-full h-full flex items-center justify-center">
+                <img
+                  src={selectedTVInterface.screenshot_data}
+                  alt={selectedTVInterface.name}
+                  className="max-w-full max-h-full object-contain rounded"
+                  style={{
+                    width: "800px",
+                    height: "450px",
+                    objectFit: "contain",
+                  }}
+                />
+                <canvas
+                  ref={tvCanvasRef}
+                  width={800}
+                  height={450}
+                  className="absolute inset-0 cursor-crosshair"
+                  style={{
+                    width: "800px",
+                    height: "450px",
+                  }}
+                  onClick={handleTVCanvasClick}
+                />
               </div>
-            ))}
-
-            {selectedTVInterface.highlight_areas.map((area) => (
-              <div
-                key={area.id}
-                className="absolute border-2 border-orange-500 pointer-events-none"
-                style={{
-                  left: `${(area.position.x / 800) * 100}%`,
-                  top: `${(area.position.y / 450) * 100}%`,
-                  width: `${(area.size.width / 800) * 100}%`,
-                  height: `${(area.size.height / 450) * 100}%`,
-                  backgroundColor: area.color + Math.round(area.opacity * 255).toString(16).padStart(2, '0'),
-                }}
-              >
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-white">
-                  {area.name}
-                </span>
+            ) : (
+              <div className="relative">
+                <canvas
+                  ref={tvCanvasRef}
+                  width={800}
+                  height={450}
+                  className="border border-gray-300 dark:border-gray-600 rounded cursor-crosshair mx-auto"
+                  style={{
+                    backgroundColor: "#f3f4f6",
+                  }}
+                  onClick={handleTVCanvasClick}
+                />
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div className="text-center text-gray-500">
+                    <Monitor className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                    <p className="text-lg font-medium">
+                      Изображение интерфейса не загружено
+                    </p>
+                    <p className="text-sm">
+                      Загрузите изображение в разделе "Интерфейсы ТВ"
+                    </p>
+                  </div>
+                </div>
               </div>
-            ))}
+            )}
 
             {/* Выбранная позиция */}
             {formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
               <div
-                className="absolute w-4 h-4 bg-blue-500 rounded-full border-2 border-white transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
+                className="absolute w-4 h-4 bg-red-500 rounded-full border-2 border-white transform -translate-x-1/2 -translate-y-1/2 animate-pulse shadow-lg pointer-events-none z-10"
                 style={{
                   left: `${(formData.tvAreaPosition.x / 800) * 100}%`,
                   top: `${(formData.tvAreaPosition.y / 450) * 100}%`,
                 }}
-              />
+              >
+                <div className="absolute inset-0 bg-red-500 rounded-full animate-ping opacity-75"></div>
+              </div>
             )}
           </div>
         </div>
@@ -662,7 +722,7 @@ const StepsManagerNew = () => {
         <div className="w-full lg:w-80 space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Выбор области на ТВ</CardTitle>
+              <CardTitle className="text-lg">Выбор позиции на ТВ</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Button
@@ -670,59 +730,37 @@ const StepsManagerNew = () => {
                 onClick={() => setIsPickingTVArea(!isPickingTVArea)}
                 className="w-full"
               >
-                <Crosshair className="h-4 w-4 mr-2" />
-                {isPickingTVArea ? "Отменить выбор" : "Выбрать область"}
+                <Target className="h-4 w-4 mr-2" />
+                {isPickingTVArea ? "Отменить выбор" : "Выбрать позицию"}
               </Button>
 
               {isPickingTVArea && (
                 <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-900/20">
-                  <Crosshair className="h-4 w-4" />
-                  <AlertDescription>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">
-                      Кликните на интерфейс ТВ, чтобы указать область для подсветки
-                    </p>
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              {formData.tvAreaPosition.x > 0 && formData.tvAreaPosition.y > 0 && (
-                <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
                   <Target className="h-4 w-4" />
                   <AlertDescription>
-                    <p className="text-sm text-green-700 dark:text-green-300">
-                      Область выбран��: ({Math.round(formData.tvAreaPosition.x)},{" "}
-                      {Math.round(formData.tvAreaPosition.y)})
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      Кликните на интерфейс Т��, чтобы указать область для
+                      подсветки
                     </p>
                   </AlertDescription>
                 </Alert>
               )}
 
-              {/* Список областей интерфейса */}
-              <div className="space-y-2">
-                <h4 className="font-medium">Доступные области:</h4>
-                <div className="space-y-1 max-h-32 overflow-y-auto">
-                  {selectedTVInterface.clickable_areas.map((area) => (
-                    <div key={area.id} className="text-xs p-2 bg-green-50 dark:bg-green-900/20 rounded">
-                      <span className="font-medium text-green-700 dark:text-green-300">
-                        {area.name}
-                      </span>
-                      <span className="text-green-600 dark:text-green-400 ml-2">
-                        (интерактивная)
-                      </span>
-                    </div>
-                  ))}
-                  {selectedTVInterface.highlight_areas.map((area) => (
-                    <div key={area.id} className="text-xs p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
-                      <span className="font-medium text-orange-700 dark:text-orange-300">
-                        {area.name}
-                      </span>
-                      <span className="text-orange-600 dark:text-orange-400 ml-2">
-                        (подсветка)
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {formData.tvAreaPosition.x > 0 &&
+                formData.tvAreaPosition.y > 0 && (
+                  <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
+                    <Target className="h-4 w-4" />
+                    <AlertDescription>
+                      <p className="text-sm text-green-700 dark:text-green-300">
+                        Область выбран��: (
+                        {Math.round(formData.tvAreaPosition.x)},{" "}
+                        {Math.round(formData.tvAreaPosition.y)})
+                      </p>
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+              {/* Спис��к областей интерфейса */}
             </CardContent>
           </Card>
         </div>
@@ -737,12 +775,9 @@ const StepsManagerNew = () => {
           <Label htmlFor={isEdit ? "edit-deviceId" : "deviceId"}>
             Приставка
           </Label>
-          <Select
-            value={formData.deviceId}
-            onValueChange={handleDeviceChange}
-          >
+          <Select value={formData.deviceId} onValueChange={handleDeviceChange}>
             <SelectTrigger>
-              <SelectValue placeholder="Выберите приставку" />
+              <SelectValue placeholder="Выбери��е приставку" />
             </SelectTrigger>
             <SelectContent>
               {getActiveDevices().map((device) => (
@@ -786,7 +821,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-title" : "title"}
           value={formData.title}
           onChange={(e) => handleFieldChange("title", e.target.value)}
-          placeholder="Введите название шага"
+          placeholder="Введ��те название шага"
         />
       </div>
 
@@ -810,7 +845,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для пользователя"
+          placeholder="Подробная инструкция для ��ользователя"
         />
       </div>
 
@@ -829,7 +864,9 @@ const StepsManagerNew = () => {
             <SelectContent>
               <SelectItem value="none">Без интерфейса</SelectItem>
               {isLoadingTVInterfaces ? (
-                <SelectItem value="loading" disabled>Загрузка...</SelectItem>
+                <SelectItem value="loading" disabled>
+                  Загрузка...
+                </SelectItem>
               ) : (
                 getAvailableTVInterfaces().map((tvInterface) => (
                   <SelectItem key={tvInterface.id} value={tvInterface.id}>
@@ -846,11 +883,44 @@ const StepsManagerNew = () => {
             </SelectContent>
           </Select>
           {formData.tvInterfaceId !== "none" && (
-            <Button variant="outline" onClick={openTVEditor} size="sm">
-              <Tv className="h-4 w-4" />
+            <Button
+              variant="outline"
+              onClick={openTVEditor}
+              size="sm"
+              className="whitespace-nowrap"
+              title="Открыть ��едактор отметок интерфейса ТВ"
+            >
+              <Target className="h-4 w-4 mr-1" />
+              Отметки
             </Button>
           )}
         </div>
+
+        {/* TV Interface Position Status */}
+        {formData.tvInterfaceId !== "none" &&
+          formData.tvAreaPosition.x > 0 &&
+          formData.tvAreaPosition.y > 0 && (
+            <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Target className="h-4 w-4 text-blue-600 mr-2" />
+                  <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                    Позиция на ТВ: ({formData.tvAreaPosition.x},{" "}
+                    {formData.tvAreaPosition.y})
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={openTVEditor}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  <Settings className="h-3 w-3 mr-1" />
+                  Изменить
+                </Button>
+              </div>
+            </div>
+          )}
       </div>
 
       <div>
@@ -878,7 +948,7 @@ const StepsManagerNew = () => {
                       {remote.name}
                       {remote.isDefault && (
                         <span className="ml-2 text-xs text-blue-600">
-                          (по умолчанию)
+                          (по умолча��ию)
                         </span>
                       )}
                     </div>
@@ -913,7 +983,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Дополнительная подсказка для пользователя"
+          placeholder="Дополнительна�� подсказка для пользоват���ля"
         />
       </div>
 
@@ -922,8 +992,8 @@ const StepsManagerNew = () => {
           <Target className="h-4 w-4" />
           <AlertDescription>
             <p className="text-sm text-green-700 dark:text-green-300">
-              Позиция кнопки на пульте: ({Math.round(formData.buttonPosition.x)},{" "}
-              {Math.round(formData.buttonPosition.y)})
+              Позиция кнопки на пульте: ({Math.round(formData.buttonPosition.x)}
+              , {Math.round(formData.buttonPosition.y)})
             </p>
           </AlertDescription>
         </Alert>
@@ -934,7 +1004,7 @@ const StepsManagerNew = () => {
           <Target className="h-4 w-4" />
           <AlertDescription>
             <p className="text-sm text-orange-700 dark:text-orange-300">
-              Позиция области на ТВ: ({Math.round(formData.tvAreaPosition.x)},{" "}
+              Позиция обл��сти на ТВ: ({Math.round(formData.tvAreaPosition.x)},{" "}
               {Math.round(formData.tvAreaPosition.y)})
             </p>
           </AlertDescription>
@@ -952,7 +1022,8 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и
+            интерфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -1151,13 +1222,13 @@ const StepsManagerNew = () => {
                               {step.requiredAction && (
                                 <Badge variant="outline">
                                   <PlayCircle className="h-3 w-3 mr-1" />
-                                  Автопереход
+                                  ��втопереход
                                 </Badge>
                               )}
                               {step.remoteId && (
                                 <Badge variant="outline">
                                   <MousePointer className="h-3 w-3 mr-1" />
-                                  Пульт
+                                  Пу��ьт
                                 </Badge>
                               )}
                               {step.tvInterfaceId && (
@@ -1192,8 +1263,7 @@ const StepsManagerNew = () => {
                               )}
                               {step.tvInterfaceId && (
                                 <span>
-                                  ТВ:{" "}
-                                  {getTVInterfaceName(step.tvInterfaceId)}
+                                  ТВ: {getTVInterfaceName(step.tvInterfaceId)}
                                 </span>
                               )}
                               {step.buttonPosition && (
@@ -1235,7 +1305,7 @@ const StepsManagerNew = () => {
                                 <Eye className="h-4 w-4 mr-2" />
                               )}
                               {step.isActive
-                                ? "Деактивировать"
+                                ? "Д��активировать"
                                 : "Активировать"}
                             </DropdownMenuItem>
                             <DropdownMenuItem
@@ -1243,7 +1313,7 @@ const StepsManagerNew = () => {
                               className="text-red-600"
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Удалить
+                              Уд��лить
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -1285,15 +1355,12 @@ const StepsManagerNew = () => {
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>
-              Выбор области на ТВ: {selectedTVInterface?.name}
+              Выбор об��асти на ТВ: {selectedTVInterface?.name}
             </DialogTitle>
           </DialogHeader>
           <div className="flex-1 overflow-hidden">{renderTVEditor()}</div>
           <div className="flex justify-end space-x-2 pt-4">
-            <Button
-              variant="outline"
-              onClick={() => setIsTVEditorOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsTVEditorOpen(false)}>
               Отмена
             </Button>
             <Button onClick={() => setIsTVEditorOpen(false)}>
@@ -1338,7 +1405,7 @@ const StepsManagerNew = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте изменить фильтры поиска или создайте новый шаг.
+              Попробуйте изменит�� фильтры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>

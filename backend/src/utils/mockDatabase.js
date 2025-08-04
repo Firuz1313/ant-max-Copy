@@ -79,7 +79,7 @@ let mockData = {
   problems: [
     {
       id: 1,
-      title: "Нет сигнала на экране",
+      title: "Нет сигнала на э��ране",
       description: "Экран остается черным, нет изображения",
       severity: "high",
       category: "display",
@@ -126,6 +126,7 @@ let mockData = {
     },
   ],
   tv_interfaces: [],
+  tv_interface_marks: [],
 };
 
 // Mock query function that simulates PostgreSQL query interface
@@ -209,6 +210,31 @@ export async function query(text, params = []) {
       return { rows: result, rowCount: result.length };
     }
 
+    if (lowercaseText.includes("from tv_interface_marks")) {
+      if (lowercaseText.includes("where tv_interface_id =")) {
+        const tvInterfaceId = params[0];
+        const marks = mockData.tv_interface_marks.filter(
+          (m) => m.tv_interface_id === tvInterfaceId && m.is_active !== false
+        );
+        return { rows: marks, rowCount: marks.length };
+      }
+      if (lowercaseText.includes("where step_id =")) {
+        const stepId = params[0];
+        const marks = mockData.tv_interface_marks.filter(
+          (m) => m.step_id === stepId && m.is_active !== false
+        );
+        return { rows: marks, rowCount: marks.length };
+      }
+      if (lowercaseText.includes("where id =")) {
+        const id = params[0];
+        const mark = mockData.tv_interface_marks.find((m) => m.id === id);
+        return { rows: mark ? [mark] : [], rowCount: mark ? 1 : 0 };
+      }
+      // Get all marks
+      const marks = mockData.tv_interface_marks.filter((m) => m.is_active !== false);
+      return { rows: marks, rowCount: marks.length };
+    }
+
     if (lowercaseText.includes("from problems")) {
       if (lowercaseText.includes("where id =")) {
         const id = parseInt(params[0]);
@@ -290,6 +316,37 @@ export async function query(text, params = []) {
         rowCount: 1,
       };
     }
+
+    if (lowercaseText.includes("into tv_interface_marks")) {
+      const newId = "mark_" + (mockData.tv_interface_marks.length + 1 + Math.floor(Math.random() * 1000));
+      const now = new Date().toISOString();
+
+      const newMark = {
+        id: newId,
+        tv_interface_id: params[0] || "openbox",
+        step_id: params[1] || null,
+        name: params[2] || "New Mark",
+        description: params[3] || "",
+        mark_type: params[4] || "point",
+        shape: params[5] || "circle",
+        position: params[6] || JSON.stringify({ x: 100, y: 100 }),
+        size: params[7] || JSON.stringify({ width: 20, height: 20 }),
+        color: params[8] || "#3b82f6",
+        is_clickable: params[9] !== false,
+        is_active: params[10] !== false,
+        is_visible: params[11] !== false,
+        created_at: now,
+        updated_at: now,
+      };
+
+      mockData.tv_interface_marks.push(newMark);
+
+      return {
+        rows: [newMark],
+        rowCount: 1,
+      };
+    }
+
     return { rows: [], rowCount: 1 };
   }
 
@@ -320,6 +377,27 @@ export async function query(text, params = []) {
         const deletedCount = mockData.tv_interfaces.length;
         mockData.tv_interfaces = [];
         return { rows: [], rowCount: deletedCount };
+      }
+    }
+
+    if (lowercaseText.includes("from tv_interface_marks")) {
+      if (lowercaseText.includes("where id =")) {
+        const id = params[0];
+        const markIndex = mockData.tv_interface_marks.findIndex((m) => m.id === id);
+        if (markIndex !== -1) {
+          const deleted = mockData.tv_interface_marks.splice(markIndex, 1)[0];
+          return { rows: [deleted], rowCount: 1 };
+        }
+      } else if (lowercaseText.includes("where tv_interface_id =")) {
+        const tvInterfaceId = params[0];
+        const deletedMarks = mockData.tv_interface_marks.filter((m) => m.tv_interface_id === tvInterfaceId);
+        mockData.tv_interface_marks = mockData.tv_interface_marks.filter((m) => m.tv_interface_id !== tvInterfaceId);
+        return { rows: deletedMarks, rowCount: deletedMarks.length };
+      } else if (lowercaseText.includes("where step_id =")) {
+        const stepId = params[0];
+        const deletedMarks = mockData.tv_interface_marks.filter((m) => m.step_id === stepId);
+        mockData.tv_interface_marks = mockData.tv_interface_marks.filter((m) => m.step_id !== stepId);
+        return { rows: deletedMarks, rowCount: deletedMarks.length };
       }
     }
     return { rows: [], rowCount: 1 };
@@ -373,6 +451,7 @@ export async function getDatabaseStats() {
         live_rows: mockData.diagnostic_sessions.length,
       },
       { tablename: "tv_interfaces", live_rows: mockData.tv_interfaces.length },
+      { tablename: "tv_interface_marks", live_rows: mockData.tv_interface_marks.length },
     ],
     databaseSize: "1.2 MB (mock)",
     timestamp: new Date().toISOString(),
