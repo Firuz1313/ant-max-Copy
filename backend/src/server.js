@@ -71,10 +71,10 @@ if (process.env.COMPRESSION_ENABLED !== 'false') {
   app.use(compression());
 }
 
-// Rate limiting
+// Rate limiting - more generous for development
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 минут
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // максимум 100 запросов на IP
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || (NODE_ENV === 'development' ? 1000 : 100), // 1000 запросов в dev, 100 в prod
   message: {
     error: 'Слишком много запросов с этого IP, попробуйте позже.',
     retryAfter: Math.ceil((parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000) / 1000)
