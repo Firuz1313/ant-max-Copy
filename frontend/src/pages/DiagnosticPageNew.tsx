@@ -5,9 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import TVDisplay from "@/components/TVDisplay";
+import TVInterfaceDisplay from "@/components/TVInterfaceDisplay";
 import RemoteControl from "@/components/RemoteControl";
 import { useData } from "@/contexts/DataContext";
 import { tvInterfacesAPI, TVInterfaceAPI } from "@/api/tvInterfaces";
+import { TVInterfaceMark } from "@/api/tvInterfaceMarks";
 import {
   ArrowLeft,
   ArrowRight,
