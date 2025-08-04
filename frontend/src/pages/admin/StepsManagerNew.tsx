@@ -205,7 +205,7 @@ const StepsManagerNew = () => {
       if (selectedStep?.id) {
         for (const mark of marks) {
           if (mark.step_id !== selectedStep.id) {
-            // Обновляем отметку, чтобы связать её с текущим шагом
+            // Обновляем отметку, чтобы связат�� её с текущим шагом
             const updateData = { step_id: selectedStep.id };
             await tvInterfaceMarksAPI.update(mark.id, updateData);
           }
@@ -642,7 +642,7 @@ const StepsManagerNew = () => {
                   <Crosshair className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
-                      Кликните на изобр��жение пульта, чтобы указать позицию кнопки
+                      Кликните на изображение пульта, чтобы указать позицию кнопки
                     </p>
                   </AlertDescription>
                 </Alert>
@@ -843,7 +843,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная и��струкция для ��ользователя"
+          placeholder="Подробная инструкция для ��ользователя"
         />
       </div>
 
@@ -857,7 +857,7 @@ const StepsManagerNew = () => {
             onValueChange={(value) => handleFieldChange("tvInterfaceId", value)}
           >
             <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Выберите интерфейс ТВ" />
+              <SelectValue placeholder="Выберите интерфе��с ТВ" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Без интерфейса</SelectItem>
@@ -909,7 +909,7 @@ const StepsManagerNew = () => {
                 className="text-blue-600 hover:text-blue-800"
               >
                 <Settings className="h-3 w-3 mr-1" />
-                Из��енить
+                Изменить
               </Button>
             </div>
           </div>
@@ -976,7 +976,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-hint" : "hint"}
           value={formData.hint}
           onChange={(e) => handleFieldChange("hint", e.target.value)}
-          placeholder="Дополнительна�� подсказка для пользоват�����ля"
+          placeholder="Дополнительна�� подсказка для пользоват���ля"
         />
       </div>
 
@@ -1015,7 +1015,7 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и и��терфейсам ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -1367,84 +1367,7 @@ const StepsManagerNew = () => {
         </DialogContent>
       </Dialog>
 
-      {/* TV Interface Marks Editor Dialog */}
-      <Dialog open={isTVInterfaceMarksEditorOpen} onOpenChange={setIsTVInterfaceMarksEditorOpen}>
-        <DialogContent className="max-w-7xl max-h-[95vh] overflow-hidden">
-          <DialogHeader>
-            <DialogTitle>
-              Отметки интерфейса: {selectedTVInterface?.name}
-            </DialogTitle>
-          </DialogHeader>
 
-          {selectedTVInterface ? (
-            <div className="flex-1 overflow-hidden">
-              {selectedTVInterface.screenshot_data ? (
-                <TVInterfaceEditor
-                  tvInterfaceId={selectedTVInterface.id}
-                  stepId={selectedStep?.id}
-                  imageUrl={selectedTVInterface.screenshot_data}
-                  imageData={selectedTVInterface.screenshot_data}
-                  initialMarks={tvInterfaceMarks}
-                  onMarksChange={saveTVInterfaceMarks}
-                  showControls={true}
-                  readonly={false}
-                  className="w-full h-full"
-                />
-              ) : (
-                <div className="flex flex-col items-center justify-center p-8 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <AlertTriangle className="h-16 w-16 text-yellow-500 mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Нет изображения интерфейса
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-center mb-4">
-                    Для этой приставки не загружено изображение интерфейса.<br />
-                    Пожалуйста, загрузите интерфейс в разделе "Интерфейсы ТВ".
-                  </p>
-                  <Button
-                    onClick={() => {
-                      setIsTVInterfaceMarksEditorOpen(false);
-                      // Navigate to TV interfaces section
-                      window.location.href = '/admin/tv-interfaces';
-                    }}
-                    className="flex items-center"
-                  >
-                    <Monitor className="h-4 w-4 mr-2" />
-                    Открыть интерфейсы ТВ
-                  </Button>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="flex items-center justify-center p-8">
-              <div className="text-center">
-                <Monitor className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 dark:text-gray-400">
-                  Интерфейс ТВ не выбран
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="flex justify-between items-center pt-4">
-            <div className="flex items-center text-sm text-gray-500">
-              {selectedTVInterface?.screenshot_data && (
-                <>
-                  <Grid3X3 className="h-4 w-4 mr-1" />
-                  Используйте инструменты для создания отметок на интерфейсе
-                </>
-              )}
-            </div>
-            <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => setIsTVInterfaceMarksEditorOpen(false)}
-              >
-                Готово
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
