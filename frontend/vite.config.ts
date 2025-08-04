@@ -59,7 +59,8 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [react({
     fastRefresh: false,
-    jsxRuntime: 'automatic'
+    jsxRuntime: 'classic',
+    jsxImportSource: 'react'
   })],
   resolve: {
     alias: {
