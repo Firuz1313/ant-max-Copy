@@ -281,7 +281,7 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
     loadTVInterface();
   }, [tvInterfaceId]);
 
-  // Load marks for TV interface
+  // Load marks for TV interface with rate limit handling
   useEffect(() => {
     const loadMarks = async () => {
       if (!tvInterfaceId) {
@@ -297,16 +297,27 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
 
         if (response.success && response.data) {
           setMarks(response.data);
+        } else if (response.error?.includes('429') || response.error?.includes('много запросов')) {
+          console.warn('Rate limited - will retry marks loading later');
+          // Retry after a delay
+          setTimeout(() => loadMarks(), 5000);
         }
-      } catch (err) {
-        console.error('Error loading TV interface marks:', err);
+      } catch (err: any) {
+        if (err.message?.includes('429') || err.message?.includes('много запросов')) {
+          console.warn('Rate limited - will retry marks loading later');
+          setTimeout(() => loadMarks(), 5000);
+        } else {
+          console.error('Error loading TV interface marks:', err);
+        }
       }
     };
 
-    loadMarks();
+    // Add a small delay to avoid rapid-fire API calls
+    const timeoutId = setTimeout(loadMarks, 100);
+    return () => clearTimeout(timeoutId);
   }, [tvInterfaceId]);
 
-  // Load marks for current step
+  // Load marks for current step with rate limit handling
   useEffect(() => {
     const loadStepMarks = async () => {
       if (!stepId) {
@@ -318,13 +329,23 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
         const response = await tvInterfaceMarksAPI.getByStepId(stepId);
         if (response.success && response.data) {
           setStepMarks(response.data);
+        } else if (response.error?.includes('429') || response.error?.includes('много запросов')) {
+          console.warn('Rate limited - will retry step marks loading later');
+          setTimeout(() => loadStepMarks(), 5000);
         }
-      } catch (err) {
-        console.error('Error loading step marks:', err);
+      } catch (err: any) {
+        if (err.message?.includes('429') || err.message?.includes('много запросов')) {
+          console.warn('Rate limited - will retry step marks loading later');
+          setTimeout(() => loadStepMarks(), 5000);
+        } else {
+          console.error('Error loading step marks:', err);
+        }
       }
     };
 
-    loadStepMarks();
+    // Add a small delay to avoid rapid-fire API calls, and delay step marks after tv interface marks
+    const timeoutId = setTimeout(loadStepMarks, 200);
+    return () => clearTimeout(timeoutId);
   }, [stepId]);
 
   // Update container size when component mounts or resizes
@@ -388,7 +409,7 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
       <div className={`flex items-center justify-center bg-black rounded-lg ${className}`}>
         <div className="text-center text-white">
           <Loader2 className="h-8 w-8 mx-auto mb-2 animate-spin" />
-          <p className="text-sm">Загрузка и��терфейса...</p>
+          <p className="text-sm">Загрузка интерфейса...</p>
         </div>
       </div>
     );
@@ -495,7 +516,7 @@ const TVInterfaceDisplay: React.FC<TVInterfaceDisplayProps> = ({
           <div className="absolute bottom-2 right-2">
             <Badge className="bg-green-600 text-white">
               <Eye className="h-3 w-3 mr-1" />
-              {activeMarks.length} активных
+              {activeMarks.length} активны��
             </Badge>
           </div>
         )}
