@@ -115,14 +115,28 @@ const DiagnosticPage = () => {
       <div className="flex-1 flex flex-row items-start justify-center w-full max-w-7xl mx-auto px-4 gap-8 mt-2" style={{minHeight:0}}>
         {/* TV */}
         <div className="flex-1 flex items-center justify-end max-w-4xl min-w-0">
-          <TVDisplay
-            deviceId={device?.id}
-            interfaceScreen={currentStepData?.highlightTVArea || 'home'}
-            tvInterfaceId={currentStepData?.tvInterfaceId}
-            className="w-full"
-            isConnected={true}
-            isLoading={false}
-          />
+          {currentStepData?.tvInterfaceId ? (
+            <TVInterfaceDisplay
+              tvInterfaceId={currentStepData.tvInterfaceId}
+              stepId={currentStepData.id}
+              currentStepNumber={currentStepNumber}
+              tvAreaPosition={currentStepData?.tvAreaPosition}
+              showAllMarks={true}
+              highlightActiveMarks={true}
+              showHints={true}
+              enableAnimations={true}
+              className="w-full h-full"
+            />
+          ) : (
+            <TVDisplay
+              deviceId={device?.id}
+              interfaceScreen={currentStepData?.highlightTVArea || 'home'}
+              tvInterfaceId={currentStepData?.tvInterfaceId}
+              className="w-full"
+              isConnected={true}
+              isLoading={false}
+            />
+          )}
         </div>
         {/* Remote */}
         <div className="flex items-center justify-start" style={{width:'200px', minWidth:'160px', maxWidth:'220px'}}>
