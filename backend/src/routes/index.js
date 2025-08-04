@@ -4,6 +4,7 @@ import problemRoutes from "./problemRoutes.js";
 import stepRoutes from "./stepRoutes.js";
 import sessionRoutes from "./sessionRoutes.js";
 import tvInterfaceRoutes from "./tvInterfaceRoutes.js";
+import tvInterfaceMarkRoutes from "./tvInterfaceMarkRoutes.js";
 import cleanupRoutes from "./cleanupRoutes.js";
 
 const router = express.Router();
@@ -71,7 +72,7 @@ router.get("/docs", (req, res) => {
       baseUrl: "/api/v1",
       endpoints: {
         devices: {
-          description: "Управление устройствами (ТВ приставки)",
+          description: "Управление устройствами (��В приставки)",
           routes: {
             "GET /devices": "Получени�� списка устройств",
             "GET /devices/:id": "Получение устройства по ID",
@@ -91,7 +92,7 @@ router.get("/docs", (req, res) => {
         problems: {
           description: "Управление проблемами диагностики",
           routes: {
-            "GET /problems": "Получение списка проблем",
+            "GET /problems": "Получение списка ��роблем",
             "GET /problems/:id": "Получение проблемы по ID",
             "POST /problems": "Создание новой проблемы",
             "PUT /problems/:id": "Обновление проблемы",
