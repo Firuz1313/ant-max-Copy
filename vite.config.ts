@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-  plugins: [react()],
+  plugins: [react({ fastRefresh: false })],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
