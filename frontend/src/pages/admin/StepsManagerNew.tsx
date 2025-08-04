@@ -149,6 +149,15 @@ const StepsManagerNew = () => {
     }
   }, [formData.deviceId]);
 
+  // Загрузка отметок TV интерфейса при изменении интерфейса или шага
+  useEffect(() => {
+    if (formData.tvInterfaceId && formData.tvInterfaceId !== "none") {
+      loadTVInterfaceMarks(formData.tvInterfaceId, selectedStep?.id);
+    } else {
+      setTVInterfaceMarks([]);
+    }
+  }, [formData.tvInterfaceId, selectedStep?.id]);
+
   const loadTVInterfacesForDevice = async (deviceId: string) => {
     try {
       setIsLoadingTVInterfaces(true);
@@ -758,7 +767,7 @@ const StepsManagerNew = () => {
                 </Alert>
               )}
 
-              {/* Список областей интерфейса */}
+              {/* Спис��к областей интерфейса */}
               <div className="space-y-2">
                 <h4 className="font-medium">Доступные области:</h4>
                 <div className="space-y-1 max-h-32 overflow-y-auto">
@@ -1340,7 +1349,7 @@ const StepsManagerNew = () => {
                               className="text-red-600"
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Удалить
+                              Уд��лить
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
