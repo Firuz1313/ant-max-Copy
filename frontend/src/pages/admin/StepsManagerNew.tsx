@@ -200,6 +200,18 @@ const StepsManagerNew = () => {
       // Здесь можно реализовать ло��ику сохранения всех отметок
       // Для простоты сейчас просто обновляем локальное состояние
       setTVInterfaceMarks(marks);
+
+      // Если есть выбранный шаг, связываем отметки с этим шагом
+      if (selectedStep?.id) {
+        for (const mark of marks) {
+          if (mark.step_id !== selectedStep.id) {
+            // Обновляем отметку, чтобы связать её с текущим шагом
+            const updateData = { step_id: selectedStep.id };
+            await tvInterfaceMarksAPI.update(mark.id, updateData);
+          }
+        }
+      }
+
       console.log("TV interface marks saved:", marks);
     } catch (error) {
       console.error("Error saving TV interface marks:", error);
@@ -643,7 +655,7 @@ const StepsManagerNew = () => {
                   <Target className="h-4 w-4" />
                   <AlertDescription>
                     <p className="text-sm text-green-700 dark:text-green-300">
-                      Позиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
+                      ��озиция выбрана: ({Math.round(formData.buttonPosition.x)},{" "}
                       {Math.round(formData.buttonPosition.y)})
                     </p>
                   </AlertDescription>
@@ -1058,7 +1070,7 @@ const StepsManagerNew = () => {
             Управление шагами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейсам ТВ
+            Создание шагов диагностики с привязкой к приставкам, проблемам и интерфейса�� ТВ
           </p>
         </div>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
