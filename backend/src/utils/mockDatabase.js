@@ -126,6 +126,7 @@ let mockData = {
     },
   ],
   tv_interfaces: [],
+  tv_interface_marks: [],
 };
 
 // Mock query function that simulates PostgreSQL query interface
