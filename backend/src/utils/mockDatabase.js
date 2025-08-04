@@ -316,6 +316,37 @@ export async function query(text, params = []) {
         rowCount: 1,
       };
     }
+
+    if (lowercaseText.includes("into tv_interface_marks")) {
+      const newId = "mark_" + (mockData.tv_interface_marks.length + 1 + Math.floor(Math.random() * 1000));
+      const now = new Date().toISOString();
+
+      const newMark = {
+        id: newId,
+        tv_interface_id: params[0] || "openbox",
+        step_id: params[1] || null,
+        name: params[2] || "New Mark",
+        description: params[3] || "",
+        mark_type: params[4] || "point",
+        shape: params[5] || "circle",
+        position: params[6] || JSON.stringify({ x: 100, y: 100 }),
+        size: params[7] || JSON.stringify({ width: 20, height: 20 }),
+        color: params[8] || "#3b82f6",
+        is_clickable: params[9] !== false,
+        is_active: params[10] !== false,
+        is_visible: params[11] !== false,
+        created_at: now,
+        updated_at: now,
+      };
+
+      mockData.tv_interface_marks.push(newMark);
+
+      return {
+        rows: [newMark],
+        rowCount: 1,
+      };
+    }
+
     return { rows: [], rowCount: 1 };
   }
 
