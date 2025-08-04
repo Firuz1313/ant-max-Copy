@@ -53,7 +53,7 @@ import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
 
-// Мемои��ированный компонент формы для предот��ращения потери фокуса
+// Мемоизированный компонент формы для предот��ращения потери фокуса
 const StepFormFieldsComponent = React.memo(
   ({
     isEdit = false,
@@ -344,7 +344,7 @@ const StepsManager = () => {
     highlightRemoteButton: "none",
     highlightTVArea: "none",
 
-    tvInterfaceId: "none", // Добавлено для выбора ��озданного и��терфейса
+    tvInterfaceId: "none", // Добавлено для выбора ��озданного интерфейса
     requiredAction: "",
     hint: "",
     remoteId: "none",
@@ -793,7 +793,7 @@ const StepsManager = () => {
       instruction: "",
       highlightRemoteButton: "none",
       highlightTVArea: "none",
-      tvInterface: "home",
+
       tvInterfaceId: "none",
       requiredAction: "",
       hint: "",
@@ -1330,7 +1330,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени���ь ф��ль��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь ф��ль��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
