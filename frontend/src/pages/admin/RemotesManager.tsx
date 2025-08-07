@@ -138,7 +138,7 @@ const RemotesManager = () => {
       console.error('Ошибка при обновлении пульта:', error);
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не удалось обновить пульт',
+        description: error.message || 'Не удалось обновить п��льт',
         variant: 'destructive',
       });
     }
@@ -362,7 +362,7 @@ const RemotesManager = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="universal">Универсальный пульт</SelectItem>
-                          {devices.filter(device => device.id && device.id.trim() !== '').map(device => (
+                          {safeDevices.map(device => (
                             <SelectItem key={device.id} value={device.id}>
                               {device.brand} {device.model}
                             </SelectItem>
