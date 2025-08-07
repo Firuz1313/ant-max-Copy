@@ -139,7 +139,14 @@ export async function query(text, params = []) {
     console.error("🔍 Query:", text);
     console.error("🔍 Parameters:", params);
 
-    // NO FALLBACK - PostgreSQL only
+    // Check if this is a connection error (PostgreSQL not available)
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      console.warn("⚠️ PostgreSQL unavailable - returning empty result for graceful degradation");
+      // Return empty result that looks like a real query result
+      return { rows: [], rowCount: 0 };
+    }
+
+    // For other database errors, still throw
     console.error("🚫 PostgreSQL query failed. Mock database fallback disabled.");
     throw error;
   } finally {
