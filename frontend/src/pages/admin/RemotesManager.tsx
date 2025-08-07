@@ -311,7 +311,7 @@ const RemotesManager = () => {
               />
             </div>
             
-            <Select value={filterDevice} onValueChange={setFilterDevice}>
+            <Select value={filterDevice || 'all'} onValueChange={setFilterDevice}>
               <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder="Фильтр по устройству" />
               </SelectTrigger>
@@ -328,7 +328,7 @@ const RemotesManager = () => {
               </SelectContent>
             </Select>
 
-            <Select value={filterLayout} onValueChange={setFilterLayout}>
+            <Select value={filterLayout || 'all'} onValueChange={setFilterLayout}>
               <SelectTrigger className="w-full sm:w-[200px]">
                 <SelectValue placeholder="Фильтр по типу" />
               </SelectTrigger>
@@ -390,7 +390,7 @@ const RemotesManager = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="device">Устройство</Label>
-                      <Select value={formData.device_id} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
+                      <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
                         <SelectTrigger>
                           <SelectValue placeholder="Выберите устройство" />
                         </SelectTrigger>
@@ -421,7 +421,7 @@ const RemotesManager = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="layout">Тип layout</Label>
-                      <Select value={formData.layout} onValueChange={(value) => setFormData({ ...formData, layout: value })}>
+                      <Select value={formData.layout || 'standard'} onValueChange={(value) => setFormData({ ...formData, layout: value })}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -504,7 +504,7 @@ const RemotesManager = () => {
                       )}
                       <Badge variant="outline">{layoutNames[remote.layout] || remote.layout}</Badge>
                       {!remote.isActive && (
-                        <Badge variant="destructive">Неактивен</Badge>
+                        <Badge variant="destructive">Неа��тивен</Badge>
                       )}
                     </div>
                     
@@ -635,7 +635,7 @@ const RemotesManager = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="edit-layout">Тип layout</Label>
-                <Select value={formData.layout} onValueChange={(value) => setFormData({ ...formData, layout: value })}>
+                <Select value={formData.layout || 'standard'} onValueChange={(value) => setFormData({ ...formData, layout: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
