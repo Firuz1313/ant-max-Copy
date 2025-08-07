@@ -157,7 +157,7 @@ const ANTSupport = () => {
         {/* Статистика устройств */}
         <section className="container mx-auto px-4 mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {devices.map((device, index) => (
+            {deviceStats.map((device, index) => (
               <div
                 key={device.name}
                 className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
@@ -256,7 +256,7 @@ const ANTSupport = () => {
               className="group"
             >
               <Settings className="mr-2 h-3 w-3" />
-              Панель администратора
+              Панель ад��инистратора
             </Button>
           </div>
         </section>
