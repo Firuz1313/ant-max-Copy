@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Plus, Edit2, Trash2, Copy, Search, BarChart3, Smartphone, Star } from 'lucide-react';
 
-// Безопасный компон��нт для SelectItem, который не рендерится с пустыми значе��иями
+// Безопасный компон��нт для SelectItem, который не ренд��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
   // Логирование для отладки
   if (!value || value === '' || value === null || value === undefined) {
@@ -178,7 +178,7 @@ const RemotesManager = () => {
       console.error('Ошибка при удалении пульта:', error);
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не ��далось удалить пульт',
+        description: error.message || 'Не ��далось уд��лить пульт',
         variant: 'destructive',
       });
     }
@@ -219,6 +219,27 @@ const RemotesManager = () => {
     });
     setIsEditDialogOpen(true);
   };
+
+  // Логирование для отладки
+  console.log('RemotesManager devices data:', devices.map(d => ({ id: d.id, type: typeof d.id, brand: d.brand })));
+
+  // Защита от рендеринга с некорректными данными и дублирующихся ID
+  const safeDevices = devices.filter((device, index, array) => {
+    const isValid = device &&
+      device.id &&
+      typeof device.id === 'string' &&
+      device.id.trim() !== '' &&
+      device.id !== 'undefined' &&
+      device.id !== 'null' &&
+      // Убираем дубли по ID
+      array.findIndex(d => d.id === device.id) === index;
+
+    if (!isValid) {
+      console.warn('RemotesManager: Отфильтровано некорректное устройство:', device);
+    }
+
+    return isValid;
+  });
 
   const safeRemotes = remotes.filter((remote, index, array) =>
     remote &&
@@ -331,7 +352,7 @@ const RemotesManager = () => {
             
             <Select value={filterDevice || 'all'} onValueChange={setFilterDevice}>
               <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="Фильтр по устройству" />
+                <SelectValue placeholder="Фильтр по устройс��ву" />
               </SelectTrigger>
               <SelectContent>
                 <SafeSelectItem value="all">Все устройства</SafeSelectItem>
@@ -682,7 +703,7 @@ const RemotesManager = () => {
                   checked={formData.is_default}
                   onCheckedChange={(checked) => setFormData({ ...formData, is_default: checked })}
                 />
-                <Label htmlFor="edit-is_default">Пульт по умолчанию для устройства</Label>
+                <Label htmlFor="edit-is_default">��ульт по умолчанию для устройства</Label>
               </div>
 
               <div className="flex items-center space-x-2">
