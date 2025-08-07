@@ -286,7 +286,7 @@ const RemotesManager = () => {
               <SelectContent>
                 <SelectItem value="all">Все устройства</SelectItem>
                 <SelectItem value="universal">Универсальные</SelectItem>
-                {devices.filter(device => device.id && device.id.trim() !== '').map(device => (
+                {safeDevices.map(device => (
                   <SelectItem key={device.id} value={device.id}>
                     {device.brand} {device.model}
                   </SelectItem>
@@ -318,7 +318,7 @@ const RemotesManager = () => {
                 <DialogHeader>
                   <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
-                    Создайте новый пульт ди��танционного управления
+                    Создайте новый пульт дистанционного управления
                   </DialogDescription>
                 </DialogHeader>
                 
