@@ -32,7 +32,7 @@ const RemotesManager = () => {
     manufacturer: '',
     model: '',
     description: '',
-    device_id: '',
+    device_id: 'universal',
     layout: 'standard',
     color_scheme: 'dark',
     image_url: '',
@@ -59,7 +59,7 @@ const RemotesManager = () => {
     } catch (error) {
       console.error('Ошибка при загрузке данных:', error);
       toast({
-        title: '��шибка',
+        title: 'Ошибка',
         description: 'Не удалось загрузить данные пультов',
         variant: 'destructive',
       });
@@ -141,7 +141,7 @@ const RemotesManager = () => {
       await api.deleteRemote(id);
       toast({
         title: 'Успех',
-        description: 'Пульт успешно удален',
+        description: '��ульт успешно удален',
       });
       loadData();
     } catch (error: any) {
@@ -420,7 +420,7 @@ const RemotesManager = () => {
         </CardContent>
       </Card>
 
-      {/* Список пу��ьтов */}
+      {/* Список пультов */}
       {filteredRemotes.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
