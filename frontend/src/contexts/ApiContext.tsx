@@ -64,7 +64,9 @@ class APIService {
       }
 
       if (status >= 400) {
-        throw new Error(data.error || data.message || `HTTP error! status: ${status} ${statusText}`);
+        const errorMessage = data.error || data.message || data.details || statusText;
+        console.error(`API Error Details [${endpoint}]:`, { status, data, bodyText });
+        throw new Error(`${errorMessage} (HTTP ${status})`);
       }
 
       return data.data || data;
