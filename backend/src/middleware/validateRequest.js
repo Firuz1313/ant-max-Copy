@@ -153,6 +153,38 @@ export const stepValidation = {
   }).min(1)
 };
 
+// Схемы валидации для пользователей
+export const userValidation = {
+  create: Joi.object({
+    id: commonSchemas.id,
+    username: Joi.string().min(3).max(50).required(),
+    email: commonSchemas.email,
+    password: commonSchemas.password,
+    first_name: Joi.string().min(1).max(255),
+    last_name: Joi.string().min(1).max(255),
+    role: commonSchemas.role.default('user'),
+    permissions: commonSchemas.jsonArray.default([]),
+    email_verified: commonSchemas.boolean.default(false),
+    is_active: commonSchemas.boolean.default(true),
+    preferences: commonSchemas.jsonObject.default({}),
+    metadata: commonSchemas.jsonObject.default({})
+  }),
+
+  update: Joi.object({
+    username: Joi.string().min(3).max(50),
+    email: commonSchemas.email,
+    password: commonSchemas.password,
+    first_name: Joi.string().min(1).max(255),
+    last_name: Joi.string().min(1).max(255),
+    role: commonSchemas.role,
+    permissions: commonSchemas.jsonArray,
+    email_verified: commonSchemas.boolean,
+    is_active: commonSchemas.boolean,
+    preferences: commonSchemas.jsonObject,
+    metadata: commonSchemas.jsonObject
+  }).min(1)
+};
+
 // Схемы валидации для пультов
 export const remoteValidation = {
   create: Joi.object({
