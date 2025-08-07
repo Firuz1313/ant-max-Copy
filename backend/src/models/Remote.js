@@ -1,4 +1,5 @@
 import BaseModel from './BaseModel.js';
+import { query } from '../utils/database.js';
 
 class Remote extends BaseModel {
   constructor() {
@@ -352,7 +353,7 @@ class Remote extends BaseModel {
   }
 
   /**
-   * Проверит�� использование пульта в диагностических шагах
+   * Проверить использование пульта в диагностических шагах
    */
   async checkRemoteUsage(id) {
     const query = `
