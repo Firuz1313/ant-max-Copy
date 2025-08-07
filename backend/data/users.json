@@ -1,1 +1,57 @@
-[]
+[
+  {
+    "id": "admin-001",
+    "username": "admin",
+    "email": "admin@antsupport.local",
+    "password_hash": "$2b$12$placeholder_hash_replace_with_real",
+    "first_name": "System",
+    "last_name": "Administrator",
+    "role": "admin",
+    "permissions": [
+      "users.create",
+      "users.read", 
+      "users.update",
+      "users.delete",
+      "devices.create",
+      "devices.read",
+      "devices.update", 
+      "devices.delete",
+      "problems.create",
+      "problems.read",
+      "problems.update",
+      "problems.delete",
+      "steps.create",
+      "steps.read",
+      "steps.update",
+      "steps.delete",
+      "remotes.create",
+      "remotes.read",
+      "remotes.update",
+      "remotes.delete",
+      "tv_interfaces.create",
+      "tv_interfaces.read",
+      "tv_interfaces.update",
+      "tv_interfaces.delete",
+      "settings.read",
+      "settings.update",
+      "analytics.read"
+    ],
+    "email_verified": true,
+    "last_login": null,
+    "login_count": 0,
+    "is_active": true,
+    "preferences": {
+      "language": "ru",
+      "theme": "dark",
+      "notifications": true,
+      "dashboard": {
+        "show_stats": true,
+        "default_page": "devices"
+      }
+    },
+    "metadata": {
+      "created_by": "system",
+      "initial_admin": true
+    }
+  }
+]
