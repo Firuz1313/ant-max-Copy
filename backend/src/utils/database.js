@@ -139,16 +139,8 @@ export async function query(text, params = []) {
     console.error("🔍 Query:", text);
     console.error("🔍 Parameters:", params);
 
-    // Fallback to mock database
-    if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
-      process.env.USE_MOCK_DB = "true";
-      if (!mockDb) {
-        mockDb = await import("./mockDatabase.js");
-      }
-      return await mockDb.query(text, params);
-    }
-
+    // NO FALLBACK - PostgreSQL only
+    console.error("🚫 PostgreSQL query failed. Mock database fallback disabled.");
     throw error;
   } finally {
     if (client) {
@@ -216,15 +208,8 @@ export async function createDatabase() {
     }
   } catch (error) {
     console.error("❌ Ошибка создания базы данных:", error.message);
-    // Fallback to mock database
-    if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
-      process.env.USE_MOCK_DB = "true";
-      if (!mockDb) {
-        mockDb = await import("./mockDatabase.js");
-      }
-      return await mockDb.createDatabase();
-    }
+    // NO FALLBACK - PostgreSQL only
+    console.error("🚫 PostgreSQL database creation failed. Mock database fallback disabled.");
     throw error;
   } finally {
     if (client) {
