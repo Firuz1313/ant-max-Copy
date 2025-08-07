@@ -24,35 +24,35 @@ class User extends BaseModel {
 
     // Фильтрация по роли
     if (filters.role) {
-      query += ` AND role = $${paramIndex}`;
+      queryText += ` AND role = $${paramIndex}`;
       params.push(filters.role);
       paramIndex++;
     }
 
     // Фильтрация по статусу email
     if (filters.email_verified !== undefined) {
-      query += ` AND email_verified = $${paramIndex}`;
+      queryText += ` AND email_verified = $${paramIndex}`;
       params.push(filters.email_verified);
       paramIndex++;
     }
 
     // Поиск по имени или email
     if (filters.search) {
-      query += ` AND (username ILIKE $${paramIndex} OR email ILIKE $${paramIndex} OR first_name ILIKE $${paramIndex} OR last_name ILIKE $${paramIndex})`;
+      queryText += ` AND (username ILIKE $${paramIndex} OR email ILIKE $${paramIndex} OR first_name ILIKE $${paramIndex} OR last_name ILIKE $${paramIndex})`;
       params.push(`%${filters.search}%`);
       paramIndex++;
     }
 
-    query += ' ORDER BY created_at DESC';
+    queryText += ' ORDER BY created_at DESC';
 
     if (filters.limit) {
-      query += ` LIMIT $${paramIndex}`;
+      queryText += ` LIMIT $${paramIndex}`;
       params.push(filters.limit);
       paramIndex++;
     }
 
     if (filters.offset) {
-      query += ` OFFSET $${paramIndex}`;
+      queryText += ` OFFSET $${paramIndex}`;
       params.push(filters.offset);
     }
 
@@ -64,7 +64,7 @@ class User extends BaseModel {
    * Получить пользователя по ID
    */
   async getUserById(id) {
-    const query = `
+    const queryText = `
       SELECT 
         id, username, email, first_name, last_name, role, 
         email_verified, last_login, login_count, is_active,
@@ -73,7 +73,7 @@ class User extends BaseModel {
       WHERE id = $1 AND is_active = true
     `;
     
-    const result = await this.executeQuery(query, [id]);
+    const result = await query(queryText, [id]);
     
     if (result.rows.length === 0) {
       return null;
@@ -86,7 +86,7 @@ class User extends BaseModel {
    * Получить пользователя по username
    */
   async getUserByUsername(username) {
-    const query = `
+    const queryText = `
       SELECT 
         id, username, email, first_name, last_name, role, 
         password_hash, email_verified, last_login, login_count, 
@@ -95,7 +95,7 @@ class User extends BaseModel {
       WHERE username = $1 AND is_active = true
     `;
     
-    const result = await this.executeQuery(query, [username]);
+    const result = await query(queryText, [username]);
     
     if (result.rows.length === 0) {
       return null;
@@ -108,7 +108,7 @@ class User extends BaseModel {
    * Получить пользователя по email
    */
   async getUserByEmail(email) {
-    const query = `
+    const queryText = `
       SELECT 
         id, username, email, first_name, last_name, role, 
         password_hash, email_verified, last_login, login_count, 
@@ -117,7 +117,7 @@ class User extends BaseModel {
       WHERE email = $1 AND is_active = true
     `;
     
-    const result = await this.executeQuery(query, [email]);
+    const result = await query(queryText, [email]);
     
     if (result.rows.length === 0) {
       return null;
@@ -160,7 +160,7 @@ class User extends BaseModel {
     const saltRounds = 12;
     const password_hash = await bcrypt.hash(password, saltRounds);
 
-    const query = `
+    const queryText = `
       INSERT INTO users (
         id, username, email, password_hash, first_name, last_name,
         role, permissions, email_verified, is_active, preferences, metadata
@@ -187,7 +187,7 @@ class User extends BaseModel {
       JSON.stringify(metadata)
     ];
 
-    const result = await this.executeQuery(query, values);
+    const result = await query(queryText, values);
     return this.formatUser(result.rows[0]);
   }
 
@@ -234,7 +234,7 @@ class User extends BaseModel {
       paramIndex++;
     }
 
-    // Об��аботка остальных полей
+    // Обработка остальных полей
     Object.keys(updateData).forEach(field => {
       if (allowedFields.includes(field)) {
         let value = updateData[field];
@@ -257,7 +257,7 @@ class User extends BaseModel {
     updateFields.push(`updated_at = NOW()`);
     values.push(id);
 
-    const query = `
+    const queryText = `
       UPDATE users 
       SET ${updateFields.join(', ')}
       WHERE id = $${paramIndex} 
@@ -267,7 +267,7 @@ class User extends BaseModel {
         preferences, created_at, updated_at
     `;
 
-    const result = await this.executeQuery(query, values);
+    const result = await query(queryText, values);
     return this.formatUser(result.rows[0]);
   }
 
@@ -280,7 +280,7 @@ class User extends BaseModel {
       throw new Error(`Пользователь с ID ${id} не найден`);
     }
 
-    // Проверка - нельз�� удалить последнего админа
+    // Проверка - нельзя удалить последнего админа
     if (user.role === 'admin') {
       const adminCount = await this.countAdmins();
       if (adminCount <= 1) {
@@ -288,13 +288,13 @@ class User extends BaseModel {
       }
     }
 
-    const query = `
+    const queryText = `
       UPDATE users 
       SET is_active = false, updated_at = NOW()
       WHERE id = $1
     `;
 
-    await this.executeQuery(query, [id]);
+    await query(queryText, [id]);
     return { id, deleted: true };
   }
 
@@ -314,26 +314,26 @@ class User extends BaseModel {
    * Обновить время последнего входа
    */
   async updateLastLogin(id) {
-    const query = `
+    const queryText = `
       UPDATE users 
       SET last_login = NOW(), login_count = login_count + 1, updated_at = NOW()
       WHERE id = $1
     `;
 
-    await this.executeQuery(query, [id]);
+    await query(queryText, [id]);
   }
 
   /**
    * Получить количество администраторов
    */
   async countAdmins() {
-    const query = `
+    const queryText = `
       SELECT COUNT(*) as count 
       FROM users 
       WHERE role = 'admin' AND is_active = true
     `;
 
-    const result = await this.executeQuery(query);
+    const result = await query(queryText);
     return parseInt(result.rows[0].count);
   }
 
@@ -341,7 +341,7 @@ class User extends BaseModel {
    * Получить статистику пользователей
    */
   async getUserStats() {
-    const query = `
+    const queryText = `
       SELECT 
         COUNT(*) as total_users,
         COUNT(CASE WHEN role = 'admin' THEN 1 END) as admin_count,
@@ -353,7 +353,7 @@ class User extends BaseModel {
       WHERE is_active = true
     `;
 
-    const result = await this.executeQuery(query);
+    const result = await query(queryText);
     const stats = result.rows[0];
 
     return {
