@@ -109,7 +109,7 @@ router.get("/docs", (req, res) => {
             "POST /problems/:id/unpublish": "Снятие с публикации",
             "POST /problems/:id/update-stats": "Обновление статистики",
             "POST /problems/:id/restore":
-              "Восстановление архивированной проблемы",
+              "Восс��ановление архивированной проблемы",
           },
         },
         steps: {
@@ -166,7 +166,7 @@ router.get("/docs", (req, res) => {
               "Активация/деактивация интерфейса ТВ",
             "GET /tv-interfaces/device/:deviceId": "Интерфейсы по устройству",
             "GET /tv-interfaces/stats": "Статистика интерфейсов",
-            "GET /tv-interfaces/:id/export": "Э��спорт интерфейс�� в JSON",
+            "GET /tv-interfaces/:id/export": "Экспорт интерфейс�� в JSON",
           },
         },
       },
@@ -193,7 +193,7 @@ router.get("/docs", (req, res) => {
           success: false,
           error: "string",
           errorType: "string",
-          details: "array (для ошибок валид��ции)",
+          details: "array (для ошибок валидации)",
           suggestion: "string (опционально)",
           timestamp: "ISO string",
         },
@@ -216,6 +216,7 @@ router.use(`${API_V1_PREFIX}/sessions`, sessionRoutes);
 router.use(`${API_V1_PREFIX}/tv-interfaces`, tvInterfaceRoutes);
 router.use(`${API_V1_PREFIX}/tv-interface-marks`, tvInterfaceMarkRoutes);
 router.use(`${API_V1_PREFIX}/cleanup`, cleanupRoutes);
+router.use(`${API_V1_PREFIX}/users`, userRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
