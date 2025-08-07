@@ -148,7 +148,7 @@ const DeviceManager = () => {
     try {
       await createDevice({
         ...formData,
-        isActive: true,
+        is_active: true,
       });
       setIsCreateDialogOpen(false);
       resetForm();
@@ -249,7 +249,7 @@ const DeviceManager = () => {
             <DialogTrigger asChild>
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
-                Добавить приставку
+                Добави��ь приставку
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -283,7 +283,7 @@ const DeviceManager = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="model">Модель</Label>
+                  <Label htmlFor="model">Моде��ь</Label>
                   <Input
                     id="model"
                     value={formData.model}
