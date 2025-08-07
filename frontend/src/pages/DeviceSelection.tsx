@@ -21,12 +21,13 @@ const DeviceSelection = () => {
   const [animatedIcons, setAnimatedIcons] = useState<boolean[]>([]);
 
   useEffect(() => {
+    setAnimatedIcons(new Array(activeDevices.length).fill(false));
     // Создаем анимацию для floating icons
     const timer = setInterval(() => {
       setAnimatedIcons((prev) => prev.map(() => Math.random() > 0.7));
     }, 2000);
     return () => clearInterval(timer);
-  }, []);
+  }, [activeDevices.length]);
 
   const handleDeviceSelect = (deviceId: string) => {
     navigate(`/problems/${deviceId}`);
