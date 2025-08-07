@@ -14,6 +14,14 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Plus, Edit2, Trash2, Copy, Search, BarChart3, Smartphone, Star } from 'lucide-react';
 
+// Безопасный компонент для SelectItem, который не рендерится с пустыми значениями
+const SafeSelectItem = ({ value, children, ...props }: any) => {
+  if (!value || typeof value !== 'string' || value.trim() === '' || value === 'undefined' || value === 'null') {
+    return null;
+  }
+  return <SelectItem value={value} {...props}>{children}</SelectItem>;
+};
+
 const RemotesManager = () => {
   const { api } = useApi();
   const [remotes, setRemotes] = useState<Remote[]>([]);
@@ -330,7 +338,7 @@ const RemotesManager = () => {
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle>Создать новый пульт</DialogTitle>
+                  <DialogTitle>Создать нов��й пульт</DialogTitle>
                   <DialogDescription>
                     Создайте новый пульт дистанционного управления
                   </DialogDescription>
@@ -412,7 +420,7 @@ const RemotesManager = () => {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="color_scheme">Цветовая схем��</Label>
+                      <Label htmlFor="color_scheme">Цветовая схема</Label>
                       <Input
                         id="color_scheme"
                         value={formData.color_scheme}
@@ -446,7 +454,7 @@ const RemotesManager = () => {
         </CardContent>
       </Card>
 
-      {/* Сп��сок пультов */}
+      {/* Список пультов */}
       {filteredRemotes.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
