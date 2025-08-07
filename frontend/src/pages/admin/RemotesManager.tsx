@@ -163,7 +163,7 @@ const RemotesManager = () => {
       });
       loadData();
     } catch (error: any) {
-      console.error('Ошибка при дублировании пульта:', error);
+      console.error('Ошибка при дублирова��ии пульта:', error);
       toast({
         title: 'Ошибка',
         description: error.message || 'Не удалось дублировать пульт',
@@ -194,9 +194,11 @@ const RemotesManager = () => {
     const matchesSearch = remote.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          remote.manufacturer.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          remote.model.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesDevice = !filterDevice || remote.deviceId === filterDevice;
-    const matchesLayout = !filterLayout || remote.layout === filterLayout;
-    
+    const matchesDevice = !filterDevice || filterDevice === 'all' ||
+                         (filterDevice === 'universal' && !remote.deviceId) ||
+                         remote.deviceId === filterDevice;
+    const matchesLayout = !filterLayout || filterLayout === 'all' || remote.layout === filterLayout;
+
     return matchesSearch && matchesDevice && matchesLayout;
   });
 
@@ -304,7 +306,7 @@ const RemotesManager = () => {
                 <DialogHeader>
                   <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
-                    Создайте новый пульт дистанционного управл��ния
+                    Создайте новый пульт дистанционного управления
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -494,7 +496,7 @@ const RemotesManager = () => {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Удалить пульт?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Вы уверены, что хотите удалить пу��ьт "{remote.name}"? 
+                            Вы уверены, что хотите удалить пульт "{remote.name}"? 
                             Это действие нельзя отменить.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
