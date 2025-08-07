@@ -93,7 +93,7 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите приставку" />
             </SelectTrigger>
             <SelectContent>
-              {getActiveDevices().map((device) => (
+              {getActiveDevices().filter(device => device.id && device.id.trim() !== '').map((device) => (
                 <SelectItem key={device.id} value={device.id}>
                   <div className="flex items-center">
                     <div
@@ -901,7 +901,7 @@ const StepsManager = () => {
                   className="w-full"
                 >
                   <Target className="h-4 w-4 mr-2" />
-                  {isPickingButton ? "Отменить выбор" : "Выбрать п��зицию"}
+                  {isPickingButton ? "Отменить выбор" : "Выбрать п����ицию"}
                 </Button>
                 <Button
                   variant="outline"
@@ -1031,7 +1031,7 @@ const StepsManager = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все приставки</SelectItem>
-                  {getActiveDevices().map((device) => (
+                  {getActiveDevices().filter(device => device.id && device.id.trim() !== '').map((device) => (
                     <SelectItem key={device.id} value={device.id}>
                       <div className="flex items-center">
                         <div
@@ -1331,7 +1331,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь ф��ль��ры поиска или создайте новый шаг.
+              Попробуйте измени��ь ф��ль��ры ��оиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
