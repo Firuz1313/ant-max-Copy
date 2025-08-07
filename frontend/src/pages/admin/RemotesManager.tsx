@@ -477,7 +477,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout 
                 ? 'Попробуйте изменить параметры поиска или фильтрации' 
-                : 'Н��чните с создания первого пульта дистанционного управления'}
+                : 'Начните с создания первого пульта дистанционного управления'}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
@@ -610,7 +610,7 @@ const RemotesManager = () => {
                     <SelectValue placeholder="Выберите устройство" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="universal">Универсальный пульт</SelectItem>
+                    <SafeSelectItem value="universal">Универсальный пульт</SafeSelectItem>
                     {safeDevices
                       .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
                       .map(device => (
