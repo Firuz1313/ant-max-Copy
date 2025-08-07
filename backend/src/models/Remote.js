@@ -79,7 +79,7 @@ class Remote extends BaseModel {
    * Получить пульт по ID
    */
   async getRemoteById(id) {
-    const query = `
+    const queryText = `
       SELECT 
         r.*,
         d.name as device_name,
@@ -90,7 +90,7 @@ class Remote extends BaseModel {
       WHERE r.id = $1 AND r.is_active = true
     `;
     
-    const result = await this.executeQuery(query, [id]);
+    const result = await query(queryText, [id]);
     
     if (result.rows.length === 0) {
       return null;
@@ -108,29 +108,29 @@ class Remote extends BaseModel {
    * Получить пульты по устройству
    */
   async getRemotesByDevice(deviceId) {
-    const query = `
+    const queryText = `
       SELECT r.*
       FROM remotes r
       WHERE r.device_id = $1 AND r.is_active = true
       ORDER BY r.is_default DESC, r.usage_count DESC, r.created_at DESC
     `;
     
-    const result = await this.executeQuery(query, [deviceId]);
+    const result = await query(queryText, [deviceId]);
     return result.rows.map(this.formatRemote);
   }
 
   /**
-   * Получить пульт по умолчанию для устройства
+   * Получи��ь пульт по умолчанию для устройства
    */
   async getDefaultRemoteForDevice(deviceId) {
-    const query = `
+    const queryText = `
       SELECT r.*
       FROM remotes r
       WHERE r.device_id = $1 AND r.is_default = true AND r.is_active = true
       LIMIT 1
     `;
     
-    const result = await this.executeQuery(query, [deviceId]);
+    const result = await query(queryText, [deviceId]);
     
     if (result.rows.length === 0) {
       return null;
@@ -169,7 +169,7 @@ class Remote extends BaseModel {
       await this.clearDefaultRemoteForDevice(device_id);
     }
 
-    const query = `
+    const queryText = `
       INSERT INTO remotes (
         id, device_id, name, manufacturer, model, description,
         layout, color_scheme, image_url, image_data, svg_data,
@@ -199,7 +199,7 @@ class Remote extends BaseModel {
       JSON.stringify(metadata)
     ];
 
-    const result = await this.executeQuery(query, values);
+    const result = await query(queryText, values);
     return this.formatRemote(result.rows[0]);
   }
 
@@ -251,14 +251,14 @@ class Remote extends BaseModel {
     updateFields.push(`updated_at = NOW()`);
     values.push(id);
 
-    const query = `
+    const queryText = `
       UPDATE remotes 
       SET ${updateFields.join(', ')}
       WHERE id = $${paramIndex} 
       RETURNING *
     `;
 
-    const result = await this.executeQuery(query, values);
+    const result = await query(queryText, values);
     return this.formatRemote(result.rows[0]);
   }
 
@@ -277,13 +277,13 @@ class Remote extends BaseModel {
       throw new Error(`Пульт "${remote.name}" используется в ${usageCheck.stepsCount} диагностических шагах. Сначала обновите или удалите эти шаги.`);
     }
 
-    const query = `
+    const queryText = `
       UPDATE remotes 
       SET is_active = false, updated_at = NOW()
       WHERE id = $1
     `;
 
-    await this.executeQuery(query, [id]);
+    await query(queryText, [id]);
     return { id, deleted: true };
   }
 
@@ -300,7 +300,7 @@ class Remote extends BaseModel {
       ...original,
       id: `${original.id}-copy-${Date.now()}`,
       name: newName || `${original.name} (копия)`,
-      is_default: false, // Копия не может быть пультом по умолчанию
+      is_default: false, // Копия не ��ожет быть пультом по умолчанию
       usage_count: 0,
       last_used: null
     };
@@ -320,20 +320,20 @@ class Remote extends BaseModel {
    * Обновить статистику использования пульта
    */
   async updateUsageStats(id) {
-    const query = `
+    const queryText = `
       UPDATE remotes 
       SET usage_count = usage_count + 1, last_used = NOW(), updated_at = NOW()
       WHERE id = $1
     `;
 
-    await this.executeQuery(query, [id]);
+    await query(queryText, [id]);
   }
 
   /**
    * Получить статистику использования пульта
    */
   async getRemoteUsageStats(id) {
-    const query = `
+    const queryText = `
       SELECT 
         COUNT(ds.id) as total_steps,
         COUNT(DISTINCT ds.problem_id) as problems_count,
@@ -342,7 +342,7 @@ class Remote extends BaseModel {
       WHERE ds.remote_id = $1 AND ds.is_active = true
     `;
 
-    const result = await this.executeQuery(query, [id]);
+    const result = await query(queryText, [id]);
     const stats = result.rows[0];
 
     return {
@@ -356,13 +356,13 @@ class Remote extends BaseModel {
    * Проверить использование пульта в диагностических шагах
    */
   async checkRemoteUsage(id) {
-    const query = `
+    const queryText = `
       SELECT COUNT(*) as count
       FROM diagnostic_steps 
       WHERE remote_id = $1 AND is_active = true
     `;
 
-    const result = await this.executeQuery(query, [id]);
+    const result = await query(queryText, [id]);
     const stepsCount = parseInt(result.rows[0].count);
 
     return {
@@ -375,7 +375,7 @@ class Remote extends BaseModel {
    * Снять флаг default с других пультов устройства
    */
   async clearDefaultRemoteForDevice(deviceId, excludeId = null) {
-    let query = `
+    let queryText = `
       UPDATE remotes 
       SET is_default = false, updated_at = NOW()
       WHERE device_id = $1 AND is_default = true
@@ -383,18 +383,18 @@ class Remote extends BaseModel {
     const params = [deviceId];
 
     if (excludeId) {
-      query += ` AND id != $2`;
+      queryText += ` AND id != $2`;
       params.push(excludeId);
     }
 
-    await this.executeQuery(query, params);
+    await query(queryText, params);
   }
 
   /**
    * Получить статистику пультов
    */
   async getRemoteStats() {
-    const query = `
+    const queryText = `
       SELECT 
         COUNT(*) as total_remotes,
         COUNT(CASE WHEN device_id IS NOT NULL THEN 1 END) as device_specific_count,
@@ -407,7 +407,7 @@ class Remote extends BaseModel {
       WHERE is_active = true
     `;
 
-    const result = await this.executeQuery(query);
+    const result = await query(queryText);
     const stats = result.rows[0];
 
     return {
@@ -425,7 +425,7 @@ class Remote extends BaseModel {
    * Получить популярные пульты
    */
   async getPopularRemotes(limit = 10) {
-    const query = `
+    const queryText = `
       SELECT r.*, d.name as device_name
       FROM remotes r
       LEFT JOIN devices d ON r.device_id = d.id
@@ -434,7 +434,7 @@ class Remote extends BaseModel {
       LIMIT $1
     `;
 
-    const result = await this.executeQuery(query, [limit]);
+    const result = await query(queryText, [limit]);
     return result.rows.map(this.formatRemote);
   }
 
