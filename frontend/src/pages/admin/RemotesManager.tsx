@@ -59,7 +59,7 @@ const RemotesManager = () => {
     } catch (error) {
       console.error('Ошибка при загрузке данных:', error);
       toast({
-        title: 'Ошибка',
+        title: '��шибка',
         description: 'Не удалось загрузить данные пультов',
         variant: 'destructive',
       });
@@ -219,7 +219,7 @@ const RemotesManager = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Загрузка ��ультов...</span>
+        <span className="ml-2">Загрузка пультов...</span>
       </div>
     );
   }
@@ -344,7 +344,7 @@ const RemotesManager = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="device">Устройство</Label>
-                      <Select value={formData.device_id} onValueChange={(value) => setFormData({ ...formData, device_id: value === 'universal' ? '' : value })}>
+                      <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value === 'universal' ? '' : value })}>
                         <SelectTrigger>
                           <SelectValue placeholder="Выберите устройство" />
                         </SelectTrigger>
@@ -361,7 +361,7 @@ const RemotesManager = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Описа��ие</Label>
+                    <Label htmlFor="description">Описание</Label>
                     <Textarea
                       id="description"
                       value={formData.description}
@@ -420,7 +420,7 @@ const RemotesManager = () => {
         </CardContent>
       </Card>
 
-      {/* Список пультов */}
+      {/* Список пу��ьтов */}
       {filteredRemotes.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
@@ -529,7 +529,7 @@ const RemotesManager = () => {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="edit-name">Назван��е *</Label>
+                <Label htmlFor="edit-name">Название *</Label>
                 <Input
                   id="edit-name"
                   value={formData.name}
