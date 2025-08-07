@@ -120,7 +120,7 @@ class Remote extends BaseModel {
   }
 
   /**
-   * Получи��ь пульт по умолчанию для устройства
+   * Получить пульт по умолчанию для устройства
    */
   async getDefaultRemoteForDevice(deviceId) {
     const queryText = `
@@ -164,7 +164,7 @@ class Remote extends BaseModel {
     } = remoteData;
 
     // Если устанавливается как пульт по умолчанию для устройства,
-    // снимаем флаг default с других пультов этого устройства
+    // снимаем флаг default с других пул��тов этого устройства
     if (is_default && device_id) {
       await this.clearDefaultRemoteForDevice(device_id);
     }
@@ -300,7 +300,7 @@ class Remote extends BaseModel {
       ...original,
       id: `${original.id}-copy-${Date.now()}`,
       name: newName || `${original.name} (копия)`,
-      is_default: false, // Копия не ��ожет быть пультом по умолчанию
+      is_default: false, // Копия не может быть пультом по умолчанию
       usage_count: 0,
       last_used: null
     };
@@ -408,15 +408,15 @@ class Remote extends BaseModel {
     `;
 
     const result = await query(queryText);
-    const stats = result.rows[0];
+    const stats = result.rows[0] || {};
 
     return {
-      totalRemotes: parseInt(stats.total_remotes),
-      deviceSpecificCount: parseInt(stats.device_specific_count),
-      universalCount: parseInt(stats.universal_count),
-      defaultCount: parseInt(stats.default_count),
-      manufacturersCount: parseInt(stats.manufacturers_count),
-      layoutsCount: parseInt(stats.layouts_count),
+      totalRemotes: parseInt(stats.total_remotes || 0),
+      deviceSpecificCount: parseInt(stats.device_specific_count || 0),
+      universalCount: parseInt(stats.universal_count || 0),
+      defaultCount: parseInt(stats.default_count || 0),
+      manufacturersCount: parseInt(stats.manufacturers_count || 0),
+      layoutsCount: parseInt(stats.layouts_count || 0),
       avgUsage: parseFloat(stats.avg_usage || 0).toFixed(1)
     };
   }
