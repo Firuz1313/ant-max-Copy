@@ -104,7 +104,7 @@ router.get("/:id", getUserById);
  * @body {string} [user.last_name] - Фамилия пользователя
  * @body {string} [user.role=user] - Роль пользователя (admin, moderator, user)
  * @body {array} [user.permissions] - Массив разрешений
- * @body {boolean} [user.email_verified=false] - Статус подтвержде��ия email
+ * @body {boolean} [user.email_verified=false] - Статус подтвер��дения email
  * @body {boolean} [user.is_active=true] - Активность пользователя
  * @body {object} [user.preferences] - Пользовательские настройки
  * @body {object} [user.metadata] - Дополнительные метаданные
@@ -132,7 +132,7 @@ router.post("/", validateRequest(userValidation.create), createUser);
  * @body {string} [user.email] - Новый email пользователя
  * @body {string} [user.password] - Новый пароль пользователя
  * @body {string} [user.first_name] - Новое имя пользователя
- * @body {string} [user.last_name] - Новая фа��илия пользователя
+ * @body {string} [user.last_name] - Новая фамилия пользователя
  * @body {string} [user.role] - Новая роль пользователя
  * @body {array} [user.permissions] - Новые разрешения
  * @body {boolean} [user.email_verified] - Статус подтверждения email
@@ -148,7 +148,7 @@ router.post("/", validateRequest(userValidation.create), createUser);
  *   "email_verified": true
  * }
  */
-router.put("/:id", userValidation?.update || ((req, res, next) => next()), updateUser);
+router.put("/:id", validateRequest(userValidation.update), updateUser);
 
 /**
  * Удалить пользователя
