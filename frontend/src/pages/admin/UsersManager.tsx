@@ -108,13 +108,16 @@ const UsersManager = () => {
 
   const handleCreate = async () => {
     try {
-      // Create through API (not implemented yet)
-      await api.createUser?.({
+      const userData = {
         ...formData,
         status: "active",
         lastLogin: "Никогда",
         createdAt: new Date().toISOString().split('T')[0],
-      });
+      };
+      console.log('Creating user with data:', userData);
+
+      // Create through API (not implemented yet)
+      await api.createUser?.(userData);
       setIsCreateDialogOpen(false);
       resetForm();
       // Reload users
@@ -204,7 +207,7 @@ const UsersManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Управление пользователями
+            Управление ��ользователями
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Управление пользователями системы и их ролями
@@ -475,7 +478,7 @@ const UsersManager = () => {
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleToggleStatus(user.id)}>
                             <UserIcon className="h-4 w-4 mr-2" />
-                            {user.status === "active" ? "Деактивировать" : "Активировать"}
+                            {user.status === "active" ? "Деактивировать" : "Акти��ировать"}
                           </DropdownMenuItem>
                           <DropdownMenuItem 
                             onClick={() => handleDelete(user.id)}
