@@ -145,7 +145,7 @@ router.get("/:id", getRemoteById);
  *   "is_default": true
  * }
  */
-router.post("/", remoteValidation?.create || ((req, res, next) => next()), createRemote);
+router.post("/", validateRequest(remoteValidation.create), createRemote);
 
 /**
  * Дублировать пульт
