@@ -52,8 +52,28 @@ interface User {
 }
 
 const UsersManager = () => {
+  // Connect to API data context
+  const { api, loading } = useData();
+
   // NO HARDCODED USERS - Load from API only
   const [users, setUsers] = useState<User[]>([]);
+
+  // Load users from API
+  useEffect(() => {
+    const loadUsers = async () => {
+      try {
+        // Note: Users API endpoint needs to be implemented in backend
+        // For now, this will show empty state when no users exist
+        const usersData = await api.getUsers?.() || [];
+        setUsers(usersData);
+      } catch (error) {
+        console.error("Error loading users:", error);
+        setUsers([]); // Show empty state
+      }
+    };
+
+    loadUsers();
+  }, [api]);
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -289,7 +309,7 @@ const UsersManager = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Неактивных
+                  Неак��ивных
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {users.filter(u => u.status === "inactive").length}
