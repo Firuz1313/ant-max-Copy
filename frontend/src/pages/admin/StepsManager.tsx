@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
@@ -901,7 +901,7 @@ const StepsManager = () => {
                   className="w-full"
                 >
                   <Target className="h-4 w-4 mr-2" />
-                  {isPickingButton ? "Отменить выбор" : "Выбрать позицию"}
+                  {isPickingButton ? "Отменить выбор" : "Выбрать п��зицию"}
                 </Button>
                 <Button
                   variant="outline"
@@ -1265,7 +1265,7 @@ const StepsManager = () => {
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>
-              Выбор позиции на пульте: {selectedRemote?.name}
+              Выбор по��иции на пульте: {selectedRemote?.name}
             </DialogTitle>
           </DialogHeader>
           <div className="flex-1 overflow-hidden">{renderRemoteEditor()}</div>
