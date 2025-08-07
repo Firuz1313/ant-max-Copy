@@ -198,7 +198,7 @@ const RemotesManager = () => {
     setIsEditDialogOpen(true);
   };
 
-  const filteredRemotes = remotes.filter(remote => {
+  const filteredRemotes = safeRemotes.filter(remote => {
     const matchesSearch = remote.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          remote.manufacturer.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          remote.model.toLowerCase().includes(searchQuery.toLowerCase());
@@ -318,7 +318,7 @@ const RemotesManager = () => {
                 <DialogHeader>
                   <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
-                    Создайте новый пульт дистанционного уп��авления
+                    Создайте новый пульт ди��танционного управления
                   </DialogDescription>
                 </DialogHeader>
                 
