@@ -36,23 +36,25 @@ class APIService {
         ...options,
       });
 
-      // Always clone the response immediately to avoid body consumption issues
-      const responseClone = response.clone();
-      const responseClone2 = response.clone();
+      // Check status first before reading body
       let data;
 
+      // Determine content type from headers
+      const contentType = response.headers.get('content-type');
+      const isJson = contentType && contentType.includes('application/json');
+
       try {
-        // Try to parse as JSON first
-        data = await responseClone.json();
-      } catch (jsonError) {
-        // If JSON parsing fails, read as text from another clone
-        try {
-          const text = await responseClone2.text();
+        if (isJson) {
+          // If content type indicates JSON, parse as JSON
+          data = await response.json();
+        } else {
+          // Otherwise read as text
+          const text = await response.text();
           data = text ? { message: text } : {};
-        } catch (textError) {
-          // If everything fails, provide empty object
-          data = {};
         }
+      } catch (parseError) {
+        console.warn('Failed to parse response body:', parseError);
+        data = {};
       }
 
       if (!response.ok) {
