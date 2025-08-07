@@ -7,6 +7,7 @@ import tvInterfaceRoutes from "./tvInterfaceRoutes.js";
 import tvInterfaceMarkRoutes from "./tvInterfaceMarkRoutes.js";
 import cleanupRoutes from "./cleanupRoutes.js";
 import userRoutes from "./userRoutes.js";
+import remoteRoutes from "./remoteRoutes.js";
 
 const router = express.Router();
 
@@ -80,7 +81,7 @@ router.get("/docs", (req, res) => {
             "GET /devices/:id": "Получение устройства по ID",
             "POST /devices": "��оздание нового устройства",
             "PUT /devices/:id": "Обновление устройства",
-            "DELETE /devices/:id": "Удаление устройства",
+            "DELETE /devices/:id": "Удал��ние устройства",
             "GET /devices/search": "Поиск устройств",
             "GET /devices/popular": "Популярные устройства",
             "GET /devices/stats": "Статистика устройств",
@@ -158,10 +159,10 @@ router.get("/docs", (req, res) => {
           description: "Управление интерфейсами ТВ приставок",
           routes: {
             "GET /tv-interfaces": "Получение списка интерфейсов ТВ",
-            "GET /tv-interfaces/:id": "Получение интерфейса ТВ по ID",
+            "GET /tv-interfaces/:id": "По��учение интерфейса ТВ по ID",
             "POST /tv-interfaces": "Создание нового интерфейса ТВ",
             "PUT /tv-interfaces/:id": "Обновление интерфейса ТВ",
-            "DELETE /tv-interfaces/:id": "Удаление инте��фейса ТВ",
+            "DELETE /tv-interfaces/:id": "Удаление интерфейса ТВ",
             "POST /tv-interfaces/:id/duplicate": "Дублирование интерфейса ТВ",
             "PATCH /tv-interfaces/:id/toggle":
               "Активация/деактивация интерфейса ТВ",
@@ -233,7 +234,7 @@ router.use(`${API_V1_PREFIX}/tv-interface-marks`, tvInterfaceMarkRoutes);
 router.use(`${API_V1_PREFIX}/cleanup`, cleanupRoutes);
 router.use(`${API_V1_PREFIX}/users`, userRoutes);
 
-// Обработчик для несуществующих эндпоинтов API
+// О��работчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
   res.status(404).json({
     success: false,
