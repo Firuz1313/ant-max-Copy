@@ -738,7 +738,7 @@ const TVInterfaceBuilder = () => {
               {searchTerm ||
               selectedDeviceFilter !== "all" ||
               selectedTypeFilter !== "all"
-                ? "Попробуйте изменить фильтры поиска"
+                ? "Попробуйте изменить фильтр�� поиска"
                 : "Создайте первый TV интерфейс для начала работы"}
             </p>
             {!searchTerm &&
@@ -862,7 +862,7 @@ const TVInterfaceBuilder = () => {
                           </AlertDialogTitle>
                           <AlertDialogDescription>
                             Это действие нельзя отменить. TV интерфейс "
-                            {tvInterface.name}" будет удален навсегда.
+                            {tvInterface.name}" б��дет удален навсегда.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -942,14 +942,14 @@ const TVInterfaceBuilder = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {devices.map((device) => (
-                    <SelectItem key={device.id} value={device.id}>
+                    <SafeSelectItem key={device.id} value={device.id}>
                       <div>
                         <div className="font-medium">{device.name}</div>
                         <div className="text-xs text-gray-500">
                           {device.brand} {device.model}
                         </div>
                       </div>
-                    </SelectItem>
+                    </SafeSelectItem>
                   ))}
                 </SelectContent>
               </Select>
