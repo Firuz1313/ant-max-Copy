@@ -179,7 +179,7 @@ const RemotesManager = () => {
       });
       loadData();
     } catch (error: any) {
-      console.error('Ошибка при дублировании пульта:', error);
+      console.error('Ошибка при дублировани�� пульта:', error);
       toast({
         title: 'Ошибка',
         description: error.message || 'Не удалось дублировать пульт',
@@ -531,7 +531,7 @@ const RemotesManager = () => {
                           <AlertDialogTitle>Удалить пульт?</AlertDialogTitle>
                           <AlertDialogDescription>
                             Вы уверены, что хотите удалить пульт "{remote.name}"? 
-                            Это действие нельзя отменить.
+                            Это действие нельзя от��енить.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -598,9 +598,9 @@ const RemotesManager = () => {
                   <SelectContent>
                     <SelectItem value="universal">Универсальный пульт</SelectItem>
                     {safeDevices.map(device => (
-                      <SelectItem key={device.id} value={device.id}>
+                      <SafeSelectItem key={device.id} value={device.id}>
                         {device.brand} {device.model}
-                      </SelectItem>
+                      </SafeSelectItem>
                     ))}
                   </SelectContent>
                 </Select>
