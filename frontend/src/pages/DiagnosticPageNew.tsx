@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import TVDisplay from "@/components/TVDisplay";
 import TVInterfaceDisplay from "@/components/TVInterfaceDisplay";
 import RemoteControl from "@/components/RemoteControl";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import { tvInterfacesAPI, TVInterfaceAPI } from "@/api/tvInterfaces";
 import { TVInterfaceMark } from "@/api/tvInterfaceMarks";
 import {
