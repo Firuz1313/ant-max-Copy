@@ -78,7 +78,7 @@ export async function testConnection() {
       "SELECT NOW() as current_time, version() as postgres_version",
     );
 
-    console.log("✅ Подключение к PostgreSQL успеш��о");
+    console.log("✅ Подключение к PostgreSQL успешно");
     console.log(`🕐 Время сервера: ${result.rows[0].current_time}`);
     console.log(
       `📋 Версия PostgreSQL: ${result.rows[0].postgres_version.split(" ")[0]}`,
@@ -220,12 +220,12 @@ export async function createDatabase() {
     }
   } catch (error) {
     console.error("❌ Ошибка создания базы данных:", error.message);
-    // Fallback to persistent mock database
+    // Fallback to mock database
     if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to persistent mock database...");
+      console.log("🔧 Falling back to mock database...");
       process.env.USE_MOCK_DB = "true";
       if (!mockDb) {
-        mockDb = await import("./persistentMockDatabase.js");
+        mockDb = await import("./mockDatabase.js");
       }
       return await mockDb.createDatabase();
     }
@@ -333,7 +333,7 @@ export async function getDatabaseStats() {
   }
 }
 
-// Функция безопасного закрытия всех соединений
+// Фу��кция безопасного закрытия всех соединений
 export async function closePool() {
   try {
     console.log("🔄 Закрытие пула соединений PostgreSQL...");
@@ -386,7 +386,7 @@ export async function cleanupOldData(daysToKeep = 90) {
   }
 }
 
-// Функция для полнотекстовог�� поиска
+// Функция для полнотекстового поиска
 export async function searchText(
   searchTerm,
   tables = ["problems", "devices", "diagnostic_steps"],
