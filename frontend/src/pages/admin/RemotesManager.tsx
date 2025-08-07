@@ -316,8 +316,8 @@ const RemotesManager = () => {
                 <SelectValue placeholder="Фильтр по устройству" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Все устройства</SelectItem>
-                <SelectItem value="universal">Универсальные</SelectItem>
+                <SafeSelectItem value="all">Все устройства</SafeSelectItem>
+                <SafeSelectItem value="universal">Универсальные</SafeSelectItem>
                 {safeDevices
                   .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
                   .map(device => (
@@ -504,7 +504,7 @@ const RemotesManager = () => {
                       )}
                       <Badge variant="outline">{layoutNames[remote.layout] || remote.layout}</Badge>
                       {!remote.isActive && (
-                        <Badge variant="destructive">Неа��тивен</Badge>
+                        <Badge variant="destructive">Неактивен</Badge>
                       )}
                     </div>
                     
