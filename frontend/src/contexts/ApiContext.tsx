@@ -36,29 +36,35 @@ class APIService {
         ...options,
       });
 
-      // Check status first before reading body
+      // Store status and headers before reading body
+      const status = response.status;
+      const statusText = response.statusText;
+      const contentType = response.headers.get('content-type');
+
       let data;
 
-      // Determine content type from headers
-      const contentType = response.headers.get('content-type');
-      const isJson = contentType && contentType.includes('application/json');
-
       try {
-        if (isJson) {
-          // If content type indicates JSON, parse as JSON
-          data = await response.json();
+        // Read the response body only once
+        const bodyText = await response.text();
+
+        // Try to parse as JSON if content type suggests it or if body looks like JSON
+        if ((contentType && contentType.includes('application/json')) ||
+            (bodyText.trim().startsWith('{') || bodyText.trim().startsWith('['))) {
+          try {
+            data = JSON.parse(bodyText);
+          } catch (jsonError) {
+            data = { message: bodyText || 'Response parsing failed' };
+          }
         } else {
-          // Otherwise read as text
-          const text = await response.text();
-          data = text ? { message: text } : {};
+          data = bodyText ? { message: bodyText } : {};
         }
-      } catch (parseError) {
-        console.warn('Failed to parse response body:', parseError);
-        data = {};
+      } catch (readError) {
+        console.warn('Failed to read response body:', readError);
+        data = { error: 'Failed to read response' };
       }
 
-      if (!response.ok) {
-        throw new Error(data.error || data.message || `HTTP error! status: ${response.status}`);
+      if (status >= 400) {
+        throw new Error(data.error || data.message || `HTTP error! status: ${status} ${statusText}`);
       }
 
       return data.data || data;
