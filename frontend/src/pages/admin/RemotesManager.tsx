@@ -309,9 +309,9 @@ const RemotesManager = () => {
                 <SelectItem value="all">Все устройства</SelectItem>
                 <SelectItem value="universal">Универсальные</SelectItem>
                 {safeDevices.map(device => (
-                  <SelectItem key={device.id} value={device.id}>
+                  <SafeSelectItem key={device.id} value={device.id}>
                     {device.brand} {device.model}
-                  </SelectItem>
+                  </SafeSelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -338,7 +338,7 @@ const RemotesManager = () => {
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle>Создать нов��й пульт</DialogTitle>
+                  <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
                     Создайте новый пульт дистанционного управления
                   </DialogDescription>
