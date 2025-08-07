@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useData } from "@/contexts/DataContext";
+import { useApi } from "@/contexts/ApiContext";
 import {
   PlayCircle,
   Tv,
@@ -17,17 +17,62 @@ import {
   MousePointer,
   Eye,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+interface Device {
+  id: string;
+  name: string;
+  model: string;
+  brand: string;
+  color: string;
+  isActive: boolean;
+}
+
+interface Problem {
+  id: string;
+  title: string;
+  deviceId: string;
+  isActive: boolean;
+}
 
 const Index = () => {
   const navigate = useNavigate();
-  const { devices, problems, getEntityStats, loading, errors } = useData();
+  const { api, loading, setLoading, setError } = useApi();
+  
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
-  const deviceStats = getEntityStats("devices");
-  const problemStats = getEntityStats("problems");
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoadingData(true);
+        setError(null);
+        
+        const [devicesData, problemsData] = await Promise.all([
+          api.getDevices(),
+          api.getProblems()
+        ]);
+        
+        setDevices(devicesData || []);
+        setProblems(problemsData || []);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setError(error instanceof Error ? error.message : 'Unknown error');
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+
+    loadData();
+  }, [api, setError]);
 
   const handleStartDiagnostic = () => {
     navigate("/devices");
   };
+
+  const activeDevices = devices.filter(d => d.isActive);
+  const activeProblems = problems.filter(p => p.isActive);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
@@ -52,7 +97,7 @@ const Index = () => {
               </span>
             </h2>
             <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-              ��рофессиональные решения для любых проблем. Простой интерфейс,
+              Профессиональные решения для любых проблем. Простой интерфейс,
               быстрые результаты.
             </p>
 
@@ -75,7 +120,7 @@ const Index = () => {
                   <Tv className="h-7 w-7 text-white" />
                 </div>
                 <div className="text-3xl font-bold text-white mb-2">
-                  {deviceStats.active}
+                  {isLoadingData ? "..." : activeDevices.length}
                 </div>
                 <div className="text-sm text-gray-300">
                   Поддерживаемых моделей
@@ -89,7 +134,7 @@ const Index = () => {
                   <Shield className="h-7 w-7 text-white" />
                 </div>
                 <div className="text-3xl font-bold text-white mb-2">
-                  {problemStats.total}
+                  {isLoadingData ? "..." : activeProblems.length}
                 </div>
                 <div className="text-sm text-gray-300">Готовых решений</div>
               </CardContent>
@@ -123,14 +168,14 @@ const Index = () => {
             <h3 className="text-3xl font-bold text-white mb-8 text-center">
               Поддерживаемые устройства
             </h3>
-            {loading.devices ? (
-              <div className="text-center text-gray-300">
+            {isLoadingData ? (
+              <div className="text-center text-gray-300 py-12">
                 <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full" role="status" aria-label="loading">
                   <span className="sr-only">Загрузка...</span>
                 </div>
                 <p className="mt-2">Загрузка устройств...</p>
               </div>
-            ) : devices.length === 0 ? (
+            ) : activeDevices.length === 0 ? (
               <div className="text-center text-gray-400 py-12">
                 <Tv className="h-16 w-16 mx-auto mb-4 text-gray-500" />
                 <h4 className="text-xl font-semibold mb-2">Нет данных об устройствах</h4>
@@ -139,34 +184,32 @@ const Index = () => {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {devices
-                  .filter((d) => d.isActive)
-                  .map((device) => (
-                    <Card
-                      key={device.id}
-                      className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 hover:scale-105 transition-all duration-300 cursor-pointer"
-                    >
-                      <CardContent className="p-5 text-center">
-                        <div
-                          className={`w-12 h-12 bg-gradient-to-br ${device.color} rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg`}
-                        >
-                          <Tv className="h-6 w-6 text-white" />
-                        </div>
-                        <div className="font-semibold text-white mb-1">
-                          {device.name}
-                        </div>
-                        <div className="text-sm text-gray-300">
-                          {device.model}
-                        </div>
-                        <Badge
-                          variant="secondary"
-                          className="mt-2 text-xs bg-green-500/20 text-green-300 border-green-500/30"
-                        >
-                          Доступно
-                        </Badge>
-                      </CardContent>
-                    </Card>
-                  ))}
+                {activeDevices.map((device) => (
+                  <Card
+                    key={device.id}
+                    className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 hover:scale-105 transition-all duration-300 cursor-pointer"
+                  >
+                    <CardContent className="p-5 text-center">
+                      <div
+                        className={`w-12 h-12 bg-gradient-to-br ${device.color || 'from-blue-500 to-blue-600'} rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg`}
+                      >
+                        <Tv className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="font-semibold text-white mb-1">
+                        {device.name}
+                      </div>
+                      <div className="text-sm text-gray-300">
+                        {device.model}
+                      </div>
+                      <Badge
+                        variant="secondary"
+                        className="mt-2 text-xs bg-green-500/20 text-green-300 border-green-500/30"
+                      >
+                        Доступно
+                      </Badge>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             )}
           </div>
@@ -208,7 +251,7 @@ const Index = () => {
                   Эффективность
                 </h4>
                 <p className="text-gray-300">
-                  Комплексный подход к решению проб��ем без вызова техника
+                  Комплексный подход к решению проблем без вызова техника
                 </p>
               </div>
             </div>
@@ -259,7 +302,7 @@ const Index = () => {
                   Интеграция в диагностику
                 </h4>
                 <p className="text-gray-300 text-sm">
-                  Созданные и��терфейсы автоматически отображаются в процессе диагностики
+                  Созданные интерфейсы автоматически отображаются в процессе диагностики
                 </p>
               </div>
             </div>
