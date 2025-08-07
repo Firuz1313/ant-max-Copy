@@ -319,7 +319,7 @@ const RemotesManager = () => {
                 <SelectItem value="all">Все устройства</SelectItem>
                 <SelectItem value="universal">Универсальные</SelectItem>
                 {safeDevices
-                  .filter(device => device.brand && device.model && device.id)
+                  .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
                   .map(device => (
                     <SafeSelectItem key={device.id} value={device.id}>
                       {device.brand} {device.model}
@@ -397,7 +397,7 @@ const RemotesManager = () => {
                         <SelectContent>
                           <SelectItem value="universal">Универсальный пульт</SelectItem>
                           {safeDevices
-                            .filter(device => device.brand && device.model && device.id)
+                            .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
                             .map(device => (
                               <SafeSelectItem key={device.id} value={device.id}>
                                 {device.brand} {device.model}
@@ -612,7 +612,7 @@ const RemotesManager = () => {
                   <SelectContent>
                     <SelectItem value="universal">Универсальный пульт</SelectItem>
                     {safeDevices
-                      .filter(device => device.brand && device.model && device.id)
+                      .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
                       .map(device => (
                         <SafeSelectItem key={device.id} value={device.id}>
                           {device.brand} {device.model}
