@@ -557,7 +557,7 @@ const RemotesManager = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="edit-device">Устройство</Label>
-                <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value === 'universal' ? '' : value })}>
+                <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите устройство" />
                   </SelectTrigger>
