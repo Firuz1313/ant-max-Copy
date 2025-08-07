@@ -29,7 +29,7 @@ const SafeSelectItem = ({ value, children, ...props }: any) => {
   }
 
   if (value.trim() === '' || value === 'undefined' || value === 'null') {
-    console.warn('SafeSelectItem: блокировка недопустимого ��начения:', { value });
+    console.warn('SafeSelectItem: блокировка недопустимого значения:', { value });
     return null;
   }
 
@@ -79,7 +79,7 @@ const RemotesManager = () => {
       setDevices(devicesData);
       setStats(statsData);
     } catch (error) {
-      console.error('Ошибка пр�� загрузке данных:', error);
+      console.error('Ошибка при загрузке данных:', error);
       toast({
         title: 'Ошибка',
         description: 'Не удалось загрузить данные пультов',
@@ -244,7 +244,6 @@ const RemotesManager = () => {
     return matchesSearch && matchesDevice && matchesLayout;
   });
 
-
   const getDeviceName = (deviceId: string | null) => {
     if (!deviceId) return 'Универсальный';
     const device = safeDevices.find(d => d.id === deviceId);
@@ -350,7 +349,7 @@ const RemotesManager = () => {
 
             <Select value={filterLayout || 'all'} onValueChange={setFilterLayout}>
               <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="Фильтр по ти��у" />
+                <SelectValue placeholder="Фильтр по типу" />
               </SelectTrigger>
               <SelectContent>
                 <SafeSelectItem value="all">Все типы</SafeSelectItem>
@@ -497,12 +496,12 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout 
                 ? 'Попробуйте изменить параметры поиска или фильтрации' 
-                : 'Начните с создания первого пульта дис��анционного управления'}
+                : 'Начните с создания первого пульта дистанционного управления'}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Соз��ать первый пульт
+                Создать первый пульт
               </Button>
             )}
           </CardContent>
