@@ -138,33 +138,30 @@ class APIService {
     });
   }
 
-  // Remotes
+  // Remotes (not implemented in backend yet)
   async getRemotes(): Promise<Remote[]> {
-    return this.request<Remote[]>("/remotes");
+    console.warn('Remotes endpoint not implemented in backend');
+    return [];
   }
 
   async getRemote(id: string): Promise<Remote> {
-    return this.request<Remote>(`/remotes/${id}`);
+    console.warn('Remotes endpoint not implemented in backend');
+    throw new Error('Remotes endpoint not implemented');
   }
 
   async createRemote(data: Partial<Remote>): Promise<Remote> {
-    return this.request<Remote>("/remotes", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    console.warn('Remotes endpoint not implemented in backend');
+    throw new Error('Remotes endpoint not implemented');
   }
 
   async updateRemote(id: string, data: Partial<Remote>): Promise<Remote> {
-    return this.request<Remote>(`/remotes/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
+    console.warn('Remotes endpoint not implemented in backend');
+    throw new Error('Remotes endpoint not implemented');
   }
 
   async deleteRemote(id: string): Promise<void> {
-    return this.request<void>(`/remotes/${id}`, {
-      method: "DELETE",
-    });
+    console.warn('Remotes endpoint not implemented in backend');
+    throw new Error('Remotes endpoint not implemented');
   }
 
   // TV Interfaces
