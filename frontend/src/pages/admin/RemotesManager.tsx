@@ -97,7 +97,7 @@ const RemotesManager = () => {
       if (!formData.name || !formData.manufacturer || !formData.model) {
         toast({
           title: 'Ошибка валидации',
-          description: 'Заполните все обязательные поля',
+          description: 'Заполните все обязательные по��я',
           variant: 'destructive',
         });
         return;
@@ -182,7 +182,7 @@ const RemotesManager = () => {
       console.error('Ошибка при дублировани�� пульта:', error);
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не удалось дублировать пульт',
+        description: error.message || 'Не удалось дуб��ировать пульт',
         variant: 'destructive',
       });
     }
@@ -231,22 +231,26 @@ const RemotesManager = () => {
     custom: 'Настраиваемый'
   };
 
-  // Защита от рендеринга с некорректными данными
-  const safeDevices = devices.filter(device =>
+  // Защита от рендеринга с некорректными данными и дублирующихся ID
+  const safeDevices = devices.filter((device, index, array) =>
     device &&
     device.id &&
     typeof device.id === 'string' &&
     device.id.trim() !== '' &&
     device.id !== 'undefined' &&
-    device.id !== 'null'
+    device.id !== 'null' &&
+    // Убираем дубли по ID
+    array.findIndex(d => d.id === device.id) === index
   );
-  const safeRemotes = remotes.filter(remote =>
+  const safeRemotes = remotes.filter((remote, index, array) =>
     remote &&
     remote.id &&
     typeof remote.id === 'string' &&
     remote.id.trim() !== '' &&
     remote.id !== 'undefined' &&
-    remote.id !== 'null'
+    remote.id !== 'null' &&
+    // Убираем дубли по ID
+    array.findIndex(r => r.id === remote.id) === index
   );
 
   if (loading) {
@@ -530,7 +534,7 @@ const RemotesManager = () => {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Удалить пульт?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Вы уверены, что хотите удалить пульт "{remote.name}"? 
+                            Вы уверены, что х��тите удалить пульт "{remote.name}"? 
                             Это действие нельзя от��енить.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
