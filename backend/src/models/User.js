@@ -8,7 +8,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получить всех поль��ователей
+   * Получить всех пользователей
    */
   async getAllUsers(filters = {}) {
     let query = `
@@ -56,7 +56,7 @@ class User extends BaseModel {
       params.push(filters.offset);
     }
 
-    const result = await this.executeQuery(query, params);
+    const result = await query(queryText, params);
     return result.rows.map(this.formatUser);
   }
 
@@ -105,7 +105,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получить пользов��теля по email
+   * Получить пользователя по email
    */
   async getUserByEmail(email) {
     const query = `
