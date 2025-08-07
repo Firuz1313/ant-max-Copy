@@ -36,7 +36,21 @@ class APIService {
         ...options,
       });
 
-      const data = await response.json();
+      // Clone the response to avoid "body stream already read" error
+      const responseClone = response.clone();
+      let data;
+
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        // If JSON parsing fails, try with the cloned response
+        try {
+          data = await responseClone.json();
+        } catch (cloneError) {
+          // If both fail, it might be an empty response or non-JSON
+          data = {};
+        }
+      }
 
       if (!response.ok) {
         throw new Error(data.error || `HTTP error! status: ${response.status}`);
@@ -395,7 +409,7 @@ export const useData = () => {
       console.warn('Settings endpoint not implemented in backend, using default settings');
       setSiteSettings({
         siteName: 'ANT Support',
-        siteDescription: 'Система диагностики ТВ приставок',
+        siteDescription: 'Си��тема диагностики ТВ приставок',
         version: '1.0.0',
         maintenanceMode: false,
         debugMode: false,
