@@ -189,7 +189,7 @@ const RemotesManager = () => {
       await api.duplicateRemote(remote.id, `${remote.name} (копия)`);
       toast({
         title: 'Успех',
-        description: 'Пульт успешно дублирован',
+        description: 'Пульт ус��ешно дублирован',
       });
       loadData();
     } catch (error: any) {
@@ -327,7 +327,7 @@ const RemotesManager = () => {
                 <SafeSelectItem value="all">Все устройства</SafeSelectItem>
                 <SafeSelectItem value="universal">Универсальные</SafeSelectItem>
                 {safeDevices
-                  .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
+                  .filter(device => device && device.brand && device.model && device.id && typeof device.id === 'string' && device.id.trim() !== '' && device.id !== 'null' && device.id !== 'undefined')
                   .map(device => (
                     <SafeSelectItem key={device.id} value={device.id}>
                       {device.brand} {device.model}
@@ -344,7 +344,7 @@ const RemotesManager = () => {
                 <SafeSelectItem value="all">Все типы</SafeSelectItem>
                 <SafeSelectItem value="standard">Стандартный</SafeSelectItem>
                 <SafeSelectItem value="compact">Компактный</SafeSelectItem>
-                <SafeSelectItem value="smart">��мный</SafeSelectItem>
+                <SafeSelectItem value="smart">Умный</SafeSelectItem>
                 <SafeSelectItem value="custom">Настраиваемый</SafeSelectItem>
               </SelectContent>
             </Select>
@@ -400,12 +400,12 @@ const RemotesManager = () => {
                       <Label htmlFor="device">Устройство</Label>
                       <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Выбери��е устройство" />
+                          <SelectValue placeholder="Выберите устройство" />
                         </SelectTrigger>
                         <SelectContent>
                           <SafeSelectItem value="universal">Универсальный пульт</SafeSelectItem>
                           {safeDevices
-                            .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
+                            .filter(device => device && device.brand && device.model && device.id && typeof device.id === 'string' && device.id.trim() !== '' && device.id !== 'null' && device.id !== 'undefined')
                             .map(device => (
                               <SafeSelectItem key={device.id} value={device.id}>
                                 {device.brand} {device.model}
@@ -620,7 +620,7 @@ const RemotesManager = () => {
                   <SelectContent>
                     <SafeSelectItem value="universal">Универсальный пульт</SafeSelectItem>
                     {safeDevices
-                      .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
+                      .filter(device => device && device.brand && device.model && device.id && typeof device.id === 'string' && device.id.trim() !== '' && device.id !== 'null' && device.id !== 'undefined')
                       .map(device => (
                         <SafeSelectItem key={device.id} value={device.id}>
                           {device.brand} {device.model}
