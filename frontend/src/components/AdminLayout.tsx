@@ -53,12 +53,6 @@ const adminMenuItems: AdminMenuItem[] = [
     description: "Создан��е и редактирование шагов диагностики",
   },
   {
-    title: "Конструктор пультов",
-    path: "/admin/remotes",
-    icon: Smartphone,
-    description: "Загрузка и настройка\n пультов управления",
-  },
-  {
     title: "Конструктор интерфейса ТВ",
     path: "/admin/tv-interfaces",
     icon: Monitor,
@@ -69,7 +63,7 @@ const adminMenuItems: AdminMenuItem[] = [
     title: "Пользователи",
     path: "/admin/users",
     icon: Users,
-    description: "Управление\nпо��ьзователями и ролями",
+    description: "Управление\nпользователями и ролями",
   },
   {
     title: "Пульты",
@@ -210,7 +204,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                   Админ-панель
                 </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Управ��ение системой диагностики ТВ-приставок
+                  Управление системой диагностики ТВ-приставок
                 </p>
               </div>
             </div>
