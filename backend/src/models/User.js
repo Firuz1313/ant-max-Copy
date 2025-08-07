@@ -1,4 +1,5 @@
 import BaseModel from './BaseModel.js';
+import { query } from '../utils/database.js';
 import bcrypt from 'bcryptjs';
 
 class User extends BaseModel {
@@ -7,7 +8,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получить всех пользователей
+   * Получить всех поль��ователей
    */
   async getAllUsers(filters = {}) {
     let query = `
@@ -60,7 +61,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получ��ть пользователя по ID
+   * Получить пользователя по ID
    */
   async getUserById(id) {
     const query = `
@@ -104,7 +105,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получить пользователя по email
+   * Получить пользов��теля по email
    */
   async getUserByEmail(email) {
     const query = `
