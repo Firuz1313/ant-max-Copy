@@ -1,5 +1,5 @@
 import BaseModel from './BaseModel.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 class User extends BaseModel {
   constructor() {
@@ -60,7 +60,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получить пользователя по ID
+   * Получ��ть пользователя по ID
    */
   async getUserById(id) {
     const query = `
@@ -82,7 +82,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получить ��ользователя по username
+   * Получить пользователя по username
    */
   async getUserByUsername(username) {
     const query = `
