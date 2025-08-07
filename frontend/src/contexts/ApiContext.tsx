@@ -38,15 +38,16 @@ class APIService {
 
       // Always clone the response immediately to avoid body consumption issues
       const responseClone = response.clone();
+      const responseClone2 = response.clone();
       let data;
 
       try {
         // Try to parse as JSON first
         data = await responseClone.json();
       } catch (jsonError) {
-        // If JSON parsing fails, read as text from the original response
+        // If JSON parsing fails, read as text from another clone
         try {
-          const text = await response.text();
+          const text = await responseClone2.text();
           data = text ? { message: text } : {};
         } catch (textError) {
           // If everything fails, provide empty object
