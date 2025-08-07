@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { DataProvider } from "@/contexts/DataContext";
+import { ApiProvider } from "@/contexts/ApiContext";
 import Layout from "@/components/Layout";
 import AdminLayout from "@/components/AdminLayout";
 
