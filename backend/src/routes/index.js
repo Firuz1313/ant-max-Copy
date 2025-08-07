@@ -8,6 +8,10 @@ import tvInterfaceMarkRoutes from "./tvInterfaceMarkRoutes.js";
 import cleanupRoutes from "./cleanupRoutes.js";
 import userRoutes from "./userRoutes.js";
 import remoteRoutes from "./remoteRoutes.js";
+import sessionStepRoutes from "./sessionStepRoutes.js";
+import stepActionRoutes from "./stepActionRoutes.js";
+import changeLogRoutes from "./changeLogRoutes.js";
+import siteSettingRoutes from "./siteSettingRoutes.js";
 
 const router = express.Router();
 
@@ -52,6 +56,10 @@ router.get("/info", (req, res) => {
         tvInterfaces: `${API_V1_PREFIX}/tv-interfaces`,
         users: `${API_V1_PREFIX}/users`,
         remotes: `${API_V1_PREFIX}/remotes`,
+        sessionSteps: `${API_V1_PREFIX}/session-steps`,
+        stepActions: `${API_V1_PREFIX}/step-actions`,
+        changeLogs: `${API_V1_PREFIX}/change-logs`,
+        settings: `${API_V1_PREFIX}/settings`,
       },
       documentation: "/api/docs",
       health: "/api/health",
@@ -94,7 +102,7 @@ router.get("/docs", (req, res) => {
           },
         },
         problems: {
-          description: "Управление проблемами диагностики",
+          description: "Управление пр��блемами диагностики",
           routes: {
             "GET /problems": "Получение списка проблем",
             "GET /problems/:id": "Получение проблемы по ID",
@@ -126,12 +134,12 @@ router.get("/docs", (req, res) => {
             "GET /steps/search": "Поиск шагов",
             "GET /steps/problem/:problemId": "Шаги по проблеме",
             "GET /steps/:id/next": "Следующий шаг",
-            "GET /steps/:id/previous": "Предыдущий шаг",
+            "GET /steps/:id/previous": "Пред��дущий шаг",
             "GET /steps/:id/stats": "Статистика шага",
             "GET /steps/validate/:problemId": "Валидация порядка шагов",
             "POST /steps/insert": "Вставка шага",
             "POST /steps/fix-numbering/:problemId": "Исправление нумерации",
-            "POST /steps/:id/duplicate": "Дублирование шага",
+            "POST /steps/:id/duplicate": "Дубл��рование шага",
             "POST /steps/:id/restore": "Восстано��ление архивированного шага",
             "PUT /steps/reorder": "Переупорядочивание шагов",
           },
@@ -150,7 +158,7 @@ router.get("/docs", (req, res) => {
             "GET /sessions/analytics": "Аналитика по времени",
             "GET /sessions/export": "Экспорт сессий",
             "POST /sessions/:id/complete": "Завершение сессии",
-            "POST /sessions/:id/progress": "Обновление прогресса",
+            "POST /sessions/:id/progress": "Обнов��ение прогресса",
             "POST /sessions/cleanup": "Очистка с��арых сессий",
             "POST /sessions/:id/restore":
               "Восстановление архивированной сессии",
@@ -168,7 +176,7 @@ router.get("/docs", (req, res) => {
             "PATCH /tv-interfaces/:id/toggle":
               "Активация/деактивация интерфейса ТВ",
             "GET /tv-interfaces/device/:deviceId": "Интерфейсы по устройству",
-            "GET /tv-interfaces/stats": "Статистика интерфейсов",
+            "GET /tv-interfaces/stats": "Статистика интерф��йсов",
             "GET /tv-interfaces/:id/export": "Экспорт интерфейс�� в JSON",
           },
         },
@@ -252,6 +260,10 @@ router.use(`${API_V1_PREFIX}/tv-interface-marks`, tvInterfaceMarkRoutes);
 router.use(`${API_V1_PREFIX}/cleanup`, cleanupRoutes);
 router.use(`${API_V1_PREFIX}/users`, userRoutes);
 router.use(`${API_V1_PREFIX}/remotes`, remoteRoutes);
+router.use(`${API_V1_PREFIX}/session-steps`, sessionStepRoutes);
+router.use(`${API_V1_PREFIX}/step-actions`, stepActionRoutes);
+router.use(`${API_V1_PREFIX}/change-logs`, changeLogRoutes);
+router.use(`${API_V1_PREFIX}/settings`, siteSettingRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
@@ -271,6 +283,10 @@ router.use("*", (req, res) => {
       `${API_V1_PREFIX}/tv-interfaces`,
       `${API_V1_PREFIX}/users`,
       `${API_V1_PREFIX}/remotes`,
+      `${API_V1_PREFIX}/session-steps`,
+      `${API_V1_PREFIX}/step-actions`,
+      `${API_V1_PREFIX}/change-logs`,
+      `${API_V1_PREFIX}/settings`,
     ],
     timestamp: new Date().toISOString(),
   });
