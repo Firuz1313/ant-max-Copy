@@ -10,7 +10,7 @@ class Remote extends BaseModel {
    * Получить все пульты
    */
   async getAllRemotes(filters = {}) {
-    let query = `
+    let queryText = `
       SELECT 
         r.*,
         d.name as device_name,
