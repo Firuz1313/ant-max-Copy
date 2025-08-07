@@ -318,11 +318,13 @@ const RemotesManager = () => {
               <SelectContent>
                 <SelectItem value="all">Все устройства</SelectItem>
                 <SelectItem value="universal">Универсальные</SelectItem>
-                {safeDevices.map(device => (
-                  <SafeSelectItem key={device.id} value={device.id}>
-                    {device.brand} {device.model}
-                  </SafeSelectItem>
-                ))}
+                {safeDevices
+                  .filter(device => device.brand && device.model && device.id)
+                  .map(device => (
+                    <SafeSelectItem key={device.id} value={device.id}>
+                      {device.brand} {device.model}
+                    </SafeSelectItem>
+                  ))}
               </SelectContent>
             </Select>
 
@@ -394,11 +396,13 @@ const RemotesManager = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="universal">Универсальный пульт</SelectItem>
-                          {safeDevices.map(device => (
-                            <SafeSelectItem key={device.id} value={device.id}>
-                              {device.brand} {device.model}
-                            </SafeSelectItem>
-                          ))}
+                          {safeDevices
+                            .filter(device => device.brand && device.model && device.id)
+                            .map(device => (
+                              <SafeSelectItem key={device.id} value={device.id}>
+                                {device.brand} {device.model}
+                              </SafeSelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
@@ -607,11 +611,13 @@ const RemotesManager = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="universal">Универсальный пульт</SelectItem>
-                    {safeDevices.map(device => (
-                      <SafeSelectItem key={device.id} value={device.id}>
-                        {device.brand} {device.model}
-                      </SafeSelectItem>
-                    ))}
+                    {safeDevices
+                      .filter(device => device.brand && device.model && device.id)
+                      .map(device => (
+                        <SafeSelectItem key={device.id} value={device.id}>
+                          {device.brand} {device.model}
+                        </SafeSelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
