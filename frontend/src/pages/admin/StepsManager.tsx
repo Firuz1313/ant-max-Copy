@@ -224,7 +224,7 @@ const StepFormFieldsComponent = React.memo(
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Без пульта</SelectItem>
-              {getAvailableRemotes().map((remote) => {
+              {getAvailableRemotes().filter(remote => remote.id && remote.id.trim() !== '').map((remote) => {
                 const device = devices.find((d) => d.id === remote.deviceId);
                 return (
                   <SelectItem key={remote.id} value={remote.id}>
@@ -409,7 +409,7 @@ const StepsManager = () => {
 
       // Показываем пользователю информацию об ошибке
       if (error instanceof Error && error.message.includes("Сетевая ошибка")) {
-        // Можно доба��ить toast уведомление
+        // Можно добавить toast уведомление
         console.error("П��облемы с подключением к серверу");
       }
     } finally {
@@ -468,7 +468,7 @@ const StepsManager = () => {
 
     // Validate interface ID and fetch full interface data
     if (!tvInterface.id) {
-      console.warn("⚠️ TV interface has no ID, using cached data");
+      console.warn("⚠�� TV interface has no ID, using cached data");
       setSelectedTVInterface(tvInterface);
       setIsTVInterfaceEditorOpen(true);
       return;
@@ -524,7 +524,7 @@ const StepsManager = () => {
       );
       toast({
         title: "Предупреждение",
-        description: `Не удалос�� загрузить по��ные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
+        description: `Не удалось загрузить по��ные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
         variant: "destructive",
       });
       setSelectedTVInterface(tvInterface);
@@ -738,7 +738,7 @@ const StepsManager = () => {
       buttonPosition: step.buttonPosition || { x: 0, y: 0 },
     });
 
-    // Загрузить TV интерфейсы для устройства шага при редактировании
+    // Загрузить TV интерфейсы для устройства шага при редактирован��и
     if (step.deviceId && step.deviceId !== "all") {
       loadTVInterfacesForDevice(step.deviceId);
     }
