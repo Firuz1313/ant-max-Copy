@@ -185,16 +185,21 @@ class APIService {
     });
   }
 
-  // Settings
+  // Settings (not implemented in backend yet)
   async getSettings(): Promise<SiteSettings> {
-    return this.request<SiteSettings>("/settings");
+    console.warn('Settings endpoint not implemented in backend');
+    return {
+      siteName: 'ANT Support',
+      siteDescription: 'Система диагностики ТВ приставок',
+      version: '1.0.0',
+      maintenanceMode: false,
+      debugMode: false,
+    } as SiteSettings;
   }
 
   async updateSettings(data: Partial<SiteSettings>): Promise<SiteSettings> {
-    return this.request<SiteSettings>("/settings", {
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
+    console.warn('Settings endpoint not implemented in backend');
+    throw new Error('Settings endpoint not implemented');
   }
 }
 
