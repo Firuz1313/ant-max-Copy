@@ -6,6 +6,7 @@ import sessionRoutes from "./sessionRoutes.js";
 import tvInterfaceRoutes from "./tvInterfaceRoutes.js";
 import tvInterfaceMarkRoutes from "./tvInterfaceMarkRoutes.js";
 import cleanupRoutes from "./cleanupRoutes.js";
+import userRoutes from "./userRoutes.js";
 
 const router = express.Router();
 
@@ -76,7 +77,7 @@ router.get("/docs", (req, res) => {
           routes: {
             "GET /devices": "Получени�� списка устройств",
             "GET /devices/:id": "Получение устройства по ID",
-            "POST /devices": "Создание нового устройства",
+            "POST /devices": "��оздание нового устройства",
             "PUT /devices/:id": "Обновление устройства",
             "DELETE /devices/:id": "Удаление устройства",
             "GET /devices/search": "Поиск устройств",
@@ -165,7 +166,7 @@ router.get("/docs", (req, res) => {
               "Активация/деактивация интерфейса ТВ",
             "GET /tv-interfaces/device/:deviceId": "Интерфейсы по устройству",
             "GET /tv-interfaces/stats": "Статистика интерфейсов",
-            "GET /tv-interfaces/:id/export": "Экспорт интерфейс�� в JSON",
+            "GET /tv-interfaces/:id/export": "Э��спорт интерфейс�� в JSON",
           },
         },
       },
@@ -192,7 +193,7 @@ router.get("/docs", (req, res) => {
           success: false,
           error: "string",
           errorType: "string",
-          details: "array (для ошибок валидации)",
+          details: "array (для ошибок валид��ции)",
           suggestion: "string (опционально)",
           timestamp: "ISO string",
         },
@@ -220,7 +221,7 @@ router.use(`${API_V1_PREFIX}/cleanup`, cleanupRoutes);
 router.use("*", (req, res) => {
   res.status(404).json({
     success: false,
-    error: `Эндпоинт ${req.originalUrl} не найден`,
+    error: `��ндпоинт ${req.originalUrl} не найден`,
     errorType: "NOT_FOUND",
     suggestion: "Проверьте документацию API по адресу /api/docs",
     availableEndpoints: [
