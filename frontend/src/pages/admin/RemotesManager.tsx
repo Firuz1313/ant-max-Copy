@@ -16,7 +16,13 @@ import { Loader2, Plus, Edit2, Trash2, Copy, Search, BarChart3, Smartphone, Star
 
 // Безопасный компонент для SelectItem, который не рендерится с пустыми значениями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
-  if (!value || typeof value !== 'string' || value.trim() === '' || value === 'undefined' || value === 'null') {
+  if (!value ||
+      typeof value !== 'string' ||
+      value.trim() === '' ||
+      value === 'undefined' ||
+      value === 'null' ||
+      value === null ||
+      value === undefined) {
     return null;
   }
   return <SelectItem value={value} {...props}>{children}</SelectItem>;
@@ -97,7 +103,7 @@ const RemotesManager = () => {
       if (!formData.name || !formData.manufacturer || !formData.model) {
         toast({
           title: 'Ошибка валидации',
-          description: 'Заполните все обязательные по��я',
+          description: 'Заполните все обязательные поля',
           variant: 'destructive',
         });
         return;
@@ -164,7 +170,7 @@ const RemotesManager = () => {
       console.error('Ошибка при удалении пульта:', error);
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не удалось удалить пульт',
+        description: error.message || 'Не ��далось удалить пульт',
         variant: 'destructive',
       });
     }
@@ -182,7 +188,7 @@ const RemotesManager = () => {
       console.error('Ошибка при дублировани�� пульта:', error);
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не удалось дуб��ировать пульт',
+        description: error.message || 'Не удалось дублировать пульт',
         variant: 'destructive',
       });
     }
@@ -269,7 +275,7 @@ const RemotesManager = () => {
         <div>
           <h1 className="text-3xl font-bold">Управление пультами</h1>
           <p className="text-muted-foreground mt-2">
-            Управление пультами дистанционного управления для диагностики
+            Управление пультами дистанционного управления для диагности��и
           </p>
         </div>
         
@@ -534,7 +540,7 @@ const RemotesManager = () => {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Удалить пульт?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Вы уверены, что х��тите удалить пульт "{remote.name}"? 
+                            Вы уверены, что хотите удалить пульт "{remote.name}"? 
                             Это действие нельзя от��енить.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
