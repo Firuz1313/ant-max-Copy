@@ -58,11 +58,11 @@ pool.on("release", (client) => {
   }
 });
 
-// Import mock database if needed
+// Import persistent mock database if needed
 let mockDb = null;
 if (USE_MOCK_DB) {
-  mockDb = await import("./mockDatabase.js");
-  console.log("🔧 Using mock database for development");
+  mockDb = await import("./persistentMockDatabase.js");
+  console.log("🔧 Using persistent mock database for development");
 }
 
 // Функция проверки подключения к базе данных
@@ -92,11 +92,11 @@ export async function testConnection() {
   } catch (error) {
     console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
 
-    // Fallback to mock database
+    // Fallback to persistent mock database
     if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
+      console.log("🔧 Falling back to persistent mock database...");
       process.env.USE_MOCK_DB = "true";
-      mockDb = await import("./mockDatabase.js");
+      mockDb = await import("./persistentMockDatabase.js");
       return await mockDb.testConnection();
     }
 
@@ -292,7 +292,7 @@ export async function runMigrations() {
       console.log(`✅ Миграция ${filename} выполнена успешно`);
     }
 
-    console.log("🎉 Все миграции выполнены успешно");
+    console.log("🎉 Все миграции в��полнены успешно");
   } catch (error) {
     console.error("❌ Ошибка выполнения миграций:", error.message);
     throw error;
@@ -338,7 +338,7 @@ export async function closePool() {
   try {
     console.log("🔄 Закрытие пула соединений PostgreSQL...");
     await pool.end();
-    console.log("✅ Пул соединений закрыт");
+    console.log("✅ П��л соединений закрыт");
   } catch (error) {
     console.error("❌ Ошибка закрытия пула:", error.message);
   }
