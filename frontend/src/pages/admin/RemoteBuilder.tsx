@@ -49,7 +49,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import RemoteControl from "@/components/RemoteControl";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 
 interface RemoteButton {
   id: string;

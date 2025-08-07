@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { cleanupAPI } from "@/api/cleanup";
 import {
