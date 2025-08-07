@@ -223,6 +223,10 @@ const RemotesManager = () => {
     custom: 'Настраиваемый'
   };
 
+  // Защита от рендеринга с некорректными данными
+  const safeDevices = devices.filter(device => device && device.id && device.id.trim() !== '');
+  const safeRemotes = remotes.filter(remote => remote && remote.id && remote.id.trim() !== '');
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -314,7 +318,7 @@ const RemotesManager = () => {
                 <DialogHeader>
                   <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
-                    Создайте новый пульт дистанционного управления
+                    Создайте новый пульт дистанционного уп��авления
                   </DialogDescription>
                 </DialogHeader>
                 
