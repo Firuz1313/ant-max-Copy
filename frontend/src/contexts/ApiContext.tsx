@@ -201,30 +201,132 @@ class APIService {
     });
   }
 
-  // Users (not implemented in backend yet)
-  async getUsers(): Promise<any[]> {
-    console.warn('Users endpoint not implemented in backend');
-    return [];
+  // Users
+  async getUsers(filters?: any): Promise<any[]> {
+    const queryParams = filters ? new URLSearchParams(filters).toString() : '';
+    const url = queryParams ? `/users?${queryParams}` : '/users';
+    const response = await this.request<{ data: any[] }>(url);
+    return response.data || [];
   }
 
   async getUser(id: string): Promise<any> {
-    console.warn('Users endpoint not implemented in backend');
-    throw new Error('Users endpoint not implemented');
+    const response = await this.request<{ data: any }>(`/users/${id}`);
+    return response.data;
   }
 
   async createUser(data: any): Promise<any> {
-    console.warn('Users endpoint not implemented in backend');
-    throw new Error('Users endpoint not implemented');
+    const response = await this.request<{ data: any }>("/users", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return response.data;
   }
 
   async updateUser(id: string, data: any): Promise<any> {
-    console.warn('Users endpoint not implemented in backend');
-    throw new Error('Users endpoint not implemented');
+    const response = await this.request<{ data: any }>(`/users/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    return response.data;
   }
 
   async deleteUser(id: string): Promise<void> {
-    console.warn('Users endpoint not implemented in backend');
-    throw new Error('Users endpoint not implemented');
+    await this.request<void>(`/users/${id}`, {
+      method: "DELETE",
+    });
+  }
+
+  async searchUsers(query: string, filters?: any): Promise<any[]> {
+    const params = new URLSearchParams({ q: query, ...filters });
+    const response = await this.request<{ data: any[] }>(`/users/search?${params}`);
+    return response.data || [];
+  }
+
+  async getUserStats(): Promise<any> {
+    const response = await this.request<{ data: any }>("/users/stats");
+    return response.data;
+  }
+
+  // Remotes
+  async getRemotes(filters?: any): Promise<Remote[]> {
+    const queryParams = filters ? new URLSearchParams(filters).toString() : '';
+    const url = queryParams ? `/remotes?${queryParams}` : '/remotes';
+    const response = await this.request<{ data: Remote[] }>(url);
+    return response.data || [];
+  }
+
+  async getRemote(id: string): Promise<Remote> {
+    const response = await this.request<{ data: Remote }>(`/remotes/${id}`);
+    return response.data;
+  }
+
+  async getRemotesByDevice(deviceId: string): Promise<Remote[]> {
+    const response = await this.request<{ data: Remote[] }>(`/remotes/device/${deviceId}`);
+    return response.data || [];
+  }
+
+  async getDefaultRemoteForDevice(deviceId: string): Promise<Remote | null> {
+    try {
+      const response = await this.request<{ data: Remote }>(`/remotes/device/${deviceId}/default`);
+      return response.data;
+    } catch (error: any) {
+      if (error.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
+  async createRemote(data: Partial<Remote>): Promise<Remote> {
+    const response = await this.request<{ data: Remote }>("/remotes", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return response.data;
+  }
+
+  async updateRemote(id: string, data: Partial<Remote>): Promise<Remote> {
+    const response = await this.request<{ data: Remote }>(`/remotes/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    return response.data;
+  }
+
+  async deleteRemote(id: string): Promise<void> {
+    await this.request<void>(`/remotes/${id}`, {
+      method: "DELETE",
+    });
+  }
+
+  async duplicateRemote(id: string, newName?: string): Promise<Remote> {
+    const response = await this.request<{ data: Remote }>(`/remotes/${id}/duplicate`, {
+      method: "POST",
+      body: JSON.stringify({ name: newName }),
+    });
+    return response.data;
+  }
+
+  async searchRemotes(query: string, filters?: any): Promise<Remote[]> {
+    const params = new URLSearchParams({ q: query, ...filters });
+    const response = await this.request<{ data: Remote[] }>(`/remotes/search?${params}`);
+    return response.data || [];
+  }
+
+  async getRemoteStats(): Promise<any> {
+    const response = await this.request<{ data: any }>("/remotes/stats");
+    return response.data;
+  }
+
+  async getPopularRemotes(limit = 10): Promise<Remote[]> {
+    const response = await this.request<{ data: Remote[] }>(`/remotes/popular?limit=${limit}`);
+    return response.data || [];
+  }
+
+  async updateRemoteUsage(id: string): Promise<void> {
+    await this.request<void>(`/remotes/${id}/usage`, {
+      method: "POST",
+    });
   }
 
   // Settings (not implemented in backend yet)
