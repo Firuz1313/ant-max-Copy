@@ -57,7 +57,7 @@ const RemotesManager = () => {
       setDevices(devicesData);
       setStats(statsData);
     } catch (error) {
-      console.error('Ошибка при за��рузке данных:', error);
+      console.error('Ошибка при загрузке данных:', error);
       toast({
         title: 'Ошибка',
         description: 'Не удалось загрузить данные пультов',
@@ -224,8 +224,22 @@ const RemotesManager = () => {
   };
 
   // Защита от рендеринга с некорректными данными
-  const safeDevices = devices.filter(device => device && device.id && device.id.trim() !== '');
-  const safeRemotes = remotes.filter(remote => remote && remote.id && remote.id.trim() !== '');
+  const safeDevices = devices.filter(device =>
+    device &&
+    device.id &&
+    typeof device.id === 'string' &&
+    device.id.trim() !== '' &&
+    device.id !== 'undefined' &&
+    device.id !== 'null'
+  );
+  const safeRemotes = remotes.filter(remote =>
+    remote &&
+    remote.id &&
+    typeof remote.id === 'string' &&
+    remote.id.trim() !== '' &&
+    remote.id !== 'undefined' &&
+    remote.id !== 'null'
+  );
 
   if (loading) {
     return (
@@ -398,7 +412,7 @@ const RemotesManager = () => {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="color_scheme">Цветовая схема</Label>
+                      <Label htmlFor="color_scheme">Цветовая схем��</Label>
                       <Input
                         id="color_scheme"
                         value={formData.color_scheme}
@@ -432,7 +446,7 @@ const RemotesManager = () => {
         </CardContent>
       </Card>
 
-      {/* Список пультов */}
+      {/* Сп��сок пультов */}
       {filteredRemotes.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
@@ -441,7 +455,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout 
                 ? 'Попробуйте изменить параметры поиска или фильтрации' 
-                : 'Начните с создания первого пульта дистанционного уп��авления'}
+                : 'Начните с создания первого пульта дистанционного управления'}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
