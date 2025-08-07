@@ -5,7 +5,9 @@ This directory contains SQL migration files for the ANT Support database schema.
 ## Migration Files
 
 ### 001_init_tables.sql
+
 Creates all primary tables for the ANT Support system:
+
 - `devices` - TV set-top box devices
 - `problems` - Diagnostic problems for devices
 - `remotes` - Remote control models
@@ -20,7 +22,9 @@ Creates all primary tables for the ANT Support system:
 - `site_settings` - Global system settings
 
 ### 002_add_indexes.sql
+
 Creates performance indexes for:
+
 - Foreign key relationships
 - Filtering and search operations
 - Full-text search (Russian language support)
@@ -30,6 +34,7 @@ Creates performance indexes for:
 ## Running Migrations
 
 ### Using npm scripts (recommended):
+
 ```bash
 # Run all pending migrations
 npm run db:migrate:up
@@ -42,6 +47,7 @@ npm run db:migrate:rollback
 ```
 
 ### Using Node.js directly:
+
 ```bash
 # Run migrations
 node src/utils/runMigrations.js up

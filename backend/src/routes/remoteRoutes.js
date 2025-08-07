@@ -11,9 +11,12 @@ import {
   getRemoteStats,
   getPopularRemotes,
   searchRemotes,
-  updateRemoteUsage
+  updateRemoteUsage,
 } from "../controllers/remoteController.js";
-import { remoteValidation, validateRequest } from "../middleware/validateRequest.js";
+import {
+  remoteValidation,
+  validateRequest,
+} from "../middleware/validateRequest.js";
 
 const router = express.Router();
 

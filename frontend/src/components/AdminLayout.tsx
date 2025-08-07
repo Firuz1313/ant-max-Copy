@@ -142,11 +142,19 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               >
                 <item.icon className="h-5 w-5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className={cn("truncate", item.titleStyle)} style={item.titleStyle}>{item.title}</div>
+                  <div
+                    className={cn("truncate", item.titleStyle)}
+                    style={item.titleStyle}
+                  >
+                    {item.title}
+                  </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {item.description.split('\n').map((line, index) => (
+                    {item.description.split("\n").map((line, index) => (
                       <span key={index}>
-                        {line}{index < item.description.split('\n').length - 1 && <br />}
+                        {line}
+                        {index < item.description.split("\n").length - 1 && (
+                          <br />
+                        )}
                       </span>
                     ))}
                   </div>
@@ -220,9 +228,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 </div>
               </div>
               <div className="w-8 h-8 bg-green-500 dark:bg-green-600 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-white">
-                  DB
-                </span>
+                <span className="text-sm font-medium text-white">DB</span>
               </div>
             </div>
           </div>

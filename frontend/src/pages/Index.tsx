@@ -38,7 +38,7 @@ interface Problem {
 const Index = () => {
   const navigate = useNavigate();
   const { api, loading, setLoading, setError } = useApi();
-  
+
   const [devices, setDevices] = useState<Device[]>([]);
   const [problems, setProblems] = useState<Problem[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
@@ -48,17 +48,17 @@ const Index = () => {
       try {
         setIsLoadingData(true);
         setError(null);
-        
+
         const [devicesData, problemsData] = await Promise.all([
           api.getDevices(),
-          api.getProblems()
+          api.getProblems(),
         ]);
-        
+
         setDevices(devicesData || []);
         setProblems(problemsData || []);
       } catch (error) {
-        console.error('Error loading data:', error);
-        setError(error instanceof Error ? error.message : 'Unknown error');
+        console.error("Error loading data:", error);
+        setError(error instanceof Error ? error.message : "Unknown error");
       } finally {
         setIsLoadingData(false);
       }
@@ -71,8 +71,8 @@ const Index = () => {
     navigate("/devices");
   };
 
-  const activeDevices = devices.filter(d => d.isActive);
-  const activeProblems = problems.filter(p => p.isActive);
+  const activeDevices = devices.filter((d) => d.isActive);
+  const activeProblems = problems.filter((p) => p.isActive);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
@@ -170,7 +170,11 @@ const Index = () => {
             </h3>
             {isLoadingData ? (
               <div className="text-center text-gray-300 py-12">
-                <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full" role="status" aria-label="loading">
+                <div
+                  className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full"
+                  role="status"
+                  aria-label="loading"
+                >
                   <span className="sr-only">Загрузка...</span>
                 </div>
                 <p className="mt-2">Загрузка устройств...</p>
@@ -178,9 +182,15 @@ const Index = () => {
             ) : activeDevices.length === 0 ? (
               <div className="text-center text-gray-400 py-12">
                 <Tv className="h-16 w-16 mx-auto mb-4 text-gray-500" />
-                <h4 className="text-xl font-semibold mb-2">Нет данных об устройствах</h4>
-                <p className="text-gray-500">Устройства пока не добавлены в систему.</p>
-                <p className="text-sm text-gray-600 mt-2">Обратитесь к администратору для добавления устройств.</p>
+                <h4 className="text-xl font-semibold mb-2">
+                  Нет данных об устройствах
+                </h4>
+                <p className="text-gray-500">
+                  Устройства пока не добавлены в систему.
+                </p>
+                <p className="text-sm text-gray-600 mt-2">
+                  Обратитесь к администратору для добавления устройств.
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -191,7 +201,7 @@ const Index = () => {
                   >
                     <CardContent className="p-5 text-center">
                       <div
-                        className={`w-12 h-12 bg-gradient-to-br ${device.color || 'from-blue-500 to-blue-600'} rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg`}
+                        className={`w-12 h-12 bg-gradient-to-br ${device.color || "from-blue-500 to-blue-600"} rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg`}
                       >
                         <Tv className="h-6 w-6 text-white" />
                       </div>
@@ -264,8 +274,9 @@ const Index = () => {
                 Конструктор интерфейсов ТВ
               </h3>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Создавайте и управляйте интерфейсами ТВ-приставок для точной диагностики.
-                Загружайте скриншоты, отмечайте интерактивные области и интегрируйте с процессом диагностики.
+                Создавайте и управляйте интерфейсами ТВ-приставок для точной
+                диагностики. Загружайте скриншоты, отмечайте интерактивные
+                области и интегрируйте с процессом диагностики.
               </p>
             </div>
 
@@ -278,7 +289,8 @@ const Index = () => {
                   Создание интерфейсов
                 </h4>
                 <p className="text-gray-300 text-sm">
-                  Загружайте скриншоты интерфейсов ваших ТВ-приставок и создавайте детальные представления
+                  Загружайте скриншоты интерфейсов ваших ТВ-приставок и
+                  создавайте детальные представления
                 </p>
               </div>
 
@@ -290,7 +302,8 @@ const Index = () => {
                   Интерактивные области
                 </h4>
                 <p className="text-gray-300 text-sm">
-                  Отмечайте кликабельные области и зоны подсветки для эффективной диагностики
+                  Отмечайте кликабельные области и зоны подсветки для
+                  эффективной диагностики
                 </p>
               </div>
 
@@ -302,7 +315,8 @@ const Index = () => {
                   Интеграция в диагностику
                 </h4>
                 <p className="text-gray-300 text-sm">
-                  Созданные интерфейсы автоматически отображаются в процессе диагностики
+                  Созданные интерфейсы автоматически отображаются в процессе
+                  диагностики
                 </p>
               </div>
             </div>

@@ -57,10 +57,10 @@ const ANTSupport = () => {
   const navigate = useNavigate();
   const { devices, siteSettings, loading } = useData();
 
-  const deviceStats = devices.map(device => ({
+  const deviceStats = devices.map((device) => ({
     name: device.name,
     users: `${Math.floor(Math.random() * 2000) + 500}K+`,
-    status: device.isActive ? "активен" : "неактивен"
+    status: device.isActive ? "активен" : "неактивен",
   }));
 
   const handleGetStarted = () => {

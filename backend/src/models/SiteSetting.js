@@ -1,12 +1,12 @@
-import BaseModel from './BaseModel.js';
-import { query } from '../utils/database.js';
+import BaseModel from "./BaseModel.js";
+import { query } from "../utils/database.js";
 
 /**
  * Модель для работы с настройками сайта
  */
 class SiteSetting extends BaseModel {
   constructor() {
-    super('site_settings');
+    super("site_settings");
   }
 
   /**
@@ -14,8 +14,8 @@ class SiteSetting extends BaseModel {
    */
   async getSettings() {
     try {
-      const result = await this.findById('settings');
-      
+      const result = await this.findById("settings");
+
       if (!result) {
         // Создать настройки по умолчанию если их нет
         return await this.createDefaultSettings();
@@ -23,7 +23,7 @@ class SiteSetting extends BaseModel {
 
       return this.formatSettings(result);
     } catch (error) {
-      console.error('Ошибка получения настроек сайта:', error.message);
+      console.error("Ошибка получения настроек сайта:", error.message);
       throw error;
     }
   }
@@ -35,23 +35,33 @@ class SiteSetting extends BaseModel {
     try {
       const updateData = this.prepareForUpdate({
         ...settingsData,
-        supported_languages: settingsData.supported_languages ? JSON.stringify(settingsData.supported_languages) : undefined,
-        api_settings: settingsData.api_settings ? JSON.stringify(settingsData.api_settings) : undefined,
-        email_settings: settingsData.email_settings ? JSON.stringify(settingsData.email_settings) : undefined,
-        storage_settings: settingsData.storage_settings ? JSON.stringify(settingsData.storage_settings) : undefined,
-        metadata: settingsData.metadata ? JSON.stringify(settingsData.metadata) : undefined
+        supported_languages: settingsData.supported_languages
+          ? JSON.stringify(settingsData.supported_languages)
+          : undefined,
+        api_settings: settingsData.api_settings
+          ? JSON.stringify(settingsData.api_settings)
+          : undefined,
+        email_settings: settingsData.email_settings
+          ? JSON.stringify(settingsData.email_settings)
+          : undefined,
+        storage_settings: settingsData.storage_settings
+          ? JSON.stringify(settingsData.storage_settings)
+          : undefined,
+        metadata: settingsData.metadata
+          ? JSON.stringify(settingsData.metadata)
+          : undefined,
       });
 
-      const { sql, values } = this.buildUpdateQuery('settings', updateData);
+      const { sql, values } = this.buildUpdateQuery("settings", updateData);
       const result = await query(sql, values);
 
       if (result.rows.length === 0) {
-        throw new Error('Настройки не найдены');
+        throw new Error("Настройки не найдены");
       }
 
       return this.formatSettings(result.rows[0]);
     } catch (error) {
-      console.error('Ошибка обновления настроек сайта:', error.message);
+      console.error("Ошибка обновления настроек сайта:", error.message);
       throw error;
     }
   }
@@ -62,14 +72,15 @@ class SiteSetting extends BaseModel {
   async createDefaultSettings() {
     try {
       const defaultSettings = {
-        id: 'settings',
-        site_name: 'ANT Support',
-        site_description: 'Профессиональная платформа для диагностики цифровых ТВ-приставо��',
-        default_language: 'ru',
-        supported_languages: ['ru', 'tj', 'uz'],
-        theme: 'professional',
-        primary_color: '#3b82f6',
-        accent_color: '#10b981',
+        id: "settings",
+        site_name: "ANT Support",
+        site_description:
+          "Профессиональная платформа для диагностики цифровых ТВ-приставо��",
+        default_language: "ru",
+        supported_languages: ["ru", "tj", "uz"],
+        theme: "professional",
+        primary_color: "#3b82f6",
+        accent_color: "#10b981",
         enable_analytics: true,
         enable_feedback: true,
         enable_offline_mode: false,
@@ -80,29 +91,29 @@ class SiteSetting extends BaseModel {
         api_settings: {
           rate_limit: {
             window_ms: 900000, // 15 минут
-            max_requests: 100
+            max_requests: 100,
           },
-          cors_origins: ['*'],
-          enable_swagger: true
+          cors_origins: ["*"],
+          enable_swagger: true,
         },
         email_settings: {
-          smtp_host: '',
+          smtp_host: "",
           smtp_port: 587,
           smtp_secure: false,
-          smtp_user: '',
-          smtp_password: '',
-          from_email: 'noreply@antsupport.local',
-          from_name: 'ANT Support'
+          smtp_user: "",
+          smtp_password: "",
+          from_email: "noreply@antsupport.local",
+          from_name: "ANT Support",
         },
         storage_settings: {
           max_file_size: 10485760, // 10MB
-          allowed_extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg', 'pdf'],
-          storage_path: '/uploads'
+          allowed_extensions: ["jpg", "jpeg", "png", "gif", "svg", "pdf"],
+          storage_path: "/uploads",
         },
         metadata: {
-          version: '1.0.0',
-          initialized_at: new Date().toISOString()
-        }
+          version: "1.0.0",
+          initialized_at: new Date().toISOString(),
+        },
       };
 
       const prepared = this.prepareForInsert(defaultSettings);
@@ -111,7 +122,7 @@ class SiteSetting extends BaseModel {
 
       return this.formatSettings(result.rows[0]);
     } catch (error) {
-      console.error('Ошибка создания настроек по умолчанию:', error.message);
+      console.error("Ошибка создания настроек по умолчанию:", error.message);
       throw error;
     }
   }
@@ -136,7 +147,7 @@ class SiteSetting extends BaseModel {
     try {
       const currentSettings = await this.getSettings();
       const updateData = { [key]: value };
-      
+
       return await this.updateSettings(updateData);
     } catch (error) {
       console.error(`Ошибка обновления настройки ${key}:`, error.message);
@@ -150,12 +161,12 @@ class SiteSetting extends BaseModel {
   async resetToDefaults() {
     try {
       // Удалить текущие настройки
-      await query('DELETE FROM site_settings WHERE id = $1', ['settings']);
-      
+      await query("DELETE FROM site_settings WHERE id = $1", ["settings"]);
+
       // Создать новые настройки по умолчанию
       return await this.createDefaultSettings();
     } catch (error) {
-      console.error('Ошибка сброса настроек:', error.message);
+      console.error("Ошибка сброса настроек:", error.message);
       throw error;
     }
   }
@@ -166,20 +177,20 @@ class SiteSetting extends BaseModel {
   async exportSettings() {
     try {
       const settings = await this.getSettings();
-      
+
       // Удаляем чувствительные данные
       const exportData = { ...settings };
       if (exportData.emailSettings && exportData.emailSettings.smtp_password) {
-        exportData.emailSettings.smtp_password = '[HIDDEN]';
+        exportData.emailSettings.smtp_password = "[HIDDEN]";
       }
 
       return {
         exported_at: new Date().toISOString(),
-        version: '1.0',
-        settings: exportData
+        version: "1.0",
+        settings: exportData,
       };
     } catch (error) {
-      console.error('Ошибка экспорта настроек:', error.message);
+      console.error("Ошибка экспорта настроек:", error.message);
       throw error;
     }
   }
@@ -190,15 +201,16 @@ class SiteSetting extends BaseModel {
   async importSettings(importData) {
     try {
       if (!importData.settings) {
-        throw new Error('Некорректный формат данных для импорта');
+        throw new Error("Некорректный формат данных для импорта");
       }
 
       // Исключаем системные поля
-      const { id, createdAt, updatedAt, ...settingsToImport } = importData.settings;
-      
+      const { id, createdAt, updatedAt, ...settingsToImport } =
+        importData.settings;
+
       return await this.updateSettings(settingsToImport);
     } catch (error) {
-      console.error('Ошибка импорта настроек:', error.message);
+      console.error("Ошибка импорта настроек:", error.message);
       throw error;
     }
   }
@@ -214,33 +226,37 @@ class SiteSetting extends BaseModel {
       siteName: settings.site_name,
       siteDescription: settings.site_description,
       defaultLanguage: settings.default_language,
-      supportedLanguages: this.parseJSON(settings.supported_languages, ['ru', 'tj', 'uz']),
+      supportedLanguages: this.parseJSON(settings.supported_languages, [
+        "ru",
+        "tj",
+        "uz",
+      ]),
       theme: settings.theme,
       primaryColor: settings.primary_color,
       accentColor: settings.accent_color,
       logoUrl: settings.logo_url,
       faviconUrl: settings.favicon_url,
-      
+
       // Возможности
       enableAnalytics: settings.enable_analytics,
       enableFeedback: settings.enable_feedback,
       enableOfflineMode: settings.enable_offline_mode,
       enableNotifications: settings.enable_notifications,
-      
+
       // Лимиты
       maxStepsPerProblem: settings.max_steps_per_problem,
       maxMediaSize: settings.max_media_size,
       sessionTimeout: settings.session_timeout,
-      
+
       // Расширенные настро��ки
       apiSettings: this.parseJSON(settings.api_settings, {}),
       emailSettings: this.parseJSON(settings.email_settings, {}),
       storageSettings: this.parseJSON(settings.storage_settings, {}),
-      
+
       isActive: settings.is_active,
       metadata: this.parseJSON(settings.metadata, {}),
       createdAt: settings.created_at,
-      updatedAt: settings.updated_at
+      updatedAt: settings.updated_at,
     };
   }
 

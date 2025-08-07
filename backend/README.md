@@ -202,6 +202,7 @@ npm run format
 ### Формат ответов
 
 #### Успешный ответ
+
 ```json
 {
   "success": true,
@@ -213,6 +214,7 @@ npm run format
 ```
 
 #### Ошибка
+
 ```json
 {
   "success": false,

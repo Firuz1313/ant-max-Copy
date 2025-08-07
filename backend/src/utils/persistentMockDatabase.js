@@ -88,7 +88,7 @@ export const getItemById = async (tableName, id) => {
 
 export const createItem = async (tableName, data) => {
   const items = await getAllItems(tableName);
-  
+
   const newItem = {
     id: generateId(),
     ...data,
@@ -97,7 +97,7 @@ export const createItem = async (tableName, data) => {
   };
 
   items.push(newItem);
-  
+
   const fileMap = {
     devices: DEVICES_FILE,
     problems: PROBLEMS_FILE,

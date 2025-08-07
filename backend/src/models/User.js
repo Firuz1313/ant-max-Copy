@@ -1,10 +1,10 @@
-import BaseModel from './BaseModel.js';
-import { query } from '../utils/database.js';
-import bcrypt from 'bcryptjs';
+import BaseModel from "./BaseModel.js";
+import { query } from "../utils/database.js";
+import bcrypt from "bcryptjs";
 
 class User extends BaseModel {
   constructor() {
-    super('users');
+    super("users");
   }
 
   /**
@@ -43,7 +43,7 @@ class User extends BaseModel {
       paramIndex++;
     }
 
-    queryText += ' ORDER BY created_at DESC';
+    queryText += " ORDER BY created_at DESC";
 
     if (filters.limit) {
       queryText += ` LIMIT $${paramIndex}`;
@@ -72,9 +72,9 @@ class User extends BaseModel {
       FROM users 
       WHERE id = $1 AND is_active = true
     `;
-    
+
     const result = await query(queryText, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -94,9 +94,9 @@ class User extends BaseModel {
       FROM users 
       WHERE username = $1 AND is_active = true
     `;
-    
+
     const result = await query(queryText, [username]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -116,9 +116,9 @@ class User extends BaseModel {
       FROM users 
       WHERE email = $1 AND is_active = true
     `;
-    
+
     const result = await query(queryText, [email]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -137,12 +137,12 @@ class User extends BaseModel {
       password,
       first_name,
       last_name,
-      role = 'user',
+      role = "user",
       permissions = [],
       email_verified = false,
       is_active = true,
       preferences = {},
-      metadata = {}
+      metadata = {},
     } = userData;
 
     // Проверка уникальности username и email
@@ -184,7 +184,7 @@ class User extends BaseModel {
       email_verified,
       is_active,
       JSON.stringify(preferences),
-      JSON.stringify(metadata)
+      JSON.stringify(metadata),
     ];
 
     const result = await query(queryText, values);
@@ -201,8 +201,16 @@ class User extends BaseModel {
     }
 
     const allowedFields = [
-      'username', 'email', 'first_name', 'last_name', 'role',
-      'permissions', 'email_verified', 'is_active', 'preferences', 'metadata'
+      "username",
+      "email",
+      "first_name",
+      "last_name",
+      "role",
+      "permissions",
+      "email_verified",
+      "is_active",
+      "preferences",
+      "metadata",
     ];
 
     const updateFields = [];
@@ -213,7 +221,9 @@ class User extends BaseModel {
     if (updateData.username && updateData.username !== currentUser.username) {
       const existingUser = await this.getUserByUsername(updateData.username);
       if (existingUser) {
-        throw new Error(`Пользователь с логином "${updateData.username}" уже существует`);
+        throw new Error(
+          `Пользователь с логином "${updateData.username}" уже существует`,
+        );
       }
     }
 
@@ -221,7 +231,9 @@ class User extends BaseModel {
     if (updateData.email && updateData.email !== currentUser.email) {
       const existingEmail = await this.getUserByEmail(updateData.email);
       if (existingEmail) {
-        throw new Error(`Пользователь с email "${updateData.email}" уже существует`);
+        throw new Error(
+          `Пользователь с email "${updateData.email}" уже существует`,
+        );
       }
     }
 
@@ -235,12 +247,12 @@ class User extends BaseModel {
     }
 
     // Обработка остальных полей
-    Object.keys(updateData).forEach(field => {
+    Object.keys(updateData).forEach((field) => {
       if (allowedFields.includes(field)) {
         let value = updateData[field];
-        
+
         // JSON поля
-        if (['permissions', 'preferences', 'metadata'].includes(field)) {
+        if (["permissions", "preferences", "metadata"].includes(field)) {
           value = JSON.stringify(value);
         }
 
@@ -259,7 +271,7 @@ class User extends BaseModel {
 
     const queryText = `
       UPDATE users 
-      SET ${updateFields.join(', ')}
+      SET ${updateFields.join(", ")}
       WHERE id = $${paramIndex} 
       RETURNING 
         id, username, email, first_name, last_name, role, 
@@ -281,10 +293,10 @@ class User extends BaseModel {
     }
 
     // Проверка - нельзя удалить последнего админа
-    if (user.role === 'admin') {
+    if (user.role === "admin") {
       const adminCount = await this.countAdmins();
       if (adminCount <= 1) {
-        throw new Error('Нельзя удалить последнего администратора');
+        throw new Error("Нельзя удалить последнего администратора");
       }
     }
 
@@ -362,7 +374,7 @@ class User extends BaseModel {
       moderatorCount: parseInt(stats.moderator_count || 0),
       userCount: parseInt(stats.user_count || 0),
       verifiedCount: parseInt(stats.verified_count || 0),
-      activeCount: parseInt(stats.active_count || 0)
+      activeCount: parseInt(stats.active_count || 0),
     };
   }
 

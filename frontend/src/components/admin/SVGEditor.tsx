@@ -615,7 +615,10 @@ const SVGEditor = () => {
                 <Select
                   value={project.remoteId || "none"}
                   onValueChange={(value) =>
-                    setProject({ ...project, remoteId: value === "none" ? undefined : value })
+                    setProject({
+                      ...project,
+                      remoteId: value === "none" ? undefined : value,
+                    })
                   }
                 >
                   <SelectTrigger>

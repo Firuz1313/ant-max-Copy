@@ -1,14 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ArrowLeft,
-  ChevronRight,
-  Tv,
-  Zap,
-  Settings,
-  Star,
-} from "lucide-react";
+import { ArrowLeft, ChevronRight, Tv, Zap, Settings, Star } from "lucide-react";
 import { useApi } from "@/contexts/ApiContext";
 import { useState, useEffect } from "react";
 
@@ -31,7 +24,7 @@ interface Problem {
 const DeviceSelection = () => {
   const navigate = useNavigate();
   const { api, setError } = useApi();
-  
+
   const [devices, setDevices] = useState<Device[]>([]);
   const [problems, setProblems] = useState<Problem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,17 +34,17 @@ const DeviceSelection = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         const [devicesData, problemsData] = await Promise.all([
           api.getDevices(),
-          api.getProblems()
+          api.getProblems(),
         ]);
-        
+
         setDevices(devicesData || []);
         setProblems(problemsData || []);
       } catch (error) {
-        console.error('Error loading data:', error);
-        setError(error instanceof Error ? error.message : 'Unknown error');
+        console.error("Error loading data:", error);
+        setError(error instanceof Error ? error.message : "Unknown error");
       } finally {
         setIsLoading(false);
       }
@@ -87,10 +80,10 @@ const DeviceSelection = () => {
   };
 
   const getProblemsForDevice = (deviceId: string): number => {
-    return problems.filter(p => p.deviceId === deviceId && p.isActive).length;
+    return problems.filter((p) => p.deviceId === deviceId && p.isActive).length;
   };
 
-  const activeDevices = devices.filter(d => d.isActive);
+  const activeDevices = devices.filter((d) => d.isActive);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -146,7 +139,10 @@ const DeviceSelection = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
               {isLoading ? (
                 <div className="col-span-full text-center text-gray-300 py-12">
-                  <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full" role="status">
+                  <div
+                    className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full"
+                    role="status"
+                  >
                     <span className="sr-only">Загрузка...</span>
                   </div>
                   <p className="mt-2">Загрузка устройств...</p>
@@ -176,7 +172,7 @@ const DeviceSelection = () => {
                     >
                       <CardHeader className="text-center pb-4">
                         <div
-                          className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${device.color || 'from-blue-500 to-blue-600'} rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:shadow-xl transition-shadow`}
+                          className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${device.color || "from-blue-500 to-blue-600"} rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:shadow-xl transition-shadow`}
                         >
                           {getDeviceIcon(device.id)}
                         </div>
@@ -217,8 +213,8 @@ const DeviceSelection = () => {
                 Не видите свою модель?
               </h3>
               <p className="text-gray-300 mb-6">
-                Мы постоянно добавляем поддержку новых устройств. Свяжитесь с нами,
-                и мы поможем найти решение для вашей приставки.
+                Мы постоянно добавляем поддержку новых устройств. Свяжитесь с
+                нами, и мы поможем найти решение для вашей приставки.
               </p>
               <Button
                 variant="outline"

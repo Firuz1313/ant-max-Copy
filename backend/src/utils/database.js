@@ -93,8 +93,12 @@ export async function testConnection() {
     console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
 
     // NO AUTOMATIC FALLBACK - Force use of PostgreSQL only
-    console.error("🚫 PostgreSQL connection failed. Mock database fallback disabled.");
-    console.error("💡 Please ensure PostgreSQL is running and configured correctly.");
+    console.error(
+      "🚫 PostgreSQL connection failed. Mock database fallback disabled.",
+    );
+    console.error(
+      "💡 Please ensure PostgreSQL is running and configured correctly.",
+    );
 
     return {
       success: false,
@@ -140,14 +144,18 @@ export async function query(text, params = []) {
     console.error("🔍 Parameters:", params);
 
     // Check if this is a connection error (PostgreSQL not available)
-    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
-      console.warn("⚠️ PostgreSQL unavailable - returning empty result for graceful degradation");
+    if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
+      console.warn(
+        "⚠️ PostgreSQL unavailable - returning empty result for graceful degradation",
+      );
       // Return empty result that looks like a real query result
       return { rows: [], rowCount: 0 };
     }
 
     // For other database errors, still throw
-    console.error("🚫 PostgreSQL query failed. Mock database fallback disabled.");
+    console.error(
+      "🚫 PostgreSQL query failed. Mock database fallback disabled.",
+    );
     throw error;
   } finally {
     if (client) {
@@ -178,8 +186,10 @@ export async function transaction(callback) {
     }
   } catch (error) {
     // Check if this is a connection error (PostgreSQL not available)
-    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
-      console.warn("⚠️ PostgreSQL unavailable - transaction skipped for graceful degradation");
+    if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
+      console.warn(
+        "⚠️ PostgreSQL unavailable - transaction skipped for graceful degradation",
+      );
       // Return null for transactions when DB is unavailable
       return null;
     }
@@ -224,7 +234,9 @@ export async function createDatabase() {
   } catch (error) {
     console.error("❌ Ошибка создания базы данных:", error.message);
     // NO FALLBACK - PostgreSQL only
-    console.error("🚫 PostgreSQL database creation failed. Mock database fallback disabled.");
+    console.error(
+      "🚫 PostgreSQL database creation failed. Mock database fallback disabled.",
+    );
     throw error;
   } finally {
     if (client) {

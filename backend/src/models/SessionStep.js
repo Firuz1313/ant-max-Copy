@@ -1,12 +1,12 @@
-import BaseModel from './BaseModel.js';
-import { query } from '../utils/database.js';
+import BaseModel from "./BaseModel.js";
+import { query } from "../utils/database.js";
 
 /**
  * Модель для работы с шагами в сессиях диагностики
  */
 class SessionStep extends BaseModel {
   constructor() {
-    super('session_steps');
+    super("session_steps");
   }
 
   /**
@@ -30,7 +30,7 @@ class SessionStep extends BaseModel {
       const result = await query(sql, [sessionId]);
       return result.rows.map(this.formatSessionStep);
     } catch (error) {
-      console.error('Ошибка получения шагов сессии:', error.message);
+      console.error("Ошибка получения шагов сессии:", error.message);
       throw error;
     }
   }
@@ -46,15 +46,15 @@ class SessionStep extends BaseModel {
         time_spent: null,
         errors: stepData.errors || [],
         user_input: stepData.user_input || null,
-        metadata: stepData.metadata || {}
+        metadata: stepData.metadata || {},
       });
 
       const { sql, values } = this.buildInsertQuery(prepared);
       const result = await query(sql, values);
-      
+
       return this.formatSessionStep(result.rows[0]);
     } catch (error) {
-      console.error('Ошибка создания шага сессии:', error.message);
+      console.error("Ошибка создания шага сессии:", error.message);
       throw error;
     }
   }
@@ -67,11 +67,11 @@ class SessionStep extends BaseModel {
       const updateData = {
         completed: true,
         completed_at: new Date().toISOString(),
-        result: completionData.result || 'success',
+        result: completionData.result || "success",
         time_spent: completionData.time_spent,
         errors: completionData.errors || [],
         user_input: completionData.user_input,
-        metadata: completionData.metadata || {}
+        metadata: completionData.metadata || {},
       };
 
       const prepared = this.prepareForUpdate(updateData);
@@ -79,12 +79,12 @@ class SessionStep extends BaseModel {
       const result = await query(sql, values);
 
       if (result.rows.length === 0) {
-        throw new Error('Шаг сессии не найден');
+        throw new Error("Шаг сессии не найден");
       }
 
       return this.formatSessionStep(result.rows[0]);
     } catch (error) {
-      console.error('Ошибка завершения шага сессии:', error.message);
+      console.error("Ошибка завершения шага сессии:", error.message);
       throw error;
     }
   }
@@ -122,12 +122,17 @@ class SessionStep extends BaseModel {
         avgTimeSpent: parseFloat(stats.avg_time_spent || 0),
         minTimeSpent: parseInt(stats.min_time_spent || 0),
         maxTimeSpent: parseInt(stats.max_time_spent || 0),
-        successRate: parseInt(stats.completed_attempts || 0) > 0 
-          ? ((parseInt(stats.successful_attempts || 0) / parseInt(stats.completed_attempts || 0)) * 100).toFixed(1)
-          : 0
+        successRate:
+          parseInt(stats.completed_attempts || 0) > 0
+            ? (
+                (parseInt(stats.successful_attempts || 0) /
+                  parseInt(stats.completed_attempts || 0)) *
+                100
+              ).toFixed(1)
+            : 0,
       };
     } catch (error) {
-      console.error('Ошибка получения статистики шага:', error.message);
+      console.error("Ошибка получения статистики шага:", error.message);
       throw error;
     }
   }
@@ -158,7 +163,7 @@ class SessionStep extends BaseModel {
       `;
 
       const result = await query(sql, [limit]);
-      return result.rows.map(row => ({
+      return result.rows.map((row) => ({
         stepId: row.step_id,
         stepTitle: row.step_title,
         stepNumber: row.step_number,
@@ -166,10 +171,10 @@ class SessionStep extends BaseModel {
         totalAttempts: parseInt(row.total_attempts),
         failures: parseInt(row.failures),
         timeouts: parseInt(row.timeouts),
-        failureRate: parseFloat(row.failure_rate).toFixed(1)
+        failureRate: parseFloat(row.failure_rate).toFixed(1),
       }));
     } catch (error) {
-      console.error('Ошибка получения проблемных шагов:', error.message);
+      console.error("Ошибка получения проблемных шагов:", error.message);
       throw error;
     }
   }
@@ -188,8 +193,10 @@ class SessionStep extends BaseModel {
         FROM session_steps ss
         WHERE ss.started_at >= $1
       `;
-      
-      const params = [filters.start_date || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)];
+
+      const params = [
+        filters.start_date || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+      ];
       let paramIndex = 2;
 
       if (filters.end_date) {
@@ -204,14 +211,14 @@ class SessionStep extends BaseModel {
       `;
 
       const result = await query(sql, params);
-      return result.rows.map(row => ({
+      return result.rows.map((row) => ({
         date: row.date,
         totalSteps: parseInt(row.total_steps),
         completedSteps: parseInt(row.completed_steps),
-        avgTimeSpent: parseFloat(row.avg_time_spent || 0).toFixed(1)
+        avgTimeSpent: parseFloat(row.avg_time_spent || 0).toFixed(1),
       }));
     } catch (error) {
-      console.error('Ошибка получения временной аналитики:', error.message);
+      console.error("Ошибка получения временной аналитики:", error.message);
       throw error;
     }
   }
@@ -241,7 +248,7 @@ class SessionStep extends BaseModel {
       stepTitle: sessionStep.step_title,
       stepDescription: sessionStep.step_description,
       stepInstruction: sessionStep.step_instruction,
-      stepEstimatedTime: sessionStep.step_estimated_time
+      stepEstimatedTime: sessionStep.step_estimated_time,
     };
   }
 

@@ -1,4 +1,4 @@
-import SessionStep from '../models/SessionStep.js';
+import SessionStep from "../models/SessionStep.js";
 
 const sessionStepModel = new SessionStep();
 
@@ -9,18 +9,18 @@ export const getSessionSteps = async (req, res) => {
   try {
     const { sessionId } = req.params;
     const steps = await sessionStepModel.findBySession(sessionId);
-    
+
     res.json({
       success: true,
       data: steps,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: error.message,
-      errorType: 'DATABASE_ERROR',
-      timestamp: new Date().toISOString()
+      errorType: "DATABASE_ERROR",
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -32,19 +32,19 @@ export const createSessionStep = async (req, res) => {
   try {
     const stepData = req.body;
     const newStep = await sessionStepModel.createSessionStep(stepData);
-    
+
     res.status(201).json({
       success: true,
       data: newStep,
-      message: 'Шаг сессии успешно создан',
-      timestamp: new Date().toISOString()
+      message: "Шаг сессии успешно создан",
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(400).json({
       success: false,
       error: error.message,
-      errorType: 'VALIDATION_ERROR',
-      timestamp: new Date().toISOString()
+      errorType: "VALIDATION_ERROR",
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -56,22 +56,25 @@ export const completeSessionStep = async (req, res) => {
   try {
     const { id } = req.params;
     const completionData = req.body;
-    
-    const completedStep = await sessionStepModel.completeSessionStep(id, completionData);
-    
+
+    const completedStep = await sessionStepModel.completeSessionStep(
+      id,
+      completionData,
+    );
+
     res.json({
       success: true,
       data: completedStep,
-      message: 'Шаг сессии успешно завершен',
-      timestamp: new Date().toISOString()
+      message: "Шаг сессии успешно завершен",
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    const statusCode = error.message.includes('не найден') ? 404 : 400;
+    const statusCode = error.message.includes("не найден") ? 404 : 400;
     res.status(statusCode).json({
       success: false,
       error: error.message,
-      errorType: statusCode === 404 ? 'NOT_FOUND' : 'VALIDATION_ERROR',
-      timestamp: new Date().toISOString()
+      errorType: statusCode === 404 ? "NOT_FOUND" : "VALIDATION_ERROR",
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -83,18 +86,18 @@ export const getStepStats = async (req, res) => {
   try {
     const { stepId } = req.params;
     const stats = await sessionStepModel.getStepStats(stepId);
-    
+
     res.json({
       success: true,
       data: stats,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: error.message,
-      errorType: 'DATABASE_ERROR',
-      timestamp: new Date().toISOString()
+      errorType: "DATABASE_ERROR",
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -106,18 +109,18 @@ export const getProblematicSteps = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 10;
     const steps = await sessionStepModel.getProblematicSteps(limit);
-    
+
     res.json({
       success: true,
       data: steps,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: error.message,
-      errorType: 'DATABASE_ERROR',
-      timestamp: new Date().toISOString()
+      errorType: "DATABASE_ERROR",
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -129,22 +132,22 @@ export const getTimeAnalytics = async (req, res) => {
   try {
     const filters = {
       start_date: req.query.start_date,
-      end_date: req.query.end_date
+      end_date: req.query.end_date,
     };
-    
+
     const analytics = await sessionStepModel.getTimeAnalytics(filters);
-    
+
     res.json({
       success: true,
       data: analytics,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: error.message,
-      errorType: 'DATABASE_ERROR',
-      timestamp: new Date().toISOString()
+      errorType: "DATABASE_ERROR",
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -155,5 +158,5 @@ export default {
   completeSessionStep,
   getStepStats,
   getProblematicSteps,
-  getTimeAnalytics
+  getTimeAnalytics,
 };

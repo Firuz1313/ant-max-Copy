@@ -112,7 +112,10 @@ const DiagnosticPage = () => {
       </header>
 
       {/* Main Content: TV + Remote */}
-      <div className="flex-1 flex flex-row items-start justify-center w-full max-w-7xl mx-auto px-4 gap-8 mt-2" style={{minHeight:0}}>
+      <div
+        className="flex-1 flex flex-row items-start justify-center w-full max-w-7xl mx-auto px-4 gap-8 mt-2"
+        style={{ minHeight: 0 }}
+      >
         {/* TV */}
         <div className="flex-1 flex items-center justify-end max-w-4xl min-w-0">
           {currentStepData?.tvInterfaceId ? (
@@ -130,7 +133,7 @@ const DiagnosticPage = () => {
           ) : (
             <TVDisplay
               deviceId={device?.id}
-              interfaceScreen={currentStepData?.highlightTVArea || 'home'}
+              interfaceScreen={currentStepData?.highlightTVArea || "home"}
               tvInterfaceId={currentStepData?.tvInterfaceId}
               className="w-full"
               isConnected={true}
@@ -139,7 +142,10 @@ const DiagnosticPage = () => {
           )}
         </div>
         {/* Remote */}
-        <div className="flex items-center justify-start" style={{width:'200px', minWidth:'160px', maxWidth:'220px'}}>
+        <div
+          className="flex items-center justify-start"
+          style={{ width: "200px", minWidth: "160px", maxWidth: "220px" }}
+        >
           {remote ? (
             remote.imageData ? (
               <div className="relative bg-gray-800 rounded-xl p-2 shadow-2xl w-full">
@@ -147,7 +153,7 @@ const DiagnosticPage = () => {
                   src={remote.imageData}
                   alt={remote.name}
                   className="w-full h-auto object-contain rounded-lg"
-                  style={{maxHeight:'420px'}}
+                  style={{ maxHeight: "420px" }}
                 />
                 {/* Button Position Indicator */}
                 {currentStepData?.buttonPosition && (
@@ -189,7 +195,10 @@ const DiagnosticPage = () => {
       </div>
 
       {/* Нижняя панель: кнопки и подсказка */}
-      <div className="fixed bottom-0 left-0 w-full bg-gradient-to-t from-slate-900/95 to-slate-900/60 border-t border-white/10 z-50 flex items-center justify-between px-4 py-3" style={{maxHeight:'64px'}}>
+      <div
+        className="fixed bottom-0 left-0 w-full bg-gradient-to-t from-slate-900/95 to-slate-900/60 border-t border-white/10 z-50 flex items-center justify-between px-4 py-3"
+        style={{ maxHeight: "64px" }}
+      >
         <Button
           variant="outline"
           onClick={handlePrevStep}
@@ -204,7 +213,9 @@ const DiagnosticPage = () => {
           {currentStepData?.hint && (
             <div className="flex items-center bg-yellow-500/10 border border-yellow-500/20 rounded-lg px-4 py-2 max-w-xl text-sm text-yellow-100">
               <Lightbulb className="h-5 w-5 text-yellow-400 mr-2" />
-              <span className="truncate"><strong>Подсказка:</strong> {currentStepData.hint}</span>
+              <span className="truncate">
+                <strong>Подсказка:</strong> {currentStepData.hint}
+              </span>
             </div>
           )}
         </div>

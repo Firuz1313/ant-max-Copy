@@ -39,7 +39,7 @@ class APIService {
       // Store status and headers before reading body
       const status = response.status;
       const statusText = response.statusText;
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers.get("content-type");
 
       let data;
 
@@ -48,24 +48,32 @@ class APIService {
         const bodyText = await response.text();
 
         // Try to parse as JSON if content type suggests it or if body looks like JSON
-        if ((contentType && contentType.includes('application/json')) ||
-            (bodyText.trim().startsWith('{') || bodyText.trim().startsWith('['))) {
+        if (
+          (contentType && contentType.includes("application/json")) ||
+          bodyText.trim().startsWith("{") ||
+          bodyText.trim().startsWith("[")
+        ) {
           try {
             data = JSON.parse(bodyText);
           } catch (jsonError) {
-            data = { message: bodyText || 'Response parsing failed' };
+            data = { message: bodyText || "Response parsing failed" };
           }
         } else {
           data = bodyText ? { message: bodyText } : {};
         }
       } catch (readError) {
-        console.warn('Failed to read response body:', readError);
-        data = { error: 'Failed to read response' };
+        console.warn("Failed to read response body:", readError);
+        data = { error: "Failed to read response" };
       }
 
       if (status >= 400) {
-        const errorMessage = data.error || data.message || data.details || statusText;
-        console.error(`API Error Details [${endpoint}]:`, { status, data, bodyText });
+        const errorMessage =
+          data.error || data.message || data.details || statusText;
+        console.error(`API Error Details [${endpoint}]:`, {
+          status,
+          data,
+          bodyText,
+        });
         throw new Error(`${errorMessage} (HTTP ${status})`);
       }
 
@@ -167,28 +175,28 @@ class APIService {
 
   // Remotes (not implemented in backend yet)
   async getRemotes(): Promise<Remote[]> {
-    console.warn('Remotes endpoint not implemented in backend');
+    console.warn("Remotes endpoint not implemented in backend");
     return [];
   }
 
   async getRemote(id: string): Promise<Remote> {
-    console.warn('Remotes endpoint not implemented in backend');
-    throw new Error('Remotes endpoint not implemented');
+    console.warn("Remotes endpoint not implemented in backend");
+    throw new Error("Remotes endpoint not implemented");
   }
 
   async createRemote(data: Partial<Remote>): Promise<Remote> {
-    console.warn('Remotes endpoint not implemented in backend');
-    throw new Error('Remotes endpoint not implemented');
+    console.warn("Remotes endpoint not implemented in backend");
+    throw new Error("Remotes endpoint not implemented");
   }
 
   async updateRemote(id: string, data: Partial<Remote>): Promise<Remote> {
-    console.warn('Remotes endpoint not implemented in backend');
-    throw new Error('Remotes endpoint not implemented');
+    console.warn("Remotes endpoint not implemented in backend");
+    throw new Error("Remotes endpoint not implemented");
   }
 
   async deleteRemote(id: string): Promise<void> {
-    console.warn('Remotes endpoint not implemented in backend');
-    throw new Error('Remotes endpoint not implemented');
+    console.warn("Remotes endpoint not implemented in backend");
+    throw new Error("Remotes endpoint not implemented");
   }
 
   // TV Interfaces
@@ -205,7 +213,9 @@ class APIService {
     return this.request<DiagnosticSession[]>("/sessions");
   }
 
-  async createSession(data: Partial<DiagnosticSession>): Promise<DiagnosticSession> {
+  async createSession(
+    data: Partial<DiagnosticSession>,
+  ): Promise<DiagnosticSession> {
     return this.request<DiagnosticSession>("/sessions", {
       method: "POST",
       body: JSON.stringify(data),
@@ -214,8 +224,8 @@ class APIService {
 
   // Users
   async getUsers(filters?: any): Promise<any[]> {
-    const queryParams = filters ? new URLSearchParams(filters).toString() : '';
-    const url = queryParams ? `/users?${queryParams}` : '/users';
+    const queryParams = filters ? new URLSearchParams(filters).toString() : "";
+    const url = queryParams ? `/users?${queryParams}` : "/users";
     const response = await this.request<{ data: any[] }>(url);
     return response.data || [];
   }
@@ -249,7 +259,9 @@ class APIService {
 
   async searchUsers(query: string, filters?: any): Promise<any[]> {
     const params = new URLSearchParams({ q: query, ...filters });
-    const response = await this.request<{ data: any[] }>(`/users/search?${params}`);
+    const response = await this.request<{ data: any[] }>(
+      `/users/search?${params}`,
+    );
     return response.data || [];
   }
 
@@ -260,8 +272,8 @@ class APIService {
 
   // Remotes
   async getRemotes(filters?: any): Promise<Remote[]> {
-    const queryParams = filters ? new URLSearchParams(filters).toString() : '';
-    const url = queryParams ? `/remotes?${queryParams}` : '/remotes';
+    const queryParams = filters ? new URLSearchParams(filters).toString() : "";
+    const url = queryParams ? `/remotes?${queryParams}` : "/remotes";
     const response = await this.request<{ data: Remote[] }>(url);
     return response.data || [];
   }
@@ -272,13 +284,17 @@ class APIService {
   }
 
   async getRemotesByDevice(deviceId: string): Promise<Remote[]> {
-    const response = await this.request<{ data: Remote[] }>(`/remotes/device/${deviceId}`);
+    const response = await this.request<{ data: Remote[] }>(
+      `/remotes/device/${deviceId}`,
+    );
     return response.data || [];
   }
 
   async getDefaultRemoteForDevice(deviceId: string): Promise<Remote | null> {
     try {
-      const response = await this.request<{ data: Remote }>(`/remotes/device/${deviceId}/default`);
+      const response = await this.request<{ data: Remote }>(
+        `/remotes/device/${deviceId}/default`,
+      );
       return response.data;
     } catch (error: any) {
       if (error.status === 404) {
@@ -311,16 +327,21 @@ class APIService {
   }
 
   async duplicateRemote(id: string, newName?: string): Promise<Remote> {
-    const response = await this.request<{ data: Remote }>(`/remotes/${id}/duplicate`, {
-      method: "POST",
-      body: JSON.stringify({ name: newName }),
-    });
+    const response = await this.request<{ data: Remote }>(
+      `/remotes/${id}/duplicate`,
+      {
+        method: "POST",
+        body: JSON.stringify({ name: newName }),
+      },
+    );
     return response.data;
   }
 
   async searchRemotes(query: string, filters?: any): Promise<Remote[]> {
     const params = new URLSearchParams({ q: query, ...filters });
-    const response = await this.request<{ data: Remote[] }>(`/remotes/search?${params}`);
+    const response = await this.request<{ data: Remote[] }>(
+      `/remotes/search?${params}`,
+    );
     return response.data || [];
   }
 
@@ -330,7 +351,9 @@ class APIService {
   }
 
   async getPopularRemotes(limit = 10): Promise<Remote[]> {
-    const response = await this.request<{ data: Remote[] }>(`/remotes/popular?limit=${limit}`);
+    const response = await this.request<{ data: Remote[] }>(
+      `/remotes/popular?limit=${limit}`,
+    );
     return response.data || [];
   }
 
@@ -342,19 +365,19 @@ class APIService {
 
   // Settings (not implemented in backend yet)
   async getSettings(): Promise<SiteSettings> {
-    console.warn('Settings endpoint not implemented in backend');
+    console.warn("Settings endpoint not implemented in backend");
     return {
-      siteName: 'ANT Support',
-      siteDescription: 'Система диагностики ТВ приставок',
-      version: '1.0.0',
+      siteName: "ANT Support",
+      siteDescription: "Система диагностики ТВ приставок",
+      version: "1.0.0",
       maintenanceMode: false,
       debugMode: false,
     } as SiteSettings;
   }
 
   async updateSettings(data: Partial<SiteSettings>): Promise<SiteSettings> {
-    console.warn('Settings endpoint not implemented in backend');
-    throw new Error('Settings endpoint not implemented');
+    console.warn("Settings endpoint not implemented in backend");
+    throw new Error("Settings endpoint not implemented");
   }
 }
 
@@ -363,7 +386,7 @@ interface ApiContextType {
   api: APIService;
   loading: boolean;
   error: string | null;
-  
+
   // Loading states for individual operations
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -418,67 +441,88 @@ export const useData = () => {
 
   // Helper functions that mimic the old DataContext interface
   const getActiveDevices = useCallback((): Device[] => {
-    return devices.filter(d => d.isActive);
+    return devices.filter((d) => d.isActive);
   }, [devices]);
 
-  const getProblemsForDevice = useCallback((deviceId: string): Problem[] => {
-    return problems.filter(p => p.deviceId === deviceId && p.isActive);
-  }, [problems]);
+  const getProblemsForDevice = useCallback(
+    (deviceId: string): Problem[] => {
+      return problems.filter((p) => p.deviceId === deviceId && p.isActive);
+    },
+    [problems],
+  );
 
-  const getStepsForProblem = useCallback((problemId: string): Step[] => {
-    return steps
-      .filter(s => s.problemId === problemId && s.isActive)
-      .sort((a, b) => a.stepNumber - b.stepNumber);
-  }, [steps]);
+  const getStepsForProblem = useCallback(
+    (problemId: string): Step[] => {
+      return steps
+        .filter((s) => s.problemId === problemId && s.isActive)
+        .sort((a, b) => a.stepNumber - b.stepNumber);
+    },
+    [steps],
+  );
 
-  const getDeviceById = useCallback((id: string): Device | undefined => {
-    return devices.find(d => d.id === id);
-  }, [devices]);
+  const getDeviceById = useCallback(
+    (id: string): Device | undefined => {
+      return devices.find((d) => d.id === id);
+    },
+    [devices],
+  );
 
-  const getProblemById = useCallback((id: string): Problem | undefined => {
-    return problems.find(p => p.id === id);
-  }, [problems]);
+  const getProblemById = useCallback(
+    (id: string): Problem | undefined => {
+      return problems.find((p) => p.id === id);
+    },
+    [problems],
+  );
 
-  const getStepById = useCallback((id: string): Step | undefined => {
-    return steps.find(s => s.id === id);
-  }, [steps]);
+  const getStepById = useCallback(
+    (id: string): Step | undefined => {
+      return steps.find((s) => s.id === id);
+    },
+    [steps],
+  );
 
-  const getRemoteById = useCallback((id: string): Remote | undefined => {
-    return remotes.find(r => r.id === id);
-  }, [remotes]);
+  const getRemoteById = useCallback(
+    (id: string): Remote | undefined => {
+      return remotes.find((r) => r.id === id);
+    },
+    [remotes],
+  );
 
   const getActiveRemotes = useCallback((): Remote[] => {
-    return remotes.filter(r => r.isActive);
+    return remotes.filter((r) => r.isActive);
   }, [remotes]);
 
   const getActiveSessions = useCallback((): DiagnosticSession[] => {
-    return sessions.filter(s => s.isActive && !s.endTime);
+    return sessions.filter((s) => s.isActive && !s.endTime);
   }, [sessions]);
 
-  const getEntityStats = useCallback((entity: string) => {
-    let data: any[] = [];
-    switch (entity) {
-      case "devices":
-        data = devices;
-        break;
-      case "problems":
-        data = problems;
-        break;
-      case "steps":
-        data = steps;
-        break;
-      case "remotes":
-        data = remotes;
-        break;
-      default:
-        data = [];
-    }
+  const getEntityStats = useCallback(
+    (entity: string) => {
+      let data: any[] = [];
+      switch (entity) {
+        case "devices":
+          data = devices;
+          break;
+        case "problems":
+          data = problems;
+          break;
+        case "steps":
+          data = steps;
+          break;
+        case "remotes":
+          data = remotes;
+          break;
+        default:
+          data = [];
+      }
 
-    return {
-      total: data.length,
-      active: data.filter((item) => item.isActive).length,
-    };
-  }, [devices, problems, steps, remotes]);
+      return {
+        total: data.length,
+        active: data.filter((item) => item.isActive).length,
+      };
+    },
+    [devices, problems, steps, remotes],
+  );
 
   // Load functions
   const loadDevices = useCallback(async () => {
@@ -487,7 +531,7 @@ export const useData = () => {
       const deviceData = await api.getDevices();
       setDevices(deviceData);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
+      setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -499,7 +543,7 @@ export const useData = () => {
       const problemData = await api.getProblems();
       setProblems(problemData);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
+      setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -511,7 +555,7 @@ export const useData = () => {
       const stepData = await api.getSteps();
       setSteps(stepData);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
+      setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -521,10 +565,12 @@ export const useData = () => {
     try {
       setLoading(true);
       // Backend doesn't have remotes endpoint yet, use empty array
-      console.warn('Remotes endpoint not implemented in backend, using empty array');
+      console.warn(
+        "Remotes endpoint not implemented in backend, using empty array",
+      );
       setRemotes([]);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
+      setError(error instanceof Error ? error.message : "Unknown error");
       setRemotes([]);
     } finally {
       setLoading(false);
@@ -537,7 +583,7 @@ export const useData = () => {
       const sessionData = await api.getSessions();
       setSessions(sessionData);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
+      setError(error instanceof Error ? error.message : "Unknown error");
     } finally {
       setLoading(false);
     }
@@ -547,16 +593,18 @@ export const useData = () => {
     try {
       setLoading(true);
       // Backend doesn't have settings endpoint yet, use default settings
-      console.warn('Settings endpoint not implemented in backend, using default settings');
+      console.warn(
+        "Settings endpoint not implemented in backend, using default settings",
+      );
       setSiteSettings({
-        siteName: 'ANT Support',
-        siteDescription: 'Си��тема диагностики ТВ приставок',
-        version: '1.0.0',
+        siteName: "ANT Support",
+        siteDescription: "Си��тема диагностики ТВ приставок",
+        version: "1.0.0",
         maintenanceMode: false,
         debugMode: false,
       } as SiteSettings);
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Unknown error');
+      setError(error instanceof Error ? error.message : "Unknown error");
       setSiteSettings(null);
     } finally {
       setLoading(false);
@@ -572,31 +620,43 @@ export const useData = () => {
       loadSessions(),
       loadSiteSettings(),
     ]);
-  }, [loadDevices, loadProblems, loadSteps, loadRemotes, loadSessions, loadSiteSettings]);
+  }, [
+    loadDevices,
+    loadProblems,
+    loadSteps,
+    loadRemotes,
+    loadSessions,
+    loadSiteSettings,
+  ]);
 
   // Export data function
-  const exportData = useCallback(async (options: any) => {
-    // Mock export functionality - would need to be implemented based on backend
-    const data = {
-      devices,
-      problems,
-      steps,
-      remotes,
-      sessions,
-      metadata: {
-        exportDate: new Date().toISOString(),
-        version: "1.0.0",
-      }
-    };
+  const exportData = useCallback(
+    async (options: any) => {
+      // Mock export functionality - would need to be implemented based on backend
+      const data = {
+        devices,
+        problems,
+        steps,
+        remotes,
+        sessions,
+        metadata: {
+          exportDate: new Date().toISOString(),
+          version: "1.0.0",
+        },
+      };
 
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
 
-    return {
-      downloadUrl: url,
-      data: data
-    };
-  }, [devices, problems, steps, remotes, sessions]);
+      return {
+        downloadUrl: url,
+        data: data,
+      };
+    },
+    [devices, problems, steps, remotes, sessions],
+  );
 
   // Refresh data function (alias for refreshAllData)
   const refreshData = useCallback(async () => {
@@ -610,8 +670,26 @@ export const useData = () => {
 
   return {
     api,
-    loading: { devices: loading, problems: loading, steps: loading, remotes: loading, stepActions: loading, sessions: loading, changeLogs: loading, siteSettings: loading },
-    errors: { devices: null, problems: null, steps: null, remotes: null, stepActions: null, sessions: null, changeLogs: null, siteSettings: null },
+    loading: {
+      devices: loading,
+      problems: loading,
+      steps: loading,
+      remotes: loading,
+      stepActions: loading,
+      sessions: loading,
+      changeLogs: loading,
+      siteSettings: loading,
+    },
+    errors: {
+      devices: null,
+      problems: null,
+      steps: null,
+      remotes: null,
+      stepActions: null,
+      sessions: null,
+      changeLogs: null,
+      siteSettings: null,
+    },
     devices,
     problems,
     steps,

@@ -1,9 +1,9 @@
-import BaseModel from './BaseModel.js';
-import { query } from '../utils/database.js';
+import BaseModel from "./BaseModel.js";
+import { query } from "../utils/database.js";
 
 class Remote extends BaseModel {
   constructor() {
-    super('remotes');
+    super("remotes");
   }
 
   /**
@@ -58,7 +58,8 @@ class Remote extends BaseModel {
       paramIndex++;
     }
 
-    queryText += ' ORDER BY r.is_default DESC, r.usage_count DESC, r.created_at DESC';
+    queryText +=
+      " ORDER BY r.is_default DESC, r.usage_count DESC, r.created_at DESC";
 
     if (filters.limit) {
       queryText += ` LIMIT $${paramIndex}`;
@@ -89,18 +90,18 @@ class Remote extends BaseModel {
       LEFT JOIN devices d ON r.device_id = d.id
       WHERE r.id = $1 AND r.is_active = true
     `;
-    
+
     const result = await query(queryText, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
 
     const remote = this.formatRemote(result.rows[0]);
-    
+
     // Получить статистику использования
     remote.usage_stats = await this.getRemoteUsageStats(id);
-    
+
     return remote;
   }
 
@@ -114,7 +115,7 @@ class Remote extends BaseModel {
       WHERE r.device_id = $1 AND r.is_active = true
       ORDER BY r.is_default DESC, r.usage_count DESC, r.created_at DESC
     `;
-    
+
     const result = await query(queryText, [deviceId]);
     return result.rows.map(this.formatRemote);
   }
@@ -129,9 +130,9 @@ class Remote extends BaseModel {
       WHERE r.device_id = $1 AND r.is_default = true AND r.is_active = true
       LIMIT 1
     `;
-    
+
     const result = await query(queryText, [deviceId]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -150,8 +151,8 @@ class Remote extends BaseModel {
       manufacturer,
       model,
       description,
-      layout = 'standard',
-      color_scheme = 'dark',
+      layout = "standard",
+      color_scheme = "dark",
       image_url,
       image_data,
       svg_data,
@@ -160,7 +161,7 @@ class Remote extends BaseModel {
       zones = [],
       is_default = false,
       is_active = true,
-      metadata = {}
+      metadata = {},
     } = remoteData;
 
     // Если устанавливается как пульт по умолчанию для устройства,
@@ -196,7 +197,7 @@ class Remote extends BaseModel {
       JSON.stringify(zones),
       is_default,
       is_active,
-      JSON.stringify(metadata)
+      JSON.stringify(metadata),
     ];
 
     const result = await query(queryText, values);
@@ -213,9 +214,22 @@ class Remote extends BaseModel {
     }
 
     const allowedFields = [
-      'device_id', 'name', 'manufacturer', 'model', 'description',
-      'layout', 'color_scheme', 'image_url', 'image_data', 'svg_data',
-      'dimensions', 'buttons', 'zones', 'is_default', 'is_active', 'metadata'
+      "device_id",
+      "name",
+      "manufacturer",
+      "model",
+      "description",
+      "layout",
+      "color_scheme",
+      "image_url",
+      "image_data",
+      "svg_data",
+      "dimensions",
+      "buttons",
+      "zones",
+      "is_default",
+      "is_active",
+      "metadata",
     ];
 
     const updateFields = [];
@@ -224,17 +238,20 @@ class Remote extends BaseModel {
 
     // Если устанавливается как пульт по умолчанию для устройства,
     // снимаем флаг default с других пультов этого устройства
-    if (updateData.is_default && (updateData.device_id || currentRemote.deviceId)) {
+    if (
+      updateData.is_default &&
+      (updateData.device_id || currentRemote.deviceId)
+    ) {
       const deviceId = updateData.device_id || currentRemote.deviceId;
       await this.clearDefaultRemoteForDevice(deviceId, id);
     }
 
-    Object.keys(updateData).forEach(field => {
+    Object.keys(updateData).forEach((field) => {
       if (allowedFields.includes(field)) {
         let value = updateData[field];
-        
+
         // JSON поля
-        if (['dimensions', 'buttons', 'zones', 'metadata'].includes(field)) {
+        if (["dimensions", "buttons", "zones", "metadata"].includes(field)) {
           value = JSON.stringify(value);
         }
 
@@ -253,7 +270,7 @@ class Remote extends BaseModel {
 
     const queryText = `
       UPDATE remotes 
-      SET ${updateFields.join(', ')}
+      SET ${updateFields.join(", ")}
       WHERE id = $${paramIndex} 
       RETURNING *
     `;
@@ -274,7 +291,9 @@ class Remote extends BaseModel {
     // Проверяем, не используется ли пульт в шагах диагностики
     const usageCheck = await this.checkRemoteUsage(id);
     if (usageCheck.inUse) {
-      throw new Error(`Пульт "${remote.name}" используется в ${usageCheck.stepsCount} диагностических шагах. Сначала обновите или удалите эти шаги.`);
+      throw new Error(
+        `Пульт "${remote.name}" используется в ${usageCheck.stepsCount} диагностических шагах. Сначала обновите или удалите эти шаги.`,
+      );
     }
 
     const queryText = `
@@ -302,7 +321,7 @@ class Remote extends BaseModel {
       name: newName || `${original.name} (копия)`,
       is_default: false, // Копия не может быть пультом по умолчанию
       usage_count: 0,
-      last_used: null
+      last_used: null,
     };
 
     // Удаляем поля, которые не нужно дублировать
@@ -348,7 +367,7 @@ class Remote extends BaseModel {
     return {
       totalSteps: parseInt(stats.total_steps || 0),
       problemsCount: parseInt(stats.problems_count || 0),
-      devicesCount: parseInt(stats.devices_count || 0)
+      devicesCount: parseInt(stats.devices_count || 0),
     };
   }
 
@@ -367,7 +386,7 @@ class Remote extends BaseModel {
 
     return {
       inUse: stepsCount > 0,
-      stepsCount
+      stepsCount,
     };
   }
 
@@ -417,7 +436,7 @@ class Remote extends BaseModel {
       defaultCount: parseInt(stats.default_count || 0),
       manufacturersCount: parseInt(stats.manufacturers_count || 0),
       layoutsCount: parseInt(stats.layouts_count || 0),
-      avgUsage: parseFloat(stats.avg_usage || 0).toFixed(1)
+      avgUsage: parseFloat(stats.avg_usage || 0).toFixed(1),
     };
   }
 
@@ -456,7 +475,10 @@ class Remote extends BaseModel {
       imageUrl: remote.image_url,
       imageData: remote.image_data,
       svgData: remote.svg_data,
-      dimensions: this.parseJSON(remote.dimensions, { width: 200, height: 500 }),
+      dimensions: this.parseJSON(remote.dimensions, {
+        width: 200,
+        height: 500,
+      }),
       buttons: this.parseJSON(remote.buttons, []),
       zones: this.parseJSON(remote.zones, []),
       isDefault: remote.is_default,
@@ -469,7 +491,7 @@ class Remote extends BaseModel {
       // Связанные данные
       deviceName: remote.device_name,
       deviceBrand: remote.device_brand,
-      deviceModel: remote.device_model
+      deviceModel: remote.device_model,
     };
   }
 

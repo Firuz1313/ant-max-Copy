@@ -93,16 +93,18 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите приставку" />
             </SelectTrigger>
             <SelectContent>
-              {getActiveDevices().filter(device => device.id && device.id.trim() !== '').map((device) => (
-                <SelectItem key={device.id} value={device.id}>
-                  <div className="flex items-center">
-                    <div
-                      className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                    />
-                    {device.name}
-                  </div>
-                </SelectItem>
-              ))}
+              {getActiveDevices()
+                .filter((device) => device.id && device.id.trim() !== "")
+                .map((device) => (
+                  <SelectItem key={device.id} value={device.id}>
+                    <div className="flex items-center">
+                      <div
+                        className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                      />
+                      {device.name}
+                    </div>
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
@@ -118,11 +120,13 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите пробл��му" />
             </SelectTrigger>
             <SelectContent>
-              {getAvailableProblems().filter(problem => problem.id && problem.id.trim() !== '').map((problem) => (
-                <SelectItem key={problem.id} value={problem.id}>
-                  {problem.title}
-                </SelectItem>
-              ))}
+              {getAvailableProblems()
+                .filter((problem) => problem.id && problem.id.trim() !== "")
+                .map((problem) => (
+                  <SelectItem key={problem.id} value={problem.id}>
+                    {problem.title}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
@@ -224,26 +228,28 @@ const StepFormFieldsComponent = React.memo(
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Без пульта</SelectItem>
-              {getAvailableRemotes().filter(remote => remote.id && remote.id.trim() !== '').map((remote) => {
-                const device = devices.find((d) => d.id === remote.deviceId);
-                return (
-                  <SelectItem key={remote.id} value={remote.id}>
-                    <div className="flex items-center">
-                      {device && (
-                        <div
-                          className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                        />
-                      )}
-                      {remote.name}
-                      {remote.isDefault && (
-                        <span className="ml-2 text-xs text-blue-600">
-                          (по умолчанию)
-                        </span>
-                      )}
-                    </div>
-                  </SelectItem>
-                );
-              })}
+              {getAvailableRemotes()
+                .filter((remote) => remote.id && remote.id.trim() !== "")
+                .map((remote) => {
+                  const device = devices.find((d) => d.id === remote.deviceId);
+                  return (
+                    <SelectItem key={remote.id} value={remote.id}>
+                      <div className="flex items-center">
+                        {device && (
+                          <div
+                            className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                          />
+                        )}
+                        {remote.name}
+                        {remote.isDefault && (
+                          <span className="ml-2 text-xs text-blue-600">
+                            (по умолчанию)
+                          </span>
+                        )}
+                      </div>
+                    </SelectItem>
+                  );
+                })}
             </SelectContent>
           </Select>
           {formData.remoteId !== "none" && (
@@ -1031,16 +1037,18 @@ const StepsManager = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все приставки</SelectItem>
-                  {getActiveDevices().filter(device => device.id && device.id.trim() !== '').map((device) => (
-                    <SelectItem key={device.id} value={device.id}>
-                      <div className="flex items-center">
-                        <div
-                          className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                        />
-                        {device.name}
-                      </div>
-                    </SelectItem>
-                  ))}
+                  {getActiveDevices()
+                    .filter((device) => device.id && device.id.trim() !== "")
+                    .map((device) => (
+                      <SelectItem key={device.id} value={device.id}>
+                        <div className="flex items-center">
+                          <div
+                            className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                          />
+                          {device.name}
+                        </div>
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
 

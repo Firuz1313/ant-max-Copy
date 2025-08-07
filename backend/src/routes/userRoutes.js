@@ -8,9 +8,12 @@ import {
   getUserStats,
   searchUsers,
   checkUsernameAvailability,
-  checkEmailAvailability
+  checkEmailAvailability,
 } from "../controllers/userController.js";
-import { userValidation, validateRequest } from "../middleware/validateRequest.js";
+import {
+  userValidation,
+  validateRequest,
+} from "../middleware/validateRequest.js";
 
 const router = express.Router();
 

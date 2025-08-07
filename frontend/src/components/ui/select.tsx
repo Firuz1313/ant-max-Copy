@@ -116,16 +116,20 @@ const SelectItem = React.forwardRef<
   // Максимальная защита от пустых значений
   const value = props.value;
 
-  if (!value ||
-      value === '' ||
-      value === null ||
-      value === undefined ||
-      (typeof value === 'string' && (
-        value.trim() === '' ||
-        value === 'null' ||
-        value === 'undefined'
-      ))) {
-    console.warn('SelectItem: блокировка пустого value:', value, 'type:', typeof value);
+  if (
+    !value ||
+    value === "" ||
+    value === null ||
+    value === undefined ||
+    (typeof value === "string" &&
+      (value.trim() === "" || value === "null" || value === "undefined"))
+  ) {
+    console.warn(
+      "SelectItem: блокировка пустого value:",
+      value,
+      "type:",
+      typeof value,
+    );
     return null;
   }
 
@@ -134,7 +138,8 @@ const SelectItem = React.forwardRef<
     // Создаем безопасные props без пустого value
     const safeProps = {
       ...props,
-      value: value && value.toString().trim() !== '' ? value : 'placeholder-value'
+      value:
+        value && value.toString().trim() !== "" ? value : "placeholder-value",
     };
 
     return (
@@ -156,7 +161,7 @@ const SelectItem = React.forwardRef<
       </SelectPrimitive.Item>
     );
   } catch (error) {
-    console.error('SelectItem render error:', error, 'props:', props);
+    console.error("SelectItem render error:", error, "props:", props);
     return null;
   }
 });

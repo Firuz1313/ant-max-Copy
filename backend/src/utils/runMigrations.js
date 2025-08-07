@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { query } from './database.js';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { query } from "./database.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,38 +10,39 @@ const __dirname = path.dirname(__filename);
  * Run database migrations
  */
 export async function runMigrations() {
-  console.log('🚀 Starting database migrations...');
-  
+  console.log("🚀 Starting database migrations...");
+
   try {
     // Create migrations tracking table if it doesn't exist
     await createMigrationsTable();
-    
+
     // Get migration files
-    const migrationsDir = path.join(__dirname, '../../migrations');
-    const migrationFiles = fs.readdirSync(migrationsDir)
-      .filter(file => file.endsWith('.sql'))
+    const migrationsDir = path.join(__dirname, "../../migrations");
+    const migrationFiles = fs
+      .readdirSync(migrationsDir)
+      .filter((file) => file.endsWith(".sql"))
       .sort();
-    
+
     console.log(`📁 Found ${migrationFiles.length} migration files`);
-    
+
     // Get already applied migrations
     const appliedMigrations = await getAppliedMigrations();
     console.log(`✅ ${appliedMigrations.length} migrations already applied`);
-    
+
     // Run pending migrations
     for (const file of migrationFiles) {
-      const migrationName = path.basename(file, '.sql');
-      
+      const migrationName = path.basename(file, ".sql");
+
       if (appliedMigrations.includes(migrationName)) {
         console.log(`⏭️  Skipping ${migrationName} (already applied)`);
         continue;
       }
-      
+
       console.log(`🔄 Running migration: ${migrationName}`);
-      
+
       const migrationPath = path.join(migrationsDir, file);
-      const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
-      
+      const migrationSQL = fs.readFileSync(migrationPath, "utf8");
+
       try {
         await query(migrationSQL);
         await markMigrationAsApplied(migrationName);
@@ -51,11 +52,10 @@ export async function runMigrations() {
         throw error;
       }
     }
-    
-    console.log('🎉 All migrations completed successfully!');
-    
+
+    console.log("🎉 All migrations completed successfully!");
   } catch (error) {
-    console.error('💥 Migration process failed:', error.message);
+    console.error("💥 Migration process failed:", error.message);
     throw error;
   }
 }
@@ -71,9 +71,9 @@ async function createMigrationsTable() {
       applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
     );
   `;
-  
+
   await query(createMigrationsTableSQL);
-  console.log('📋 Migrations tracking table ready');
+  console.log("📋 Migrations tracking table ready");
 }
 
 /**
@@ -81,10 +81,12 @@ async function createMigrationsTable() {
  */
 async function getAppliedMigrations() {
   try {
-    const result = await query('SELECT name FROM migrations ORDER BY applied_at');
-    return result.rows.map(row => row.name);
+    const result = await query(
+      "SELECT name FROM migrations ORDER BY applied_at",
+    );
+    return result.rows.map((row) => row.name);
   } catch (error) {
-    console.warn('⚠️  Could not fetch applied migrations:', error.message);
+    console.warn("⚠️  Could not fetch applied migrations:", error.message);
     return [];
   }
 }
@@ -94,8 +96,8 @@ async function getAppliedMigrations() {
  */
 async function markMigrationAsApplied(migrationName) {
   await query(
-    'INSERT INTO migrations (name) VALUES ($1) ON CONFLICT (name) DO NOTHING',
-    [migrationName]
+    "INSERT INTO migrations (name) VALUES ($1) ON CONFLICT (name) DO NOTHING",
+    [migrationName],
   );
 }
 
@@ -105,25 +107,26 @@ async function markMigrationAsApplied(migrationName) {
 export async function rollbackLastMigration() {
   try {
     const result = await query(
-      'SELECT name FROM migrations ORDER BY applied_at DESC LIMIT 1'
+      "SELECT name FROM migrations ORDER BY applied_at DESC LIMIT 1",
     );
-    
+
     if (result.rows.length === 0) {
-      console.log('📭 No migrations to rollback');
+      console.log("📭 No migrations to rollback");
       return;
     }
-    
+
     const lastMigration = result.rows[0].name;
     console.log(`🔄 Rolling back migration: ${lastMigration}`);
-    
+
     // Remove from migrations table
-    await query('DELETE FROM migrations WHERE name = $1', [lastMigration]);
-    
+    await query("DELETE FROM migrations WHERE name = $1", [lastMigration]);
+
     console.log(`✅ Migration ${lastMigration} rolled back`);
-    console.log('⚠️  Note: You may need to manually drop tables/indexes created by this migration');
-    
+    console.log(
+      "⚠️  Note: You may need to manually drop tables/indexes created by this migration",
+    );
   } catch (error) {
-    console.error('💥 Rollback failed:', error.message);
+    console.error("💥 Rollback failed:", error.message);
     throw error;
   }
 }
@@ -134,25 +137,25 @@ export async function rollbackLastMigration() {
 export async function getMigrationStatus() {
   try {
     const appliedMigrations = await getAppliedMigrations();
-    
-    const migrationsDir = path.join(__dirname, '../../migrations');
-    const availableMigrations = fs.readdirSync(migrationsDir)
-      .filter(file => file.endsWith('.sql'))
-      .map(file => path.basename(file, '.sql'))
+
+    const migrationsDir = path.join(__dirname, "../../migrations");
+    const availableMigrations = fs
+      .readdirSync(migrationsDir)
+      .filter((file) => file.endsWith(".sql"))
+      .map((file) => path.basename(file, ".sql"))
       .sort();
-    
+
     const pendingMigrations = availableMigrations.filter(
-      migration => !appliedMigrations.includes(migration)
+      (migration) => !appliedMigrations.includes(migration),
     );
-    
+
     return {
       applied: appliedMigrations,
       pending: pendingMigrations,
-      total: availableMigrations.length
+      total: availableMigrations.length,
     };
-    
   } catch (error) {
-    console.error('💥 Could not get migration status:', error.message);
+    console.error("💥 Could not get migration status:", error.message);
     throw error;
   }
 }
@@ -160,33 +163,35 @@ export async function getMigrationStatus() {
 // CLI support
 if (import.meta.url === `file://${process.argv[1]}`) {
   const command = process.argv[2];
-  
+
   switch (command) {
-    case 'up':
+    case "up":
       runMigrations().catch(process.exit);
       break;
-    case 'rollback':
+    case "rollback":
       rollbackLastMigration().catch(process.exit);
       break;
-    case 'status':
+    case "status":
       getMigrationStatus()
-        .then(status => {
-          console.log('📊 Migration Status:');
+        .then((status) => {
+          console.log("📊 Migration Status:");
           console.log(`   Applied: ${status.applied.length}`);
           console.log(`   Pending: ${status.pending.length}`);
           console.log(`   Total: ${status.total}`);
-          
+
           if (status.pending.length > 0) {
-            console.log('\n⏳ Pending migrations:');
-            status.pending.forEach(migration => console.log(`   - ${migration}`));
+            console.log("\n⏳ Pending migrations:");
+            status.pending.forEach((migration) =>
+              console.log(`   - ${migration}`),
+            );
           } else {
-            console.log('\n✅ All migrations are up to date');
+            console.log("\n✅ All migrations are up to date");
           }
         })
         .catch(process.exit);
       break;
     default:
-      console.log('Usage: node runMigrations.js [up|rollback|status]');
+      console.log("Usage: node runMigrations.js [up|rollback|status]");
       process.exit(1);
   }
 }

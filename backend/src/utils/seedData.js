@@ -20,7 +20,7 @@ export const seedDatabase = async () => {
 
     // Skip seeding - keep database empty for production use
     console.log("✅ Database seeding skipped - database will remain empty");
-    
+
     return {
       success: true,
       message: "Database seeding skipped - no test data added",

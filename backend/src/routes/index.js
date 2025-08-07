@@ -190,7 +190,8 @@ router.get("/docs", (req, res) => {
             "DELETE /users/:id": "Удаление пользователя",
             "GET /users/stats": "Статистика пользователей",
             "GET /users/search": "Поиск пользователей",
-            "GET /users/check-username/:username": "Проверка доступности логина",
+            "GET /users/check-username/:username":
+              "Проверка доступности логина",
             "GET /users/check-email/:email": "Проверка доступности email",
           },
         },

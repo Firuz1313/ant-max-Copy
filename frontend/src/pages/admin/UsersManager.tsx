@@ -59,7 +59,7 @@ interface User {
 const UsersManager = () => {
   // Connect to API data context
   const { api, loading } = useData();
-  
+
   // NO HARDCODED USERS - Load from API only
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -82,28 +82,38 @@ const UsersManager = () => {
       try {
         // Note: Users API endpoint needs to be implemented in backend
         // For now, this will show empty state when no users exist
-        const usersData = await api.getUsers?.() || [];
+        const usersData = (await api.getUsers?.()) || [];
         setUsers(usersData);
       } catch (error) {
         console.error("Error loading users:", error);
         setUsers([]); // Show empty state
       }
     };
-    
+
     loadUsers();
   }, [api]);
 
   const roles = [
-    { value: "admin", label: "Администратор", color: "bg-red-100 text-red-800" },
+    {
+      value: "admin",
+      label: "Администратор",
+      color: "bg-red-100 text-red-800",
+    },
     { value: "editor", label: "Редактор", color: "bg-blue-100 text-blue-800" },
-    { value: "viewer", label: "Наблюдатель", color: "bg-gray-100 text-gray-800" },
+    {
+      value: "viewer",
+      label: "Наблюдатель",
+      color: "bg-gray-100 text-gray-800",
+    },
   ];
 
   const filteredUsers = users.filter((user) => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === "all" || user.role === filterRole;
-    const matchesStatus = filterStatus === "all" || user.status === filterStatus;
+    const matchesStatus =
+      filterStatus === "all" || user.status === filterStatus;
     return matchesSearch && matchesRole && matchesStatus;
   });
 
@@ -115,16 +125,16 @@ const UsersManager = () => {
         password: formData.password,
         role: formData.role,
         bio: "",
-        profileImage: ""
+        profileImage: "",
       };
-      console.log('Creating user with data:', userData);
+      console.log("Creating user with data:", userData);
 
       // Create through API (not implemented yet)
       await api.createUser?.(userData);
       setIsCreateDialogOpen(false);
       resetForm();
       // Reload users
-      const usersData = await api.getUsers?.() || [];
+      const usersData = (await api.getUsers?.()) || [];
       setUsers(usersData);
     } catch (error) {
       console.error("Error creating user:", error);
@@ -133,7 +143,7 @@ const UsersManager = () => {
 
   const handleEdit = async () => {
     if (!selectedUser) return;
-    
+
     try {
       // Update through API (not implemented yet)
       await api.updateUser?.(selectedUser.id, formData);
@@ -141,7 +151,7 @@ const UsersManager = () => {
       setSelectedUser(null);
       resetForm();
       // Reload users
-      const usersData = await api.getUsers?.() || [];
+      const usersData = (await api.getUsers?.()) || [];
       setUsers(usersData);
     } catch (error) {
       console.error("Error updating user:", error);
@@ -153,7 +163,7 @@ const UsersManager = () => {
       // Delete through API (not implemented yet)
       await api.deleteUser?.(userId);
       // Reload users
-      const usersData = await api.getUsers?.() || [];
+      const usersData = (await api.getUsers?.()) || [];
       setUsers(usersData);
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -161,17 +171,17 @@ const UsersManager = () => {
   };
 
   const handleToggleStatus = async (userId: string) => {
-    const user = users.find(u => u.id === userId);
+    const user = users.find((u) => u.id === userId);
     if (!user) return;
-    
+
     try {
       // Toggle status through API (not implemented yet)
       await api.updateUser?.(userId, {
         ...user,
-        status: user.status === "active" ? "inactive" : "active"
+        status: user.status === "active" ? "inactive" : "active",
       });
       // Reload users
-      const usersData = await api.getUsers?.() || [];
+      const usersData = (await api.getUsers?.()) || [];
       setUsers(usersData);
     } catch (error) {
       console.error("Error toggling user status:", error);
@@ -198,11 +208,13 @@ const UsersManager = () => {
   };
 
   const getRoleColor = (role: string) => {
-    return roles.find(r => r.value === role)?.color || "bg-gray-100 text-gray-800";
+    return (
+      roles.find((r) => r.value === role)?.color || "bg-gray-100 text-gray-800"
+    );
   };
 
   const getRoleLabel = (role: string) => {
-    return roles.find(r => r.value === role)?.label || role;
+    return roles.find((r) => r.value === role)?.label || role;
   };
 
   return (
@@ -304,7 +316,9 @@ const UsersManager = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Всего пользователей</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Всего пользователей
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -322,7 +336,7 @@ const UsersManager = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {users.filter(u => u.status === "active").length}
+              {users.filter((u) => u.status === "active").length}
             </div>
             <p className="text-xs text-muted-foreground">
               Активных пользователей
@@ -339,7 +353,7 @@ const UsersManager = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {users.filter(u => u.role === "admin").length}
+              {users.filter((u) => u.role === "admin").length}
             </div>
             <p className="text-xs text-muted-foreground">
               С правами администратора
@@ -354,7 +368,7 @@ const UsersManager = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {users.filter(u => u.status === "inactive").length}
+              {users.filter((u) => u.status === "inactive").length}
             </div>
             <p className="text-xs text-muted-foreground">
               Заблокированных пользователей
@@ -413,10 +427,9 @@ const UsersManager = () => {
                 Пользователи не найдены
               </h3>
               <p className="text-gray-500 dark:text-gray-400 mb-4">
-                {users.length === 0 
+                {users.length === 0
                   ? "В системе пока нет пользователей. Создайте первого пользователя."
-                  : "Попробуйте изменить фильтры поиска."
-                }
+                  : "Попробуйте изменить фильтры поиска."}
               </p>
               {users.length === 0 && (
                 <Button onClick={() => setIsCreateDialogOpen(true)}>
@@ -444,7 +457,11 @@ const UsersManager = () => {
                       <div className="flex items-center space-x-3">
                         <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
                           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            {user.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .toUpperCase()}
                           </span>
                         </div>
                         <div>
@@ -464,7 +481,9 @@ const UsersManager = () => {
                     </TableCell>
                     <TableCell>
                       <Badge
-                        variant={user.status === "active" ? "default" : "secondary"}
+                        variant={
+                          user.status === "active" ? "default" : "secondary"
+                        }
                         className={
                           user.status === "active"
                             ? "bg-green-100 text-green-800"
@@ -488,15 +507,21 @@ const UsersManager = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => openEditDialog(user)}>
+                          <DropdownMenuItem
+                            onClick={() => openEditDialog(user)}
+                          >
                             <Edit className="h-4 w-4 mr-2" />
                             Редактировать
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleStatus(user.id)}>
+                          <DropdownMenuItem
+                            onClick={() => handleToggleStatus(user.id)}
+                          >
                             <UserIcon className="h-4 w-4 mr-2" />
-                            {user.status === "active" ? "Деактивировать" : "Активировать"}
+                            {user.status === "active"
+                              ? "Деактивировать"
+                              : "Активировать"}
                           </DropdownMenuItem>
-                          <DropdownMenuItem 
+                          <DropdownMenuItem
                             onClick={() => handleDelete(user.id)}
                             className="text-red-600"
                           >

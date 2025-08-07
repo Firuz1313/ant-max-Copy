@@ -1,5 +1,5 @@
-import User from '../models/User.js';
-import { v4 as uuidv4 } from 'uuid';
+import User from "../models/User.js";
+import { v4 as uuidv4 } from "uuid";
 
 const userModel = new User();
 
@@ -9,20 +9,15 @@ const userModel = new User();
  */
 export const getAllUsers = async (req, res) => {
   try {
-    const {
-      role,
-      email_verified,
-      search,
-      limit = 50,
-      offset = 0
-    } = req.query;
+    const { role, email_verified, search, limit = 50, offset = 0 } = req.query;
 
     const filters = {
       role,
-      email_verified: email_verified !== undefined ? email_verified === 'true' : undefined,
+      email_verified:
+        email_verified !== undefined ? email_verified === "true" : undefined,
       search,
       limit: parseInt(limit),
-      offset: parseInt(offset)
+      offset: parseInt(offset),
     };
 
     const users = await userModel.getAllUsers(filters);
@@ -33,20 +28,22 @@ export const getAllUsers = async (req, res) => {
       pagination: {
         limit: filters.limit,
         offset: filters.offset,
-        total: users.length
+        total: users.length,
       },
-      message: users.length > 0 ? `Найдено ${users.length} пользователей` : 'Пользователи не найдены',
-      timestamp: new Date().toISOString()
+      message:
+        users.length > 0
+          ? `Найдено ${users.length} пользователей`
+          : "Пользователи не найдены",
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при получении пользователей:', error);
+    console.error("Ошибка при получении пользователей:", error);
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при получении пользователей',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при получении пользователей",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -65,25 +62,24 @@ export const getUserById = async (req, res) => {
       return res.status(404).json({
         success: false,
         error: `Пользователь с ID ${id} не найден`,
-        errorType: 'NOT_FOUND',
-        timestamp: new Date().toISOString()
+        errorType: "NOT_FOUND",
+        timestamp: new Date().toISOString(),
       });
     }
 
     res.json({
       success: true,
       data: user,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при получении пользователя:', error);
+    console.error("Ошибка при получении пользователя:", error);
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при получении пользователя',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при получении пользователя",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -100,10 +96,10 @@ export const createUser = async (req, res) => {
     if (!userData.username || !userData.email || !userData.password) {
       return res.status(400).json({
         success: false,
-        error: 'Отсутствуют обязательные поля: username, email, password',
-        errorType: 'VALIDATION_ERROR',
-        details: ['username', 'email', 'password'],
-        timestamp: new Date().toISOString()
+        error: "Отсутствуют обязательные поля: username, email, password",
+        errorType: "VALIDATION_ERROR",
+        details: ["username", "email", "password"],
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -112,9 +108,9 @@ export const createUser = async (req, res) => {
     if (!emailRegex.test(userData.email)) {
       return res.status(400).json({
         success: false,
-        error: 'Некорректный формат email адреса',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Некорректный формат email адреса",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -122,9 +118,9 @@ export const createUser = async (req, res) => {
     if (userData.username.length < 3 || userData.username.length > 50) {
       return res.status(400).json({
         success: false,
-        error: 'Логин должен содержать от 3 до 50 символов',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Логин должен содержать от 3 до 50 символов",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -132,16 +128,16 @@ export const createUser = async (req, res) => {
     if (userData.password.length < 6) {
       return res.status(400).json({
         success: false,
-        error: 'Пароль должен содержать минимум 6 символов',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Пароль должен содержать минимум 6 символов",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
     // Добавляем ID если не указан
     const userDataWithId = {
       ...userData,
-      id: userData.id || uuidv4()
+      id: userData.id || uuidv4(),
     };
 
     const newUser = await userModel.createUser(userDataWithId);
@@ -150,28 +146,27 @@ export const createUser = async (req, res) => {
       success: true,
       data: newUser,
       message: `Пользователь "${newUser.username}" успешно создан`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при создании пользователя:', error);
+    console.error("Ошибка при создании пользователя:", error);
 
     // Обработка ошибок уникальности
-    if (error.message.includes('уже существует')) {
+    if (error.message.includes("уже существует")) {
       return res.status(409).json({
         success: false,
         error: error.message,
-        errorType: 'DUPLICATE_ERROR',
-        timestamp: new Date().toISOString()
+        errorType: "DUPLICATE_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при создании пользователя',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при создании пользователя",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -191,20 +186,23 @@ export const updateUser = async (req, res) => {
       if (!emailRegex.test(updateData.email)) {
         return res.status(400).json({
           success: false,
-          error: 'Некорректный формат email адреса',
-          errorType: 'VALIDATION_ERROR',
-          timestamp: new Date().toISOString()
+          error: "Некорректный формат email адреса",
+          errorType: "VALIDATION_ERROR",
+          timestamp: new Date().toISOString(),
         });
       }
     }
 
     // Валидация username если предоставлен
-    if (updateData.username && (updateData.username.length < 3 || updateData.username.length > 50)) {
+    if (
+      updateData.username &&
+      (updateData.username.length < 3 || updateData.username.length > 50)
+    ) {
       return res.status(400).json({
         success: false,
-        error: 'Логин должен содержать от 3 до 50 символов',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Логин должен содержать от 3 до 50 символов",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -212,9 +210,9 @@ export const updateUser = async (req, res) => {
     if (updateData.password && updateData.password.length < 6) {
       return res.status(400).json({
         success: false,
-        error: 'Пароль должен содержать минимум 6 символов',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Пароль должен содержать минимум 6 символов",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -224,38 +222,37 @@ export const updateUser = async (req, res) => {
       success: true,
       data: updatedUser,
       message: `Пользователь "${updatedUser.username}" успешно обновлен`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при обновлении пользователя:', error);
+    console.error("Ошибка при обновлении пользователя:", error);
 
     // Обработка ошибки "не найден"
-    if (error.message.includes('не найден')) {
+    if (error.message.includes("не найден")) {
       return res.status(404).json({
         success: false,
         error: error.message,
-        errorType: 'NOT_FOUND',
-        timestamp: new Date().toISOString()
+        errorType: "NOT_FOUND",
+        timestamp: new Date().toISOString(),
       });
     }
 
     // Обработка ошибок уникальности
-    if (error.message.includes('уже существует')) {
+    if (error.message.includes("уже существует")) {
       return res.status(409).json({
         success: false,
         error: error.message,
-        errorType: 'DUPLICATE_ERROR',
-        timestamp: new Date().toISOString()
+        errorType: "DUPLICATE_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при обновлении пользователя',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при обновлении пользователя",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -274,38 +271,37 @@ export const deleteUser = async (req, res) => {
       success: true,
       data: result,
       message: `Пользователь успешно удален`,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при удалении пользователя:', error);
+    console.error("Ошибка при удалении пользователя:", error);
 
     // Обработка ошибки "не найден"
-    if (error.message.includes('не найден')) {
+    if (error.message.includes("не найден")) {
       return res.status(404).json({
         success: false,
         error: error.message,
-        errorType: 'NOT_FOUND',
-        timestamp: new Date().toISOString()
+        errorType: "NOT_FOUND",
+        timestamp: new Date().toISOString(),
       });
     }
 
     // Обработка ошибки удаления последнего админа
-    if (error.message.includes('последнего администратора')) {
+    if (error.message.includes("последнего администратора")) {
       return res.status(403).json({
         success: false,
         error: error.message,
-        errorType: 'OPERATION_FORBIDDEN',
-        timestamp: new Date().toISOString()
+        errorType: "OPERATION_FORBIDDEN",
+        timestamp: new Date().toISOString(),
       });
     }
 
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при удалении пользователя',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при удалении пользователя",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -321,18 +317,17 @@ export const getUserStats = async (req, res) => {
     res.json({
       success: true,
       data: stats,
-      message: 'Статистика пользователей получена',
-      timestamp: new Date().toISOString()
+      message: "Статистика пользователей получена",
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при получе��ии статистики пользователей:', error);
+    console.error("Ошибка при получе��ии статистики пользователей:", error);
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при получении статистики',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при получении статистики",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -348,16 +343,16 @@ export const searchUsers = async (req, res) => {
     if (!query || query.length < 2) {
       return res.status(400).json({
         success: false,
-        error: 'Поисковый запрос должен содержать минимум 2 символа',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Поисковый запрос должен содержать минимум 2 символа",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
     const filters = {
       search: query,
       role,
-      limit: parseInt(limit)
+      limit: parseInt(limit),
     };
 
     const users = await userModel.getAllUsers(filters);
@@ -367,20 +362,22 @@ export const searchUsers = async (req, res) => {
       data: users,
       pagination: {
         limit: filters.limit,
-        total: users.length
+        total: users.length,
       },
-      message: users.length > 0 ? `По запросу "${query}" найдено ${users.length} пользователей` : `По запросу "${query}" ничего не найдено`,
-      timestamp: new Date().toISOString()
+      message:
+        users.length > 0
+          ? `По запросу "${query}" найдено ${users.length} пользователей`
+          : `По запросу "${query}" ничего не найдено`,
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при поиске пользователей:', error);
+    console.error("Ошибка при поиске пользователей:", error);
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при поиске пользователей',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при поиске пользователей",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -396,9 +393,9 @@ export const checkUsernameAvailability = async (req, res) => {
     if (!username || username.length < 3) {
       return res.status(400).json({
         success: false,
-        error: 'Логин должен содержать минимум 3 символа',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Логин должен содержать минимум 3 символа",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -409,20 +406,19 @@ export const checkUsernameAvailability = async (req, res) => {
       success: true,
       data: {
         username,
-        available
+        available,
       },
-      message: available ? 'Логин доступен' : 'Логин уже занят',
-      timestamp: new Date().toISOString()
+      message: available ? "Логин доступен" : "Логин уже занят",
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при проверке доступности логина:', error);
+    console.error("Ошибка при проверке доступности логина:", error);
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при проверке логина',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при проверке логина",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };
@@ -439,9 +435,9 @@ export const checkEmailAvailability = async (req, res) => {
     if (!emailRegex.test(email)) {
       return res.status(400).json({
         success: false,
-        error: 'Некорректный формат email адреса',
-        errorType: 'VALIDATION_ERROR',
-        timestamp: new Date().toISOString()
+        error: "Некорректный формат email адреса",
+        errorType: "VALIDATION_ERROR",
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -452,20 +448,19 @@ export const checkEmailAvailability = async (req, res) => {
       success: true,
       data: {
         email,
-        available
+        available,
       },
-      message: available ? 'Email доступен' : 'Email уже занят',
-      timestamp: new Date().toISOString()
+      message: available ? "Email доступен" : "Email уже занят",
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Ошибка при проверке доступности email:', error);
+    console.error("Ошибка при проверке доступности email:", error);
     res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при проверке email',
-      errorType: 'DATABASE_ERROR',
+      error: "Внутренняя ошибка сервера при проверке email",
+      errorType: "DATABASE_ERROR",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 };

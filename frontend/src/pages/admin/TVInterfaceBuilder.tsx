@@ -14,10 +14,20 @@ import {
 
 // Безопасный компонент для SelectItem, который не рендерится с пустыми значениями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
-  if (!value || typeof value !== 'string' || value.trim() === '' || value === 'undefined' || value === 'null') {
+  if (
+    !value ||
+    typeof value !== "string" ||
+    value.trim() === "" ||
+    value === "undefined" ||
+    value === "null"
+  ) {
     return null;
   }
-  return <SelectItem value={value} {...props}>{children}</SelectItem>;
+  return (
+    <SelectItem value={value} {...props}>
+      {children}
+    </SelectItem>
+  );
 };
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";

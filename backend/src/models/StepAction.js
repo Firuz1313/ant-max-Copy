@@ -1,12 +1,12 @@
-import BaseModel from './BaseModel.js';
-import { query } from '../utils/database.js';
+import BaseModel from "./BaseModel.js";
+import { query } from "../utils/database.js";
 
 /**
  * Модель для работы с действиями в диагностических шагах
  */
 class StepAction extends BaseModel {
   constructor() {
-    super('step_actions');
+    super("step_actions");
   }
 
   /**
@@ -26,7 +26,7 @@ class StepAction extends BaseModel {
           ds.step_number
         FROM step_actions sa
         LEFT JOIN diagnostic_steps ds ON sa.step_id = ds.id
-        WHERE sa.step_id = $1 ${options.is_active !== undefined ? 'AND sa.is_active = $2' : ''}
+        WHERE sa.step_id = $1 ${options.is_active !== undefined ? "AND sa.is_active = $2" : ""}
         ORDER BY sa.created_at ASC
       `;
 
@@ -38,7 +38,7 @@ class StepAction extends BaseModel {
       const result = await query(sql, values);
       return result.rows.map(this.formatStepAction);
     } catch (error) {
-      console.error('Ошибка получения действий шага:', error.message);
+      console.error("Ошибка получения действий шага:", error.message);
       throw error;
     }
   }
@@ -50,43 +50,45 @@ class StepAction extends BaseModel {
     try {
       // Валидация обязательных полей
       if (!actionData.step_id) {
-        throw new Error('ID шага обязателен');
+        throw new Error("ID шага обязателен");
       }
 
       if (!actionData.name || !actionData.name.trim()) {
-        throw new Error('Название действия обязательно');
+        throw new Error("Название действия обязательно");
       }
 
       if (!actionData.type) {
-        throw new Error('Тип действия обязателен');
+        throw new Error("Тип действия обязателен");
       }
 
       // Проверяем существование шага
       const stepExists = await query(
-        'SELECT id FROM diagnostic_steps WHERE id = $1',
-        [actionData.step_id]
+        "SELECT id FROM diagnostic_steps WHERE id = $1",
+        [actionData.step_id],
       );
       if (stepExists.rows.length === 0) {
-        throw new Error('Шаг не найден');
+        throw new Error("Шаг не найден");
       }
 
       const prepared = this.prepareForInsert({
         ...actionData,
         name: actionData.name.trim(),
-        description: actionData.description?.trim() || '',
-        color: actionData.color || '#000000',
-        coordinates: actionData.coordinates ? JSON.stringify(actionData.coordinates) : null,
+        description: actionData.description?.trim() || "",
+        color: actionData.color || "#000000",
+        coordinates: actionData.coordinates
+          ? JSON.stringify(actionData.coordinates)
+          : null,
         timeout: actionData.timeout || null,
         retry_count: actionData.retry_count || 3,
-        metadata: actionData.metadata || {}
+        metadata: actionData.metadata || {},
       });
 
       const { sql, values } = this.buildInsertQuery(prepared);
       const result = await query(sql, values);
-      
+
       return this.formatStepAction(result.rows[0]);
     } catch (error) {
-      console.error('Оши��ка создания действия шага:', error.message);
+      console.error("Оши��ка создания действия шага:", error.message);
       throw error;
     }
   }
@@ -98,25 +100,29 @@ class StepAction extends BaseModel {
     try {
       const existing = await this.findById(id);
       if (!existing) {
-        throw new Error('Действие не найдено');
+        throw new Error("Действие не найдено");
       }
 
       const prepared = this.prepareForUpdate({
         ...updateData,
-        coordinates: updateData.coordinates ? JSON.stringify(updateData.coordinates) : undefined,
-        metadata: updateData.metadata ? JSON.stringify(updateData.metadata) : undefined
+        coordinates: updateData.coordinates
+          ? JSON.stringify(updateData.coordinates)
+          : undefined,
+        metadata: updateData.metadata
+          ? JSON.stringify(updateData.metadata)
+          : undefined,
       });
 
       const { sql, values } = this.buildUpdateQuery(id, prepared);
       const result = await query(sql, values);
 
       if (result.rows.length === 0) {
-        throw new Error('Действие не найдено');
+        throw new Error("Действие не найдено");
       }
 
       return this.formatStepAction(result.rows[0]);
     } catch (error) {
-      console.error('Ошибка обновления действия шага:', error.message);
+      console.error("Ошибка обновления действия шага:", error.message);
       throw error;
     }
   }
@@ -137,13 +143,13 @@ class StepAction extends BaseModel {
         LEFT JOIN problems p ON ds.problem_id = p.id
         WHERE sa.type = $1 AND sa.is_active = true
         ORDER BY sa.created_at DESC
-        ${options.limit ? `LIMIT ${options.limit}` : ''}
+        ${options.limit ? `LIMIT ${options.limit}` : ""}
       `;
 
       const result = await query(sql, [type]);
       return result.rows.map(this.formatStepAction);
     } catch (error) {
-      console.error('Ошибка получения действий по типу:', error.message);
+      console.error("Ошибка получения действий по типу:", error.message);
       throw error;
     }
   }
@@ -167,21 +173,21 @@ class StepAction extends BaseModel {
       `;
 
       const result = await query(sql);
-      
+
       const summary = {
         totalActions: 0,
         activeActions: 0,
         uniqueTypes: 0,
-        stepsWithActions: 0
+        stepsWithActions: 0,
       };
 
       const typeStats = [];
 
-      result.rows.forEach(row => {
+      result.rows.forEach((row) => {
         if (row.type) {
           typeStats.push({
             type: row.type,
-            count: parseInt(row.count_by_type)
+            count: parseInt(row.count_by_type),
           });
         } else {
           summary.totalActions = parseInt(row.total_actions || 0);
@@ -193,7 +199,7 @@ class StepAction extends BaseModel {
 
       return { summary, typeStats };
     } catch (error) {
-      console.error('Ошибка получения статистики действий:', error.message);
+      console.error("Ошибка получения статистики действий:", error.message);
       throw error;
     }
   }
@@ -205,7 +211,7 @@ class StepAction extends BaseModel {
     try {
       const original = await this.findById(actionId);
       if (!original) {
-        throw new Error('Действие не найдено');
+        throw new Error("Действие не найдено");
       }
 
       const duplicateData = {
@@ -214,7 +220,7 @@ class StepAction extends BaseModel {
         step_id: newStepId || original.stepId,
         name: `${original.name} (копия)`,
         created_at: undefined,
-        updated_at: undefined
+        updated_at: undefined,
       };
 
       // Удаляем поля, которые не нужно дублировать
@@ -225,7 +231,7 @@ class StepAction extends BaseModel {
 
       return await this.createStepAction(duplicateData);
     } catch (error) {
-      console.error('Ошибка дублирования действия:', error.message);
+      console.error("Ошибка дублирования действия:", error.message);
       throw error;
     }
   }
@@ -258,7 +264,7 @@ class StepAction extends BaseModel {
       updatedAt: action.updated_at,
       // Связанные данные
       stepTitle: action.step_title,
-      stepNumber: action.step_number
+      stepNumber: action.step_number,
     };
   }
 

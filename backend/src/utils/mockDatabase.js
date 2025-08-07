@@ -42,14 +42,14 @@ export const createItem = async (tableName, data) => {
   if (!mockData[tableName]) {
     mockData[tableName] = [];
   }
-  
+
   const newItem = {
     id: generateId(),
     ...data,
     created_at: createTimestamp(),
     updated_at: createTimestamp(),
   };
-  
+
   mockData[tableName].push(newItem);
   return newItem;
 };
@@ -58,17 +58,17 @@ export const updateItem = async (tableName, id, data) => {
   console.log(`📝 MockDB: Updating item ${id} in ${tableName}`);
   const items = mockData[tableName] || [];
   const index = items.findIndex((item) => item.id === id);
-  
+
   if (index === -1) {
     throw new Error(`Item with id ${id} not found in ${tableName}`);
   }
-  
+
   const updatedItem = {
     ...items[index],
     ...data,
     updated_at: createTimestamp(),
   };
-  
+
   items[index] = updatedItem;
   return updatedItem;
 };
@@ -77,11 +77,11 @@ export const deleteItem = async (tableName, id) => {
   console.log(`🗑️ MockDB: Deleting item ${id} from ${tableName}`);
   const items = mockData[tableName] || [];
   const index = items.findIndex((item) => item.id === id);
-  
+
   if (index === -1) {
     throw new Error(`Item with id ${id} not found in ${tableName}`);
   }
-  
+
   items.splice(index, 1);
   return true;
 };

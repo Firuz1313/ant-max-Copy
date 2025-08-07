@@ -1,12 +1,12 @@
-import BaseModel from './BaseModel.js';
-import { query } from '../utils/database.js';
+import BaseModel from "./BaseModel.js";
+import { query } from "../utils/database.js";
 
 /**
  * Модель для работы с журналом изменений
  */
 class ChangeLog extends BaseModel {
   constructor() {
-    super('change_logs');
+    super("change_logs");
   }
 
   /**
@@ -24,15 +24,15 @@ class ChangeLog extends BaseModel {
         reason: logData.reason || null,
         ip_address: logData.ip_address || null,
         user_agent: logData.user_agent || null,
-        metadata: logData.metadata || {}
+        metadata: logData.metadata || {},
       });
 
       const { sql, values } = this.buildInsertQuery(prepared);
       const result = await query(sql, values);
-      
+
       return this.formatChangeLog(result.rows[0]);
     } catch (error) {
-      console.error('Ошибка создания записи журнала:', error.message);
+      console.error("Ошибка создания записи журнала:", error.message);
       throw error;
     }
   }
@@ -53,13 +53,13 @@ class ChangeLog extends BaseModel {
         WHERE cl.entity_type = $1 AND cl.entity_id = $2 
         AND cl.is_active = true
         ORDER BY cl.created_at DESC
-        ${options.limit ? `LIMIT ${options.limit}` : ''}
+        ${options.limit ? `LIMIT ${options.limit}` : ""}
       `;
 
       const result = await query(sql, [entityType, entityId]);
       return result.rows.map(this.formatChangeLog);
     } catch (error) {
-      console.error('Ошибка получения журнала по сущности:', error.message);
+      console.error("Ошибка получения журнала по сущности:", error.message);
       throw error;
     }
   }
@@ -79,13 +79,13 @@ class ChangeLog extends BaseModel {
         LEFT JOIN users u ON cl.user_id = u.id
         WHERE cl.user_id = $1 AND cl.is_active = true
         ORDER BY cl.created_at DESC
-        ${options.limit ? `LIMIT ${options.limit}` : ''}
+        ${options.limit ? `LIMIT ${options.limit}` : ""}
       `;
 
       const result = await query(sql, [userId]);
       return result.rows.map(this.formatChangeLog);
     } catch (error) {
-      console.error('Ошибка получения журнала по пользователю:', error.message);
+      console.error("Ошибка получения журнала по пользователю:", error.message);
       throw error;
     }
   }
@@ -105,13 +105,13 @@ class ChangeLog extends BaseModel {
         LEFT JOIN users u ON cl.user_id = u.id
         WHERE cl.action = $1 AND cl.is_active = true
         ORDER BY cl.created_at DESC
-        ${options.limit ? `LIMIT ${options.limit}` : ''}
+        ${options.limit ? `LIMIT ${options.limit}` : ""}
       `;
 
       const result = await query(sql, [action]);
       return result.rows.map(this.formatChangeLog);
     } catch (error) {
-      console.error('Ошибка получения журнала по действию:', error.message);
+      console.error("Ошибка получения журнала по действию:", error.message);
       throw error;
     }
   }
@@ -138,7 +138,7 @@ class ChangeLog extends BaseModel {
       const result = await query(sql, [limit]);
       return result.rows.map(this.formatChangeLog);
     } catch (error) {
-      console.error('Ошибка получения последних изменений:', error.message);
+      console.error("Ошибка получения последних изменений:", error.message);
       throw error;
     }
   }
@@ -166,26 +166,26 @@ class ChangeLog extends BaseModel {
       `;
 
       const result = await query(sql);
-      
+
       const summary = {
         totalChanges: 0,
         entityTypes: 0,
-        activeUsers: 0
+        activeUsers: 0,
       };
 
       const typeStats = [];
       const actionStats = [];
 
-      result.rows.forEach(row => {
+      result.rows.forEach((row) => {
         if (row.entity_type && !row.action) {
           typeStats.push({
             entityType: row.entity_type,
-            count: parseInt(row.changes_by_type)
+            count: parseInt(row.changes_by_type),
           });
         } else if (row.action && !row.entity_type) {
           actionStats.push({
             action: row.action,
-            count: parseInt(row.changes_by_action)
+            count: parseInt(row.changes_by_action),
           });
         } else if (!row.entity_type && !row.action) {
           summary.totalChanges = parseInt(row.total_changes || 0);
@@ -196,7 +196,7 @@ class ChangeLog extends BaseModel {
 
       return { summary, typeStats, actionStats };
     } catch (error) {
-      console.error('Ошибка получения статистики журнала:', error.message);
+      console.error("Ошибка получения статистики журнала:", error.message);
       throw error;
     }
   }
@@ -225,16 +225,16 @@ class ChangeLog extends BaseModel {
       `;
 
       const result = await query(sql);
-      return result.rows.map(row => ({
+      return result.rows.map((row) => ({
         ipAddress: row.ip_address,
         changeCount: parseInt(row.change_count),
         userCount: parseInt(row.user_count),
         firstSeen: row.first_seen,
         lastSeen: row.last_seen,
-        actions: row.actions || []
+        actions: row.actions || [],
       }));
     } catch (error) {
-      console.error('Ошибка получения аудита IP:', error.message);
+      console.error("Ошибка получения аудита IP:", error.message);
       throw error;
     }
   }
@@ -253,10 +253,10 @@ class ChangeLog extends BaseModel {
 
       const result = await query(sql);
       return {
-        archivedCount: result.rowCount
+        archivedCount: result.rowCount,
       };
     } catch (error) {
-      console.error('Ошибка архивирования журнала:', error.message);
+      console.error("Ошибка архивирования журнала:", error.message);
       throw error;
     }
   }
@@ -285,7 +285,7 @@ class ChangeLog extends BaseModel {
       // Данные пользователя
       username: log.user_username,
       userFirstName: log.user_first_name,
-      userLastName: log.user_last_name
+      userLastName: log.user_last_name,
     };
   }
 
