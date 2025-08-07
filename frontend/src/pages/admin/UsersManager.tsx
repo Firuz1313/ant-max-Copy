@@ -180,8 +180,9 @@ const UsersManager = () => {
 
   const resetForm = () => {
     setFormData({
-      name: "",
+      username: "",
       email: "",
+      password: "",
       role: "viewer",
     });
   };
@@ -210,7 +211,7 @@ const UsersManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Управление пол��зователями
+            Управление пользователями
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Управление пользователями системы и их ролями
@@ -309,7 +310,7 @@ const UsersManager = () => {
           <CardContent>
             <div className="text-2xl font-bold">{users.length}</div>
             <p className="text-xs text-muted-foreground">
-              В ��истеме зарегистрировано
+              В системе зарегистрировано
             </p>
           </CardContent>
         </Card>
