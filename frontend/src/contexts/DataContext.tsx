@@ -358,37 +358,19 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Data states
-  const [devices, setDevices] = useState<Device[]>(() => {
-    const stored = localStorage.getItem("ant-support-devices");
-    return stored ? JSON.parse(stored) : defaultDevices;
-  });
+  const [devices, setDevices] = useState<Device[]>([]);
 
-  const [problems, setProblems] = useState<Problem[]>(() => {
-    const stored = localStorage.getItem("ant-support-problems");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [problems, setProblems] = useState<Problem[]>([]);
 
-  const [steps, setSteps] = useState<Step[]>(() => {
-    const stored = localStorage.getItem("ant-support-steps");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [steps, setSteps] = useState<Step[]>([]);
 
-  const [remotes, setRemotes] = useState<Remote[]>(() => {
-    const stored = localStorage.getItem("ant-support-remotes");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [remotes, setRemotes] = useState<Remote[]>([]);
 
-  const [stepActions, setStepActions] = useState<StepAction[]>(() => {
-    const stored = localStorage.getItem("ant-support-step-actions");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [stepActions, setStepActions] = useState<StepAction[]>([]);
 
   const [sessions, setSessions] = useState<DiagnosticSession[]>([]);
   const [changeLogs, setChangeLogs] = useState<ChangeLog[]>([]);
-  const [siteSettings, setSiteSettings] = useState<SiteSettings>(() => {
-    const stored = localStorage.getItem("ant-support-settings");
-    return stored ? JSON.parse(stored) : defaultSiteSettings;
-  });
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   // Persistence effects
   useEffect(() => {
@@ -1010,7 +992,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
       if (remote.isDefault) {
         return {
           canDelete: false,
-          reason: "Нельзя удалить пульт по умолчанию",
+          reason: "Нельзя удалить пульт по умолчани��",
         };
       }
 
