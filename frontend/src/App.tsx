@@ -31,7 +31,7 @@ import SystemSettings from "@/pages/admin/SystemSettings";
 
 function App() {
   return (
-    <DataProvider>
+    <ApiProvider>
       <Router>
         <Routes>
           {/* Public Routes */}
@@ -179,7 +179,7 @@ function App() {
           />
         </Routes>
       </Router>
-    </DataProvider>
+    </ApiProvider>
   );
 }
 
