@@ -152,7 +152,7 @@ const RemotesManager = () => {
       console.error('Ошибка при обновлении пульта:', error);
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не удалось обновить пульт',
+        description: error.message || 'Не ��далось обновить пульт',
         variant: 'destructive',
       });
     }
@@ -263,7 +263,7 @@ const RemotesManager = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Загрузка пультов...</span>
+        <span className="ml-2">Загрузка ��ультов...</span>
       </div>
     );
   }
@@ -318,11 +318,13 @@ const RemotesManager = () => {
               <SelectContent>
                 <SelectItem value="all">Все устройства</SelectItem>
                 <SelectItem value="universal">Универсальные</SelectItem>
-                {safeDevices.map(device => (
-                  <SafeSelectItem key={device.id} value={device.id}>
-                    {device.brand} {device.model}
-                  </SafeSelectItem>
-                ))}
+                {safeDevices
+                  .filter(device => device.brand && device.model)
+                  .map(device => (
+                    <SafeSelectItem key={device.id} value={device.id}>
+                      {device.brand} {device.model}
+                    </SafeSelectItem>
+                  ))}
               </SelectContent>
             </Select>
 
@@ -394,18 +396,20 @@ const RemotesManager = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="universal">Универсальный пульт</SelectItem>
-                          {safeDevices.map(device => (
-                            <SafeSelectItem key={device.id} value={device.id}>
-                              {device.brand} {device.model}
-                            </SafeSelectItem>
-                          ))}
+                          {safeDevices
+                            .filter(device => device.brand && device.model)
+                            .map(device => (
+                              <SafeSelectItem key={device.id} value={device.id}>
+                                {device.brand} {device.model}
+                              </SafeSelectItem>
+                            ))}
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Описание</Label>
+                    <Label htmlFor="description">Оп��сание</Label>
                     <Textarea
                       id="description"
                       value={formData.description}
@@ -607,11 +611,13 @@ const RemotesManager = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="universal">Универсальный пульт</SelectItem>
-                    {safeDevices.map(device => (
-                      <SafeSelectItem key={device.id} value={device.id}>
-                        {device.brand} {device.model}
-                      </SafeSelectItem>
-                    ))}
+                    {safeDevices
+                      .filter(device => device.brand && device.model)
+                      .map(device => (
+                        <SafeSelectItem key={device.id} value={device.id}>
+                          {device.brand} {device.model}
+                        </SafeSelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
