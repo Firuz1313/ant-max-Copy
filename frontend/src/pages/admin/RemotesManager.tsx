@@ -285,7 +285,7 @@ const RemotesManager = () => {
                 <SelectValue placeholder="Фильтр по типу" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Все типы</SelectItem>
+                <SelectItem value="all">Все типы</SelectItem>
                 <SelectItem value="standard">Стандартный</SelectItem>
                 <SelectItem value="compact">Компактный</SelectItem>
                 <SelectItem value="smart">Умный</SelectItem>
