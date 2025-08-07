@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Plus, Edit2, Trash2, Copy, Search, BarChart3, Smartphone, Star } from 'lucide-react';
 
-// Безопасный компонент для SelectItem, который не рендерится с пустыми значениями
+// Безопасный компонент для SelectItem, который не рендерится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
   // Логирование для отладки
   if (!value || value === '' || value === null || value === undefined) {
@@ -248,7 +248,7 @@ const RemotesManager = () => {
   // Логирование для отладки
   console.log('RemotesManager devices data:', devices.map(d => ({ id: d.id, type: typeof d.id, brand: d.brand })));
 
-  // Защита от рендеринга с некорректными данными и дублирующихся ID
+  // Защита от рендеринга с некорректными данными и д��блирующихся ID
   const safeDevices = devices.filter((device, index, array) => {
     const isValid = device &&
       device.id &&
@@ -265,16 +265,6 @@ const RemotesManager = () => {
 
     return isValid;
   });
-  const safeRemotes = remotes.filter((remote, index, array) =>
-    remote &&
-    remote.id &&
-    typeof remote.id === 'string' &&
-    remote.id.trim() !== '' &&
-    remote.id !== 'undefined' &&
-    remote.id !== 'null' &&
-    // Убираем дубли по ID
-    array.findIndex(r => r.id === remote.id) === index
-  );
 
   if (loading) {
     return (
@@ -562,7 +552,7 @@ const RemotesManager = () => {
                           <AlertDialogTitle>Удалить пульт?</AlertDialogTitle>
                           <AlertDialogDescription>
                             Вы уверены, что хотите удалить пульт "{remote.name}"? 
-                            Это действие нельзя от��енить.
+                            Это дейст��ие нельзя от��енить.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
