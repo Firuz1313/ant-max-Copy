@@ -421,9 +421,6 @@ class PersistentMockDatabase {
 // Export singleton instance
 const mockDb = new PersistentMockDatabase();
 
-export default {
-  query: mockDb.query.bind(mockDb),
-  transaction: mockDb.transaction.bind(mockDb),
-  testConnection: mockDb.testConnection.bind(mockDb),
-  createDatabase: mockDb.createDatabase.bind(mockDb),
-};
+export { mockDb };
+
+export default mockDb;
