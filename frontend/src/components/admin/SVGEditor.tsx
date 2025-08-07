@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import {
   Palette,
   MousePointer,
