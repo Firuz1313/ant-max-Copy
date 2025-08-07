@@ -206,7 +206,7 @@ router.post("/:id/usage", updateRemoteUsage);
  *   "buttons": [...]
  * }
  */
-router.put("/:id", remoteValidation?.update || ((req, res, next) => next()), updateRemote);
+router.put("/:id", validateRequest(remoteValidation.update), updateRemote);
 
 /**
  * Удалить пульт
