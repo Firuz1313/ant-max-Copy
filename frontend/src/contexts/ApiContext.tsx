@@ -292,6 +292,10 @@ export const useData = () => {
     return remotes.find(r => r.id === id);
   }, [remotes]);
 
+  const getActiveRemotes = useCallback((): Remote[] => {
+    return remotes.filter(r => r.isActive);
+  }, [remotes]);
+
   const getActiveSessions = useCallback((): DiagnosticSession[] => {
     return sessions.filter(s => s.isActive && !s.endTime);
   }, [sessions]);
@@ -470,6 +474,7 @@ export const useData = () => {
     getProblemById,
     getStepById,
     getRemoteById,
+    getActiveRemotes,
     getActiveSessions,
 
     // CRUD operations
