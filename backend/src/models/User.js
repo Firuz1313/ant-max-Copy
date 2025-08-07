@@ -11,7 +11,7 @@ class User extends BaseModel {
    * Получить всех пользователей
    */
   async getAllUsers(filters = {}) {
-    let query = `
+    let queryText = `
       SELECT 
         id, username, email, first_name, last_name, role, 
         email_verified, last_login, login_count, is_active,
@@ -234,7 +234,7 @@ class User extends BaseModel {
       paramIndex++;
     }
 
-    // Обработка остальных полей
+    // Об��аботка остальных полей
     Object.keys(updateData).forEach(field => {
       if (allowedFields.includes(field)) {
         let value = updateData[field];
@@ -280,7 +280,7 @@ class User extends BaseModel {
       throw new Error(`Пользователь с ID ${id} не найден`);
     }
 
-    // Проверка - нельзя удалить последнего админа
+    // Проверка - нельз�� удалить последнего админа
     if (user.role === 'admin') {
       const adminCount = await this.countAdmins();
       if (adminCount <= 1) {
