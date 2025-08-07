@@ -13,7 +13,7 @@ import {
   searchRemotes,
   updateRemoteUsage
 } from "../controllers/remoteController.js";
-import { remoteValidation } from "../middleware/validateRequest.js";
+import { remoteValidation, validateRequest } from "../middleware/validateRequest.js";
 
 const router = express.Router();
 
@@ -91,7 +91,7 @@ router.get("/device/:deviceId", getRemotesByDevice);
 /**
  * Получить пульт по умолчанию для устройства
  * @route GET /remotes/device/:deviceId/default
- * @desc Получение пу��ьта по умолчанию для конкретного устройства
+ * @desc Получение пульта по умолчанию для конкретного устройства
  * @param {string} deviceId - Уникальный идентификатор устройства
  * @access Public
  * @example
