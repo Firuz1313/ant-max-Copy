@@ -176,6 +176,14 @@ export async function transaction(callback) {
       await client.query("ROLLBACK");
       throw error;
     }
+  } catch (error) {
+    // Check if this is a connection error (PostgreSQL not available)
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      console.warn("⚠️ PostgreSQL unavailable - transaction skipped for graceful degradation");
+      // Return null for transactions when DB is unavailable
+      return null;
+    }
+    throw error;
   } finally {
     if (client) {
       client.release();
