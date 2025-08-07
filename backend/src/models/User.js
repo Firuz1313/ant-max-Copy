@@ -354,15 +354,15 @@ class User extends BaseModel {
     `;
 
     const result = await query(queryText);
-    const stats = result.rows[0];
+    const stats = result.rows[0] || {};
 
     return {
-      totalUsers: parseInt(stats.total_users),
-      adminCount: parseInt(stats.admin_count),
-      moderatorCount: parseInt(stats.moderator_count),
-      userCount: parseInt(stats.user_count),
-      verifiedCount: parseInt(stats.verified_count),
-      activeCount: parseInt(stats.active_count)
+      totalUsers: parseInt(stats.total_users || 0),
+      adminCount: parseInt(stats.admin_count || 0),
+      moderatorCount: parseInt(stats.moderator_count || 0),
+      userCount: parseInt(stats.user_count || 0),
+      verifiedCount: parseInt(stats.verified_count || 0),
+      activeCount: parseInt(stats.active_count || 0)
     };
   }
 
