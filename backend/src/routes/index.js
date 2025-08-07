@@ -81,7 +81,7 @@ router.get("/docs", (req, res) => {
             "GET /devices/:id": "Получение устройства по ID",
             "POST /devices": "��оздание нового устройства",
             "PUT /devices/:id": "Обновление устройства",
-            "DELETE /devices/:id": "Удал��ние устройства",
+            "DELETE /devices/:id": "Удаление устройства",
             "GET /devices/search": "Поиск устройств",
             "GET /devices/popular": "Популярные устройства",
             "GET /devices/stats": "Статистика устройств",
@@ -159,7 +159,7 @@ router.get("/docs", (req, res) => {
           description: "Управление интерфейсами ТВ приставок",
           routes: {
             "GET /tv-interfaces": "Получение списка интерфейсов ТВ",
-            "GET /tv-interfaces/:id": "По��учение интерфейса ТВ по ID",
+            "GET /tv-interfaces/:id": "Получение интерфейса ТВ по ID",
             "POST /tv-interfaces": "Создание нового интерфейса ТВ",
             "PUT /tv-interfaces/:id": "Обновление интерфейса ТВ",
             "DELETE /tv-interfaces/:id": "Удаление интерфейса ТВ",
@@ -179,7 +179,7 @@ router.get("/docs", (req, res) => {
             "POST /users": "Создание нового пользователя",
             "PUT /users/:id": "Обновление пользователя",
             "DELETE /users/:id": "Удаление пользователя",
-            "GET /users/stats": "Статистика пользователей",
+            "GET /users/stats": "Статистика ��ользователей",
             "GET /users/search": "Поиск пользователей",
             "GET /users/check-username/:username": "Проверка доступности логина",
             "GET /users/check-email/:email": "Проверка доступности email",
@@ -233,8 +233,9 @@ router.use(`${API_V1_PREFIX}/tv-interfaces`, tvInterfaceRoutes);
 router.use(`${API_V1_PREFIX}/tv-interface-marks`, tvInterfaceMarkRoutes);
 router.use(`${API_V1_PREFIX}/cleanup`, cleanupRoutes);
 router.use(`${API_V1_PREFIX}/users`, userRoutes);
+router.use(`${API_V1_PREFIX}/remotes`, remoteRoutes);
 
-// О��работчик для несуществующих эндпоинтов API
+// Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
   res.status(404).json({
     success: false,
