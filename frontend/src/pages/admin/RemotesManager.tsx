@@ -385,9 +385,9 @@ const RemotesManager = () => {
                         <SelectContent>
                           <SelectItem value="universal">Универсальный пульт</SelectItem>
                           {safeDevices.map(device => (
-                            <SelectItem key={device.id} value={device.id}>
+                            <SafeSelectItem key={device.id} value={device.id}>
                               {device.brand} {device.model}
-                            </SelectItem>
+                            </SafeSelectItem>
                           ))}
                         </SelectContent>
                       </Select>
