@@ -47,12 +47,18 @@ export const clearDatabase = async () => {
       await client.query("SET FOREIGN_KEY_CHECKS = 0");
 
       // Очищаем все таблицы в правильном порядке
+      await client.query("DELETE FROM session_steps");
+      await client.query("DELETE FROM step_actions");
       await client.query("DELETE FROM diagnostic_sessions");
       await client.query("DELETE FROM diagnostic_steps");
+      await client.query("DELETE FROM tv_interface_marks");
+      await client.query("DELETE FROM tv_interfaces");
+      await client.query("DELETE FROM remotes");
       await client.query("DELETE FROM problems");
       await client.query("DELETE FROM devices");
-      await client.query("DELETE FROM tv_interfaces");
-      await client.query("DELETE FROM tv_interface_marks");
+      await client.query("DELETE FROM change_logs");
+      await client.query("DELETE FROM users WHERE id != 'admin-001'"); // Оставляем админа
+      await client.query("DELETE FROM site_settings WHERE id != 'settings'"); // Оставляем настройки
 
       // Включаем обратно проверки внешних ключей
       await client.query("SET FOREIGN_KEY_CHECKS = 1");
