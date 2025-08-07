@@ -9,13 +9,56 @@ import {
   Settings,
   Star,
 } from "lucide-react";
-import { useData } from "@/contexts/DataContext";
+import { useApi } from "@/contexts/ApiContext";
 import { useState, useEffect } from "react";
+
+interface Device {
+  id: string;
+  name: string;
+  model: string;
+  brand: string;
+  color: string;
+  isActive: boolean;
+}
+
+interface Problem {
+  id: string;
+  title: string;
+  deviceId: string;
+  isActive: boolean;
+}
 
 const DeviceSelection = () => {
   const navigate = useNavigate();
-  const { devices, loading, getProblemsForDevice } = useData();
-  const activeDevices = devices.filter(d => d.isActive);
+  const { api, setError } = useApi();
+  
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const [devicesData, problemsData] = await Promise.all([
+          api.getDevices(),
+          api.getProblems()
+        ]);
+        
+        setDevices(devicesData || []);
+        setProblems(problemsData || []);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        setError(error instanceof Error ? error.message : 'Unknown error');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, [api, setError]);
 
   const handleDeviceSelect = (deviceId: string) => {
     navigate(`/problems/${deviceId}`);
@@ -42,6 +85,12 @@ const DeviceSelection = () => {
         return <Tv className="h-8 w-8" />;
     }
   };
+
+  const getProblemsForDevice = (deviceId: string): number => {
+    return problems.filter(p => p.deviceId === deviceId && p.isActive).length;
+  };
+
+  const activeDevices = devices.filter(d => d.isActive);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -95,7 +144,7 @@ const DeviceSelection = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-              {loading.devices ? (
+              {isLoading ? (
                 <div className="col-span-full text-center text-gray-300 py-12">
                   <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full" role="status">
                     <span className="sr-only">Загрузка...</span>
@@ -117,7 +166,7 @@ const DeviceSelection = () => {
                 </div>
               ) : (
                 activeDevices.map((device) => {
-                  const problemsCount = getProblemsForDevice(device.id).length;
+                  const problemsCount = getProblemsForDevice(device.id);
 
                   return (
                     <Card
