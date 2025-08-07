@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -179,7 +179,7 @@ const SystemSettings = () => {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Settings className="h-5 w-5 mr-2" />
-                Общие настройки
+                Общие на��тройки
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -370,7 +370,7 @@ const SystemSettings = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <Label htmlFor="diagnosticReports">Отчеты диагностики</Label>
-                    <p className="text-sm text-gray-500">Ежедневные отчеты о диагностике</p>
+                    <p className="text-sm text-gray-500">Еже��невные отчеты о диагностике</p>
                   </div>
                   <Switch
                     id="diagnosticReports"

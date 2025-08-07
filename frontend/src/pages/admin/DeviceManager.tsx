@@ -40,7 +40,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 
 interface Device {
   id: string;
@@ -383,7 +383,7 @@ const DeviceManager = () => {
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Поиск приставок..."
+              placeholder="Поиск прист��вок..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
