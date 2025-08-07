@@ -70,8 +70,9 @@ const UsersManager = () => {
   const [filterStatus, setFilterStatus] = useState<string>("all");
 
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
+    password: "",
     role: "viewer" as User["role"],
   });
 
@@ -109,10 +110,12 @@ const UsersManager = () => {
   const handleCreate = async () => {
     try {
       const userData = {
-        ...formData,
-        status: "active",
-        lastLogin: "Никогда",
-        createdAt: new Date().toISOString().split('T')[0],
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        bio: "",
+        profileImage: ""
       };
       console.log('Creating user with data:', userData);
 
@@ -207,7 +210,7 @@ const UsersManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Управление ��ользователями
+            Управление пользователями
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Управление пользователями системы и их ролями
@@ -382,7 +385,7 @@ const UsersManager = () => {
                 <SelectContent>
                   <SelectItem value="all">Все статусы</SelectItem>
                   <SelectItem value="active">Активный</SelectItem>
-                  <SelectItem value="inactive">Неактивный</SelectItem>
+                  <SelectItem value="inactive">Неактивн��й</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -478,7 +481,7 @@ const UsersManager = () => {
                           </DropdownMenuItem>
                           <DropdownMenuItem onClick={() => handleToggleStatus(user.id)}>
                             <UserIcon className="h-4 w-4 mr-2" />
-                            {user.status === "active" ? "Деактивировать" : "Акти��ировать"}
+                            {user.status === "active" ? "Деактивировать" : "Активировать"}
                           </DropdownMenuItem>
                           <DropdownMenuItem 
                             onClick={() => handleDelete(user.id)}
