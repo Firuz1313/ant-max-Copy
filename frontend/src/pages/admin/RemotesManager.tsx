@@ -304,7 +304,7 @@ const RemotesManager = () => {
                 <DialogHeader>
                   <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
-                    Создайте новый пульт дист��нционного управления
+                    Создайте новый пульт дистанционного управл��ния
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -379,7 +379,7 @@ const RemotesManager = () => {
                           <SelectItem value="standard">Стандартный</SelectItem>
                           <SelectItem value="compact">Компактный</SelectItem>
                           <SelectItem value="smart">Умный</SelectItem>
-                          <SelectItem value="custom">Настраиваемы��</SelectItem>
+                          <SelectItem value="custom">Настраиваемый</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -461,7 +461,7 @@ const RemotesManager = () => {
                     <div className="text-sm text-muted-foreground space-y-1">
                       <p><strong>Производитель:</strong> {remote.manufacturer}</p>
                       <p><strong>Модель:</strong> {remote.model}</p>
-                      <p><strong>У��тройство:</strong> {getDeviceName(remote.deviceId)}</p>
+                      <p><strong>Устройство:</strong> {getDeviceName(remote.deviceId)}</p>
                       {remote.description && <p><strong>Описание:</strong> {remote.description}</p>}
                       <p><strong>Использований:</strong> {remote.usageCount || 0}</p>
                     </div>
@@ -494,7 +494,7 @@ const RemotesManager = () => {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Удалить пульт?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Вы уверены, что хотите удалить пульт "{remote.name}"? 
+                            Вы уверены, что хотите удалить пу��ьт "{remote.name}"? 
                             Это действие нельзя отменить.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
@@ -555,12 +555,12 @@ const RemotesManager = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="edit-device">Устройство</Label>
-                <Select value={formData.device_id} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
+                <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value === 'universal' ? '' : value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите устройство" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Универсальный пульт</SelectItem>
+                    <SelectItem value="universal">Универсальный пульт</SelectItem>
                     {devices.map(device => (
                       <SelectItem key={device.id} value={device.id}>
                         {device.brand} {device.model}
