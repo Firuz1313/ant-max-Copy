@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import {
   Tv,
   Settings,
@@ -256,7 +256,7 @@ const ANTSupport = () => {
               className="group"
             >
               <Settings className="mr-2 h-3 w-3" />
-              Панель ад��инистратора
+              ��анель ад��инистратора
             </Button>
           </div>
         </section>
