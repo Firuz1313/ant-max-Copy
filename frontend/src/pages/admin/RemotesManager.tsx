@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
 import { Loader2, Plus, Edit2, Trash2, Copy, Search, BarChart3, Smartphone, Star } from 'lucide-react';
 
-// Безопасный компонент для SelectItem, который не рендерится с пустыми значе��иями
+// Безопасный компон��нт для SelectItem, который не рендерится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
   // Логирование для отладки
   if (!value || value === '' || value === null || value === undefined) {
@@ -220,6 +220,17 @@ const RemotesManager = () => {
     setIsEditDialogOpen(true);
   };
 
+  const safeRemotes = remotes.filter((remote, index, array) =>
+    remote &&
+    remote.id &&
+    typeof remote.id === 'string' &&
+    remote.id.trim() !== '' &&
+    remote.id !== 'undefined' &&
+    remote.id !== 'null' &&
+    // Убираем дубли по ID
+    array.findIndex(r => r.id === remote.id) === index
+  );
+
   const filteredRemotes = safeRemotes.filter(remote => {
     const matchesSearch = remote.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          remote.manufacturer.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -359,7 +370,7 @@ const RemotesManager = () => {
                 <DialogHeader>
                   <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
-                    Создайте новый пульт дистанционного управления
+                    Создайте ��овый пульт дистанционного управления
                   </DialogDescription>
                 </DialogHeader>
                 
