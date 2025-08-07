@@ -57,7 +57,7 @@ const RemotesManager = () => {
       setDevices(devicesData);
       setStats(statsData);
     } catch (error) {
-      console.error('Ошибка при загрузке данных:', error);
+      console.error('Ошибка при за��рузке данных:', error);
       toast({
         title: 'Ошибка',
         description: 'Не удалось загрузить данные пультов',
@@ -212,7 +212,7 @@ const RemotesManager = () => {
 
   const getDeviceName = (deviceId: string | null) => {
     if (!deviceId) return 'Универсальный';
-    const device = devices.find(d => d.id === deviceId);
+    const device = safeDevices.find(d => d.id === deviceId);
     return device ? `${device.brand} ${device.model}` : 'Неизвестно';
   };
 
@@ -358,7 +358,7 @@ const RemotesManager = () => {
                       <Label htmlFor="device">Устройство</Label>
                       <Select value={formData.device_id} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Выберите ус��ройство" />
+                          <SelectValue placeholder="Выберите устройство" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="universal">Универсальный пульт</SelectItem>
@@ -441,7 +441,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout 
                 ? 'Попробуйте изменить параметры поиска или фильтрации' 
-                : 'Начните с создания первого пульта дистанционного управления'}
+                : 'Начните с создания первого пульта дистанционного уп��авления'}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
