@@ -74,7 +74,7 @@ const RemotesManager = () => {
       manufacturer: '',
       model: '',
       description: '',
-      device_id: '',
+      device_id: 'universal',
       layout: 'standard',
       color_scheme: 'dark',
       image_url: '',
@@ -141,7 +141,7 @@ const RemotesManager = () => {
       await api.deleteRemote(id);
       toast({
         title: 'Успех',
-        description: '��ульт успешно удален',
+        description: 'Пульт успешно удален',
       });
       loadData();
     } catch (error: any) {
