@@ -1,16 +1,1 @@
-[
-  {
-    "id": "tv_int_825",
-    "name": "OpenBox Main Menu",
-    "description": "Main menu interface for OpenBox devices",
-    "type": "home",
-    "device_id": "openbox",
-    "screenshot_url": null,
-    "screenshot_data": null,
-    "clickable_areas": "[]",
-    "highlight_areas": "[]",
-    "is_active": true,
-    "created_at": "2025-08-07T09:47:35.839Z",
-    "updated_at": "2025-08-07T09:47:35.839Z"
-  }
-]
+[]
