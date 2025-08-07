@@ -104,7 +104,7 @@ router.get("/:id", getUserById);
  * @body {string} [user.last_name] - Фамилия пользователя
  * @body {string} [user.role=user] - Роль пользователя (admin, moderator, user)
  * @body {array} [user.permissions] - Массив разрешений
- * @body {boolean} [user.email_verified=false] - Статус подтверждения email
+ * @body {boolean} [user.email_verified=false] - Статус подтвержде��ия email
  * @body {boolean} [user.is_active=true] - Активность пользователя
  * @body {object} [user.preferences] - Пользовательские настройки
  * @body {object} [user.metadata] - Дополнительные метаданные
@@ -120,7 +120,7 @@ router.get("/:id", getUserById);
  *   "role": "user"
  * }
  */
-router.post("/", userValidation?.create || ((req, res, next) => next()), createUser);
+router.post("/", validateRequest(userValidation.create), createUser);
 
 /**
  * Обновить пользователя
@@ -131,8 +131,8 @@ router.post("/", userValidation?.create || ((req, res, next) => next()), createU
  * @body {string} [user.username] - Новый логин пользователя
  * @body {string} [user.email] - Новый email пользователя
  * @body {string} [user.password] - Новый пароль пользователя
- * @body {string} [user.first_name] - ��овое имя пользователя
- * @body {string} [user.last_name] - Новая фамилия пользователя
+ * @body {string} [user.first_name] - Новое имя пользователя
+ * @body {string} [user.last_name] - Новая фа��илия пользователя
  * @body {string} [user.role] - Новая роль пользователя
  * @body {array} [user.permissions] - Новые разрешения
  * @body {boolean} [user.email_verified] - Статус подтверждения email
