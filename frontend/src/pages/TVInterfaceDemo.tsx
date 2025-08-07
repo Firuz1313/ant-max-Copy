@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import TVDisplay from '@/components/TVDisplay';
-import { useData } from '@/contexts/DataContext';
+import { useData } from '@/contexts/ApiContext';
 import { TVInterface } from '@/types/tvInterface';
 import { tvInterfacesAPI } from '@/api/tvInterfaces';
 import { Monitor, RefreshCw } from 'lucide-react';
@@ -206,7 +206,7 @@ const TVInterfaceDemo = () => {
               <ul className="list-disc list-inside ml-4 mt-1 space-y-1">
                 <li>Редактирование существующих интерфейсов</li>
                 <li>Активация/деактивация интерфейсов</li>
-                <li>Удаление ненужных интерфейсов</li>
+                <li>Удаление ненужных интер��ейсов</li>
                 <li>Фильтрация по устройствам</li>
               </ul>
             </div>
