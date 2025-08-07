@@ -201,6 +201,32 @@ class APIService {
     });
   }
 
+  // Users (not implemented in backend yet)
+  async getUsers(): Promise<any[]> {
+    console.warn('Users endpoint not implemented in backend');
+    return [];
+  }
+
+  async getUser(id: string): Promise<any> {
+    console.warn('Users endpoint not implemented in backend');
+    throw new Error('Users endpoint not implemented');
+  }
+
+  async createUser(data: any): Promise<any> {
+    console.warn('Users endpoint not implemented in backend');
+    throw new Error('Users endpoint not implemented');
+  }
+
+  async updateUser(id: string, data: any): Promise<any> {
+    console.warn('Users endpoint not implemented in backend');
+    throw new Error('Users endpoint not implemented');
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    console.warn('Users endpoint not implemented in backend');
+    throw new Error('Users endpoint not implemented');
+  }
+
   // Settings (not implemented in backend yet)
   async getSettings(): Promise<SiteSettings> {
     console.warn('Settings endpoint not implemented in backend');
