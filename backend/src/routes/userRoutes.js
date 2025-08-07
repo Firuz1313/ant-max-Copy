@@ -10,7 +10,7 @@ import {
   checkUsernameAvailability,
   checkEmailAvailability
 } from "../controllers/userController.js";
-import { userValidation } from "../middleware/validateRequest.js";
+import { userValidation, validateRequest } from "../middleware/validateRequest.js";
 
 const router = express.Router();
 
@@ -131,7 +131,7 @@ router.post("/", userValidation?.create || ((req, res, next) => next()), createU
  * @body {string} [user.username] - Новый логин пользователя
  * @body {string} [user.email] - Новый email пользователя
  * @body {string} [user.password] - Новый пароль пользователя
- * @body {string} [user.first_name] - Новое имя пользователя
+ * @body {string} [user.first_name] - ��овое имя пользователя
  * @body {string} [user.last_name] - Новая фамилия пользователя
  * @body {string} [user.role] - Новая роль пользователя
  * @body {array} [user.permissions] - Новые разрешения
