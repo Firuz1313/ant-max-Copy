@@ -227,7 +227,7 @@ const RemotesManager = () => {
   const getDeviceName = (deviceId: string | null) => {
     if (!deviceId) return 'Универсальный';
     const device = safeDevices.find(d => d.id === deviceId);
-    return device ? `${device.brand} ${device.model}` : 'Неизвестно';
+    return device ? `${device.brand} ${device.model}` : 'Неизв��стно';
   };
 
   const layoutNames = {
@@ -270,7 +270,7 @@ const RemotesManager = () => {
 
   return (
     <div className="space-y-6">
-      {/* Заголовок и статистика */}
+      {/* Заголовок и статист��ка */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold">Управление пультами</h1>
@@ -395,7 +395,7 @@ const RemotesManager = () => {
                           <SelectValue placeholder="Выберите устройство" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="universal">Универсальный пульт</SelectItem>
+                          <SafeSelectItem value="universal">Универсальный пульт</SafeSelectItem>
                           {safeDevices
                             .filter(device => device.brand && device.model && device.id && device.id.trim() !== '')
                             .map(device => (
