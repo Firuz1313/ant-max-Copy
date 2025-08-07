@@ -69,7 +69,13 @@ const adminMenuItems: AdminMenuItem[] = [
     title: "Пользователи",
     path: "/admin/users",
     icon: Users,
-    description: "Управление\nпользователя��и и ролями",
+    description: "Управление\nпо��ьзователями и ролями",
+  },
+  {
+    title: "Пульты",
+    path: "/admin/remotes",
+    icon: Smartphone,
+    description: "Управление пультами\nдистанционного управления",
   },
   {
     title: "Настройки системы",
@@ -204,7 +210,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                   Админ-панель
                 </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Управление системой диагностики ТВ-приставок
+                  Управ��ение системой диагностики ТВ-приставок
                 </p>
               </div>
             </div>
