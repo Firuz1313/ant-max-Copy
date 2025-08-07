@@ -304,7 +304,7 @@ const RemotesManager = () => {
                 <DialogHeader>
                   <DialogTitle>Создать новый пульт</DialogTitle>
                   <DialogDescription>
-                    Создайте новый пульт дистанционного управления
+                    Создайте новый пульт дист��нционного управления
                   </DialogDescription>
                 </DialogHeader>
                 
@@ -342,12 +342,12 @@ const RemotesManager = () => {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="device">Устройство</Label>
-                      <Select value={formData.device_id} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
+                      <Select value={formData.device_id} onValueChange={(value) => setFormData({ ...formData, device_id: value === 'universal' ? '' : value })}>
                         <SelectTrigger>
                           <SelectValue placeholder="Выберите устройство" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">Универсальный пульт</SelectItem>
+                          <SelectItem value="universal">Универсальный пульт</SelectItem>
                           {devices.map(device => (
                             <SelectItem key={device.id} value={device.id}>
                               {device.brand} {device.model}
@@ -379,7 +379,7 @@ const RemotesManager = () => {
                           <SelectItem value="standard">Стандартный</SelectItem>
                           <SelectItem value="compact">Компактный</SelectItem>
                           <SelectItem value="smart">Умный</SelectItem>
-                          <SelectItem value="custom">Настраиваемый</SelectItem>
+                          <SelectItem value="custom">Настраиваемы��</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -461,7 +461,7 @@ const RemotesManager = () => {
                     <div className="text-sm text-muted-foreground space-y-1">
                       <p><strong>Производитель:</strong> {remote.manufacturer}</p>
                       <p><strong>Модель:</strong> {remote.model}</p>
-                      <p><strong>Устройство:</strong> {getDeviceName(remote.deviceId)}</p>
+                      <p><strong>У��тройство:</strong> {getDeviceName(remote.deviceId)}</p>
                       {remote.description && <p><strong>Описание:</strong> {remote.description}</p>}
                       <p><strong>Использований:</strong> {remote.usageCount || 0}</p>
                     </div>
