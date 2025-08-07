@@ -23,8 +23,8 @@ const RemotesManager = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterDevice, setFilterDevice] = useState<string>('');
-  const [filterLayout, setFilterLayout] = useState<string>('');
+  const [filterDevice, setFilterDevice] = useState<string>('all');
+  const [filterLayout, setFilterLayout] = useState<string>('all');
   const [stats, setStats] = useState<any>(null);
 
   const [formData, setFormData] = useState({
@@ -163,7 +163,7 @@ const RemotesManager = () => {
       });
       loadData();
     } catch (error: any) {
-      console.error('Ошибка при дублирова��ии пульта:', error);
+      console.error('Ошибка при дублировании пульта:', error);
       toast({
         title: 'Ошибка',
         description: error.message || 'Не удалось дублировать пульт',
@@ -219,7 +219,7 @@ const RemotesManager = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Загрузка пультов...</span>
+        <span className="ml-2">Загрузка ��ультов...</span>
       </div>
     );
   }
@@ -361,7 +361,7 @@ const RemotesManager = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description">Описание</Label>
+                    <Label htmlFor="description">Описа��ие</Label>
                     <Textarea
                       id="description"
                       value={formData.description}
@@ -529,7 +529,7 @@ const RemotesManager = () => {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="edit-name">Название *</Label>
+                <Label htmlFor="edit-name">Назван��е *</Label>
                 <Input
                   id="edit-name"
                   value={formData.name}
