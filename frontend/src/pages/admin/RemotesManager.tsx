@@ -227,7 +227,7 @@ const RemotesManager = () => {
   const getDeviceName = (deviceId: string | null) => {
     if (!deviceId) return 'Универсальный';
     const device = safeDevices.find(d => d.id === deviceId);
-    return device ? `${device.brand} ${device.model}` : 'Неизв��стно';
+    return device ? `${device.brand} ${device.model}` : 'Неизвестно';
   };
 
   const layoutNames = {
@@ -270,7 +270,7 @@ const RemotesManager = () => {
 
   return (
     <div className="space-y-6">
-      {/* Заголовок и статист��ка */}
+      {/* Заголовок и статистика */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold">Управление пультами</h1>
@@ -426,10 +426,10 @@ const RemotesManager = () => {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="standard">Стандартный</SelectItem>
-                          <SelectItem value="compact">Компактный</SelectItem>
-                          <SelectItem value="smart">Умный</SelectItem>
-                          <SelectItem value="custom">Настраиваемый</SelectItem>
+                          <SafeSelectItem value="standard">Стандартный</SafeSelectItem>
+                          <SafeSelectItem value="compact">Компактный</SafeSelectItem>
+                          <SafeSelectItem value="smart">Умный</SafeSelectItem>
+                          <SafeSelectItem value="custom">Настраиваемый</SafeSelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -477,7 +477,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout 
                 ? 'Попробуйте изменить параметры поиска или фильтрации' 
-                : 'Начните с создания первого пульта дистанционного управления'}
+                : 'Н��чните с создания первого пульта дистанционного управления'}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
