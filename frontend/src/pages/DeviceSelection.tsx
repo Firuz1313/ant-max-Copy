@@ -16,8 +16,8 @@ import { useState, useEffect } from "react";
 
 const DeviceSelection = () => {
   const navigate = useNavigate();
-  const { getActiveDevices, getProblemsForDevice } = useData();
-  const devices = getActiveDevices();
+  const { devices, loading, getProblemsForDevice } = useData();
+  const activeDevices = devices.filter(d => d.isActive);
   const [animatedIcons, setAnimatedIcons] = useState<boolean[]>([]);
 
   useEffect(() => {
