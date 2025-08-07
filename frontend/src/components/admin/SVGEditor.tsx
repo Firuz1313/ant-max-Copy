@@ -613,9 +613,9 @@ const SVGEditor = () => {
               <div>
                 <Label htmlFor="remote-select">Привязать к пульту</Label>
                 <Select
-                  value={project.remoteId || ""}
+                  value={project.remoteId || "none"}
                   onValueChange={(value) =>
-                    setProject({ ...project, remoteId: value || undefined })
+                    setProject({ ...project, remoteId: value === "none" ? undefined : value })
                   }
                 >
                   <SelectTrigger>
