@@ -36,27 +36,29 @@ class APIService {
         ...options,
       });
 
+      // Always clone the response immediately to avoid body consumption issues
+      const responseClone = response.clone();
       let data;
 
-      // Check if response has content
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.includes("application/json")) {
-        data = await response.json();
-      } else {
-        // For non-JSON responses or empty responses
-        const text = await response.text();
+      try {
+        // Try to parse as JSON first
+        data = await responseClone.json();
+      } catch (jsonError) {
+        // If JSON parsing fails, read as text from the original response
         try {
-          data = text ? JSON.parse(text) : {};
-        } catch {
-          data = { message: text };
+          const text = await response.text();
+          data = text ? { message: text } : {};
+        } catch (textError) {
+          // If everything fails, provide empty object
+          data = {};
         }
       }
 
       if (!response.ok) {
-        throw new Error(data.error || `HTTP error! status: ${response.status}`);
+        throw new Error(data.error || data.message || `HTTP error! status: ${response.status}`);
       }
 
-      return data.data || data; // Return the data directly
+      return data.data || data;
     } catch (error) {
       console.error(`API Error [${endpoint}]:`, error);
       throw error;
