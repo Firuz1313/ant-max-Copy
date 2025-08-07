@@ -25,7 +25,7 @@ class BaseModel {
   }
 
   /**
-   * Создание временной метки
+   * Создание временной м��тки
    */
   createTimestamp() {
     return new Date().toISOString();
@@ -209,9 +209,16 @@ class BaseModel {
     try {
       const { sql, values } = this.buildSelectQuery(filters, options);
       const result = await query(sql, values);
-      return result.rows;
+      return result.rows || [];
     } catch (error) {
       console.error(`Ошибка получения записей из ${this.tableName}:`, error.message);
+
+      // If PostgreSQL is unavailable, return empty array
+      if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+        console.warn(`⚠️ PostgreSQL unavailable - returning empty array for ${this.tableName}`);
+        return [];
+      }
+
       throw error;
     }
   }
