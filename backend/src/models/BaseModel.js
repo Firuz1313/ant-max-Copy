@@ -312,9 +312,16 @@ class BaseModel {
       }
 
       const result = await query(sql, values);
-      return parseInt(result.rows[0].total);
+      return parseInt(result.rows[0]?.total || 0);
     } catch (error) {
       console.error(`Ошибка подсчета записей в ${this.tableName}:`, error.message);
+
+      // If PostgreSQL is unavailable, return 0
+      if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+        console.warn(`⚠️ PostgreSQL unavailable - returning count 0 for ${this.tableName}`);
+        return 0;
+      }
+
       throw error;
     }
   }
