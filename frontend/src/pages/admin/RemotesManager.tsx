@@ -138,7 +138,7 @@ const RemotesManager = () => {
       console.error('Ошибка при обновлении пульта:', error);
       toast({
         title: 'Ошибка',
-        description: error.message || 'Не удалось обновить п��льт',
+        description: error.message || 'Не удалось обновить пульт',
         variant: 'destructive',
       });
     }
@@ -281,7 +281,7 @@ const RemotesManager = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Все устройства</SelectItem>
-                <SelectItem value="universal">Универсальные</SelectItem>
+                <SelectItem value="universal">Ун��версальные</SelectItem>
                 {devices.filter(device => device.id && device.id.trim() !== '').map(device => (
                   <SelectItem key={device.id} value={device.id}>
                     {device.brand} {device.model}
@@ -357,7 +357,7 @@ const RemotesManager = () => {
                           <SelectValue placeholder="Выберите устройство" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="universal">Универсальный ��ульт</SelectItem>
+                          <SelectItem value="universal">Универсальный пульт</SelectItem>
                           {devices.filter(device => device.id && device.id.trim() !== '').map(device => (
                             <SelectItem key={device.id} value={device.id}>
                               {device.brand} {device.model}
@@ -571,7 +571,7 @@ const RemotesManager = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="universal">Универсальный пульт</SelectItem>
-                    {devices.map(device => (
+                    {devices.filter(device => device.id && device.id.trim() !== '').map(device => (
                       <SelectItem key={device.id} value={device.id}>
                         {device.brand} {device.model}
                       </SelectItem>
