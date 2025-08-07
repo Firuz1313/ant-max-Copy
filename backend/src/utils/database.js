@@ -58,11 +58,11 @@ pool.on("release", (client) => {
   }
 });
 
-// Import persistent mock database if needed
+// Import mock database if needed
 let mockDb = null;
 if (USE_MOCK_DB) {
-  mockDb = await import("./persistentMockDatabase.js");
-  console.log("🔧 Using persistent mock database for development");
+  mockDb = await import("./mockDatabase.js");
+  console.log("🔧 Using mock database for development");
 }
 
 // Функция проверки подключения к базе данных
@@ -78,7 +78,7 @@ export async function testConnection() {
       "SELECT NOW() as current_time, version() as postgres_version",
     );
 
-    console.log("✅ Подключение к PostgreSQL успешно");
+    console.log("✅ Подключение к PostgreSQL успеш��о");
     console.log(`🕐 Время сервера: ${result.rows[0].current_time}`);
     console.log(
       `📋 Версия PostgreSQL: ${result.rows[0].postgres_version.split(" ")[0]}`,
@@ -92,11 +92,11 @@ export async function testConnection() {
   } catch (error) {
     console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
 
-    // Fallback to persistent mock database
+    // Fallback to mock database
     if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to persistent mock database...");
+      console.log("🔧 Falling back to mock database...");
       process.env.USE_MOCK_DB = "true";
-      mockDb = await import("./persistentMockDatabase.js");
+      mockDb = await import("./mockDatabase.js");
       return await mockDb.testConnection();
     }
 
@@ -143,12 +143,12 @@ export async function query(text, params = []) {
     console.error("🔍 Query:", text);
     console.error("🔍 Parameters:", params);
 
-    // Fallback to persistent mock database
+    // Fallback to mock database
     if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to persistent mock database...");
+      console.log("🔧 Falling back to mock database...");
       process.env.USE_MOCK_DB = "true";
       if (!mockDb) {
-        mockDb = await import("./persistentMockDatabase.js");
+        mockDb = await import("./mockDatabase.js");
       }
       return await mockDb.query(text, params);
     }
@@ -386,7 +386,7 @@ export async function cleanupOldData(daysToKeep = 90) {
   }
 }
 
-// Функция для полнотекстового поиска
+// Функция для полнотекстовог�� поиска
 export async function searchText(
   searchTerm,
   tables = ["problems", "devices", "diagnostic_steps"],
