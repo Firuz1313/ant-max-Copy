@@ -2,6 +2,7 @@ import React, {
   createContext,
   useContext,
   useState,
+  useEffect,
   ReactNode,
   useCallback,
 } from "react";
@@ -248,86 +249,217 @@ export const useApi = () => {
 // Compatibility hook for existing components
 export const useData = () => {
   const { api, loading, setLoading, setError } = useApi();
-  
+
+  // State to hold loaded data for the old interface compatibility
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [problems, setProblems] = useState<Problem[]>([]);
+  const [steps, setSteps] = useState<Step[]>([]);
+  const [remotes, setRemotes] = useState<Remote[]>([]);
+  const [sessions, setSessions] = useState<DiagnosticSession[]>([]);
+  const [changeLogs, setChangeLogs] = useState<ChangeLog[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+
   // Helper functions that mimic the old DataContext interface
-  const getActiveDevices = useCallback(async (): Promise<Device[]> => {
+  const getActiveDevices = useCallback((): Device[] => {
+    return devices.filter(d => d.isActive);
+  }, [devices]);
+
+  const getProblemsForDevice = useCallback((deviceId: string): Problem[] => {
+    return problems.filter(p => p.deviceId === deviceId && p.isActive);
+  }, [problems]);
+
+  const getStepsForProblem = useCallback((problemId: string): Step[] => {
+    return steps
+      .filter(s => s.problemId === problemId && s.isActive)
+      .sort((a, b) => a.stepNumber - b.stepNumber);
+  }, [steps]);
+
+  const getDeviceById = useCallback((id: string): Device | undefined => {
+    return devices.find(d => d.id === id);
+  }, [devices]);
+
+  const getProblemById = useCallback((id: string): Problem | undefined => {
+    return problems.find(p => p.id === id);
+  }, [problems]);
+
+  const getStepById = useCallback((id: string): Step | undefined => {
+    return steps.find(s => s.id === id);
+  }, [steps]);
+
+  const getRemoteById = useCallback((id: string): Remote | undefined => {
+    return remotes.find(r => r.id === id);
+  }, [remotes]);
+
+  const getActiveSessions = useCallback((): DiagnosticSession[] => {
+    return sessions.filter(s => s.isActive && !s.endTime);
+  }, [sessions]);
+
+  const getEntityStats = useCallback((entity: string) => {
+    let data: any[] = [];
+    switch (entity) {
+      case "devices":
+        data = devices;
+        break;
+      case "problems":
+        data = problems;
+        break;
+      case "steps":
+        data = steps;
+        break;
+      case "remotes":
+        data = remotes;
+        break;
+      default:
+        data = [];
+    }
+
+    return {
+      total: data.length,
+      active: data.filter((item) => item.isActive).length,
+    };
+  }, [devices, problems, steps, remotes]);
+
+  // Load functions
+  const loadDevices = useCallback(async () => {
     try {
       setLoading(true);
-      const devices = await api.getDevices();
-      return devices.filter(d => d.isActive);
+      const deviceData = await api.getDevices();
+      setDevices(deviceData);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
-      return [];
     } finally {
       setLoading(false);
     }
   }, [api, setLoading, setError]);
 
-  const getProblemsForDevice = useCallback(async (deviceId: string): Promise<Problem[]> => {
+  const loadProblems = useCallback(async () => {
     try {
       setLoading(true);
-      return await api.getProblems(deviceId);
+      const problemData = await api.getProblems();
+      setProblems(problemData);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
-      return [];
     } finally {
       setLoading(false);
     }
   }, [api, setLoading, setError]);
 
-  const getStepsForProblem = useCallback(async (problemId: string): Promise<Step[]> => {
+  const loadSteps = useCallback(async () => {
     try {
       setLoading(true);
-      return await api.getSteps(problemId);
+      const stepData = await api.getSteps();
+      setSteps(stepData);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
-      return [];
     } finally {
       setLoading(false);
     }
   }, [api, setLoading, setError]);
 
-  const getDeviceById = useCallback(async (id: string): Promise<Device | null> => {
+  const loadRemotes = useCallback(async () => {
     try {
-      return await api.getDevice(id);
+      setLoading(true);
+      const remoteData = await api.getRemotes();
+      setRemotes(remoteData);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
-      return null;
+    } finally {
+      setLoading(false);
     }
-  }, [api, setError]);
+  }, [api, setLoading, setError]);
 
-  const getProblemById = useCallback(async (id: string): Promise<Problem | null> => {
+  const loadSessions = useCallback(async () => {
     try {
-      return await api.getProblem(id);
+      setLoading(true);
+      const sessionData = await api.getSessions();
+      setSessions(sessionData);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
-      return null;
+    } finally {
+      setLoading(false);
     }
-  }, [api, setError]);
+  }, [api, setLoading, setError]);
 
-  // Mock data for compatibility - these will be empty arrays until explicitly loaded
+  const loadSiteSettings = useCallback(async () => {
+    try {
+      setLoading(true);
+      const settingsData = await api.getSettings();
+      setSiteSettings(settingsData);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Unknown error');
+    } finally {
+      setLoading(false);
+    }
+  }, [api, setLoading, setError]);
+
+  const refreshAllData = useCallback(async () => {
+    await Promise.all([
+      loadDevices(),
+      loadProblems(),
+      loadSteps(),
+      loadRemotes(),
+      loadSessions(),
+      loadSiteSettings(),
+    ]);
+  }, [loadDevices, loadProblems, loadSteps, loadRemotes, loadSessions, loadSiteSettings]);
+
+  // Export data function
+  const exportData = useCallback(async (options: any) => {
+    // Mock export functionality - would need to be implemented based on backend
+    const data = {
+      devices,
+      problems,
+      steps,
+      remotes,
+      sessions,
+      metadata: {
+        exportDate: new Date().toISOString(),
+        version: "1.0.0",
+      }
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    return {
+      downloadUrl: url,
+      data: data
+    };
+  }, [devices, problems, steps, remotes, sessions]);
+
+  // Refresh data function (alias for refreshAllData)
+  const refreshData = useCallback(async () => {
+    await refreshAllData();
+  }, [refreshAllData]);
+
+  // Load initial data
+  useEffect(() => {
+    refreshAllData();
+  }, []);
+
   return {
     api,
     loading: { devices: loading, problems: loading, steps: loading, remotes: loading, stepActions: loading, sessions: loading, changeLogs: loading, siteSettings: loading },
     errors: { devices: null, problems: null, steps: null, remotes: null, stepActions: null, sessions: null, changeLogs: null, siteSettings: null },
-    devices: [], // Always empty - use getActiveDevices() instead
-    problems: [], // Always empty - use getProblemsForDevice() instead
-    steps: [], // Always empty - use getStepsForProblem() instead
-    remotes: [],
+    devices,
+    problems,
+    steps,
+    remotes,
     stepActions: [],
-    sessions: [],
-    changeLogs: [],
-    siteSettings: null,
-    
+    sessions,
+    changeLogs,
+    siteSettings,
+
     // API methods
     getActiveDevices,
     getProblemsForDevice,
     getStepsForProblem,
     getDeviceById,
     getProblemById,
-    getStepById: async (id: string) => null,
-    getRemoteById: async (id: string) => null,
-    
+    getStepById,
+    getRemoteById,
+    getActiveSessions,
+
     // CRUD operations
     createDevice: api.createDevice.bind(api),
     updateDevice: api.updateDevice.bind(api),
@@ -341,18 +473,28 @@ export const useData = () => {
     createRemote: api.createRemote.bind(api),
     updateRemote: api.updateRemote.bind(api),
     deleteRemote: api.deleteRemote.bind(api),
-    
+
     // Utility functions
-    getEntityStats: (entity: string) => ({ total: 0, active: 0 }),
-    clearAllData: () => {},
-    refreshAllData: async () => {},
-    loadDevices: async () => {},
-    loadProblems: async () => {},
-    loadSteps: async () => {},
-    loadRemotes: async () => {},
+    getEntityStats,
+    clearAllData: () => {
+      setDevices([]);
+      setProblems([]);
+      setSteps([]);
+      setRemotes([]);
+      setSessions([]);
+      setChangeLogs([]);
+      setSiteSettings(null);
+    },
+    refreshAllData,
+    refreshData,
+    exportData,
+    loadDevices,
+    loadProblems,
+    loadSteps,
+    loadRemotes,
     loadStepActions: async () => {},
-    loadSessions: async () => {},
-    loadSiteSettings: async () => {},
+    loadSessions,
+    loadSiteSettings,
   };
 };
 
