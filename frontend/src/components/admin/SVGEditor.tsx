@@ -622,7 +622,7 @@ const SVGEditor = () => {
                     <SelectValue placeholder="Выберите пульт" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Без привязки</SelectItem>
+                    <SelectItem value="none">Без привязки</SelectItem>
                     {remotes.map((remote) => (
                       <SelectItem key={remote.id} value={remote.id}>
                         {remote.name}
