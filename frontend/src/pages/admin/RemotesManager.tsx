@@ -227,7 +227,7 @@ const RemotesManager = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Загрузка пульто��...</span>
+        <span className="ml-2">Загрузка пультов...</span>
       </div>
     );
   }
@@ -277,12 +277,12 @@ const RemotesManager = () => {
             
             <Select value={filterDevice} onValueChange={setFilterDevice}>
               <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="Фильтр по устройству" />
+                <SelectValue placeholder="Фильтр по уст��ойству" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Все устройства</SelectItem>
                 <SelectItem value="universal">Универсальные</SelectItem>
-                {devices.map(device => (
+                {devices.filter(device => device.id && device.id.trim() !== '').map(device => (
                   <SelectItem key={device.id} value={device.id}>
                     {device.brand} {device.model}
                   </SelectItem>
