@@ -118,7 +118,7 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите пробл��му" />
             </SelectTrigger>
             <SelectContent>
-              {getAvailableProblems().map((problem) => (
+              {getAvailableProblems().filter(problem => problem.id && problem.id.trim() !== '').map((problem) => (
                 <SelectItem key={problem.id} value={problem.id}>
                   {problem.title}
                 </SelectItem>
@@ -409,7 +409,7 @@ const StepsManager = () => {
 
       // Показываем пользователю информацию об ошибке
       if (error instanceof Error && error.message.includes("Сетевая ошибка")) {
-        // Можно добавить toast уведомление
+        // Можно доба��ить toast уведомление
         console.error("П��облемы с подключением к серверу");
       }
     } finally {
@@ -524,7 +524,7 @@ const StepsManager = () => {
       );
       toast({
         title: "Предупреждение",
-        description: `Не удалось загрузить по��ные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
+        description: `Не удалос�� загрузить по��ные данные интерфейса ${tvInterface.name}. Используются кэшированные данные.`,
         variant: "destructive",
       });
       setSelectedTVInterface(tvInterface);
@@ -901,7 +901,7 @@ const StepsManager = () => {
                   className="w-full"
                 >
                   <Target className="h-4 w-4 mr-2" />
-                  {isPickingButton ? "Отменить выбор" : "Выбрать п����ицию"}
+                  {isPickingButton ? "Отменить выбор" : "Выбрать п��зицию"}
                 </Button>
                 <Button
                   variant="outline"
@@ -1331,7 +1331,7 @@ const StepsManager = () => {
               Шаги не найдены
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Попробуйте измени��ь ф��ль��ры ��оиска или создайте новый шаг.
+              Попробуйте измени��ь ф��ль��ры поиска или создайте новый шаг.
             </p>
           </CardContent>
         </Card>
