@@ -22,7 +22,7 @@ const SafeSelectItem = ({ value, children, ...props }: any) => {
     return null;
   }
 
-  // Дополнительные проверки
+  // Дополнительные проверк��
   if (typeof value !== 'string') {
     console.warn('SafeSelectItem: блокировка нестрокового значения:', { value, type: typeof value });
     return null;
@@ -150,7 +150,7 @@ const RemotesManager = () => {
       await api.updateRemote(selectedRemote.id, updateData);
       toast({
         title: 'Успех',
-        description: 'Пульт успешно обновлен',
+        description: 'Пульт успешно обно��лен',
       });
       setIsEditDialogOpen(false);
       setSelectedRemote(null);
@@ -189,7 +189,7 @@ const RemotesManager = () => {
       await api.duplicateRemote(remote.id, `${remote.name} (копия)`);
       toast({
         title: 'Успех',
-        description: 'Пульт ус��ешно дублирован',
+        description: 'Пульт успешно дублирован',
       });
       loadData();
     } catch (error: any) {
@@ -245,17 +245,26 @@ const RemotesManager = () => {
     custom: 'Настраиваемый'
   };
 
+  // Логирование для отладки
+  console.log('RemotesManager devices data:', devices.map(d => ({ id: d.id, type: typeof d.id, brand: d.brand })));
+
   // Защита от рендеринга с некорректными данными и дублирующихся ID
-  const safeDevices = devices.filter((device, index, array) =>
-    device &&
-    device.id &&
-    typeof device.id === 'string' &&
-    device.id.trim() !== '' &&
-    device.id !== 'undefined' &&
-    device.id !== 'null' &&
-    // Убираем дубли по ID
-    array.findIndex(d => d.id === device.id) === index
-  );
+  const safeDevices = devices.filter((device, index, array) => {
+    const isValid = device &&
+      device.id &&
+      typeof device.id === 'string' &&
+      device.id.trim() !== '' &&
+      device.id !== 'undefined' &&
+      device.id !== 'null' &&
+      // Убираем дубли по ID
+      array.findIndex(d => d.id === device.id) === index;
+
+    if (!isValid) {
+      console.warn('RemotesManager: Отфильтровано некорректное устройство:', device);
+    }
+
+    return isValid;
+  });
   const safeRemotes = remotes.filter((remote, index, array) =>
     remote &&
     remote.id &&
