@@ -11,6 +11,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+// Безопасный компонент для SelectItem, который не рендерится с пустыми значениями
+const SafeSelectItem = ({ value, children, ...props }: any) => {
+  if (!value || typeof value !== 'string' || value.trim() === '' || value === 'undefined' || value === 'null') {
+    return null;
+  }
+  return <SelectItem value={value} {...props}>{children}</SelectItem>;
+};
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useData } from "@/contexts/ApiContext";
@@ -302,7 +310,7 @@ const TVInterfaceBuilder = () => {
       console.error("Error deleting TV interface:", error);
       toast({
         title: "Ошибка",
-        description: "Произошла ошибка при удалении TV интерфейса",
+        description: "Произошла ошибка при удал��нии TV интерфейса",
         variant: "destructive",
       });
     } finally {
@@ -468,7 +476,7 @@ const TVInterfaceBuilder = () => {
                 <AlertDialogTitle>Очистить все TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
                   Это действие удалит все существующие TV интерфейсы. После
-                  очистки вы сможете создавать свои собственные интерфейсы
+                  ��чистки вы сможете создавать свои собственные интерфейсы
                   вручную через UI.
                 </AlertDialogDescription>
               </AlertDialogHeader>
@@ -546,7 +554,7 @@ const TVInterfaceBuilder = () => {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите устройство" />
+                      <SelectValue placeholder="Выберите устрой��тво" />
                     </SelectTrigger>
                     <SelectContent>
                       {devices.map((device) => (
