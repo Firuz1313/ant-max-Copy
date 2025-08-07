@@ -20,7 +20,7 @@ import {
 
 const Index = () => {
   const navigate = useNavigate();
-  const { devices, problems, getEntityStats } = useData();
+  const { devices, problems, getEntityStats, loading, errors } = useData();
 
   const deviceStats = getEntityStats("devices");
   const problemStats = getEntityStats("problems");
@@ -52,7 +52,7 @@ const Index = () => {
               </span>
             </h2>
             <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Профессиональные решения для любых проблем. Простой интерфейс,
+              ��рофессиональные решения для любых проблем. Простой интерфейс,
               быстрые результаты.
             </p>
 
@@ -123,36 +123,52 @@ const Index = () => {
             <h3 className="text-3xl font-bold text-white mb-8 text-center">
               Поддерживаемые устройства
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {devices
-                .filter((d) => d.isActive)
-                .map((device) => (
-                  <Card
-                    key={device.id}
-                    className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 hover:scale-105 transition-all duration-300 cursor-pointer"
-                  >
-                    <CardContent className="p-5 text-center">
-                      <div
-                        className={`w-12 h-12 bg-gradient-to-br ${device.color} rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg`}
-                      >
-                        <Tv className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="font-semibold text-white mb-1">
-                        {device.name}
-                      </div>
-                      <div className="text-sm text-gray-300">
-                        {device.model}
-                      </div>
-                      <Badge
-                        variant="secondary"
-                        className="mt-2 text-xs bg-green-500/20 text-green-300 border-green-500/30"
-                      >
-                        Доступно
-                      </Badge>
-                    </CardContent>
-                  </Card>
-                ))}
-            </div>
+            {loading.devices ? (
+              <div className="text-center text-gray-300">
+                <div className="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full" role="status" aria-label="loading">
+                  <span className="sr-only">Загрузка...</span>
+                </div>
+                <p className="mt-2">Загрузка устройств...</p>
+              </div>
+            ) : devices.length === 0 ? (
+              <div className="text-center text-gray-400 py-12">
+                <Tv className="h-16 w-16 mx-auto mb-4 text-gray-500" />
+                <h4 className="text-xl font-semibold mb-2">Нет данных об устройствах</h4>
+                <p className="text-gray-500">Устройства пока не добавлены в систему.</p>
+                <p className="text-sm text-gray-600 mt-2">Обратитесь к администратору для добавления устройств.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {devices
+                  .filter((d) => d.isActive)
+                  .map((device) => (
+                    <Card
+                      key={device.id}
+                      className="bg-white/5 backdrop-blur-md border-white/10 hover:bg-white/10 hover:scale-105 transition-all duration-300 cursor-pointer"
+                    >
+                      <CardContent className="p-5 text-center">
+                        <div
+                          className={`w-12 h-12 bg-gradient-to-br ${device.color} rounded-xl flex items-center justify-center mx-auto mb-3 shadow-lg`}
+                        >
+                          <Tv className="h-6 w-6 text-white" />
+                        </div>
+                        <div className="font-semibold text-white mb-1">
+                          {device.name}
+                        </div>
+                        <div className="text-sm text-gray-300">
+                          {device.model}
+                        </div>
+                        <Badge
+                          variant="secondary"
+                          className="mt-2 text-xs bg-green-500/20 text-green-300 border-green-500/30"
+                        >
+                          Доступно
+                        </Badge>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </div>
+            )}
           </div>
 
           {/* Features */}
