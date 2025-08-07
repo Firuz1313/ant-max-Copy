@@ -143,12 +143,12 @@ export async function query(text, params = []) {
     console.error("🔍 Query:", text);
     console.error("🔍 Parameters:", params);
 
-    // Fallback to mock database
+    // Fallback to persistent mock database
     if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
+      console.log("🔧 Falling back to persistent mock database...");
       process.env.USE_MOCK_DB = "true";
       if (!mockDb) {
-        mockDb = await import("./mockDatabase.js");
+        mockDb = await import("./persistentMockDatabase.js");
       }
       return await mockDb.query(text, params);
     }
@@ -220,12 +220,12 @@ export async function createDatabase() {
     }
   } catch (error) {
     console.error("❌ Ошибка создания базы данных:", error.message);
-    // Fallback to mock database
+    // Fallback to persistent mock database
     if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
+      console.log("🔧 Falling back to persistent mock database...");
       process.env.USE_MOCK_DB = "true";
       if (!mockDb) {
-        mockDb = await import("./mockDatabase.js");
+        mockDb = await import("./persistentMockDatabase.js");
       }
       return await mockDb.createDatabase();
     }
@@ -292,7 +292,7 @@ export async function runMigrations() {
       console.log(`✅ Миграция ${filename} выполнена успешно`);
     }
 
-    console.log("🎉 Все миграции в��полнены успешно");
+    console.log("🎉 Все миграции выполнены успешно");
   } catch (error) {
     console.error("❌ Ошибка выполнения миграций:", error.message);
     throw error;
@@ -338,7 +338,7 @@ export async function closePool() {
   try {
     console.log("🔄 Закрытие пула соединений PostgreSQL...");
     await pool.end();
-    console.log("✅ П��л соединений закрыт");
+    console.log("✅ Пул соединений закрыт");
   } catch (error) {
     console.error("❌ Ошибка закрытия пула:", error.message);
   }
