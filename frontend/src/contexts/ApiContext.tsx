@@ -36,19 +36,19 @@ class APIService {
         ...options,
       });
 
-      // Clone the response to avoid "body stream already read" error
-      const responseClone = response.clone();
       let data;
 
-      try {
+      // Check if response has content
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
         data = await response.json();
-      } catch (jsonError) {
-        // If JSON parsing fails, try with the cloned response
+      } else {
+        // For non-JSON responses or empty responses
+        const text = await response.text();
         try {
-          data = await responseClone.json();
-        } catch (cloneError) {
-          // If both fail, it might be an empty response or non-JSON
-          data = {};
+          data = text ? JSON.parse(text) : {};
+        } catch {
+          data = { message: text };
         }
       }
 
