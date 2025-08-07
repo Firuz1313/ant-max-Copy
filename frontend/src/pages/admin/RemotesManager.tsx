@@ -16,15 +16,23 @@ import { Loader2, Plus, Edit2, Trash2, Copy, Search, BarChart3, Smartphone, Star
 
 // Безопасный компонент для SelectItem, который не рендерится с пустыми значениями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
-  if (!value ||
-      typeof value !== 'string' ||
-      value.trim() === '' ||
-      value === 'undefined' ||
-      value === 'null' ||
-      value === null ||
-      value === undefined) {
+  // Логирование для отладки
+  if (!value || value === '' || value === null || value === undefined) {
+    console.warn('SafeSelectItem: блокировка пустого значения:', { value, children });
     return null;
   }
+
+  // Дополнительные проверки
+  if (typeof value !== 'string') {
+    console.warn('SafeSelectItem: блокировка нестрокового значения:', { value, type: typeof value });
+    return null;
+  }
+
+  if (value.trim() === '' || value === 'undefined' || value === 'null') {
+    console.warn('SafeSelectItem: блокировка недопустимого значения:', { value });
+    return null;
+  }
+
   return <SelectItem value={value} {...props}>{children}</SelectItem>;
 };
 
@@ -336,7 +344,7 @@ const RemotesManager = () => {
                 <SafeSelectItem value="all">Все типы</SafeSelectItem>
                 <SafeSelectItem value="standard">Стандартный</SafeSelectItem>
                 <SafeSelectItem value="compact">Компактный</SafeSelectItem>
-                <SafeSelectItem value="smart">Умный</SafeSelectItem>
+                <SafeSelectItem value="smart">��мный</SafeSelectItem>
                 <SafeSelectItem value="custom">Настраиваемый</SafeSelectItem>
               </SelectContent>
             </Select>
@@ -392,7 +400,7 @@ const RemotesManager = () => {
                       <Label htmlFor="device">Устройство</Label>
                       <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Выберите устройство" />
+                          <SelectValue placeholder="Выбери��е устройство" />
                         </SelectTrigger>
                         <SelectContent>
                           <SafeSelectItem value="universal">Универсальный пульт</SafeSelectItem>
@@ -477,7 +485,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout 
                 ? 'Попробуйте изменить параметры поиска или фильтрации' 
-                : 'Начните с созд��ния первого пульта дистанционного управления'}
+                : 'Начните с создания первого пульта дистанционного управления'}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
