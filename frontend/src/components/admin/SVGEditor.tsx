@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import {
   Palette,
   MousePointer,
@@ -613,16 +613,19 @@ const SVGEditor = () => {
               <div>
                 <Label htmlFor="remote-select">Привязать к пульту</Label>
                 <Select
-                  value={project.remoteId || ""}
+                  value={project.remoteId || "none"}
                   onValueChange={(value) =>
-                    setProject({ ...project, remoteId: value || undefined })
+                    setProject({
+                      ...project,
+                      remoteId: value === "none" ? undefined : value,
+                    })
                   }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите пульт" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Без привязки</SelectItem>
+                    <SelectItem value="none">Без привязки</SelectItem>
                     {remotes.map((remote) => (
                       <SelectItem key={remote.id} value={remote.id}>
                         {remote.name}

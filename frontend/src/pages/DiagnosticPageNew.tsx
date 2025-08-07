@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import TVDisplay from "@/components/TVDisplay";
 import TVInterfaceDisplay from "@/components/TVInterfaceDisplay";
 import RemoteControl from "@/components/RemoteControl";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import { tvInterfacesAPI, TVInterfaceAPI } from "@/api/tvInterfaces";
 import { TVInterfaceMark } from "@/api/tvInterfaceMarks";
 import {
@@ -50,7 +50,7 @@ const DiagnosticPageNew = () => {
     deviceId: string;
     problemId: string;
   }>();
-  
+
   const {
     getDeviceById,
     getStepsForProblem,
@@ -62,19 +62,25 @@ const DiagnosticPageNew = () => {
   // Состояние
   const [currentStepNumber, setCurrentStepNumber] = useState(1);
   const [manualProgress, setManualProgress] = useState(false);
-  const [currentTVInterface, setCurrentTVInterface] = useState<TVInterfaceAPI | null>(null);
+  const [currentTVInterface, setCurrentTVInterface] =
+    useState<TVInterfaceAPI | null>(null);
   const [loadingTVInterface, setLoadingTVInterface] = useState(false);
   const [sessionStartTime] = useState(Date.now());
   const [hoveredMark, setHoveredMark] = useState<TVInterfaceMark | null>(null);
-  const [selectedMark, setSelectedMark] = useState<TVInterfaceMark | null>(null);
+  const [selectedMark, setSelectedMark] = useState<TVInterfaceMark | null>(
+    null,
+  );
 
   // Данные
   const device = deviceId ? getDeviceById(deviceId) : null;
-  const steps: DiagnosticStep[] = problemId ? getStepsForProblem(problemId) : [];
+  const steps: DiagnosticStep[] = problemId
+    ? getStepsForProblem(problemId)
+    : [];
   const currentStepData = steps.find(
     (step) => step.stepNumber === currentStepNumber,
   );
-  const progress = steps.length > 0 ? (currentStepNumber / steps.length) * 100 : 0;
+  const progress =
+    steps.length > 0 ? (currentStepNumber / steps.length) * 100 : 0;
   const problem = problemId ? problems.find((p) => p.id === problemId) : null;
 
   // Получение пульта для текущего шага
@@ -89,10 +95,15 @@ const DiagnosticPageNew = () => {
   // Загрузка ТВ интерфейса для текущего шага
   useEffect(() => {
     const loadTVInterface = async () => {
-      if (currentStepData?.tvInterfaceId && currentStepData.tvInterfaceId !== "none") {
+      if (
+        currentStepData?.tvInterfaceId &&
+        currentStepData.tvInterfaceId !== "none"
+      ) {
         setLoadingTVInterface(true);
         try {
-          const response = await tvInterfacesAPI.getById(currentStepData.tvInterfaceId);
+          const response = await tvInterfacesAPI.getById(
+            currentStepData.tvInterfaceId,
+          );
           if (response.success && response.data) {
             setCurrentTVInterface(response.data);
           }
@@ -127,17 +138,20 @@ const DiagnosticPageNew = () => {
       setManualProgress(true);
     } else {
       // Все шаги завершены
-      const sessionId = Date.now().toString(36) + Math.random().toString(36).substr(2);
-      const sessionDuration = Math.round((Date.now() - sessionStartTime) / 1000);
+      const sessionId =
+        Date.now().toString(36) + Math.random().toString(36).substr(2);
+      const sessionDuration = Math.round(
+        (Date.now() - sessionStartTime) / 1000,
+      );
 
       // Можно сохранить сессию диагностики
-      console.log('Diagnostic session completed:', {
+      console.log("Diagnostic session completed:", {
         deviceId,
         problemId,
         sessionId,
         duration: sessionDuration,
         completedSteps: steps.length,
-        success: true
+        success: true,
       });
 
       navigate(`/success/${deviceId}/${sessionId}?problemId=${problemId}`);
@@ -165,11 +179,13 @@ const DiagnosticPageNew = () => {
   // Mark interaction handlers
   const handleMarkClick = (mark: TVInterfaceMark) => {
     setSelectedMark(mark);
-    console.log('Mark clicked:', mark);
+    console.log("Mark clicked:", mark);
 
     // If the mark has a click action, we could trigger it here
     if (mark.click_action && mark.action_value) {
-      console.log(`Triggering action: ${mark.click_action} - ${mark.action_value}`);
+      console.log(
+        `Triggering action: ${mark.click_action} - ${mark.action_value}`,
+      );
     }
   };
 
@@ -197,12 +213,12 @@ const DiagnosticPageNew = () => {
             src={remote.imageData}
             alt={remote.name}
             className="w-full h-auto object-contain rounded-lg"
-            style={{ maxHeight: '420px' }}
+            style={{ maxHeight: "420px" }}
           />
         ) : (
           <RemoteControl />
         )}
-        
+
         {/* Индикатор позиции кнопки */}
         {currentStepData?.buttonPosition && remote.imageData && (
           <div
@@ -216,7 +232,7 @@ const DiagnosticPageNew = () => {
             <Target className="absolute inset-0 w-3 h-3 text-white m-auto" />
           </div>
         )}
-        
+
         {/* Бейдж названия пульта */}
         <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
           <Badge className="bg-gray-700 text-white text-xs">
@@ -252,16 +268,19 @@ const DiagnosticPageNew = () => {
           <div className="text-xs text-gray-400 -mt-1 mb-2">
             Шаг {currentStepNumber} из {steps.length}
           </div>
-          
+
           {/* Progress Bar */}
           <div className="w-full max-w-md">
             <Progress value={progress} className="h-2" />
           </div>
-          
+
           {/* Current TV Interface Info */}
           {currentTVInterface && (
             <div className="mt-2">
-              <Badge variant="outline" className="text-gray-300 border-gray-400">
+              <Badge
+                variant="outline"
+                className="text-gray-300 border-gray-400"
+              >
                 <Tv className="h-3 w-3 mr-1" />
                 Интерфейс: {currentTVInterface.name}
               </Badge>
@@ -271,10 +290,16 @@ const DiagnosticPageNew = () => {
       </header>
 
       {/* Main Content: TV + Remote */}
-      <div className="flex-1 flex flex-row items-start justify-center w-full max-w-7xl mx-auto px-4 gap-8 mt-2" style={{ minHeight: 0 }}>
+      <div
+        className="flex-1 flex flex-row items-start justify-center w-full max-w-7xl mx-auto px-4 gap-8 mt-2"
+        style={{ minHeight: 0 }}
+      >
         {/* TV Interface */}
         <div className="flex-1 flex items-center justify-end max-w-4xl min-w-0">
-          <div className="w-full" style={{ aspectRatio: '16/9', maxHeight: '450px' }}>
+          <div
+            className="w-full"
+            style={{ aspectRatio: "16/9", maxHeight: "450px" }}
+          >
             <TVInterfaceDisplay
               tvInterfaceId={currentStepData?.tvInterfaceId}
               stepId={currentStepData?.id}
@@ -290,9 +315,12 @@ const DiagnosticPageNew = () => {
             />
           </div>
         </div>
-        
+
         {/* Remote Control */}
-        <div className="flex items-center justify-start" style={{ width: '200px', minWidth: '160px', maxWidth: '220px' }}>
+        <div
+          className="flex items-center justify-start"
+          style={{ width: "200px", minWidth: "160px", maxWidth: "220px" }}
+        >
           {renderRemote()}
         </div>
       </div>
@@ -316,7 +344,7 @@ const DiagnosticPageNew = () => {
                   <div className="text-white leading-relaxed mb-4">
                     {currentStepData.instruction}
                   </div>
-                  
+
                   {/* Step Hint */}
                   {currentStepData.hint && (
                     <div className="flex items-start gap-2 p-3 bg-yellow-500/20 border border-yellow-500/30 rounded-lg mb-4">
@@ -338,12 +366,14 @@ const DiagnosticPageNew = () => {
                         )}
                         {selectedMark.action_description && (
                           <p className="mt-1">
-                            <strong>Действие:</strong> {selectedMark.action_description}
+                            <strong>Действие:</strong>{" "}
+                            {selectedMark.action_description}
                           </p>
                         )}
                         {selectedMark.expected_result && (
                           <p className="mt-1 text-green-300">
-                            <strong>Ожидаемый результат:</strong> {selectedMark.expected_result}
+                            <strong>Ожидаемый результат:</strong>{" "}
+                            {selectedMark.expected_result}
                           </p>
                         )}
                       </div>
@@ -357,7 +387,9 @@ const DiagnosticPageNew = () => {
                       <div className="text-gray-300 text-sm">
                         <p className="font-medium">{hoveredMark.name}</p>
                         {hoveredMark.hint_text && (
-                          <p className="mt-1 text-yellow-300">{hoveredMark.hint_text}</p>
+                          <p className="mt-1 text-yellow-300">
+                            {hoveredMark.hint_text}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -366,31 +398,46 @@ const DiagnosticPageNew = () => {
                   {/* Step Status Indicators */}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {currentStepData.remoteId && (
-                      <Badge variant="outline" className="text-green-300 border-green-400">
+                      <Badge
+                        variant="outline"
+                        className="text-green-300 border-green-400"
+                      >
                         <MousePointer className="h-3 w-3 mr-1" />
                         Пульт подключен
                       </Badge>
                     )}
                     {currentStepData.tvInterfaceId && (
-                      <Badge variant="outline" className="text-blue-300 border-blue-400">
+                      <Badge
+                        variant="outline"
+                        className="text-blue-300 border-blue-400"
+                      >
                         <Monitor className="h-3 w-3 mr-1" />
                         ТВ интерфейс активен
                       </Badge>
                     )}
                     {currentStepData.buttonPosition && (
-                      <Badge variant="outline" className="text-red-300 border-red-400">
+                      <Badge
+                        variant="outline"
+                        className="text-red-300 border-red-400"
+                      >
                         <Target className="h-3 w-3 mr-1" />
                         Позиция кнопки
                       </Badge>
                     )}
                     {currentStepData.tvAreaPosition && (
-                      <Badge variant="outline" className="text-orange-300 border-orange-400">
+                      <Badge
+                        variant="outline"
+                        className="text-orange-300 border-orange-400"
+                      >
                         <Target className="h-3 w-3 mr-1" />
                         Область на ТВ
                       </Badge>
                     )}
                     {selectedMark && (
-                      <Badge variant="outline" className="text-purple-300 border-purple-400">
+                      <Badge
+                        variant="outline"
+                        className="text-purple-300 border-purple-400"
+                      >
                         <Target className="h-3 w-3 mr-1" />
                         Выбрана отметка
                       </Badge>
@@ -419,7 +466,7 @@ const DiagnosticPageNew = () => {
                         </Button>
                       )}
                     </div>
-                    
+
                     <Button
                       onClick={handleNextStep}
                       className="bg-green-600 hover:bg-green-700 text-white"

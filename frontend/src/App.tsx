@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { DataProvider } from "@/contexts/DataContext";
+import { ApiProvider } from "@/contexts/ApiContext";
 import Layout from "@/components/Layout";
 import AdminLayout from "@/components/AdminLayout";
 
@@ -24,14 +24,14 @@ import AdminDashboard from "@/pages/admin/AdminDashboard";
 import DeviceManager from "@/pages/admin/DeviceManager";
 import ProblemsManager from "@/pages/admin/ProblemsManager";
 import StepsManager from "@/pages/admin/StepsManager";
-import RemoteBuilder from "@/pages/admin/RemoteBuilder";
+import RemotesManager from "@/pages/admin/RemotesManager";
 import TVInterfaceBuilder from "@/pages/admin/TVInterfaceBuilder";
 import UsersManager from "@/pages/admin/UsersManager";
 import SystemSettings from "@/pages/admin/SystemSettings";
 
 function App() {
   return (
-    <DataProvider>
+    <ApiProvider>
       <Router>
         <Routes>
           {/* Public Routes */}
@@ -139,7 +139,7 @@ function App() {
             path="/admin/remotes"
             element={
               <AdminLayout>
-                <RemoteBuilder />
+                <RemotesManager />
               </AdminLayout>
             }
           />
@@ -179,7 +179,7 @@ function App() {
           />
         </Routes>
       </Router>
-    </DataProvider>
+    </ApiProvider>
   );
 }
 

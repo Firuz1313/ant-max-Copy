@@ -48,7 +48,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { TVInterface, tvInterfaceUtils } from "@/types/tvInterface";
 import TVInterfaceAreaEditor from "@/components/admin/TVInterfaceAreaEditor";
@@ -93,16 +93,18 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите приставку" />
             </SelectTrigger>
             <SelectContent>
-              {getActiveDevices().map((device) => (
-                <SelectItem key={device.id} value={device.id}>
-                  <div className="flex items-center">
-                    <div
-                      className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                    />
-                    {device.name}
-                  </div>
-                </SelectItem>
-              ))}
+              {getActiveDevices()
+                .filter((device) => device.id && device.id.trim() !== "")
+                .map((device) => (
+                  <SelectItem key={device.id} value={device.id}>
+                    <div className="flex items-center">
+                      <div
+                        className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                      />
+                      {device.name}
+                    </div>
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
@@ -118,11 +120,13 @@ const StepFormFieldsComponent = React.memo(
               <SelectValue placeholder="Выберите пробл��му" />
             </SelectTrigger>
             <SelectContent>
-              {getAvailableProblems().map((problem) => (
-                <SelectItem key={problem.id} value={problem.id}>
-                  {problem.title}
-                </SelectItem>
-              ))}
+              {getAvailableProblems()
+                .filter((problem) => problem.id && problem.id.trim() !== "")
+                .map((problem) => (
+                  <SelectItem key={problem.id} value={problem.id}>
+                    {problem.title}
+                  </SelectItem>
+                ))}
             </SelectContent>
           </Select>
         </div>
@@ -224,26 +228,28 @@ const StepFormFieldsComponent = React.memo(
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Без пульта</SelectItem>
-              {getAvailableRemotes().map((remote) => {
-                const device = devices.find((d) => d.id === remote.deviceId);
-                return (
-                  <SelectItem key={remote.id} value={remote.id}>
-                    <div className="flex items-center">
-                      {device && (
-                        <div
-                          className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                        />
-                      )}
-                      {remote.name}
-                      {remote.isDefault && (
-                        <span className="ml-2 text-xs text-blue-600">
-                          (по умолчанию)
-                        </span>
-                      )}
-                    </div>
-                  </SelectItem>
-                );
-              })}
+              {getAvailableRemotes()
+                .filter((remote) => remote.id && remote.id.trim() !== "")
+                .map((remote) => {
+                  const device = devices.find((d) => d.id === remote.deviceId);
+                  return (
+                    <SelectItem key={remote.id} value={remote.id}>
+                      <div className="flex items-center">
+                        {device && (
+                          <div
+                            className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                          />
+                        )}
+                        {remote.name}
+                        {remote.isDefault && (
+                          <span className="ml-2 text-xs text-blue-600">
+                            (по умолчанию)
+                          </span>
+                        )}
+                      </div>
+                    </SelectItem>
+                  );
+                })}
             </SelectContent>
           </Select>
           {formData.remoteId !== "none" && (
@@ -468,7 +474,7 @@ const StepsManager = () => {
 
     // Validate interface ID and fetch full interface data
     if (!tvInterface.id) {
-      console.warn("⚠️ TV interface has no ID, using cached data");
+      console.warn("⚠�� TV interface has no ID, using cached data");
       setSelectedTVInterface(tvInterface);
       setIsTVInterfaceEditorOpen(true);
       return;
@@ -738,7 +744,7 @@ const StepsManager = () => {
       buttonPosition: step.buttonPosition || { x: 0, y: 0 },
     });
 
-    // Загрузить TV интерфейсы для устройства шага при редактировании
+    // Загрузить TV интерфейсы для устройства шага при редактирован��и
     if (step.deviceId && step.deviceId !== "all") {
       loadTVInterfacesForDevice(step.deviceId);
     }
@@ -901,7 +907,7 @@ const StepsManager = () => {
                   className="w-full"
                 >
                   <Target className="h-4 w-4 mr-2" />
-                  {isPickingButton ? "Отменить выбор" : "Выбрать позицию"}
+                  {isPickingButton ? "Отменить выбор" : "Выбрать п��зицию"}
                 </Button>
                 <Button
                   variant="outline"
@@ -1031,16 +1037,18 @@ const StepsManager = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Все приставки</SelectItem>
-                  {getActiveDevices().map((device) => (
-                    <SelectItem key={device.id} value={device.id}>
-                      <div className="flex items-center">
-                        <div
-                          className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
-                        />
-                        {device.name}
-                      </div>
-                    </SelectItem>
-                  ))}
+                  {getActiveDevices()
+                    .filter((device) => device.id && device.id.trim() !== "")
+                    .map((device) => (
+                      <SelectItem key={device.id} value={device.id}>
+                        <div className="flex items-center">
+                          <div
+                            className={`w-3 h-3 rounded bg-gradient-to-br ${device.color} mr-2`}
+                          />
+                          {device.name}
+                        </div>
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
 
@@ -1265,7 +1273,7 @@ const StepsManager = () => {
         <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>
-              Выбор позиции на пульте: {selectedRemote?.name}
+              Выбор по��иции на пульте: {selectedRemote?.name}
             </DialogTitle>
           </DialogHeader>
           <div className="flex-1 overflow-hidden">{renderRemoteEditor()}</div>

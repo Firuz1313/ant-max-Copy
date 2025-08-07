@@ -1,343 +1,323 @@
-# ANT Support Backend API
+# ANT Support Backend
 
-## Описание
+Backend API для системы диагностики ТВ-приставок ANT Support.
 
-Backend API для системы диагностики ТВ-приставок ANT Support. Предоставляет REST API для управления устройствами, проблемами, диагностическими шагами и сессиями диагностики.
+## Обзор
+
+Система предоставляет RESTful API для управления диагностическими процедурами, устройствами, пользователями и настройками системы.
 
 ## Технологии
 
-- **Node.js** - JavaScript runtime
-- **Express.js** - Web framework
-- **PostgreSQL** - База данных
-- **pg** - PostgreSQL client для Node.js
-- **Joi** - Валидация данных
-- **CORS** - Cross-Origin Resource Sharing
-- **Helmet** - Безопасность
-- **Morgan** - HTTP логирование
-- **Compression** - Сжатие HTTP ответов
-- **Rate Limiting** - Ограничение частоты запросов
+- **Node.js** с **Express.js**
+- **PostgreSQL** - основная база данных
+- **ES6 Modules** - современный JavaScript
+- **RESTful API** - стандартная архитектура
 
 ## Структура проекта
 
 ```
 backend/
 ├── src/
-│   ├── controllers/          # Контроллеры API
-│   │   ├── deviceController.js
-│   │   ├── problemController.js
-│   │   ├── stepController.js
-│   │   └── sessionController.js
-│   ├── models/              # Модели данных
-│   │   ├── BaseModel.js
-│   │   ├── Device.js
-│   │   ├── Problem.js
-│   │   ├── DiagnosticStep.js
-│   │   └── DiagnosticSession.js
-│   ├── routes/              # Роуты API
-│   │   ├── index.js         # Главный роутер
-│   │   ├── deviceRoutes.js
-│   │   ├── problemRoutes.js
-│   │   ├── stepRoutes.js
-│   │   └── sessionRoutes.js
-│   ├── middleware/          # Middleware функции
-│   │   ├── errorHandler.js
-│   │   ├── requestLogger.js
-│   │   └── validateRequest.js
-│   ├── utils/               # Утилиты
-│   │   ├── database.js      # Подключение к БД
-│   │   ├── initDb.js        # Инициализация БД
-│   │   └── seedData.js      # Тестовые данные
-│   └── server.js            # Главный файл сервера
-├── migrations/              # SQL миграции
-│   ├── 001_init_tables.sql
-│   └── 002_add_indexes.sql
-├── .env.example            # Пример переменных окружения
-├── package.json
-└── README.md
+│   ├── controllers/     # Контроллеры API
+│   ├── models/         # Модели данных
+│   ���── routes/         # Маршруты API
+│   ├── middleware/     # Промежуточное ПО
+│   └── utils/          # Утилиты и помощники
+├── data/               # JSON файлы с данными
+├── migrations/         # SQL миграции базы данных
+└── server.js          # Точка входа приложения
 ```
 
-## Быстрый старт
+## Модели данных
 
-### 1. Установка зависимостей
+### Основные модели
+
+1. **BaseModel** - Базовая модель с общими методами
+2. **Device** - ТВ-приставки и устройства
+3. **Problem** - Диагностические проблемы
+4. **DiagnosticStep** - Пошаговые инструкции
+5. **DiagnosticSession** - Сессии диагностики пользователей
+6. **Remote** - Пульты дистанционного управления
+7. **TVInterface** - Интерфейсы и скриншоты ТВ
+8. **TVInterfaceMark** - Интерактивные отметки на интерфейсах
+9. **User** - Пользователи и администраторы
+
+### Дополнительные модели
+
+10. **SessionStep** - Выполненные шаги в сессиях
+11. **StepAction** - Действия для шаго�� диагностики
+12. **ChangeLog** - Журнал изменений и аудит
+13. **SiteSetting** - Настройки системы
+
+## API Эндпоинты
+
+### Основные ресурсы
+
+- **GET/POST/PUT/DELETE** `/api/v1/devices` - Управление устройствами
+- **GET/POST/PUT/DELETE** `/api/v1/problems` - Управление проблемами
+- **GET/POST/PUT/DELETE** `/api/v1/steps` - Управление шагами диагностики
+- **GET/POST/PUT/DELETE** `/api/v1/sessions` - Управление сессиями
+- **GET/POST/PUT/DELETE** `/api/v1/remotes` - Управление пультами
+- **GET/POST/PUT/DELETE** `/api/v1/tv-interfaces` - Управление ТВ интерфейсами
+- **GET/POST/PUT/DELETE** `/api/v1/users` - Управление пользователями
+
+### Дополнительные ресурсы
+
+- **GET/POST/PUT** `/api/v1/session-steps` - Шаги в сессиях
+- **GET/POST/PUT/DELETE** `/api/v1/step-actions` - Действия шагов
+- **GET/POST** `/api/v1/change-logs` - Журнал изменений
+- **GET/PUT** `/api/v1/settings` - Настройки системы
+
+### Служебные эндпоинты
+
+- **GET** `/api/health` - Проверка состояния API
+- **GET** `/api/info` - Информация об API
+- **GET** `/api/docs` - Документация API
+
+## База данных
+
+### Миграции
+
+Система использует SQL миграции для управления схемой базы данных:
 
 ```bash
-cd backend
+# Проверить статус миграций
+npm run db:migrate:status
+
+# Запустить все миграции
+npm run db:migrate:up
+
+# Откатить последнюю миграцию (только для разработки)
+npm run db:migrate:rollback
+
+# Альтернативно, использовать скрипт напрямую
+node run-migrations.js status
+node run-migrations.js up
+```
+
+### Доступные миграции
+
+1. **001_init_tables.sql** - Создание всех основных таблиц
+2. **002_add_indexes.sql** - Добавление индексов для производительности
+3. **003_initial_data.sql** - Начальные данные и настройки
+
+### Схема базы данных
+
+Подробная схема базы данных описана в `database_schema.md`.
+
+## Установка и запуск
+
+### Требования
+
+- Node.js 18+
+- PostgreSQL 13+
+- npm или yarn
+
+### Установка
+
+```bash
+# У��тановить зависимости
 npm install
+
+# Настроить переменные окружения
+cp .env.example .env
+# Отредактировать .env файл
+
+# Запустить миграции базы данных
+npm run db:migrate:up
+
+# Инициализировать базу данных (опционально)
+npm run db:init
 ```
 
-### 2. Настройка базы данных
-
-Создайте PostgreSQL базу данных и настройте переменные окружения:
+### Запуск
 
 ```bash
-cp .env.example .env
+# Режим разработки
+npm run dev
+
+# Продакшн режим
+npm start
+
+# Запуск только backend (если фронтенд отдельно)
+npm run dev:backend
 ```
 
-Отредактируйте `.env` файл:
+## Переменные окружения
 
 ```env
 # База данных
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=ant_support
-DB_USER=postgres
-DB_PASSWORD=postgres
+DB_USER=your_user
+DB_PASSWORD=your_password
 
 # Сервер
+PORT=3001
 NODE_ENV=development
-PORT=3000
+
+# Безопасность
+JWT_SECRET=your_jwt_secret
+BCRYPT_ROUNDS=12
 
 # CORS
-ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://localhost:8080
+CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 ```
 
-### 3. Инициализация базы данных
+## Разработка
+
+### Добавление новой модели
+
+1. Создать модель в `src/models/`
+2. Создать контроллер в `src/controllers/`
+3. Создать маршруты в `src/routes/`
+4. Добавить маршруты в `src/routes/index.js`
+5. Создать миграцию в `migrations/`
+6. Добавить JSON файл данных в `data/`
+
+### Создание миграции
 
 ```bash
-# Создание таблиц и индексов
-npm run db:init
-
-# Заполнение тестовыми данными
-npm run db:seed
+# Создать новый файл миграции
+# Формат: XXX_description.sql
+touch migrations/004_new_feature.sql
 ```
 
-### 4. Запуск сервера
+### Тестирование
 
 ```bash
-# Режим разработки (с hot reload)
-npm run dev
-
-# Режим продакшена
-npm start
-```
-
-Сервер будет доступен по адресу: `http://localhost:3000`
-
-## API Документация
-
-### Базовые эндпоинты
-
-- `GET /api/health` - Проверка состояния API
-- `GET /api/info` - Информация об API
-- `GET /api/docs` - Документация API
-
-### Устройства
-
-- `GET /api/v1/devices` - Получение списка устройств
-- `GET /api/v1/devices/:id` - Получение устройства по ID
-- `POST /api/v1/devices` - Создание устройства
-- `PUT /api/v1/devices/:id` - Обновление устройства
-- `DELETE /api/v1/devices/:id` - Удаление устройства
-- `GET /api/v1/devices/search` - Поиск устройств
-- `GET /api/v1/devices/popular` - Популярные устройства
-- `GET /api/v1/devices/stats` - Статистика устройств
-
-### Проблемы
-
-- `GET /api/v1/problems` - Получение списка проблем
-- `GET /api/v1/problems/:id` - Получение проблемы по ID
-- `POST /api/v1/problems` - Создание проблемы
-- `PUT /api/v1/problems/:id` - Обновление проблемы
-- `DELETE /api/v1/problems/:id` - Удаление проблемы
-- `GET /api/v1/problems/device/:deviceId` - Проблемы по устройству
-- `GET /api/v1/problems/category/:category` - Проблемы по категории
-- `POST /api/v1/problems/:id/publish` - Публикация проблемы
-
-### Диагностические шаги
-
-- `GET /api/v1/steps` - Получение списка шагов
-- `GET /api/v1/steps/:id` - Получение шага по ID
-- `POST /api/v1/steps` - Создание шага
-- `PUT /api/v1/steps/:id` - Обновление шага
-- `DELETE /api/v1/steps/:id` - Удаление шага
-- `GET /api/v1/steps/problem/:problemId` - Шаги по проблеме
-- `PUT /api/v1/steps/reorder` - Переупорядочивание шагов
-
-### Диагностические сессии
-
-- `GET /api/v1/sessions` - Получение списка сессий
-- `GET /api/v1/sessions/:id` - Получение сессии по ID
-- `POST /api/v1/sessions` - Создание сессии
-- `PUT /api/v1/sessions/:id` - Обновление сессии
-- `POST /api/v1/sessions/:id/complete` - Завершение сессии
-- `POST /api/v1/sessions/:id/progress` - Обновление прогресса
-- `GET /api/v1/sessions/active` - Активные сессии
-- `GET /api/v1/sessions/stats` - Статист��ка сессий
-
-## Схема базы данных
-
-### Основные таблицы
-
-1. **devices** - Устройства (ТВ-приставки)
-2. **problems** - Проблемы диагностики
-3. **diagnostic_steps** - Шаги диагностики
-4. **diagnostic_sessions** - Сессии диагностики
-5. **session_steps** - Выполненные шаги в сессии
-6. **users** - Пользователи системы
-
-### Связи
-
-- Device → Problems (1:N)
-- Problem → DiagnosticSteps (1:N)
-- Device + Problem → DiagnosticSession (N:1)
-- DiagnosticSession → SessionSteps (1:N)
-- DiagnosticStep → SessionSteps (1:N)
-
-## Валидация данных
-
-API использует библиотеку Joi для валидации входящих данных. Все эндпоинты проверяют:
-
-- Типы данных
-- Обязательные поля
-- Ограничения длины
-- Формат значений (email, URL, etc.)
-- Бизнес-правила
-
-## Обработка ошибок
-
-Все ошибки возвращаются в едином формате:
-
-```json
-{
-  "success": false,
-  "error": "Описание ошибки",
-  "errorType": "VALIDATION_ERROR",
-  "details": [...],
-  "timestamp": "2024-01-20T10:30:00.000Z"
-}
-```
-
-### Типы ошибок
-
-- `VALIDATION_ERROR` - Ошибка валидации данных
-- `NOT_FOUND` - Ресурс не найден
-- `DUPLICATE_ERROR` - Дублирование данных
-- `CONSTRAINT_ERROR` - Нарушение ограничений БД
-
-## Безопасность
-
-- **Helmet** - Установка security headers
-- **CORS** - Настройка cross-origin requests
-- **Rate Limiting** - Ограничение частоты запросов
-- **Input Validation** - Валидация всех входящих данных
-- **SQL Injection Protection** - Использование параметризованных запросов
-
-## Логирование
-
-- **Morgan** - HTTP запросы в development/production режимах
-- **Custom Logger** - Логирование ошибок и важных событий
-- **Request/Response** - Детальное логирование API вызовов
-
-## Развертывание
-
-### Development
-
-```bash
-npm install
-npm run db:init
-npm run db:seed
-npm run dev
-```
-
-### Production
-
-```bash
-npm install --production
-npm run db:init
-NODE_ENV=production npm start
-```
-
-### Docker
-
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
-```
-
-### Environment Variables
-
-Обязательные переменные для продакшена:
-
-```env
-NODE_ENV=production
-PORT=3000
-DB_HOST=your-db-host
-DB_PORT=5432
-DB_NAME=ant_support
-DB_USER=your-db-user
-DB_PASSWORD=your-db-password
-DB_SSL=true
-ALLOWED_ORIGINS=https://yourdomain.com
-RATE_LIMIT_MAX_REQUESTS=100
-JWT_SECRET=your-super-secret-key
-```
-
-## Мониторинг и здоровье
-
-### Health Check
-
-```bash
-curl http://localhost:3000/api/health
-```
-
-Ответ:
-
-```json
-{
-  "status": "OK",
-  "timestamp": "2024-01-20T10:30:00.000Z",
-  "environment": "development",
-  "version": "1.0.0",
-  "uptime": 3600,
-  "memory": {...}
-}
-```
-
-### Метрики
-
-- Время ответа API
-- Использование памяти
-- Активные соединения к БД
-- Количество запросов в секунду
-- Статистика ошибок
-
-## Тестирование
-
-```bash
-# Запуск тестов
+# Запустить тесты
 npm test
 
-# Запуск с покрытием
-npm run test:coverage
-
-# Линтинг кода
+# Линтинг
 npm run lint
 
 # Форматирование кода
 npm run format
 ```
 
-## API Клиент
+## API Документация
 
-Для frontend ин��еграции создан TypeScript клиент с:
+### Формат ответов
 
-- Автоматическая типизация
-- React Query интеграция
-- Обработка ошибок
-- Кеширование данных
-- Оптимистичные обновления
+#### Успешный ответ
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "Опциональное сообщение",
+  "pagination": {},
+  "timestamp": "2024-01-01T00:00:00.000Z"
+}
+```
+
+#### Ошибка
+
+```json
+{
+  "success": false,
+  "error": "Описание ошибки",
+  "errorType": "VALIDATION_ERROR",
+  "details": [],
+  "suggestion": "Рекомендация по исправлению",
+  "timestamp": "2024-01-01T00:00:00.000Z"
+}
+```
+
+### Коды ошибок
+
+- **400** - Bad Request (валидация, параметры)
+- **401** - Unauthorized (требуется авторизация)
+- **403** - Forbidden (недостаточно прав)
+- **404** - Not Found (ресурс не найден)
+- **409** - Conflict (дубликаты, ограничения)
+- **422** - Unprocessable Entity (бизнес-логика)
+- **500** - Internal Server Error (внутренняя ошибка)
+
+## Мониторинг и логирование
+
+### Логи
+
+Система ведет подробные логи всех операций:
+
+- HTTP запросы (Morgan)
+- Ошибки базы данных
+- Изменения данных (ChangeLog)
+- Аудит пользователей
+
+### Метрики
+
+- Время ответа API
+- Статистика использования
+- Аналитика диагностических сессий
+- Производительность базы данных
+
+## Безопасность
+
+### Реализованные меры
+
+- Валидация входных данных (Joi)
+- Защита от SQL инъекций (параметризованные запросы)
+- Хеширование паролей (bcrypt)
+- Rate limiting
+- CORS защита
+- Helmet.js для заголовков безопасности
+
+### Рекомендации
+
+- Использовать HTTPS в продакшне
+- Регулярно обновлять зависимости
+- Настроить мониторинг безопасности
+- Проводить аудит кода
+
+## Производительность
+
+### Оптимизации
+
+- Индексы базы данных
+- Пагинация результатов
+- Кеширование (планируется)
+- Сжатие ответов
+- Оптимизированные SQL запросы
+
+### Мониторинг
+
+- Медленные запросы
+- Использование памяти
+- CPU нагрузка
+- Соединения с БД
 
 ## Поддержка
 
-- **Документация**: `/api/docs`
-- **Проблемы**: GitHub Issues
-- **Email**: support@ant-support.com
+### Отладка
+
+```bash
+# Проверить состояние API
+curl http://localhost:3001/api/health
+
+# Получить информацию об API
+curl http://localhost:3001/api/info
+
+# Просмотреть логи
+npm run logs
+```
+
+### Частые проблемы
+
+1. **Ошибка подключения к БД** - проверить .env файл
+2. **Порт занят** - изменить PORT в .env
+3. **Миграции не применяются** - проверить права доступа к БД
+
+## Вклад в разработку
+
+1. Fork репозитория
+2. Создать feature ветку
+3. Внести изменения
+4. Добавить тесты
+5. Создать Pull Request
 
 ## Лицензия
 
-MIT License - see LICENSE file for details.
+MIT License - см. LICENSE файл для ��еталей.

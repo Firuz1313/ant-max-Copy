@@ -52,7 +52,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import {
   tvInterfacesAPI,
   TVInterfaceAPI,
@@ -99,7 +99,7 @@ const StepsManagerNew = () => {
     getDefaultRemoteForDevice,
   } = useData();
 
-  // Состояние для ТВ интерфейсов
+  // Состоя��ие для ТВ интерфейсов
   const [tvInterfaces, setTVInterfaces] = useState<TVInterfaceAPI[]>([]);
   const [selectedTVInterface, setSelectedTVInterface] =
     useState<TVInterfaceAPI | null>(null);
@@ -740,7 +740,7 @@ const StepsManagerNew = () => {
                   <AlertDescription>
                     <p className="text-sm text-blue-700 dark:text-blue-300">
                       Кликните на интерфейс Т��, чтобы указать область для
-                      подсветки
+                      по��светки
                     </p>
                   </AlertDescription>
                 </Alert>
@@ -845,7 +845,7 @@ const StepsManagerNew = () => {
           id={isEdit ? "edit-instruction" : "instruction"}
           value={formData.instruction}
           onChange={(e) => handleFieldChange("instruction", e.target.value)}
-          placeholder="Подробная инструкция для ��ользователя"
+          placeholder="Подробная инструкция дл�� ��ользователя"
         />
       </div>
 

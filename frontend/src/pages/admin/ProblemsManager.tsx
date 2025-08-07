@@ -46,7 +46,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 
 const iconMap = {
   Signal,
@@ -317,7 +317,7 @@ const ProblemsManager = () => {
             Управление проблемами
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Создание и настройка проблем для различных моделей приставок
+            Создание и настройка проблем для ��азличных моделей приставок
           </p>
         </div>
         <div className="flex space-x-2">

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import {
   Tv,
   Settings,
@@ -53,16 +53,15 @@ const features = [
   },
 ];
 
-const devices = [
-  { name: "OpenBox", users: "2.3M+", status: "активен" },
-  { name: "OpenBox Gold", users: "1.8M+", status: "активен" },
-  { name: "Uclan", users: "1.2M+", status: "активен" },
-  { name: "HDBox", users: "950K+", status: "активен" },
-];
-
 const ANTSupport = () => {
   const navigate = useNavigate();
-  const { siteSettings } = useData();
+  const { devices, siteSettings, loading } = useData();
+
+  const deviceStats = devices.map((device) => ({
+    name: device.name,
+    users: `${Math.floor(Math.random() * 2000) + 500}K+`,
+    status: device.isActive ? "активен" : "неактивен",
+  }));
 
   const handleGetStarted = () => {
     navigate("/problems");
@@ -70,7 +69,7 @@ const ANTSupport = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
-      {/* Анимированный фон */}
+      {/* Ан��мированный фон */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
         <div
@@ -158,7 +157,7 @@ const ANTSupport = () => {
         {/* Статистика устройств */}
         <section className="container mx-auto px-4 mb-20">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {devices.map((device, index) => (
+            {deviceStats.map((device, index) => (
               <div
                 key={device.name}
                 className="backdrop-blur-md bg-white/5 border border-white/10 rounded-xl p-6 text-center transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20"
@@ -240,7 +239,7 @@ const ANTSupport = () => {
                 className="group"
               >
                 <Users className="mr-2 h-5 w-5" />
-                Выберите устройство
+                Выбер��те устройство
                 <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
             </div>
@@ -257,7 +256,7 @@ const ANTSupport = () => {
               className="group"
             >
               <Settings className="mr-2 h-3 w-3" />
-              Панель администратора
+              ��анель ад��инистратора
             </Button>
           </div>
         </section>

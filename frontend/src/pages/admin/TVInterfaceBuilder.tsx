@@ -11,9 +11,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+// Безопасный компонент для SelectItem, который не рендерится с пустыми значениями
+const SafeSelectItem = ({ value, children, ...props }: any) => {
+  if (
+    !value ||
+    typeof value !== "string" ||
+    value.trim() === "" ||
+    value === "undefined" ||
+    value === "null"
+  ) {
+    return null;
+  }
+  return (
+    <SelectItem value={value} {...props}>
+      {children}
+    </SelectItem>
+  );
+};
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 import { tvInterfacesAPI } from "@/api/tvInterfaces";
 import { cleanupAPI } from "@/api/cleanup";
 import {
@@ -468,7 +486,7 @@ const TVInterfaceBuilder = () => {
                 <AlertDialogTitle>Очистить все TV интерфейсы?</AlertDialogTitle>
                 <AlertDialogDescription>
                   Это действие удалит все существующие TV интерфейсы. После
-                  очистки вы сможете создавать свои собственные интерфейсы
+                  ��чистки вы сможете создавать свои собственные интерфейсы
                   вручную через UI.
                 </AlertDialogDescription>
               </AlertDialogHeader>
@@ -550,14 +568,14 @@ const TVInterfaceBuilder = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {devices.map((device) => (
-                        <SelectItem key={device.id} value={device.id}>
+                        <SafeSelectItem key={device.id} value={device.id}>
                           <div>
                             <div className="font-medium">{device.name}</div>
                             <div className="text-xs text-gray-500">
                               {device.brand} {device.model}
                             </div>
                           </div>
-                        </SelectItem>
+                        </SafeSelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -677,9 +695,9 @@ const TVInterfaceBuilder = () => {
                 <SelectContent>
                   <SelectItem value="all">Все устройства</SelectItem>
                   {devices.map((device) => (
-                    <SelectItem key={device.id} value={device.id}>
+                    <SafeSelectItem key={device.id} value={device.id}>
                       {device.name}
-                    </SelectItem>
+                    </SafeSelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -730,7 +748,7 @@ const TVInterfaceBuilder = () => {
               {searchTerm ||
               selectedDeviceFilter !== "all" ||
               selectedTypeFilter !== "all"
-                ? "Попробуйте изменить фильтры поиска"
+                ? "Попробуйте изменить фильтр�� поиска"
                 : "Создайте первый TV интерфейс для начала работы"}
             </p>
             {!searchTerm &&
@@ -854,7 +872,7 @@ const TVInterfaceBuilder = () => {
                           </AlertDialogTitle>
                           <AlertDialogDescription>
                             Это действие нельзя отменить. TV интерфейс "
-                            {tvInterface.name}" будет удален навсегда.
+                            {tvInterface.name}" б��дет удален навсегда.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -934,14 +952,14 @@ const TVInterfaceBuilder = () => {
                 </SelectTrigger>
                 <SelectContent>
                   {devices.map((device) => (
-                    <SelectItem key={device.id} value={device.id}>
+                    <SafeSelectItem key={device.id} value={device.id}>
                       <div>
                         <div className="font-medium">{device.name}</div>
                         <div className="text-xs text-gray-500">
                           {device.brand} {device.model}
                         </div>
                       </div>
-                    </SelectItem>
+                    </SafeSelectItem>
                   ))}
                 </SelectContent>
               </Select>

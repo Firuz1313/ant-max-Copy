@@ -53,12 +53,6 @@ const adminMenuItems: AdminMenuItem[] = [
     description: "Создан��е и редактирование шагов диагностики",
   },
   {
-    title: "Конструктор пультов",
-    path: "/admin/remotes",
-    icon: Smartphone,
-    description: "Загрузка и настройка\n пультов управления",
-  },
-  {
     title: "Конструктор интерфейса ТВ",
     path: "/admin/tv-interfaces",
     icon: Monitor,
@@ -70,6 +64,12 @@ const adminMenuItems: AdminMenuItem[] = [
     path: "/admin/users",
     icon: Users,
     description: "Управление\nпользователями и ролями",
+  },
+  {
+    title: "Пульты",
+    path: "/admin/remotes",
+    icon: Smartphone,
+    description: "Управление пультами\nдистанционного управления",
   },
   {
     title: "Настройки системы",
@@ -142,11 +142,19 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               >
                 <item.icon className="h-5 w-5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className={cn("truncate", item.titleStyle)} style={item.titleStyle}>{item.title}</div>
+                  <div
+                    className={cn("truncate", item.titleStyle)}
+                    style={item.titleStyle}
+                  >
+                    {item.title}
+                  </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {item.description.split('\n').map((line, index) => (
+                    {item.description.split("\n").map((line, index) => (
                       <span key={index}>
-                        {line}{index < item.description.split('\n').length - 1 && <br />}
+                        {line}
+                        {index < item.description.split("\n").length - 1 && (
+                          <br />
+                        )}
                       </span>
                     ))}
                   </div>
@@ -213,16 +221,14 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               <SyncIndicator className="text-gray-500 dark:text-gray-400" />
               <div className="text-right">
                 <div className="text-sm font-medium text-gray-900 dark:text-white">
-                  Администратор
+                  Система
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  admin@antsupport.com
+                  PostgreSQL режим
                 </div>
               </div>
-              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  A
-                </span>
+              <div className="w-8 h-8 bg-green-500 dark:bg-green-600 rounded-full flex items-center justify-center">
+                <span className="text-sm font-medium text-white">DB</span>
               </div>
             </div>
           </div>

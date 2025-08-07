@@ -98,9 +98,13 @@ const limiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
+  trustProxy: false, // Disable trust proxy to avoid the security warning
 });
 
-app.use("/api/", limiter);
+// Only enable rate limiting in production
+if (NODE_ENV === "production") {
+  app.use("/api/", limiter);
+}
 
 // Логирование
 if (NODE_ENV === "development") {

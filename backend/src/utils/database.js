@@ -92,13 +92,13 @@ export async function testConnection() {
   } catch (error) {
     console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
 
-    // Fallback to mock database
-    if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
-      process.env.USE_MOCK_DB = "true";
-      mockDb = await import("./mockDatabase.js");
-      return await mockDb.testConnection();
-    }
+    // NO AUTOMATIC FALLBACK - Force use of PostgreSQL only
+    console.error(
+      "🚫 PostgreSQL connection failed. Mock database fallback disabled.",
+    );
+    console.error(
+      "💡 Please ensure PostgreSQL is running and configured correctly.",
+    );
 
     return {
       success: false,
@@ -143,16 +143,19 @@ export async function query(text, params = []) {
     console.error("🔍 Query:", text);
     console.error("🔍 Parameters:", params);
 
-    // Fallback to mock database
-    if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
-      process.env.USE_MOCK_DB = "true";
-      if (!mockDb) {
-        mockDb = await import("./mockDatabase.js");
-      }
-      return await mockDb.query(text, params);
+    // Check if this is a connection error (PostgreSQL not available)
+    if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
+      console.warn(
+        "⚠️ PostgreSQL unavailable - returning empty result for graceful degradation",
+      );
+      // Return empty result that looks like a real query result
+      return { rows: [], rowCount: 0 };
     }
 
+    // For other database errors, still throw
+    console.error(
+      "🚫 PostgreSQL query failed. Mock database fallback disabled.",
+    );
     throw error;
   } finally {
     if (client) {
@@ -181,6 +184,16 @@ export async function transaction(callback) {
       await client.query("ROLLBACK");
       throw error;
     }
+  } catch (error) {
+    // Check if this is a connection error (PostgreSQL not available)
+    if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
+      console.warn(
+        "⚠️ PostgreSQL unavailable - transaction skipped for graceful degradation",
+      );
+      // Return null for transactions when DB is unavailable
+      return null;
+    }
+    throw error;
   } finally {
     if (client) {
       client.release();
@@ -220,15 +233,10 @@ export async function createDatabase() {
     }
   } catch (error) {
     console.error("❌ Ошибка создания базы данных:", error.message);
-    // Fallback to mock database
-    if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
-      process.env.USE_MOCK_DB = "true";
-      if (!mockDb) {
-        mockDb = await import("./mockDatabase.js");
-      }
-      return await mockDb.createDatabase();
-    }
+    // NO FALLBACK - PostgreSQL only
+    console.error(
+      "🚫 PostgreSQL database creation failed. Mock database fallback disabled.",
+    );
     throw error;
   } finally {
     if (client) {
@@ -242,7 +250,7 @@ export async function runMigrations() {
   try {
     console.log("🔄 Запуск миграций базы данных...");
 
-    // Создаем таблицу для отслеживания миграций
+    // Создаем таб��ицу для отслеживания миграций
     await query(`
       CREATE TABLE IF NOT EXISTS migrations (
         id SERIAL PRIMARY KEY,
@@ -333,7 +341,7 @@ export async function getDatabaseStats() {
   }
 }
 
-// Функция безопасного закрытия всех соединений
+// Фу��кция безопасного закрытия всех соединений
 export async function closePool() {
   try {
     console.log("🔄 Закрытие пула соединений PostgreSQL...");

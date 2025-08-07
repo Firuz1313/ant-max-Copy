@@ -18,7 +18,7 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import { useData } from "@/contexts/DataContext";
+import { useData } from "@/contexts/ApiContext";
 
 interface RemoteControlProps {
   highlightButton?: string;

@@ -1,0 +1,129 @@
+[
+  {
+    "id": "remote-universal-001",
+    "device_id": null,
+    "name": "Универсальный пульт ANT",
+    "manufacturer": "ANT",
+    "model": "UNIVERSAL-RC01",
+    "description": "Стандартный универсальный пульт дистанционного управления для всех моделей ANT приставок",
+    "layout": "standard",
+    "color_scheme": "dark",
+    "image_url": "/images/remotes/ant-universal.png",
+    "image_data": null,
+    "svg_data": null,
+    "dimensions": {
+      "width": 180,
+      "height": 480
+    },
+    "buttons": [
+      {
+        "id": "power",
+        "name": "Питание",
+        "position": { "x": 90, "y": 50 },
+        "size": { "width": 40, "height": 25 },
+        "color": "#ff4444",
+        "icon": "power",
+        "action": "power_toggle"
+      },
+      {
+        "id": "ok",
+        "name": "OK",
+        "position": { "x": 90, "y": 180 },
+        "size": { "width": 35, "height": 35 },
+        "color": "#4444ff",
+        "icon": "check",
+        "action": "select"
+      },
+      {
+        "id": "up",
+        "name": "Вверх",
+        "position": { "x": 90, "y": 140 },
+        "size": { "width": 30, "height": 25 },
+        "color": "#666666",
+        "icon": "arrow-up",
+        "action": "navigate_up"
+      },
+      {
+        "id": "down",
+        "name": "Вниз",
+        "position": { "x": 90, "y": 220 },
+        "size": { "width": 30, "height": 25 },
+        "color": "#666666",
+        "icon": "arrow-down",
+        "action": "navigate_down"
+      },
+      {
+        "id": "left",
+        "name": "Влево",
+        "position": { "x": 50, "y": 180 },
+        "size": { "width": 25, "height": 30 },
+        "color": "#666666",
+        "icon": "arrow-left",
+        "action": "navigate_left"
+      },
+      {
+        "id": "right",
+        "name": "Вправо",
+        "position": { "x": 130, "y": 180 },
+        "size": { "width": 25, "height": 30 },
+        "color": "#666666",
+        "icon": "arrow-right",
+        "action": "navigate_right"
+      },
+      {
+        "id": "menu",
+        "name": "Меню",
+        "position": { "x": 50, "y": 280 },
+        "size": { "width": 35, "height": 25 },
+        "color": "#44aa44",
+        "icon": "menu",
+        "action": "menu"
+      },
+      {
+        "id": "back",
+        "name": "Назад",
+        "position": { "x": 130, "y": 280 },
+        "size": { "width": 35, "height": 25 },
+        "color": "#aa4444",
+        "icon": "arrow-left",
+        "action": "back"
+      },
+      {
+        "id": "home",
+        "name": "Домой",
+        "position": { "x": 90, "y": 280 },
+        "size": { "width": 35, "height": 25 },
+        "color": "#4444aa",
+        "icon": "home",
+        "action": "home"
+      }
+    ],
+    "zones": [
+      {
+        "id": "navigation",
+        "name": "Навигация",
+        "position": { "x": 40, "y": 130 },
+        "size": { "width": 100, "height": 100 },
+        "color": "#333333",
+        "opacity": 0.1
+      },
+      {
+        "id": "control",
+        "name": "Управление",
+        "position": { "x": 40, "y": 270 },
+        "size": { "width": 100, "height": 40 },
+        "color": "#444444",
+        "opacity": 0.1
+      }
+    ],
+    "is_default": true,
+    "usage_count": 0,
+    "last_used": null,
+    "is_active": true,
+    "metadata": {
+      "compatibility": ["all"],
+      "version": "1.0",
+      "created_by": "system"
+    }
+  }
+]

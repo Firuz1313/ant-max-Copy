@@ -52,12 +52,7 @@ const features = [
   },
 ];
 
-const devices = [
-  { name: "OpenBox", users: "2.3M+", status: "active" },
-  { name: "OpenBox Gold", users: "1.8M+", status: "active" },
-  { name: "Uclan", users: "1.2M+", status: "active" },
-  { name: "HDBox", users: "950K+", status: "active" },
-];
+// NO HARDCODED DEVICES - Load from API
 
 const Index = () => {
   const navigate = useNavigate();
