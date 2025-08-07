@@ -69,7 +69,7 @@ const adminMenuItems: AdminMenuItem[] = [
     title: "Пользователи",
     path: "/admin/users",
     icon: Users,
-    description: "Управление\nпользователями и ролями",
+    description: "Управление\nпользователя��и и ролями",
   },
   {
     title: "Настройки системы",
@@ -213,15 +213,15 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
               <SyncIndicator className="text-gray-500 dark:text-gray-400" />
               <div className="text-right">
                 <div className="text-sm font-medium text-gray-900 dark:text-white">
-                  Администратор
+                  Система
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400">
-                  admin@antsupport.com
+                  PostgreSQL режим
                 </div>
               </div>
-              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                  A
+              <div className="w-8 h-8 bg-green-500 dark:bg-green-600 rounded-full flex items-center justify-center">
+                <span className="text-sm font-medium text-white">
+                  DB
                 </span>
               </div>
             </div>
