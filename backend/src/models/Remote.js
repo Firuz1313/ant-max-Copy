@@ -25,49 +25,49 @@ class Remote extends BaseModel {
 
     // Фильтрация по устройству
     if (filters.device_id) {
-      query += ` AND r.device_id = $${paramIndex}`;
+      queryText += ` AND r.device_id = $${paramIndex}`;
       params.push(filters.device_id);
       paramIndex++;
     }
 
     // Фильтрация по производителю
     if (filters.manufacturer) {
-      query += ` AND r.manufacturer ILIKE $${paramIndex}`;
+      queryText += ` AND r.manufacturer ILIKE $${paramIndex}`;
       params.push(`%${filters.manufacturer}%`);
       paramIndex++;
     }
 
     // Фильтрация по layout
     if (filters.layout) {
-      query += ` AND r.layout = $${paramIndex}`;
+      queryText += ` AND r.layout = $${paramIndex}`;
       params.push(filters.layout);
       paramIndex++;
     }
 
     // Фильтрация по default статусу
     if (filters.is_default !== undefined) {
-      query += ` AND r.is_default = $${paramIndex}`;
+      queryText += ` AND r.is_default = $${paramIndex}`;
       params.push(filters.is_default);
       paramIndex++;
     }
 
     // Поиск по названию или модели
     if (filters.search) {
-      query += ` AND (r.name ILIKE $${paramIndex} OR r.manufacturer ILIKE $${paramIndex} OR r.model ILIKE $${paramIndex})`;
+      queryText += ` AND (r.name ILIKE $${paramIndex} OR r.manufacturer ILIKE $${paramIndex} OR r.model ILIKE $${paramIndex})`;
       params.push(`%${filters.search}%`);
       paramIndex++;
     }
 
-    query += ' ORDER BY r.is_default DESC, r.usage_count DESC, r.created_at DESC';
+    queryText += ' ORDER BY r.is_default DESC, r.usage_count DESC, r.created_at DESC';
 
     if (filters.limit) {
-      query += ` LIMIT $${paramIndex}`;
+      queryText += ` LIMIT $${paramIndex}`;
       params.push(filters.limit);
       paramIndex++;
     }
 
     if (filters.offset) {
-      query += ` OFFSET $${paramIndex}`;
+      queryText += ` OFFSET $${paramIndex}`;
       params.push(filters.offset);
     }
 
