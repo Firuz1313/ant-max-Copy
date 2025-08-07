@@ -359,14 +359,16 @@ export const useData = () => {
   const loadRemotes = useCallback(async () => {
     try {
       setLoading(true);
-      const remoteData = await api.getRemotes();
-      setRemotes(remoteData);
+      // Backend doesn't have remotes endpoint yet, use empty array
+      console.warn('Remotes endpoint not implemented in backend, using empty array');
+      setRemotes([]);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
+      setRemotes([]);
     } finally {
       setLoading(false);
     }
-  }, [api, setLoading, setError]);
+  }, [setLoading, setError]);
 
   const loadSessions = useCallback(async () => {
     try {
@@ -383,14 +385,22 @@ export const useData = () => {
   const loadSiteSettings = useCallback(async () => {
     try {
       setLoading(true);
-      const settingsData = await api.getSettings();
-      setSiteSettings(settingsData);
+      // Backend doesn't have settings endpoint yet, use default settings
+      console.warn('Settings endpoint not implemented in backend, using default settings');
+      setSiteSettings({
+        siteName: 'ANT Support',
+        siteDescription: 'Система диагностики ТВ приставок',
+        version: '1.0.0',
+        maintenanceMode: false,
+        debugMode: false,
+      } as SiteSettings);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Unknown error');
+      setSiteSettings(null);
     } finally {
       setLoading(false);
     }
-  }, [api, setLoading, setError]);
+  }, [setLoading, setError]);
 
   const refreshAllData = useCallback(async () => {
     await Promise.all([
