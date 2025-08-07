@@ -220,26 +220,6 @@ const RemotesManager = () => {
     setIsEditDialogOpen(true);
   };
 
-  // Логирование для отладки
-  console.log('RemotesManager devices data:', devices.map(d => ({ id: d.id, type: typeof d.id, brand: d.brand })));
-
-  // Защита от рендеринга с некорректными данными и дублирующихся ID
-  const safeDevices = devices.filter((device, index, array) => {
-    const isValid = device &&
-      device.id &&
-      typeof device.id === 'string' &&
-      device.id.trim() !== '' &&
-      device.id !== 'undefined' &&
-      device.id !== 'null' &&
-      // Убираем дубли по ID
-      array.findIndex(d => d.id === device.id) === index;
-
-    if (!isValid) {
-      console.warn('RemotesManager: Отфильтровано некорректное устройство:', device);
-    }
-
-    return isValid;
-  });
 
   const safeRemotes = remotes.filter((remote, index, array) =>
     remote &&
@@ -679,7 +659,7 @@ const RemotesManager = () => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SafeSelectItem value="standard">Стандартный</SafeSelectItem>
+                    <SafeSelectItem value="standard">Стандар��ный</SafeSelectItem>
                     <SafeSelectItem value="compact">Компактный</SafeSelectItem>
                     <SafeSelectItem value="smart">Умный</SafeSelectItem>
                     <SafeSelectItem value="custom">Настраиваемый</SafeSelectItem>
