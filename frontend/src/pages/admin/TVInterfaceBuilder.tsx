@@ -685,9 +685,9 @@ const TVInterfaceBuilder = () => {
                 <SelectContent>
                   <SelectItem value="all">Все устройства</SelectItem>
                   {devices.map((device) => (
-                    <SelectItem key={device.id} value={device.id}>
+                    <SafeSelectItem key={device.id} value={device.id}>
                       {device.name}
-                    </SelectItem>
+                    </SafeSelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -738,7 +738,7 @@ const TVInterfaceBuilder = () => {
               {searchTerm ||
               selectedDeviceFilter !== "all" ||
               selectedTypeFilter !== "all"
-                ? "Попробуйте изменить фильтры по��ска"
+                ? "Попробуйте изменить фильтры поиска"
                 : "Создайте первый TV интерфейс для начала работы"}
             </p>
             {!searchTerm &&
