@@ -281,7 +281,7 @@ const RemotesManager = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Все устройства</SelectItem>
-                <SelectItem value="universal">Ун��версальные</SelectItem>
+                <SelectItem value="universal">Универсальные</SelectItem>
                 {devices.filter(device => device.id && device.id.trim() !== '').map(device => (
                   <SelectItem key={device.id} value={device.id}>
                     {device.brand} {device.model}
@@ -565,7 +565,7 @@ const RemotesManager = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="edit-device">Устройство</Label>
-                <Select value={formData.device_id || 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
+                <Select value={formData.device_id && formData.device_id.trim() !== '' ? formData.device_id : 'universal'} onValueChange={(value) => setFormData({ ...formData, device_id: value })}>
                   <SelectTrigger>
                     <SelectValue placeholder="Выберите устройство" />
                   </SelectTrigger>
