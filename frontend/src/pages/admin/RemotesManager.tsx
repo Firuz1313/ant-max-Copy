@@ -29,7 +29,7 @@ const SafeSelectItem = ({ value, children, ...props }: any) => {
   }
 
   if (value.trim() === '' || value === 'undefined' || value === 'null') {
-    console.warn('SafeSelectItem: блокировка недопустимого значения:', { value });
+    console.warn('SafeSelectItem: блокировка недопустимого ��начения:', { value });
     return null;
   }
 
@@ -244,6 +244,27 @@ const RemotesManager = () => {
     return matchesSearch && matchesDevice && matchesLayout;
   });
 
+  // Логирование для отладки
+  console.log('RemotesManager devices data:', devices.map(d => ({ id: d.id, type: typeof d.id, brand: d.brand })));
+
+  // Защита от рендеринга с некорректными данными и дублирующихся ID
+  const safeDevices = devices.filter((device, index, array) => {
+    const isValid = device &&
+      device.id &&
+      typeof device.id === 'string' &&
+      device.id.trim() !== '' &&
+      device.id !== 'undefined' &&
+      device.id !== 'null' &&
+      // Убираем дубли по ID
+      array.findIndex(d => d.id === device.id) === index;
+
+    if (!isValid) {
+      console.warn('RemotesManager: Отфильтровано некорректное устройство:', device);
+    }
+
+    return isValid;
+  });
+
   const getDeviceName = (deviceId: string | null) => {
     if (!deviceId) return 'Универсальный';
     const device = safeDevices.find(d => d.id === deviceId);
@@ -349,7 +370,7 @@ const RemotesManager = () => {
 
             <Select value={filterLayout || 'all'} onValueChange={setFilterLayout}>
               <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="Фильтр по типу" />
+                <SelectValue placeholder="Фильтр по ти��у" />
               </SelectTrigger>
               <SelectContent>
                 <SafeSelectItem value="all">Все типы</SafeSelectItem>
@@ -501,7 +522,7 @@ const RemotesManager = () => {
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Создать первый пульт
+                Соз��ать первый пульт
               </Button>
             )}
           </CardContent>
