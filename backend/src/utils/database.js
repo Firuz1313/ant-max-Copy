@@ -92,13 +92,9 @@ export async function testConnection() {
   } catch (error) {
     console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
 
-    // Fallback to mock database
-    if (!USE_MOCK_DB) {
-      console.log("🔧 Falling back to mock database...");
-      process.env.USE_MOCK_DB = "true";
-      mockDb = await import("./mockDatabase.js");
-      return await mockDb.testConnection();
-    }
+    // NO AUTOMATIC FALLBACK - Force use of PostgreSQL only
+    console.error("🚫 PostgreSQL connection failed. Mock database fallback disabled.");
+    console.error("💡 Please ensure PostgreSQL is running and configured correctly.");
 
     return {
       success: false,
@@ -242,7 +238,7 @@ export async function runMigrations() {
   try {
     console.log("🔄 Запуск миграций базы данных...");
 
-    // Создаем таблицу для отслеживания миграций
+    // Создаем таб��ицу для отслеживания миграций
     await query(`
       CREATE TABLE IF NOT EXISTS migrations (
         id SERIAL PRIMARY KEY,
