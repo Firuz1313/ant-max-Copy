@@ -60,7 +60,7 @@ const RemotesManager = () => {
       console.error('Ошибка при загрузке данных:', error);
       toast({
         title: 'Ошибка',
-        description: 'Не удалось загрузить данные пультов',
+        description: 'Не уд��лось загрузить данные пультов',
         variant: 'destructive',
       });
     } finally {
@@ -95,7 +95,11 @@ const RemotesManager = () => {
         return;
       }
 
-      await api.createRemote(formData);
+      const remoteData = {
+        ...formData,
+        device_id: formData.device_id === 'universal' ? undefined : formData.device_id
+      };
+      await api.createRemote(remoteData);
       toast({
         title: 'Успех',
         description: 'Пульт успешно создан',
@@ -104,7 +108,7 @@ const RemotesManager = () => {
       resetForm();
       loadData();
     } catch (error: any) {
-      console.error('Ошибка при создании пульта:', error);
+      console.error('Ошибка при созда��ии пульта:', error);
       toast({
         title: 'Ошибка',
         description: error.message || 'Не удалось создать пульт',
