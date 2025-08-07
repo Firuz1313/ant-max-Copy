@@ -79,7 +79,7 @@ const RemotesManager = () => {
       setDevices(devicesData);
       setStats(statsData);
     } catch (error) {
-      console.error('Ошибка при загрузке данных:', error);
+      console.error('Ошибка пр�� загрузке данных:', error);
       toast({
         title: 'Ошибка',
         description: 'Не удалось загрузить данные пультов',
@@ -244,26 +244,6 @@ const RemotesManager = () => {
     return matchesSearch && matchesDevice && matchesLayout;
   });
 
-  // Логирование для отладки
-  console.log('RemotesManager devices data:', devices.map(d => ({ id: d.id, type: typeof d.id, brand: d.brand })));
-
-  // Защита от рендеринга с некорректными данными и дублирующихся ID
-  const safeDevices = devices.filter((device, index, array) => {
-    const isValid = device &&
-      device.id &&
-      typeof device.id === 'string' &&
-      device.id.trim() !== '' &&
-      device.id !== 'undefined' &&
-      device.id !== 'null' &&
-      // Убираем дубли по ID
-      array.findIndex(d => d.id === device.id) === index;
-
-    if (!isValid) {
-      console.warn('RemotesManager: Отфильтровано некорректное устройство:', device);
-    }
-
-    return isValid;
-  });
 
   const getDeviceName = (deviceId: string | null) => {
     if (!deviceId) return 'Универсальный';
@@ -517,7 +497,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout 
                 ? 'Попробуйте изменить параметры поиска или фильтрации' 
-                : 'Начните с создания первого пульта дистанционного управления'}
+                : 'Начните с создания первого пульта дис��анционного управления'}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
