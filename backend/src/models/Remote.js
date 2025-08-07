@@ -71,7 +71,7 @@ class Remote extends BaseModel {
       params.push(filters.offset);
     }
 
-    const result = await this.executeQuery(query, params);
+    const result = await query(queryText, params);
     return result.rows.map(this.formatRemote);
   }
 
