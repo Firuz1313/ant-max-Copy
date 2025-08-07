@@ -210,7 +210,7 @@ const UsersManager = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Управление пользователями
+            Управление пол��зователями
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Управление пользователями системы и их ролями
@@ -229,12 +229,12 @@ const UsersManager = () => {
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="name">Имя</Label>
+                <Label htmlFor="username">Имя пользователя</Label>
                 <Input
-                  id="name"
-                  value={formData.name}
+                  id="username"
+                  value={formData.username}
                   onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
+                    setFormData({ ...formData, username: e.target.value })
                   }
                   placeholder="Введите имя пользователя"
                 />
@@ -249,6 +249,18 @@ const UsersManager = () => {
                     setFormData({ ...formData, email: e.target.value })
                   }
                   placeholder="Введите email"
+                />
+              </div>
+              <div>
+                <Label htmlFor="password">Пароль</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  placeholder="Введите пароль"
                 />
               </div>
               <div>
@@ -297,7 +309,7 @@ const UsersManager = () => {
           <CardContent>
             <div className="text-2xl font-bold">{users.length}</div>
             <p className="text-xs text-muted-foreground">
-              В системе зарегистрировано
+              В ��истеме зарегистрировано
             </p>
           </CardContent>
         </Card>
