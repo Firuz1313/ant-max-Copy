@@ -333,11 +333,11 @@ const RemotesManager = () => {
                 <SelectValue placeholder="Фильтр по типу" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Все типы</SelectItem>
-                <SelectItem value="standard">Стандартный</SelectItem>
-                <SelectItem value="compact">Компактный</SelectItem>
-                <SelectItem value="smart">Умный</SelectItem>
-                <SelectItem value="custom">Настраиваемый</SelectItem>
+                <SafeSelectItem value="all">Все типы</SafeSelectItem>
+                <SafeSelectItem value="standard">Стандартный</SafeSelectItem>
+                <SafeSelectItem value="compact">Компактный</SafeSelectItem>
+                <SafeSelectItem value="smart">Умный</SafeSelectItem>
+                <SafeSelectItem value="custom">Настраиваемый</SafeSelectItem>
               </SelectContent>
             </Select>
 
