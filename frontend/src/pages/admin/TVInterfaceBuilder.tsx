@@ -310,7 +310,7 @@ const TVInterfaceBuilder = () => {
       console.error("Error deleting TV interface:", error);
       toast({
         title: "Ошибка",
-        description: "Произошла ошибка при удал��нии TV интерфейса",
+        description: "Произошла ошибка при удалении TV интерфейса",
         variant: "destructive",
       });
     } finally {
@@ -554,18 +554,18 @@ const TVInterfaceBuilder = () => {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Выберите устрой��тво" />
+                      <SelectValue placeholder="Выберите устройство" />
                     </SelectTrigger>
                     <SelectContent>
                       {devices.map((device) => (
-                        <SelectItem key={device.id} value={device.id}>
+                        <SafeSelectItem key={device.id} value={device.id}>
                           <div>
                             <div className="font-medium">{device.name}</div>
                             <div className="text-xs text-gray-500">
                               {device.brand} {device.model}
                             </div>
                           </div>
-                        </SelectItem>
+                        </SafeSelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -738,7 +738,7 @@ const TVInterfaceBuilder = () => {
               {searchTerm ||
               selectedDeviceFilter !== "all" ||
               selectedTypeFilter !== "all"
-                ? "Попробуйте изменить фильтры поиска"
+                ? "Попробуйте изменить фильтры по��ска"
                 : "Создайте первый TV интерфейс для начала работы"}
             </p>
             {!searchTerm &&
