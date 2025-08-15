@@ -204,15 +204,6 @@ class BaseModel {
         `Ошибка получения записи из ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return null
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning null for ${this.tableName} findById`,
-        );
-        return null;
-      }
-
       throw error;
     }
   }
@@ -227,7 +218,7 @@ class BaseModel {
       return result.rows || [];
     } catch (error) {
       console.error(
-        `Ошибка полу��ения записей из ${this.tableName}:`,
+        `Ошибка получения записей из ${this.tableName}:`,
         error.message,
       );
 
