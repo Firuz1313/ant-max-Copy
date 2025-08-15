@@ -27,6 +27,10 @@ export default function DatabaseInit() {
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(false);
   const [initResult, setInitResult] = useState<InitResponse | null>(null);
+  const [validating, setValidating] = useState(false);
+  const [validationResult, setValidationResult] = useState<any>(null);
+  const [resetting, setResetting] = useState(false);
+  const [resetResult, setResetResult] = useState<any>(null);
 
   const checkDatabaseStatus = async () => {
     setLoading(true);
