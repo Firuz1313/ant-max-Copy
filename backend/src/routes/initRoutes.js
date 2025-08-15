@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import db from '../utils/database.js';
 import ApiValidator from '../utils/apiValidator.js';
+import SystemReset from '../utils/systemReset.js';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
