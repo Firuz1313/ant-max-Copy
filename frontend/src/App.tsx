@@ -28,6 +28,7 @@ import RemotesManager from "@/pages/admin/RemotesManager";
 import TVInterfaceBuilder from "@/pages/admin/TVInterfaceBuilder";
 import UsersManager from "@/pages/admin/UsersManager";
 import SystemSettings from "@/pages/admin/SystemSettings";
+import DatabaseInit from "@/pages/admin/DatabaseInit";
 
 function App() {
   return (
