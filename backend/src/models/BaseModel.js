@@ -187,21 +187,6 @@ class BaseModel {
         `Ошибка создания записи в ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return a mock object
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning mock object for ${this.tableName} creation`,
-        );
-        return {
-          id: this.generateId(),
-          ...data,
-          created_at: this.createTimestamp(),
-          updated_at: this.createTimestamp(),
-          is_active: true,
-        };
-      }
-
       throw error;
     }
   }
@@ -242,7 +227,7 @@ class BaseModel {
       return result.rows || [];
     } catch (error) {
       console.error(
-        `Ошибка получения записей из ${this.tableName}:`,
+        `Ошибка полу��ения записей из ${this.tableName}:`,
         error.message,
       );
 
