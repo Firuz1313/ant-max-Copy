@@ -42,10 +42,11 @@ class APIService {
       const contentType = response.headers.get("content-type");
 
       let data;
+      let bodyText = "";
 
       try {
         // Read the response body only once
-        const bodyText = await response.text();
+        bodyText = await response.text();
 
         // Try to parse as JSON if content type suggests it or if body looks like JSON
         if (
