@@ -270,6 +270,7 @@ router.use(`${API_V1_PREFIX}/change-logs`, changeLogRoutes);
 router.use(`${API_V1_PREFIX}/settings`, siteSettingRoutes);
 router.use(`${API_V1_PREFIX}/init`, initRoutes);
 router.use(`${API_V1_PREFIX}/db-check`, quickDbCheck);
+router.use(`${API_V1_PREFIX}/debug`, debugRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
