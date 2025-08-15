@@ -13,9 +13,7 @@ dotenv.config();
 
 const { Pool, Client } = pkg;
 
-// Check if we should use mock database
-const USE_MOCK_DB =
-  process.env.USE_MOCK_DB === "true" || process.env.NODE_ENV === "mock";
+// PostgreSQL only - no mock database support
 
 // Конфигурация подключения к PostgreSQL
 const dbConfig = {
@@ -58,19 +56,10 @@ pool.on("release", (client) => {
   }
 });
 
-// Import mock database if needed
-let mockDb = null;
-if (USE_MOCK_DB) {
-  mockDb = await import("./mockDatabase.js");
-  console.log("🔧 Using mock database for development");
-}
+// PostgreSQL only - no mock database fallback
 
-// Функция проверки подключения к базе данных
+// Функция проверки подключения к PostgreSQL
 export async function testConnection() {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.testConnection();
-  }
-
   let client;
   try {
     client = await pool.connect();
@@ -113,10 +102,6 @@ export async function testConnection() {
 
 // Функция выполнения запроса с логированием
 export async function query(text, params = []) {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.query(text, params);
-  }
-
   const start = Date.now();
   let client;
 
@@ -166,10 +151,6 @@ export async function query(text, params = []) {
 
 // Функция выполнения транзакции
 export async function transaction(callback) {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.transaction(callback);
-  }
-
   let client;
 
   try {
@@ -203,10 +184,6 @@ export async function transaction(callback) {
 
 // Функция создания базы данных (если не существует)
 export async function createDatabase() {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.createDatabase();
-  }
-
   const adminConfig = {
     ...dbConfig,
     database: "postgres", // подключаемся к системной БД для создания новой

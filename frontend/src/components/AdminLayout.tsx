@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   Tv,
+  Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -50,7 +51,7 @@ const adminMenuItems: AdminMenuItem[] = [
     title: "Управление шагами",
     path: "/admin/steps",
     icon: Layers,
-    description: "Создан��е и редактирование шагов диагностики",
+    description: "Создан��е и редактирование шагов диагно��тики",
   },
   {
     title: "Конструктор интерфейса ТВ",
@@ -76,6 +77,18 @@ const adminMenuItems: AdminMenuItem[] = [
     path: "/admin/settings",
     icon: Settings,
     description: "Конфигурация и\nсистемные настройки",
+  },
+  {
+    title: "База данных",
+    path: "/admin/database",
+    icon: Database,
+    description: "Инициализация и\nуправление БД",
+  },
+  {
+    title: "Тест API",
+    path: "/admin/api-test",
+    icon: Settings,
+    description: "Проверка подключения\nк API",
   },
 ];
 

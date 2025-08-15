@@ -28,6 +28,8 @@ import RemotesManager from "@/pages/admin/RemotesManager";
 import TVInterfaceBuilder from "@/pages/admin/TVInterfaceBuilder";
 import UsersManager from "@/pages/admin/UsersManager";
 import SystemSettings from "@/pages/admin/SystemSettings";
+import DatabaseInit from "@/pages/admin/DatabaseInit";
+import ApiConnectionTest from "@/pages/ApiConnectionTest";
 
 function App() {
   return (
@@ -164,6 +166,22 @@ function App() {
             element={
               <AdminLayout>
                 <SystemSettings />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/database"
+            element={
+              <AdminLayout>
+                <DatabaseInit />
+              </AdminLayout>
+            }
+          />
+          <Route
+            path="/admin/api-test"
+            element={
+              <AdminLayout>
+                <ApiConnectionTest />
               </AdminLayout>
             }
           />

@@ -1,4 +1,5 @@
 import { APIResponse, PaginatedResponse, FilterOptions } from "../types";
+import { transformToFrontend, transformToBackend } from "../lib/caseConverter";
 
 // Force recompilation - 2025-01-30
 
@@ -151,7 +152,10 @@ export class ApiClient {
       }
 
       console.log(`✅ API call successful`);
-      return responseData;
+
+      // Transform snake_case to camelCase for frontend
+      const transformedData = transformToFrontend(responseData);
+      return transformedData;
     } catch (error) {
       clearTimeout(timeoutId);
 
@@ -191,10 +195,13 @@ export class ApiClient {
     data?: any,
     options: RequestOptions = {},
   ): Promise<T> {
+    // Transform camelCase to snake_case for backend
+    const transformedData = data ? transformToBackend(data) : undefined;
+
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "POST",
-      body: data ? JSON.stringify(data) : undefined,
+      body: transformedData ? JSON.stringify(transformedData) : undefined,
     });
   }
 
@@ -203,10 +210,13 @@ export class ApiClient {
     data?: any,
     options: RequestOptions = {},
   ): Promise<T> {
+    // Transform camelCase to snake_case for backend
+    const transformedData = data ? transformToBackend(data) : undefined;
+
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "PUT",
-      body: data ? JSON.stringify(data) : undefined,
+      body: transformedData ? JSON.stringify(transformedData) : undefined,
     });
   }
 
@@ -215,10 +225,13 @@ export class ApiClient {
     data?: any,
     options: RequestOptions = {},
   ): Promise<T> {
+    // Transform camelCase to snake_case for backend
+    const transformedData = data ? transformToBackend(data) : undefined;
+
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "PATCH",
-      body: data ? JSON.stringify(data) : undefined,
+      body: transformedData ? JSON.stringify(transformedData) : undefined,
     });
   }
 

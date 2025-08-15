@@ -11,12 +11,14 @@ class User extends BaseModel {
    * Получить всех пользователей
    */
   async getAllUsers(filters = {}) {
+    console.log("🔍 User.getAllUsers called with filters:", filters);
+
     let queryText = `
-      SELECT 
-        id, username, email, first_name, last_name, role, 
+      SELECT
+        id, username, email, first_name, last_name, role,
         email_verified, last_login, login_count, is_active,
         preferences, created_at, updated_at
-      FROM users 
+      FROM users
       WHERE is_active = true
     `;
     const params = [];
@@ -56,7 +58,12 @@ class User extends BaseModel {
       params.push(filters.offset);
     }
 
+    console.log("📊 User.getAllUsers query:", queryText);
+    console.log("📊 User.getAllUsers params:", params);
+
     const result = await query(queryText, params);
+    console.log("📊 User.getAllUsers result rows:", result.rows.length);
+
     return result.rows.map(this.formatUser);
   }
 
@@ -399,7 +406,7 @@ class User extends BaseModel {
       preferences: this.parseJSON(user.preferences, {}),
       createdAt: user.created_at,
       updatedAt: user.updated_at,
-      // Не возвращаем password_hash в API ответе
+      // Не возвращаем password_hash в API отв��те
     };
   }
 

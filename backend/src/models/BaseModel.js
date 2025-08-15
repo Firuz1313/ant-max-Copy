@@ -47,7 +47,7 @@ class BaseModel {
   }
 
   /**
-   * Подготовка данных для обновления
+   * Подготовка данных для обновлен��я
    */
   prepareForUpdate(data) {
     const prepared = {
@@ -187,21 +187,6 @@ class BaseModel {
         `Ошибка создания записи в ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return a mock object
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning mock object for ${this.tableName} creation`,
-        );
-        return {
-          id: this.generateId(),
-          ...data,
-          created_at: this.createTimestamp(),
-          updated_at: this.createTimestamp(),
-          is_active: true,
-        };
-      }
-
       throw error;
     }
   }
@@ -219,15 +204,6 @@ class BaseModel {
         `Ошибка получения записи из ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return null
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning null for ${this.tableName} findById`,
-        );
-        return null;
-      }
-
       throw error;
     }
   }
@@ -245,15 +221,6 @@ class BaseModel {
         `Ошибка получения записей из ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return empty array
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning empty array for ${this.tableName}`,
-        );
-        return [];
-      }
-
       throw error;
     }
   }
@@ -271,15 +238,6 @@ class BaseModel {
         `Ошибка получения записи из ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return null
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning null for ${this.tableName} findOne`,
-        );
-        return null;
-      }
-
       throw error;
     }
   }
@@ -298,19 +256,6 @@ class BaseModel {
         `Ошибка обновления записи в ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return mock updated object
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning mock object for ${this.tableName} update`,
-        );
-        return {
-          id: id,
-          ...data,
-          updated_at: this.createTimestamp(),
-        };
-      }
-
       throw error;
     }
   }
@@ -387,15 +332,6 @@ class BaseModel {
         `Ошибка подсчета записей в ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return 0
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning count 0 for ${this.tableName}`,
-        );
-        return 0;
-      }
-
       throw error;
     }
   }

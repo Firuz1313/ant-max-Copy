@@ -9,6 +9,7 @@ const userModel = new User();
  */
 export const getAllUsers = async (req, res) => {
   try {
+    console.log("🔍 getAllUsers called with query:", req.query);
     const { role, email_verified, search, limit = 50, offset = 0 } = req.query;
 
     const filters = {
@@ -20,7 +21,9 @@ export const getAllUsers = async (req, res) => {
       offset: parseInt(offset),
     };
 
+    console.log("📊 Getting users with filters:", filters);
     const users = await userModel.getAllUsers(filters);
+    console.log("📊 Found users count:", users.length);
 
     res.json({
       success: true,
@@ -92,7 +95,7 @@ export const createUser = async (req, res) => {
   try {
     const userData = req.body;
 
-    // Валидация обязательных полей
+    // Валидация обяз��тельных полей
     if (!userData.username || !userData.email || !userData.password) {
       return res.status(400).json({
         success: false,
@@ -374,7 +377,7 @@ export const searchUsers = async (req, res) => {
     console.error("Ошибка при поиске пользователей:", error);
     res.status(500).json({
       success: false,
-      error: "Внутренняя ошибка сервера при поиске пользователей",
+      error: "Внутренняя ошибка сервера п��и поиске пользователей",
       errorType: "DATABASE_ERROR",
       details: error.message,
       timestamp: new Date().toISOString(),
@@ -415,7 +418,7 @@ export const checkUsernameAvailability = async (req, res) => {
     console.error("Ошибка при проверке доступности логина:", error);
     res.status(500).json({
       success: false,
-      error: "Внутренняя ошибка сервера при проверке логина",
+      error: "Внутренняя ошибка сервера при прове��ке логина",
       errorType: "DATABASE_ERROR",
       details: error.message,
       timestamp: new Date().toISOString(),

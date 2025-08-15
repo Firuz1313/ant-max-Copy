@@ -12,6 +12,9 @@ import sessionStepRoutes from "./sessionStepRoutes.js";
 import stepActionRoutes from "./stepActionRoutes.js";
 import changeLogRoutes from "./changeLogRoutes.js";
 import siteSettingRoutes from "./siteSettingRoutes.js";
+import initRoutes from "./initRoutes.js";
+import quickDbCheck from "./quickDbCheck.js";
+import debugRoutes from "./debugRoutes.js";
 
 const router = express.Router();
 
@@ -265,6 +268,9 @@ router.use(`${API_V1_PREFIX}/session-steps`, sessionStepRoutes);
 router.use(`${API_V1_PREFIX}/step-actions`, stepActionRoutes);
 router.use(`${API_V1_PREFIX}/change-logs`, changeLogRoutes);
 router.use(`${API_V1_PREFIX}/settings`, siteSettingRoutes);
+router.use(`${API_V1_PREFIX}/init`, initRoutes);
+router.use(`${API_V1_PREFIX}/db-check`, quickDbCheck);
+router.use(`${API_V1_PREFIX}/debug`, debugRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
