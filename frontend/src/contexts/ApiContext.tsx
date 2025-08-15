@@ -16,8 +16,9 @@ import {
   ChangeLog,
   SiteSettings,
 } from "@/types";
+import { apiClient } from "@/api/client";
 
-// Pure API service without any caching or local storage
+// Use unified API client instead of custom APIService
 class APIService {
   private baseURL = "/api/v1";
 
