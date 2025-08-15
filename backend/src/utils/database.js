@@ -13,9 +13,7 @@ dotenv.config();
 
 const { Pool, Client } = pkg;
 
-// Check if we should use mock database
-const USE_MOCK_DB =
-  process.env.USE_MOCK_DB === "true" || process.env.NODE_ENV === "mock";
+// PostgreSQL only - no mock database support
 
 // Конфигурация подключения к PostgreSQL
 const dbConfig = {
@@ -389,7 +387,7 @@ export async function cleanupOldData(daysToKeep = 90) {
       deletedLogs: logsResult.rowCount,
     };
   } catch (error) {
-    console.error("❌ Ошибка очистки данных:", error.message);
+    console.error("❌ Ошибка очистки да��ных:", error.message);
     throw error;
   }
 }
