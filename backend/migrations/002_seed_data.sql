@@ -8,15 +8,21 @@ INSERT INTO site_settings (id, site_name, site_description) VALUES (
     'Профессиональная платформа для диагностики цифровых ТВ-приставок'
 ) ON CONFLICT (id) DO NOTHING;
 
--- Create admin user
+-- Create admin user (password: admin123)
 INSERT INTO users (id, username, email, password_hash, role, email_verified) VALUES (
     'admin-001',
     'admin',
     'admin@antsupport.local',
-    '$2b$10$YourHashHere',
+    '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
     'admin',
     true
 ) ON CONFLICT (username) DO NOTHING;
+
+-- Create additional test users
+INSERT INTO users (id, username, email, password_hash, role, email_verified) VALUES
+    ('user-001', 'testuser', 'user@antsupport.local', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'user', true),
+    ('mod-001', 'moderator', 'mod@antsupport.local', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'moderator', true)
+ON CONFLICT (username) DO NOTHING;
 
 -- Insert sample devices
 INSERT INTO devices (id, name, brand, model, description, image_url, color, order_index, status, is_active) VALUES 
@@ -74,7 +80,7 @@ ON CONFLICT (id) DO NOTHING;
 INSERT INTO diagnostic_steps (id, problem_id, device_id, step_number, title, instruction, estimated_time, action_type, is_active) VALUES 
     ('classic-no-signal-step1', 'classic-no-signal', 'ant-classic', 1, 'Проверка подключения кабелей', 'Убедитесь, что все кабели подключены правильно и плотно', 60, 'check', true),
     ('classic-no-signal-step2', 'classic-no-signal', 'ant-classic', 2, 'Проверка питания', 'Проверьте, что приставка включена и светится индикатор питания', 30, 'check', true),
-    ('classic-no-signal-step3', 'classic-no-signal', 'ant-classic', 3, 'Перезагрузка приставки', 'Отключите питание на 10 секунд, затем включите снова', 90, 'button_press', true),
+    ('classic-no-signal-step3', 'classic-no-signal', 'ant-classic', 3, 'Перезагрузка приставки', 'Отключите питание на 10 ��екунд, затем включите снова', 90, 'button_press', true),
     ('classic-no-signal-step4', 'classic-no-signal', 'ant-classic', 4, 'Проверка телевизора', 'Убедитесь, что на телевизоре выбран правильный источник сигнала', 45, 'check', true)
 ON CONFLICT (id) DO NOTHING;
 
