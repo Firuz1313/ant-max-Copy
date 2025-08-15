@@ -47,7 +47,7 @@ class BaseModel {
   }
 
   /**
-   * Подготовка данных для обновления
+   * Подготовка данных для обновлен��я
    */
   prepareForUpdate(data) {
     const prepared = {
@@ -332,15 +332,6 @@ class BaseModel {
         `Ошибка подсчета записей в ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return 0
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning count 0 for ${this.tableName}`,
-        );
-        return 0;
-      }
-
       throw error;
     }
   }
