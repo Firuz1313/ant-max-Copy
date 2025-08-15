@@ -14,6 +14,7 @@ import changeLogRoutes from "./changeLogRoutes.js";
 import siteSettingRoutes from "./siteSettingRoutes.js";
 import initRoutes from "./initRoutes.js";
 import quickDbCheck from "./quickDbCheck.js";
+import debugRoutes from "./debugRoutes.js";
 
 const router = express.Router();
 
@@ -89,7 +90,7 @@ router.get("/docs", (req, res) => {
           description: "У��равление устройствами (ТВ приставки)",
           routes: {
             "GET /devices": "Получени�� списка устройств",
-            "GET /devices/:id": "Получение устройст��а по ID",
+            "GET /devices/:id": "Получение устройства по ID",
             "POST /devices": "��оздание нового устройства",
             "PUT /devices/:id": "Обновление устройства",
             "DELETE /devices/:id": "Удаление устройства",
@@ -147,7 +148,7 @@ router.get("/docs", (req, res) => {
           },
         },
         sessions: {
-          description: "Управлени�� диагностическими сессиями",
+          description: "Управление диагностическими сессиями",
           routes: {
             "GET /sessions": "Получение списка сессий",
             "GET /sessions/:id": "Получение сессии по ID",
@@ -223,7 +224,7 @@ router.get("/docs", (req, res) => {
         409: "Conflict - Конфликт данных (дубликаты, ограничения)",
         422: "Unprocessable Entity - Ошибка бизнес-логики",
         429: "Too Many Requests - Превышен лимит запросов",
-        500: "Internal Server Error - Внутр��нняя ошибка сервера",
+        500: "Internal Server Error - Внутренняя ошибка сервера",
         503: "Service Unavailable - Сервис временно недоступен",
       },
       responseFormat: {
