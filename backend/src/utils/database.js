@@ -41,7 +41,7 @@ pool.on("connect", (client) => {
 });
 
 pool.on("error", (err, client) => {
-  console.error("📊 Ошибк�� подключения к PostgreSQL:", err.message);
+  console.error("📊 Ошибка подключения к PostgreSQL:", err.message);
 });
 
 pool.on("acquire", (client) => {
@@ -58,12 +58,8 @@ pool.on("release", (client) => {
 
 // PostgreSQL only - no mock database fallback
 
-// Функция проверки подключения к базе данных
+// Функция проверки подключения к PostgreSQL
 export async function testConnection() {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.testConnection();
-  }
-
   let client;
   try {
     client = await pool.connect();
@@ -83,7 +79,7 @@ export async function testConnection() {
       version: result.rows[0].postgres_version,
     };
   } catch (error) {
-    console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
+    console.error("❌ Ошибка подключе��ия к PostgreSQL:", error.message);
 
     // NO AUTOMATIC FALLBACK - Force use of PostgreSQL only
     console.error(
@@ -260,7 +256,7 @@ export async function runMigrations() {
       executedResult.rows.map((row) => row.filename),
     );
 
-    // Читаем файлы миграций
+    // Читаем файлы мигр��ций
     const migrationsDir = path.join(__dirname, "../../migrations");
     const migrationFiles = fs
       .readdirSync(migrationsDir)
@@ -341,7 +337,7 @@ export async function closePool() {
     await pool.end();
     console.log("✅ Пул соединений закрыт");
   } catch (error) {
-    console.error("❌ Ошибка закрытия ��ула:", error.message);
+    console.error("❌ Ошибка закрытия пула:", error.message);
   }
 }
 
@@ -387,7 +383,7 @@ export async function cleanupOldData(daysToKeep = 90) {
   }
 }
 
-// Функция для полнотекст��вого поиска
+// Функция дл�� полнотекстового поиска
 export async function searchText(
   searchTerm,
   tables = ["problems", "devices", "diagnostic_steps"],
