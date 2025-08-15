@@ -152,7 +152,10 @@ export class ApiClient {
       }
 
       console.log(`✅ API call successful`);
-      return responseData;
+
+      // Transform snake_case to camelCase for frontend
+      const transformedData = transformToFrontend(responseData);
+      return transformedData;
     } catch (error) {
       clearTimeout(timeoutId);
 
