@@ -29,6 +29,7 @@ import TVInterfaceBuilder from "@/pages/admin/TVInterfaceBuilder";
 import UsersManager from "@/pages/admin/UsersManager";
 import SystemSettings from "@/pages/admin/SystemSettings";
 import DatabaseInit from "@/pages/admin/DatabaseInit";
+import ApiConnectionTest from "@/pages/ApiConnectionTest";
 
 function App() {
   return (
