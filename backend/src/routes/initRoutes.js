@@ -127,4 +127,35 @@ router.get('/status', async (req, res) => {
   }
 });
 
+// Validate complete API functionality
+router.get('/validate', async (req, res) => {
+  try {
+    console.log('🔍 Running API validation...');
+
+    const validation = await ApiValidator.runFullValidation();
+
+    if (validation.success) {
+      res.json({
+        success: true,
+        message: 'API validation completed successfully',
+        validation: validation
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'API validation found issues',
+        validation: validation
+      });
+    }
+
+  } catch (error) {
+    console.error('❌ API validation failed:', error.message);
+    res.status(500).json({
+      success: false,
+      error: 'API validation failed',
+      details: error.message
+    });
+  }
+});
+
 export default router;
