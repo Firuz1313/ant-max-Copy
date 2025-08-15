@@ -210,10 +210,13 @@ export class ApiClient {
     data?: any,
     options: RequestOptions = {},
   ): Promise<T> {
+    // Transform camelCase to snake_case for backend
+    const transformedData = data ? transformToBackend(data) : undefined;
+
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "PUT",
-      body: data ? JSON.stringify(data) : undefined,
+      body: transformedData ? JSON.stringify(transformedData) : undefined,
     });
   }
 
