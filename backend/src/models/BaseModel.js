@@ -98,7 +98,7 @@ class BaseModel {
   }
 
   /**
-   * Построение SQL запроса для выборки с фильтрами
+   * Построение SQL запроса для выборки с фильтр��ми
    */
   buildSelectQuery(filters = {}, options = {}) {
     let sql = `SELECT * FROM ${this.tableName}`;
@@ -221,15 +221,6 @@ class BaseModel {
         `Ошибка получения записей из ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return empty array
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning empty array for ${this.tableName}`,
-        );
-        return [];
-      }
-
       throw error;
     }
   }
