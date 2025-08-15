@@ -75,6 +75,49 @@ export default function DatabaseInit() {
     }
   };
 
+  const validateSystem = async () => {
+    setValidating(true);
+    setValidationResult(null);
+
+    try {
+      const response = await apiClient.get<any>('/api/v1/init/validate');
+      setValidationResult(response);
+    } catch (error: any) {
+      setValidationResult({
+        success: false,
+        error: error.message || 'Failed to validate system',
+        details: error.response?.data?.details
+      });
+    } finally {
+      setValidating(false);
+    }
+  };
+
+  const resetSystem = async () => {
+    setResetting(true);
+    setResetResult(null);
+
+    try {
+      const response = await apiClient.post<any>('/api/v1/init/reset');
+      setResetResult(response);
+
+      // Refresh status after successful reset
+      if (response.success) {
+        setTimeout(() => {
+          checkDatabaseStatus();
+        }, 1000);
+      }
+    } catch (error: any) {
+      setResetResult({
+        success: false,
+        error: error.message || 'Failed to reset system',
+        details: error.response?.data?.details
+      });
+    } finally {
+      setResetting(false);
+    }
+  };
+
   const formatTableStats = (stats: Record<string, number | string>) => {
     return Object.entries(stats).map(([table, count]) => (
       <div key={table} className="flex justify-between items-center py-1">
