@@ -159,4 +159,35 @@ router.get('/validate', async (req, res) => {
   }
 });
 
+// Complete system reset and initialization
+router.post('/reset', async (req, res) => {
+  try {
+    console.log('🚀 Starting complete system reset...');
+
+    const resetResult = await SystemReset.performCompleteReset();
+
+    if (resetResult.success) {
+      res.json({
+        success: true,
+        message: 'System reset completed successfully',
+        results: resetResult
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'System reset failed',
+        results: resetResult
+      });
+    }
+
+  } catch (error) {
+    console.error('❌ System reset failed:', error.message);
+    res.status(500).json({
+      success: false,
+      error: 'System reset failed',
+      details: error.message
+    });
+  }
+});
+
 export default router;
