@@ -16,6 +16,7 @@ import {
   Menu,
   X,
   Tv,
+  Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
