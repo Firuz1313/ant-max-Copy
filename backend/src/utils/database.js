@@ -126,7 +126,7 @@ export async function query(text, params = []) {
     const duration = Date.now() - start;
     console.error(`❌ SQL Error after ${duration}ms:`, error.message);
     console.error("🔍 Query:", text);
-    console.error("�� Parameters:", params);
+    console.error("🔍 Parameters:", params);
 
     // Check if this is a connection error (PostgreSQL not available)
     if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
@@ -184,10 +184,6 @@ export async function transaction(callback) {
 
 // Функция создания базы данных (если не существует)
 export async function createDatabase() {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.createDatabase();
-  }
-
   const adminConfig = {
     ...dbConfig,
     database: "postgres", // подключаемся к системной БД для создания новой
