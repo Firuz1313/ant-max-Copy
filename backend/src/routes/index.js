@@ -108,7 +108,7 @@ router.get("/docs", (req, res) => {
             "GET /problems": "Получение списка проблем",
             "GET /problems/:id": "Получение проблемы по ID",
             "POST /problems": "Создание новой проблемы",
-            "PUT /problems/:id": "Обновл��ние проблемы",
+            "PUT /problems/:id": "Обновление проблемы",
             "DELETE /problems/:id": "Удаление проблемы",
             "GET /problems/search": "Поиск проблем",
             "GET /problems/popular": "Популярные проблемы",
@@ -166,7 +166,7 @@ router.get("/docs", (req, res) => {
           },
         },
         tvInterfaces: {
-          description: "Управление ��нтерфейсами ТВ приставок",
+          description: "Управление интерфейсами ТВ приставок",
           routes: {
             "GET /tv-interfaces": "Получение списка интерфейсов ТВ",
             "GET /tv-interfaces/:id": "Получение интерфейса ТВ по ID",
@@ -184,7 +184,7 @@ router.get("/docs", (req, res) => {
         users: {
           description: "Управление пользователями системы",
           routes: {
-            "GET /users": "Получение списка пользователей",
+            "GET /users": "Получение списка пользовате��ей",
             "GET /users/:id": "Получение пользователя по ID",
             "POST /users": "Создание нового пользователя",
             "PUT /users/:id": "Обновление пользователя",
@@ -222,7 +222,7 @@ router.get("/docs", (req, res) => {
         409: "Conflict - Конфликт данных (дубликаты, ограничения)",
         422: "Unprocessable Entity - Ошибка бизнес-логики",
         429: "Too Many Requests - Превышен лимит запросов",
-        500: "Internal Server Error - Внутренняя ошибка серв��ра",
+        500: "Internal Server Error - Внутренняя ошибка сервера",
         503: "Service Unavailable - Сервис временно недоступен",
       },
       responseFormat: {
@@ -266,6 +266,7 @@ router.use(`${API_V1_PREFIX}/session-steps`, sessionStepRoutes);
 router.use(`${API_V1_PREFIX}/step-actions`, stepActionRoutes);
 router.use(`${API_V1_PREFIX}/change-logs`, changeLogRoutes);
 router.use(`${API_V1_PREFIX}/settings`, siteSettingRoutes);
+router.use(`${API_V1_PREFIX}/init`, initRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
