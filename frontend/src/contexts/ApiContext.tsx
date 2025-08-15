@@ -20,81 +20,28 @@ import { apiClient } from "@/api/client";
 
 // Use unified API client instead of custom APIService
 class APIService {
-  private baseURL = "/api/v1";
-
   private async request<T>(
     endpoint: string,
     options: RequestInit = {},
   ): Promise<T> {
-    const url = `${this.baseURL}${endpoint}`;
-
     try {
-      const response = await fetch(url, {
-        headers: {
-          "Content-Type": "application/json",
-          ...options.headers,
-        },
-        ...options,
-      });
+      const method = (options.method || 'GET') as string;
+      const body = options.body ? JSON.parse(options.body as string) : undefined;
 
-      // Store status and headers before reading body
-      const status = response.status;
-      const statusText = response.statusText;
-      const contentType = response.headers.get("content-type");
-
-      let data;
-      let bodyText = "";
-
-      try {
-        // Read the response body only once
-        bodyText = await response.text();
-
-        // Try to parse as JSON if content type suggests it or if body looks like JSON
-        if (
-          (contentType && contentType.includes("application/json")) ||
-          bodyText.trim().startsWith("{") ||
-          bodyText.trim().startsWith("[")
-        ) {
-          try {
-            data = JSON.parse(bodyText);
-          } catch (jsonError) {
-            data = { message: bodyText || "Response parsing failed" };
-          }
-        } else {
-          data = bodyText ? { message: bodyText } : {};
-        }
-      } catch (readError) {
-        console.warn("Failed to read response body:", readError);
-        data = { error: "Failed to read response" };
+      switch (method.toUpperCase()) {
+        case 'GET':
+          return await apiClient.get<T>(endpoint);
+        case 'POST':
+          return await apiClient.post<T>(endpoint, body);
+        case 'PUT':
+          return await apiClient.put<T>(endpoint, body);
+        case 'PATCH':
+          return await apiClient.patch<T>(endpoint, body);
+        case 'DELETE':
+          return await apiClient.delete<T>(endpoint);
+        default:
+          return await apiClient.get<T>(endpoint);
       }
-
-      if (status >= 400) {
-        let errorMessage = statusText;
-
-        // Try to extract error message from response data
-        if (data) {
-          if (data.error) {
-            errorMessage = data.error;
-          } else if (data.message) {
-            errorMessage = data.message;
-          } else if (data.details) {
-            errorMessage = data.details;
-          } else if (typeof data === 'string') {
-            errorMessage = data;
-          }
-        }
-
-        console.error(`API Error Details [${endpoint}]:`, {
-          status,
-          errorMessage,
-          data,
-          bodyText: bodyText.substring(0, 200), // Limit bodyText length
-        });
-
-        throw new Error(`${errorMessage} (HTTP ${status})`);
-      }
-
-      return data.data || data;
     } catch (error) {
       console.error(`API Error [${endpoint}]:`, error);
       throw error;
