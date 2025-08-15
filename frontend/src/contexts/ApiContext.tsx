@@ -68,13 +68,28 @@ class APIService {
       }
 
       if (status >= 400) {
-        const errorMessage =
-          data.error || data.message || data.details || statusText;
+        let errorMessage = statusText;
+
+        // Try to extract error message from response data
+        if (data) {
+          if (data.error) {
+            errorMessage = data.error;
+          } else if (data.message) {
+            errorMessage = data.message;
+          } else if (data.details) {
+            errorMessage = data.details;
+          } else if (typeof data === 'string') {
+            errorMessage = data;
+          }
+        }
+
         console.error(`API Error Details [${endpoint}]:`, {
           status,
+          errorMessage,
           data,
-          bodyText,
+          bodyText: bodyText.substring(0, 200), // Limit bodyText length
         });
+
         throw new Error(`${errorMessage} (HTTP ${status})`);
       }
 
