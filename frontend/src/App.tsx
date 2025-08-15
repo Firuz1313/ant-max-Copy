@@ -168,6 +168,14 @@ function App() {
               </AdminLayout>
             }
           />
+          <Route
+            path="/admin/database"
+            element={
+              <AdminLayout>
+                <DatabaseInit />
+              </AdminLayout>
+            }
+          />
 
           {/* 404 Route */}
           <Route
