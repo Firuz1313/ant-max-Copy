@@ -79,7 +79,7 @@ export async function testConnection() {
       version: result.rows[0].postgres_version,
     };
   } catch (error) {
-    console.error("❌ Ошибка подключе��ия к PostgreSQL:", error.message);
+    console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
 
     // NO AUTOMATIC FALLBACK - Force use of PostgreSQL only
     console.error(
@@ -102,10 +102,6 @@ export async function testConnection() {
 
 // Функция выполнения запроса с логированием
 export async function query(text, params = []) {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.query(text, params);
-  }
-
   const start = Date.now();
   let client;
 
@@ -256,7 +252,7 @@ export async function runMigrations() {
       executedResult.rows.map((row) => row.filename),
     );
 
-    // Читаем файлы мигр��ций
+    // Читаем файлы миграций
     const migrationsDir = path.join(__dirname, "../../migrations");
     const migrationFiles = fs
       .readdirSync(migrationsDir)
@@ -337,7 +333,7 @@ export async function closePool() {
     await pool.end();
     console.log("✅ Пул соединений закрыт");
   } catch (error) {
-    console.error("❌ Ошибка закрытия пула:", error.message);
+    console.error("❌ Ошибка закрытия пу��а:", error.message);
   }
 }
 
@@ -383,7 +379,7 @@ export async function cleanupOldData(daysToKeep = 90) {
   }
 }
 
-// Функция дл�� полнотекстового поиска
+// Функция для полнотекстов��го поиска
 export async function searchText(
   searchTerm,
   tables = ["problems", "devices", "diagnostic_steps"],
