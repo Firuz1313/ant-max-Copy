@@ -304,6 +304,134 @@ export default function DatabaseInit() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Validation Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>System Validation</CardTitle>
+          <CardDescription>
+            Validate that the API and database are working correctly
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <Button
+              onClick={validateSystem}
+              disabled={validating}
+              variant="outline"
+              size="lg"
+            >
+              {validating ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Validating System...
+                </>
+              ) : (
+                <>
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Validate System
+                </>
+              )}
+            </Button>
+
+            {validationResult && (
+              <Alert variant={validationResult.success ? "default" : "destructive"}>
+                {validationResult.success ? (
+                  <CheckCircle className="h-4 w-4" />
+                ) : (
+                  <AlertCircle className="h-4 w-4" />
+                )}
+                <AlertDescription>
+                  <div>
+                    <p className="font-medium">
+                      {validationResult.success ? 'Validation Passed!' : 'Validation Failed'}
+                    </p>
+                    <p>{validationResult.message || validationResult.error}</p>
+                    {validationResult.validation && (
+                      <div className="mt-2 text-sm">
+                        <details>
+                          <summary className="cursor-pointer">View Details</summary>
+                          <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto">
+                            {JSON.stringify(validationResult.validation, null, 2)}
+                          </pre>
+                        </details>
+                      </div>
+                    )}
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Reset System Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Complete System Reset</CardTitle>
+          <CardDescription>
+            Drop all tables, recreate schema, and seed with fresh data. This is more thorough than initialization.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Danger:</strong> This will completely destroy all existing data and recreate the entire database from scratch.
+                This action cannot be undone.
+              </AlertDescription>
+            </Alert>
+
+            <Button
+              onClick={resetSystem}
+              disabled={resetting}
+              variant="destructive"
+              size="lg"
+            >
+              {resetting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  Resetting System...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Complete System Reset
+                </>
+              )}
+            </Button>
+
+            {resetResult && (
+              <Alert variant={resetResult.success ? "default" : "destructive"}>
+                {resetResult.success ? (
+                  <CheckCircle className="h-4 w-4" />
+                ) : (
+                  <AlertCircle className="h-4 w-4" />
+                )}
+                <AlertDescription>
+                  <div>
+                    <p className="font-medium">
+                      {resetResult.success ? 'Reset Successful!' : 'Reset Failed'}
+                    </p>
+                    <p>{resetResult.message || resetResult.error}</p>
+                    {resetResult.results && (
+                      <div className="mt-2 text-sm">
+                        <details>
+                          <summary className="cursor-pointer">View Reset Details</summary>
+                          <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto">
+                            {JSON.stringify(resetResult.results, null, 2)}
+                          </pre>
+                        </details>
+                      </div>
+                    )}
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
