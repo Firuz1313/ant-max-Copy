@@ -12,6 +12,7 @@ import sessionStepRoutes from "./sessionStepRoutes.js";
 import stepActionRoutes from "./stepActionRoutes.js";
 import changeLogRoutes from "./changeLogRoutes.js";
 import siteSettingRoutes from "./siteSettingRoutes.js";
+import initRoutes from "./initRoutes.js";
 
 const router = express.Router();
 
@@ -107,7 +108,7 @@ router.get("/docs", (req, res) => {
             "GET /problems": "Получение списка проблем",
             "GET /problems/:id": "Получение проблемы по ID",
             "POST /problems": "Создание новой проблемы",
-            "PUT /problems/:id": "Обновление проблемы",
+            "PUT /problems/:id": "Обновл��ние проблемы",
             "DELETE /problems/:id": "Удаление проблемы",
             "GET /problems/search": "Поиск проблем",
             "GET /problems/popular": "Популярные проблемы",
@@ -165,7 +166,7 @@ router.get("/docs", (req, res) => {
           },
         },
         tvInterfaces: {
-          description: "Управление интерфейсами ТВ приставок",
+          description: "Управление ��нтерфейсами ТВ приставок",
           routes: {
             "GET /tv-interfaces": "Получение списка интерфейсов ТВ",
             "GET /tv-interfaces/:id": "Получение интерфейса ТВ по ID",
@@ -221,7 +222,7 @@ router.get("/docs", (req, res) => {
         409: "Conflict - Конфликт данных (дубликаты, ограничения)",
         422: "Unprocessable Entity - Ошибка бизнес-логики",
         429: "Too Many Requests - Превышен лимит запросов",
-        500: "Internal Server Error - Внутренняя ошибка сервера",
+        500: "Internal Server Error - Внутренняя ошибка серв��ра",
         503: "Service Unavailable - Сервис временно недоступен",
       },
       responseFormat: {
