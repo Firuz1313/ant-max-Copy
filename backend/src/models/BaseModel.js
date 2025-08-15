@@ -47,7 +47,7 @@ class BaseModel {
   }
 
   /**
-   * Подготовка данных дл�� обновления
+   * Подготовка данных для обновления
    */
   prepareForUpdate(data) {
     const prepared = {
@@ -256,19 +256,6 @@ class BaseModel {
         `Ошибка обновления записи в ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return mock updated object
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning mock object for ${this.tableName} update`,
-        );
-        return {
-          id: id,
-          ...data,
-          updated_at: this.createTimestamp(),
-        };
-      }
-
       throw error;
     }
   }
