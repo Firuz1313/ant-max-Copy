@@ -126,7 +126,7 @@ export async function query(text, params = []) {
     const duration = Date.now() - start;
     console.error(`❌ SQL Error after ${duration}ms:`, error.message);
     console.error("🔍 Query:", text);
-    console.error("🔍 Parameters:", params);
+    console.error("�� Parameters:", params);
 
     // Check if this is a connection error (PostgreSQL not available)
     if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
@@ -151,10 +151,6 @@ export async function query(text, params = []) {
 
 // Функция выполнения транзакции
 export async function transaction(callback) {
-  if (USE_MOCK_DB && mockDb) {
-    return await mockDb.transaction(callback);
-  }
-
   let client;
 
   try {
@@ -333,7 +329,7 @@ export async function closePool() {
     await pool.end();
     console.log("✅ Пул соединений закрыт");
   } catch (error) {
-    console.error("❌ Ошибка закрытия пу��а:", error.message);
+    console.error("❌ Ошибка закрытия пула:", error.message);
   }
 }
 
@@ -379,7 +375,7 @@ export async function cleanupOldData(daysToKeep = 90) {
   }
 }
 
-// Функция для полнотекстов��го поиска
+// Функция для полнотекстового поиска
 export async function searchText(
   searchTerm,
   tables = ["problems", "devices", "diagnostic_steps"],
