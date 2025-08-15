@@ -25,19 +25,21 @@ class APIService {
     options: RequestInit = {},
   ): Promise<T> {
     try {
-      const method = (options.method || 'GET') as string;
-      const body = options.body ? JSON.parse(options.body as string) : undefined;
+      const method = (options.method || "GET") as string;
+      const body = options.body
+        ? JSON.parse(options.body as string)
+        : undefined;
 
       switch (method.toUpperCase()) {
-        case 'GET':
+        case "GET":
           return await apiClient.get<T>(endpoint);
-        case 'POST':
+        case "POST":
           return await apiClient.post<T>(endpoint, body);
-        case 'PUT':
+        case "PUT":
           return await apiClient.put<T>(endpoint, body);
-        case 'PATCH':
+        case "PATCH":
           return await apiClient.patch<T>(endpoint, body);
-        case 'DELETE':
+        case "DELETE":
           return await apiClient.delete<T>(endpoint);
         default:
           return await apiClient.get<T>(endpoint);

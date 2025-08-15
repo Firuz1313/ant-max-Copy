@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Database, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
-import { apiClient } from '@/api/client';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Loader2,
+  Database,
+  CheckCircle,
+  AlertCircle,
+  RefreshCw,
+} from "lucide-react";
+import { apiClient } from "@/api/client";
 
 interface DatabaseStatus {
   success: boolean;
@@ -35,7 +47,9 @@ export default function DatabaseInit() {
   const checkDatabaseStatus = async () => {
     setLoading(true);
     try {
-      const response = await apiClient.get<DatabaseStatus>('/api/v1/init/status');
+      const response = await apiClient.get<DatabaseStatus>(
+        "/api/v1/init/status",
+      );
       setStatus(response);
     } catch (error: any) {
       setStatus({
@@ -43,7 +57,7 @@ export default function DatabaseInit() {
         connected: false,
         tables: [],
         stats: {},
-        error: error.message || 'Failed to check database status'
+        error: error.message || "Failed to check database status",
       });
     } finally {
       setLoading(false);
@@ -53,11 +67,11 @@ export default function DatabaseInit() {
   const initializeDatabase = async () => {
     setInitializing(true);
     setInitResult(null);
-    
+
     try {
-      const response = await apiClient.post<InitResponse>('/api/v1/init/init');
+      const response = await apiClient.post<InitResponse>("/api/v1/init/init");
       setInitResult(response);
-      
+
       // Refresh status after successful initialization
       if (response.success) {
         setTimeout(() => {
@@ -67,8 +81,8 @@ export default function DatabaseInit() {
     } catch (error: any) {
       setInitResult({
         success: false,
-        error: error.message || 'Failed to initialize database',
-        details: error.response?.data?.details
+        error: error.message || "Failed to initialize database",
+        details: error.response?.data?.details,
       });
     } finally {
       setInitializing(false);
@@ -80,13 +94,13 @@ export default function DatabaseInit() {
     setValidationResult(null);
 
     try {
-      const response = await apiClient.get<any>('/api/v1/init/validate');
+      const response = await apiClient.get<any>("/api/v1/init/validate");
       setValidationResult(response);
     } catch (error: any) {
       setValidationResult({
         success: false,
-        error: error.message || 'Failed to validate system',
-        details: error.response?.data?.details
+        error: error.message || "Failed to validate system",
+        details: error.response?.data?.details,
       });
     } finally {
       setValidating(false);
@@ -98,7 +112,7 @@ export default function DatabaseInit() {
     setResetResult(null);
 
     try {
-      const response = await apiClient.post<any>('/api/v1/init/reset');
+      const response = await apiClient.post<any>("/api/v1/init/reset");
       setResetResult(response);
 
       // Refresh status after successful reset
@@ -110,8 +124,8 @@ export default function DatabaseInit() {
     } catch (error: any) {
       setResetResult({
         success: false,
-        error: error.message || 'Failed to reset system',
-        details: error.response?.data?.details
+        error: error.message || "Failed to reset system",
+        details: error.response?.data?.details,
       });
     } finally {
       setResetting(false);
@@ -121,16 +135,25 @@ export default function DatabaseInit() {
   const formatTableStats = (stats: Record<string, number | string>) => {
     return Object.entries(stats).map(([table, count]) => (
       <div key={table} className="flex justify-between items-center py-1">
-        <span className="text-sm font-medium capitalize">{table.replace('_', ' ')}</span>
-        <span className={`text-sm px-2 py-1 rounded ${
-          count === 'missing' ? 'bg-red-100 text-red-700' :
-          count === 'error' ? 'bg-yellow-100 text-yellow-700' :
-          typeof count === 'number' && count > 0 ? 'bg-green-100 text-green-700' :
-          'bg-gray-100 text-gray-700'
-        }`}>
-          {count === 'missing' ? 'Missing' : 
-           count === 'error' ? 'Error' : 
-           count}
+        <span className="text-sm font-medium capitalize">
+          {table.replace("_", " ")}
+        </span>
+        <span
+          className={`text-sm px-2 py-1 rounded ${
+            count === "missing"
+              ? "bg-red-100 text-red-700"
+              : count === "error"
+                ? "bg-yellow-100 text-yellow-700"
+                : typeof count === "number" && count > 0
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-700"
+          }`}
+        >
+          {count === "missing"
+            ? "Missing"
+            : count === "error"
+              ? "Error"
+              : count}
         </span>
       </div>
     ));
@@ -152,13 +175,17 @@ export default function DatabaseInit() {
             Initialize and manage the PostgreSQL database for ANT Support
           </p>
         </div>
-        
-        <Button 
-          onClick={checkDatabaseStatus} 
+
+        <Button
+          onClick={checkDatabaseStatus}
           disabled={loading}
           variant="outline"
         >
-          {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <RefreshCw className="w-4 h-4 mr-2" />}
+          {loading ? (
+            <Loader2 className="w-4 h-4 animate-spin mr-2" />
+          ) : (
+            <RefreshCw className="w-4 h-4 mr-2" />
+          )}
           Refresh Status
         </Button>
       </div>
@@ -189,8 +216,10 @@ export default function DatabaseInit() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h4 className="font-medium">Connection</h4>
-                  <p className={`text-sm ${status.connected ? 'text-green-600' : 'text-red-600'}`}>
-                    {status.connected ? 'Connected' : 'Disconnected'}
+                  <p
+                    className={`text-sm ${status.connected ? "text-green-600" : "text-red-600"}`}
+                  >
+                    {status.connected ? "Connected" : "Disconnected"}
                   </p>
                 </div>
                 <div>
@@ -212,7 +241,7 @@ export default function DatabaseInit() {
                 <div>
                   <h4 className="font-medium mb-2">Database Tables</h4>
                   <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
-                    {status.tables.join(', ')}
+                    {status.tables.join(", ")}
                   </div>
                 </div>
               )}
@@ -237,7 +266,8 @@ export default function DatabaseInit() {
         <CardHeader>
           <CardTitle>Initialize Database</CardTitle>
           <CardDescription>
-            Set up the complete database schema with sample data. This will drop existing tables and recreate them.
+            Set up the complete database schema with sample data. This will drop
+            existing tables and recreate them.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -245,13 +275,14 @@ export default function DatabaseInit() {
             <Alert>
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                <strong>Warning:</strong> This operation will drop all existing tables and data. 
-                Use only for initial setup or when you want to reset the database completely.
+                <strong>Warning:</strong> This operation will drop all existing
+                tables and data. Use only for initial setup or when you want to
+                reset the database completely.
               </AlertDescription>
             </Alert>
 
-            <Button 
-              onClick={initializeDatabase} 
+            <Button
+              onClick={initializeDatabase}
               disabled={initializing}
               variant="destructive"
               size="lg"
@@ -279,16 +310,20 @@ export default function DatabaseInit() {
                 <AlertDescription>
                   <div>
                     <p className="font-medium">
-                      {initResult.success ? 'Success!' : 'Error'}
+                      {initResult.success ? "Success!" : "Error"}
                     </p>
                     <p>{initResult.message || initResult.error}</p>
                     {initResult.stats && (
                       <div className="mt-2 text-sm">
                         <p>Database initialized with:</p>
                         <ul className="list-disc list-inside">
-                          {Object.entries(initResult.stats).map(([key, value]) => (
-                            <li key={key}>{value} {key}</li>
-                          ))}
+                          {Object.entries(initResult.stats).map(
+                            ([key, value]) => (
+                              <li key={key}>
+                                {value} {key}
+                              </li>
+                            ),
+                          )}
                         </ul>
                       </div>
                     )}
@@ -335,7 +370,9 @@ export default function DatabaseInit() {
             </Button>
 
             {validationResult && (
-              <Alert variant={validationResult.success ? "default" : "destructive"}>
+              <Alert
+                variant={validationResult.success ? "default" : "destructive"}
+              >
                 {validationResult.success ? (
                   <CheckCircle className="h-4 w-4" />
                 ) : (
@@ -344,15 +381,23 @@ export default function DatabaseInit() {
                 <AlertDescription>
                   <div>
                     <p className="font-medium">
-                      {validationResult.success ? 'Validation Passed!' : 'Validation Failed'}
+                      {validationResult.success
+                        ? "Validation Passed!"
+                        : "Validation Failed"}
                     </p>
                     <p>{validationResult.message || validationResult.error}</p>
                     {validationResult.validation && (
                       <div className="mt-2 text-sm">
                         <details>
-                          <summary className="cursor-pointer">View Details</summary>
+                          <summary className="cursor-pointer">
+                            View Details
+                          </summary>
                           <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto">
-                            {JSON.stringify(validationResult.validation, null, 2)}
+                            {JSON.stringify(
+                              validationResult.validation,
+                              null,
+                              2,
+                            )}
                           </pre>
                         </details>
                       </div>
@@ -370,7 +415,8 @@ export default function DatabaseInit() {
         <CardHeader>
           <CardTitle>Complete System Reset</CardTitle>
           <CardDescription>
-            Drop all tables, recreate schema, and seed with fresh data. This is more thorough than initialization.
+            Drop all tables, recreate schema, and seed with fresh data. This is
+            more thorough than initialization.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -378,7 +424,8 @@ export default function DatabaseInit() {
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                <strong>Danger:</strong> This will completely destroy all existing data and recreate the entire database from scratch.
+                <strong>Danger:</strong> This will completely destroy all
+                existing data and recreate the entire database from scratch.
                 This action cannot be undone.
               </AlertDescription>
             </Alert>
@@ -412,13 +459,17 @@ export default function DatabaseInit() {
                 <AlertDescription>
                   <div>
                     <p className="font-medium">
-                      {resetResult.success ? 'Reset Successful!' : 'Reset Failed'}
+                      {resetResult.success
+                        ? "Reset Successful!"
+                        : "Reset Failed"}
                     </p>
                     <p>{resetResult.message || resetResult.error}</p>
                     {resetResult.results && (
                       <div className="mt-2 text-sm">
                         <details>
-                          <summary className="cursor-pointer">View Reset Details</summary>
+                          <summary className="cursor-pointer">
+                            View Reset Details
+                          </summary>
                           <pre className="mt-2 text-xs bg-gray-100 p-2 rounded overflow-auto">
                             {JSON.stringify(resetResult.results, null, 2)}
                           </pre>

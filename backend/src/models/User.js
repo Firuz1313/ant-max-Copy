@@ -11,7 +11,7 @@ class User extends BaseModel {
    * Получить всех пользователей
    */
   async getAllUsers(filters = {}) {
-    console.log('🔍 User.getAllUsers called with filters:', filters);
+    console.log("🔍 User.getAllUsers called with filters:", filters);
 
     let queryText = `
       SELECT
@@ -58,11 +58,11 @@ class User extends BaseModel {
       params.push(filters.offset);
     }
 
-    console.log('📊 User.getAllUsers query:', queryText);
-    console.log('📊 User.getAllUsers params:', params);
+    console.log("📊 User.getAllUsers query:", queryText);
+    console.log("📊 User.getAllUsers params:", params);
 
     const result = await query(queryText, params);
-    console.log('📊 User.getAllUsers result rows:', result.rows.length);
+    console.log("📊 User.getAllUsers result rows:", result.rows.length);
 
     return result.rows.map(this.formatUser);
   }

@@ -1,12 +1,12 @@
-import express from 'express';
-import db from '../utils/database.js';
+import express from "express";
+import db from "../utils/database.js";
 
 const router = express.Router();
 
 // Debug endpoint to check users table
-router.get('/users-table', async (req, res) => {
+router.get("/users-table", async (req, res) => {
   try {
-    console.log('🔍 Debug: Checking users table...');
+    console.log("🔍 Debug: Checking users table...");
 
     // Check if users table exists
     const tableExists = await db.query(`
@@ -17,13 +17,13 @@ router.get('/users-table', async (req, res) => {
       )
     `);
 
-    console.log('📊 Users table exists:', tableExists.rows[0].exists);
+    console.log("📊 Users table exists:", tableExists.rows[0].exists);
 
     if (!tableExists.rows[0].exists) {
       return res.json({
         success: false,
-        error: 'Users table does not exist',
-        recommendation: 'Initialize database first'
+        error: "Users table does not exist",
+        recommendation: "Initialize database first",
       });
     }
 
@@ -36,13 +36,13 @@ router.get('/users-table', async (req, res) => {
       ORDER BY ordinal_position
     `);
 
-    console.log('📊 Users table columns:', columns.rows.length);
+    console.log("📊 Users table columns:", columns.rows.length);
 
     // Try to count users
-    const count = await db.query('SELECT COUNT(*) as count FROM users');
+    const count = await db.query("SELECT COUNT(*) as count FROM users");
     const userCount = parseInt(count.rows[0].count);
 
-    console.log('📊 Users count:', userCount);
+    console.log("📊 Users count:", userCount);
 
     // Get sample user (without password)
     const sampleUser = await db.query(`
@@ -57,64 +57,62 @@ router.get('/users-table', async (req, res) => {
         exists: true,
         columns: columns.rows,
         recordCount: userCount,
-        sampleRecord: sampleUser.rows[0] || null
+        sampleRecord: sampleUser.rows[0] || null,
       },
-      message: `Users table is ready with ${userCount} records`
+      message: `Users table is ready with ${userCount} records`,
     });
-
   } catch (error) {
-    console.error('❌ Debug users table error:', error);
+    console.error("❌ Debug users table error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
   }
 });
 
 // Debug endpoint to test user controller directly
-router.get('/test-user-controller', async (req, res) => {
+router.get("/test-user-controller", async (req, res) => {
   try {
-    console.log('🔍 Debug: Testing user controller...');
-    
+    console.log("🔍 Debug: Testing user controller...");
+
     // Import and test the controller function directly
-    const { getAllUsers } = await import('../controllers/userController.js');
-    
+    const { getAllUsers } = await import("../controllers/userController.js");
+
     // Create mock req/res objects
     const mockReq = {
-      query: {}
+      query: {},
     };
-    
+
     const mockRes = {
       json: (data) => {
-        console.log('📊 Controller response:', data);
+        console.log("📊 Controller response:", data);
         res.json({
           success: true,
-          message: 'User controller test completed',
-          controllerResponse: data
+          message: "User controller test completed",
+          controllerResponse: data,
         });
       },
       status: (code) => ({
         json: (data) => {
-          console.log('📊 Controller error response:', code, data);
+          console.log("📊 Controller error response:", code, data);
           res.status(200).json({
             success: false,
-            message: 'User controller returned error',
+            message: "User controller returned error",
             errorCode: code,
-            controllerResponse: data
+            controllerResponse: data,
           });
-        }
-      })
+        },
+      }),
     };
 
     await getAllUsers(mockReq, mockRes);
-
   } catch (error) {
-    console.error('❌ Debug controller test error:', error);
+    console.error("❌ Debug controller test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
   }
 });

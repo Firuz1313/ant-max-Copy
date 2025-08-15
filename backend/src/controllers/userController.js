@@ -9,7 +9,7 @@ const userModel = new User();
  */
 export const getAllUsers = async (req, res) => {
   try {
-    console.log('🔍 getAllUsers called with query:', req.query);
+    console.log("🔍 getAllUsers called with query:", req.query);
     const { role, email_verified, search, limit = 50, offset = 0 } = req.query;
 
     const filters = {
@@ -21,9 +21,9 @@ export const getAllUsers = async (req, res) => {
       offset: parseInt(offset),
     };
 
-    console.log('📊 Getting users with filters:', filters);
+    console.log("📊 Getting users with filters:", filters);
     const users = await userModel.getAllUsers(filters);
-    console.log('📊 Found users count:', users.length);
+    console.log("📊 Found users count:", users.length);
 
     res.json({
       success: true,
