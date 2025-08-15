@@ -41,7 +41,7 @@ pool.on("connect", (client) => {
 });
 
 pool.on("error", (err, client) => {
-  console.error("📊 Ошибка подключения к PostgreSQL:", err.message);
+  console.error("📊 Ошибк�� подключения к PostgreSQL:", err.message);
 });
 
 pool.on("acquire", (client) => {
@@ -56,12 +56,7 @@ pool.on("release", (client) => {
   }
 });
 
-// Import mock database if needed
-let mockDb = null;
-if (USE_MOCK_DB) {
-  mockDb = await import("./mockDatabase.js");
-  console.log("🔧 Using mock database for development");
-}
+// PostgreSQL only - no mock database fallback
 
 // Функция проверки подключения к базе данных
 export async function testConnection() {
@@ -346,7 +341,7 @@ export async function closePool() {
     await pool.end();
     console.log("✅ Пул соединений закрыт");
   } catch (error) {
-    console.error("❌ Ошибка закрытия пула:", error.message);
+    console.error("❌ Ошибка закрытия ��ула:", error.message);
   }
 }
 
@@ -387,12 +382,12 @@ export async function cleanupOldData(daysToKeep = 90) {
       deletedLogs: logsResult.rowCount,
     };
   } catch (error) {
-    console.error("❌ Ошибка очистки да��ных:", error.message);
+    console.error("❌ Ошибка очистки данных:", error.message);
     throw error;
   }
 }
 
-// Функция для полнотекстового поиска
+// Функция для полнотекст��вого поиска
 export async function searchText(
   searchTerm,
   tables = ["problems", "devices", "diagnostic_steps"],
