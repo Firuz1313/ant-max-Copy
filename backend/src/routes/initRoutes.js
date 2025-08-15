@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import db from '../utils/database.js';
+import ApiValidator from '../utils/apiValidator.js';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
