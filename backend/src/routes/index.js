@@ -13,6 +13,7 @@ import stepActionRoutes from "./stepActionRoutes.js";
 import changeLogRoutes from "./changeLogRoutes.js";
 import siteSettingRoutes from "./siteSettingRoutes.js";
 import initRoutes from "./initRoutes.js";
+import quickDbCheck from "./quickDbCheck.js";
 
 const router = express.Router();
 
@@ -127,7 +128,7 @@ router.get("/docs", (req, res) => {
         steps: {
           description: "Управление диагностическими шагами",
           routes: {
-            "GET /steps": "Получение списка шагов",
+            "GET /steps": "��олучение списка шагов",
             "GET /steps/:id": "Получение шага по ID",
             "POST /steps": "Создание нового шага",
             "PUT /steps/:id": "Обновление шага",
@@ -184,7 +185,7 @@ router.get("/docs", (req, res) => {
         users: {
           description: "Управление пользователями системы",
           routes: {
-            "GET /users": "Получение списка пользовате��ей",
+            "GET /users": "Получ��ние списка пользователей",
             "GET /users/:id": "Получение пользователя по ID",
             "POST /users": "Создание нового пользователя",
             "PUT /users/:id": "Обновление пользователя",
