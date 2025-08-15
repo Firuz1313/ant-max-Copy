@@ -177,6 +177,14 @@ function App() {
               </AdminLayout>
             }
           />
+          <Route
+            path="/admin/api-test"
+            element={
+              <AdminLayout>
+                <ApiConnectionTest />
+              </AdminLayout>
+            }
+          />
 
           {/* 404 Route */}
           <Route
