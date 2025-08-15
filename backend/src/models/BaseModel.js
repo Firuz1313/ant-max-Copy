@@ -47,7 +47,7 @@ class BaseModel {
   }
 
   /**
-   * Подготовка данных для обновления
+   * Подготовка данных дл�� обновления
    */
   prepareForUpdate(data) {
     const prepared = {
@@ -98,7 +98,7 @@ class BaseModel {
   }
 
   /**
-   * Построение SQL запроса для выборки с фильтр��ми
+   * Построение SQL запроса для выборки с фильтрами
    */
   buildSelectQuery(filters = {}, options = {}) {
     let sql = `SELECT * FROM ${this.tableName}`;
@@ -238,15 +238,6 @@ class BaseModel {
         `Ошибка получения записи из ${this.tableName}:`,
         error.message,
       );
-
-      // If PostgreSQL is unavailable, return null
-      if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
-        console.warn(
-          `⚠️ PostgreSQL unavailable - returning null for ${this.tableName} findOne`,
-        );
-        return null;
-      }
-
       throw error;
     }
   }
