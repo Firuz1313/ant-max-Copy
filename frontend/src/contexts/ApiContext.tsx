@@ -745,6 +745,7 @@ export const useData = () => {
     // API methods
     getActiveDevices,
     getProblemsForDevice,
+    getAvailableProblems,
     getStepsForProblem,
     getDeviceById,
     getProblemById,
