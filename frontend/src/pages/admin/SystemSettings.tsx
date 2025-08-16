@@ -60,7 +60,7 @@ interface SiteSettings {
 
 const defaultSettings: SiteSettings = {
   site_name: "ANT Support",
-  site_description: "Система диагностики ТВ-приставок",
+  site_description: "Сист��ма диагностики ТВ-приставок",
   default_language: "ru",
   timezone: "Europe/Moscow",
   maintenance_mode: false,
@@ -127,20 +127,17 @@ const SystemSettings = () => {
     try {
       setSaving(true);
       
-      // Convert settings object to array format expected by backend
-      const settingsArray = Object.entries(settings).map(([key, value]) => ({
-        key,
-        value: String(value),
-        type: typeof value,
-        category: getCategoryForKey(key),
-        description: getDescriptionForKey(key),
-      }));
-
-      for (const setting of settingsArray) {
-        await apiClient.post("/settings", setting);
+      // Update settings using individual PUT requests
+      for (const [key, value] of Object.entries(settings)) {
+        await apiClient.put(`/settings/${key}`, {
+          value: String(value),
+          type: typeof value,
+          category: getCategoryForKey(key),
+          description: getDescriptionForKey(key),
+        });
       }
 
-      toast.success('Настройки успешно сохранены');
+      toast.success('Н��стройки успешно сохранены');
     } catch (error: any) {
       console.error('Failed to save settings:', error);
       toast.error('Не удалось сохранить настройки');
