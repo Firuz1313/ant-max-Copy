@@ -152,30 +152,45 @@ class APIService {
     });
   }
 
-  // Remotes (not implemented in backend yet)
+  async reorderSteps(problemId: string, stepIds: string[]): Promise<Step[]> {
+    const response = await this.request<{ data: Step[] }>("/steps/reorder", {
+      method: "PUT",
+      body: JSON.stringify({ problem_id: problemId, step_ids: stepIds }),
+    });
+    return response.data;
+  }
+
+  // Remotes
   async getRemotes(): Promise<Remote[]> {
-    console.warn("Remotes endpoint not implemented in backend");
-    return [];
+    const response = await this.request<{ data: Remote[] }>("/remotes");
+    return response.data || [];
   }
 
   async getRemote(id: string): Promise<Remote> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    const response = await this.request<{ data: Remote }>(`/remotes/${id}`);
+    return response.data;
   }
 
   async createRemote(data: Partial<Remote>): Promise<Remote> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    const response = await this.request<{ data: Remote }>("/remotes", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return response.data;
   }
 
   async updateRemote(id: string, data: Partial<Remote>): Promise<Remote> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    const response = await this.request<{ data: Remote }>(`/remotes/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    return response.data;
   }
 
   async deleteRemote(id: string): Promise<void> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    await this.request<void>(`/remotes/${id}`, {
+      method: "DELETE",
+    });
   }
 
   // TV Interfaces
@@ -460,6 +475,10 @@ export const useData = () => {
     [problems],
   );
 
+  const getAvailableProblems = useCallback((): Problem[] => {
+    return problems.filter((p) => p.isActive);
+  }, [problems]);
+
   const getStepsForProblem = useCallback(
     (problemId: string): Step[] => {
       return steps
@@ -499,6 +518,26 @@ export const useData = () => {
 
   const getActiveRemotes = useCallback((): Remote[] => {
     return remotes.filter((r) => r.isActive);
+  }, [remotes]);
+
+  const getRemotesForDevice = useCallback(
+    (deviceId: string): Remote[] => {
+      return remotes.filter((r) => r.deviceId === deviceId && r.isActive);
+    },
+    [remotes],
+  );
+
+  const getDefaultRemoteForDevice = useCallback(
+    (deviceId: string): Remote | undefined => {
+      return remotes.find(
+        (r) => r.deviceId === deviceId && r.isDefault && r.isActive,
+      );
+    },
+    [remotes],
+  );
+
+  const getDefaultRemote = useCallback((): Remote | undefined => {
+    return remotes.find((r) => r.isDefault && r.isActive);
   }, [remotes]);
 
   const getActiveSessions = useCallback((): DiagnosticSession[] => {
@@ -573,18 +612,15 @@ export const useData = () => {
   const loadRemotes = useCallback(async () => {
     try {
       setLoading(true);
-      // Backend doesn't have remotes endpoint yet, use empty array
-      console.warn(
-        "Remotes endpoint not implemented in backend, using empty array",
-      );
-      setRemotes([]);
+      const remoteData = await api.getRemotes();
+      setRemotes(remoteData);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Unknown error");
       setRemotes([]);
     } finally {
       setLoading(false);
     }
-  }, [setLoading, setError]);
+  }, [api, setLoading, setError]);
 
   const loadSessions = useCallback(async () => {
     try {
@@ -711,12 +747,16 @@ export const useData = () => {
     // API methods
     getActiveDevices,
     getProblemsForDevice,
+    getAvailableProblems,
     getStepsForProblem,
     getDeviceById,
     getProblemById,
     getStepById,
     getRemoteById,
     getActiveRemotes,
+    getRemotesForDevice,
+    getDefaultRemoteForDevice,
+    getDefaultRemote,
     getActiveSessions,
 
     // CRUD operations
@@ -729,6 +769,7 @@ export const useData = () => {
     createStep: api.createStep.bind(api),
     updateStep: api.updateStep.bind(api),
     deleteStep: api.deleteStep.bind(api),
+    reorderSteps: api.reorderSteps.bind(api),
     createRemote: api.createRemote.bind(api),
     updateRemote: api.updateRemote.bind(api),
     deleteRemote: api.deleteRemote.bind(api),

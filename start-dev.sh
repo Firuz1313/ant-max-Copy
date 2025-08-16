@@ -1,4 +1,4 @@
-!/bin/bash
+/bin/bash
 
 # Start backend in background
 cd backend && npm run dev &

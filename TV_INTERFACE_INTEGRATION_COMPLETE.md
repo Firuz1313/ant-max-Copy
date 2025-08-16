@@ -1,4 +1,4 @@
- TV Interface Constructor - Complete Integration
+TV Interface Constructor - Complete Integration
 
 ## Обзор реализации
 
