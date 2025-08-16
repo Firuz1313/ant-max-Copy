@@ -30,20 +30,33 @@ class APIService {
         ? JSON.parse(options.body as string)
         : undefined;
 
+      let response: any;
       switch (method.toUpperCase()) {
         case "GET":
-          return await apiClient.get<T>(endpoint);
+          response = await apiClient.get<any>(endpoint);
+          break;
         case "POST":
-          return await apiClient.post<T>(endpoint, body);
+          response = await apiClient.post<any>(endpoint, body);
+          break;
         case "PUT":
-          return await apiClient.put<T>(endpoint, body);
+          response = await apiClient.put<any>(endpoint, body);
+          break;
         case "PATCH":
-          return await apiClient.patch<T>(endpoint, body);
+          response = await apiClient.patch<any>(endpoint, body);
+          break;
         case "DELETE":
-          return await apiClient.delete<T>(endpoint);
+          response = await apiClient.delete<any>(endpoint);
+          break;
         default:
-          return await apiClient.get<T>(endpoint);
+          response = await apiClient.get<any>(endpoint);
       }
+
+      // Handle backend response format: { success: true, data: [...] }
+      if (response && typeof response === 'object' && 'success' in response) {
+        return response.data || response;
+      }
+
+      return response;
     } catch (error) {
       console.error(`API Error [${endpoint}]:`, error);
       throw error;
