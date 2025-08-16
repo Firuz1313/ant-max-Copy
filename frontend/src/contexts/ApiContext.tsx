@@ -731,6 +731,8 @@ export const useData = () => {
     getStepById,
     getRemoteById,
     getActiveRemotes,
+    getRemotesForDevice,
+    getDefaultRemoteForDevice,
     getActiveSessions,
 
     // CRUD operations
