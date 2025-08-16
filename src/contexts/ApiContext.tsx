@@ -733,13 +733,16 @@ export const useData = () => {
     // API methods
     getActiveDevices,
     getProblemsForDevice,
+    getAvailableProblems,
     getStepsForProblem,
     getDeviceById,
     getProblemById,
     getStepById,
     getRemoteById,
     getActiveRemotes,
+    getRemotesForDevice,
     getDefaultRemoteForDevice,
+    getDefaultRemote,
     getActiveSessions,
 
     // CRUD operations
