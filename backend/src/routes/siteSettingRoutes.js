@@ -11,6 +11,13 @@ const router = express.Router();
 router.get("/", siteSettingController.getSettings);
 
 /**
+ * @route POST /api/v1/settings
+ * @desc Создать настройку
+ * @access Public
+ */
+router.post("/", siteSettingController.updateSetting);
+
+/**
  * @route PUT /api/v1/settings
  * @desc Обновить настройки сайта
  * @access Public

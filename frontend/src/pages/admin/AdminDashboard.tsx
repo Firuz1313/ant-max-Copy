@@ -308,7 +308,7 @@ const AdminDashboard = () => {
 
               <div className="pt-4 border-t">
                 <div className="text-sm text-gray-600 mb-2">
-                  Использование хранилища
+                  Испо��ьзование хранилища
                 </div>
                 <Progress value={67} className="h-2" />
                 <div className="text-xs text-gray-500 mt-1">
@@ -392,19 +392,47 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => (window.location.href = "/admin/devices")}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Добавить устройство
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => (window.location.href = "/admin/problems")}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Создать проблему
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => {
+                  const input = document.createElement("input");
+                  input.type = "file";
+                  input.accept = ".json";
+                  input.onchange = (e) => {
+                    const file = (e.target as HTMLInputElement).files?.[0];
+                    if (file) {
+                      console.log("Import file selected:", file.name);
+                      // TODO: Implement import functionality
+                    }
+                  };
+                  input.click();
+                }}
+              >
                 <Upload className="h-4 w-4 mr-2" />
                 Импорт данных
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={handleExport}
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Экспорт резервной копии
               </Button>
@@ -417,6 +445,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
+                  onClick={() => (window.location.href = "/admin/settings")}
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Общие настройки
@@ -425,6 +454,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
+                  onClick={() => (window.location.href = "/admin/users")}
                 >
                   <Users className="h-4 w-4 mr-2" />
                   Управление пользователями
@@ -433,6 +463,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
+                  onClick={() => (window.location.href = "/admin")}
                 >
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Аналитика
@@ -451,7 +482,11 @@ const AdminDashboard = () => {
               <AlertTriangle className="h-5 w-5 mr-2" />
               Последние проблемы
             </CardTitle>
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => (window.location.href = "/admin/problems")}
+            >
               <Eye className="h-4 w-4 mr-2" />
               Посмотреть все
             </Button>

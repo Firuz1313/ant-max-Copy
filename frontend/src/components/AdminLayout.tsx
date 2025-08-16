@@ -78,18 +78,6 @@ const adminMenuItems: AdminMenuItem[] = [
     icon: Settings,
     description: "Конфигурация и\nсистемные настройки",
   },
-  {
-    title: "База данных",
-    path: "/admin/database",
-    icon: Database,
-    description: "Инициализация и\nуправление БД",
-  },
-  {
-    title: "Тест API",
-    path: "/admin/api-test",
-    icon: Settings,
-    description: "Проверка подключения\nк API",
-  },
 ];
 
 interface AdminLayoutProps {
@@ -112,12 +100,12 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out flex flex-col",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded-lg flex items-center justify-center">
               <Tv className="h-4 w-4 text-white" />
@@ -142,7 +130,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-2">
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
           {adminMenuItems.map((item) => (
             <Link key={item.path} to={item.path}>
               <div
@@ -178,7 +166,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         </nav>
 
         {/* Bottom Actions */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex-shrink-0">
           <Link to="/admin">
             <Button
               variant="outline"

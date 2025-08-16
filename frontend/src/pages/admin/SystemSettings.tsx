@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { useData } from "@/contexts/ApiContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,186 +13,283 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 import {
   Settings,
-  Globe,
   Database,
-  Mail,
-  Shield,
   Bell,
+  Shield,
   Palette,
+  Archive,
+  Save,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  Monitor,
+  Globe,
+  Clock,
+  Eye,
+  EyeOff,
   Download,
   Upload,
-  Save,
-  RefreshCw,
+  Trash2,
 } from "lucide-react";
+import { apiClient } from "@/api/client";
+
+interface SiteSettings {
+  site_name: string;
+  site_description: string;
+  default_language: string;
+  timezone: string;
+  maintenance_mode: boolean;
+  maintenance_message: string;
+  max_sessions_per_user: number;
+  session_timeout: number;
+  allow_registration: boolean;
+  require_email_verification: boolean;
+  default_theme: string;
+  notification_email: string;
+  smtp_enabled: boolean;
+  smtp_host: string;
+  smtp_port: number;
+  smtp_username: string;
+  smtp_password: string;
+  backup_retention_days: number;
+  auto_backup_enabled: boolean;
+  auto_backup_frequency: string;
+  debug_mode: boolean;
+  analytics_enabled: boolean;
+  error_reporting: boolean;
+}
+
+const defaultSettings: SiteSettings = {
+  site_name: "ANT Support",
+  site_description: "Сист��ма диагностики ТВ-приставок",
+  default_language: "ru",
+  timezone: "Europe/Moscow",
+  maintenance_mode: false,
+  maintenance_message: "Сайт временно недоступен для технического обслуживания",
+  max_sessions_per_user: 5,
+  session_timeout: 30,
+  allow_registration: true,
+  require_email_verification: false,
+  default_theme: "system",
+  notification_email: "admin@example.com",
+  smtp_enabled: false,
+  smtp_host: "",
+  smtp_port: 587,
+  smtp_username: "",
+  smtp_password: "",
+  backup_retention_days: 30,
+  auto_backup_enabled: true,
+  auto_backup_frequency: "daily",
+  debug_mode: false,
+  analytics_enabled: true,
+  error_reporting: true,
+};
 
 const SystemSettings = () => {
-  const { siteSettings, updateSiteSettings } = useData();
+  const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState("general");
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [settings, setSettings] = useState({
-    // General Settings from context
-    ...siteSettings,
-    timezone: "Europe/Moscow",
-    maintenanceMode: false,
+  const loadSettings = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get("/settings");
 
-    // Diagnostic Settings
-    autoAdvanceSteps: true,
-    showHints: true,
-    maxDiagnosticTime: 30,
-    enableFeedback: true,
-    requireUserInfo: false,
-
-    // Notification Settings
-    emailNotifications: true,
-    systemAlerts: true,
-    userActivityLogs: true,
-    diagnosticReports: true,
-
-    // Security Settings
-    sessionTimeout: 60,
-    passwordMinLength: 8,
-    requireTwoFactor: false,
-    apiRateLimit: 100,
-
-    // Appearance Settings
-    theme: "dark",
-    primaryColor: "#3b82f6",
-    accentColor: "#10b981",
-    logoUrl: "",
-
-    // Backup Settings
-    autoBackup: true,
-    backupFrequency: "daily",
-    backupRetention: 30,
-
-    // Performance Settings
-    cacheEnabled: true,
-    compressionEnabled: true,
-    imageOptimization: true,
-  });
-
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSave = async () => {
-    setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Update site settings in context
-    updateSiteSettings({
-      ...siteSettings,
-      siteName: settings.siteName,
-      siteDescription: settings.siteDescription,
-      defaultLanguage: settings.defaultLanguage,
-      theme: settings.theme,
-      primaryColor: settings.primaryColor,
-      accentColor: settings.accentColor,
-      logoUrl: settings.logoUrl,
-    });
-
-    setIsLoading(false);
-    // Show success message
+      if (response.success && response.data) {
+        // Convert settings array to object
+        const settingsObj = { ...defaultSettings };
+        if (Array.isArray(response.data)) {
+          response.data.forEach((setting: any) => {
+            if (setting.key && setting.value !== undefined) {
+              // Convert string values to proper types
+              let value = setting.value;
+              if (setting.type === "boolean") {
+                value = value === "true" || value === true;
+              } else if (setting.type === "number") {
+                value = parseInt(value, 10);
+              }
+              (settingsObj as any)[setting.key] = value;
+            }
+          });
+        }
+        setSettings(settingsObj);
+      }
+    } catch (error: any) {
+      console.error("Failed to load settings:", error);
+      toast.error("Не удалось загрузить настройки");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleReset = () => {
-    // Reset to default values
-    setSettings({
-      siteName: "ANT Support",
-      siteDescription: "Система диагностики ТВ-приставок",
-      defaultLanguage: "ru",
-      timezone: "Europe/Moscow",
-      maintenanceMode: false,
-      autoAdvanceSteps: true,
-      showHints: true,
-      maxDiagnosticTime: 30,
-      enableFeedback: true,
-      requireUserInfo: false,
-      emailNotifications: true,
-      systemAlerts: true,
-      userActivityLogs: true,
-      diagnosticReports: true,
-      sessionTimeout: 60,
-      passwordMinLength: 8,
-      requireTwoFactor: false,
-      apiRateLimit: 100,
-      theme: "dark",
-      primaryColor: "#3b82f6",
-      accentColor: "#10b981",
-      logoUrl: "",
-      autoBackup: true,
-      backupFrequency: "daily",
-      backupRetention: 30,
-      cacheEnabled: true,
-      compressionEnabled: true,
-      imageOptimization: true,
-    });
+  const saveSettings = async () => {
+    try {
+      setSaving(true);
+
+      // Update settings using individual PUT requests
+      for (const [key, value] of Object.entries(settings)) {
+        await apiClient.put(`/settings/${key}`, {
+          value: String(value),
+          type: typeof value,
+          category: getCategoryForKey(key),
+          description: getDescriptionForKey(key),
+        });
+      }
+
+      toast.success("Н��стройки успешно сохранены");
+    } catch (error: any) {
+      console.error("Failed to save settings:", error);
+      toast.error("Не удалось сохранить настройки");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const updateSetting = (key: string, value: any) => {
+  const getCategoryForKey = (key: string): string => {
+    if (
+      key.startsWith("site_") ||
+      key.includes("language") ||
+      key.includes("timezone")
+    )
+      return "general";
+    if (
+      key.includes("session") ||
+      key.includes("registration") ||
+      key.includes("verification")
+    )
+      return "security";
+    if (
+      key.includes("notification") ||
+      key.includes("smtp") ||
+      key.includes("email")
+    )
+      return "notifications";
+    if (key.includes("theme") || key.includes("analytics")) return "appearance";
+    if (key.includes("backup") || key.includes("retention")) return "backup";
+    if (
+      key.includes("debug") ||
+      key.includes("error") ||
+      key.includes("maintenance")
+    )
+      return "diagnostics";
+    return "general";
+  };
+
+  const getDescriptionForKey = (key: string): string => {
+    const descriptions: Record<string, string> = {
+      site_name: "Название вашего сайта",
+      site_description: "Краткое описание сайта",
+      default_language: "Язык интерфейса по умолчанию",
+      timezone: "Временная зона",
+      maintenance_mode: "Режим технического обслуживания",
+      max_sessions_per_user: "Максимальное количество сессий на пользователя",
+      session_timeout: "Время жизни сессии в минутах",
+      notification_email: "Email для системных уведомлений",
+      backup_retention_days: "Количество дней хранения резервных копий",
+    };
+    return descriptions[key] || "";
+  };
+
+  const updateSetting = (key: keyof SiteSettings, value: any) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin" />
+        <span className="ml-2">Загрузка настроек...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
             Настройки системы
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Конфигурация и управление системными параметрами
+            Управление конфигурацией и параметрами системы
           </p>
         </div>
-        <div className="flex space-x-2">
-          <Button variant="outline" onClick={handleReset}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Сбросить
-          </Button>
-          <Button onClick={handleSave} disabled={isLoading}>
+        <Button
+          onClick={saveSettings}
+          disabled={saving}
+          className="flex items-center"
+        >
+          {saving ? (
+            <Loader2 className="h-4 w-4 animate-spin mr-2" />
+          ) : (
             <Save className="h-4 w-4 mr-2" />
-            {isLoading ? "Сохранение..." : "Сохранить"}
-          </Button>
-        </div>
+          )}
+          Сохранить изменения
+        </Button>
       </div>
 
-      <Tabs defaultValue="general" className="space-y-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="general">Общие</TabsTrigger>
-          <TabsTrigger value="diagnostic">Диагностика</TabsTrigger>
-          <TabsTrigger value="notifications">Уведомления</TabsTrigger>
-          <TabsTrigger value="security">Безопасность</TabsTrigger>
-          <TabsTrigger value="appearance">Внешний вид</TabsTrigger>
-          <TabsTrigger value="backup">Резервное копирование</TabsTrigger>
+          <TabsTrigger value="general" className="flex items-center">
+            <Settings className="h-4 w-4 mr-2" />
+            Общие
+          </TabsTrigger>
+          <TabsTrigger value="diagnostics" className="flex items-center">
+            <Monitor className="h-4 w-4 mr-2" />
+            Диагностика
+          </TabsTrigger>
+          <TabsTrigger value="notifications" className="flex items-center">
+            <Bell className="h-4 w-4 mr-2" />
+            Уведомления
+          </TabsTrigger>
+          <TabsTrigger value="security" className="flex items-center">
+            <Shield className="h-4 w-4 mr-2" />
+            Безопасность
+          </TabsTrigger>
+          <TabsTrigger value="appearance" className="flex items-center">
+            <Palette className="h-4 w-4 mr-2" />
+            Внешний вид
+          </TabsTrigger>
+          <TabsTrigger value="backup" className="flex items-center">
+            <Archive className="h-4 w-4 mr-2" />
+            Резервное копирование
+          </TabsTrigger>
         </TabsList>
 
         {/* General Settings */}
-        <TabsContent value="general">
+        <TabsContent value="general" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Settings className="h-5 w-5 mr-2" />
-                Общие на��тройки
-              </CardTitle>
+              <CardTitle>Основные настройки</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="siteName">Название сайта</Label>
+                  <Label htmlFor="site_name">Название сайта</Label>
                   <Input
-                    id="siteName"
-                    value={settings.siteName}
-                    onChange={(e) => updateSetting("siteName", e.target.value)}
+                    id="site_name"
+                    value={settings.site_name}
+                    onChange={(e) => updateSetting("site_name", e.target.value)}
+                    placeholder="Введите название сайта"
                   />
                 </div>
-
                 <div className="space-y-2">
-                  <Label htmlFor="defaultLanguage">Язык по умолчанию</Label>
+                  <Label htmlFor="default_language">Язык по умолчанию</Label>
                   <Select
-                    value={settings.defaultLanguage}
+                    value={settings.default_language}
                     onValueChange={(value) =>
-                      updateSetting("defaultLanguage", value)
+                      updateSetting("default_language", value)
                     }
                   >
                     <SelectTrigger>
@@ -202,26 +298,26 @@ const SystemSettings = () => {
                     <SelectContent>
                       <SelectItem value="ru">Русский</SelectItem>
                       <SelectItem value="en">English</SelectItem>
-                      <SelectItem value="tj">Тоҷикӣ</SelectItem>
-                      <SelectItem value="uz">O'zbek</SelectItem>
+                      <SelectItem value="uk">Українська</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="siteDescription">Описание сайта</Label>
+                <Label htmlFor="site_description">Описание сайта</Label>
                 <Textarea
-                  id="siteDescription"
-                  value={settings.siteDescription}
+                  id="site_description"
+                  value={settings.site_description}
                   onChange={(e) =>
-                    updateSetting("siteDescription", e.target.value)
+                    updateSetting("site_description", e.target.value)
                   }
                   placeholder="Введите описание сайта"
+                  rows={3}
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="timezone">Часовой пояс</Label>
                   <Select
@@ -235,473 +331,407 @@ const SystemSettings = () => {
                       <SelectItem value="Europe/Moscow">
                         Москва (UTC+3)
                       </SelectItem>
-                      <SelectItem value="Asia/Dushanbe">
-                        Душанбе (UTC+5)
+                      <SelectItem value="Europe/Kiev">Киев (UTC+2)</SelectItem>
+                      <SelectItem value="Europe/Minsk">
+                        Минск (UTC+3)
                       </SelectItem>
-                      <SelectItem value="Asia/Tashkent">
-                        Ташкент (UTC+5)
-                      </SelectItem>
-                      <SelectItem value="UTC">UTC</SelectItem>
+                      <SelectItem value="UTC">UTC (UTC+0)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="maintenanceMode">Режим обслуживания</Label>
-                    <Switch
-                      id="maintenanceMode"
-                      checked={settings.maintenanceMode}
-                      onCheckedChange={(checked) =>
-                        updateSetting("maintenanceMode", checked)
-                      }
-                    />
-                  </div>
-                  <p className="text-sm text-gray-500">
+                  <Label htmlFor="notification_email">
+                    Email для уведомлений
+                  </Label>
+                  <Input
+                    id="notification_email"
+                    type="email"
+                    value={settings.notification_email}
+                    onChange={(e) =>
+                      updateSetting("notification_email", e.target.value)
+                    }
+                    placeholder="admin@example.com"
+                  />
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>Режим обслуживания</Label>
+                  <p className="text-sm text-gray-600">
                     Временно отключить сайт для обслуживания
                   </p>
                 </div>
+                <Switch
+                  checked={settings.maintenance_mode}
+                  onCheckedChange={(checked) =>
+                    updateSetting("maintenance_mode", checked)
+                  }
+                />
+              </div>
+
+              {settings.maintenance_mode && (
+                <div className="space-y-2">
+                  <Label htmlFor="maintenance_message">
+                    Сообщение о обслуживании
+                  </Label>
+                  <Textarea
+                    id="maintenance_message"
+                    value={settings.maintenance_message}
+                    onChange={(e) =>
+                      updateSetting("maintenance_message", e.target.value)
+                    }
+                    placeholder="Сообщение, которое увидят пользователи"
+                    rows={2}
+                  />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Diagnostics Settings */}
+        <TabsContent value="diagnostics" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Параметры диагностики</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="max_sessions">
+                    Максимум сессий на пользователя
+                  </Label>
+                  <Input
+                    id="max_sessions"
+                    type="number"
+                    value={settings.max_sessions_per_user}
+                    onChange={(e) =>
+                      updateSetting(
+                        "max_sessions_per_user",
+                        parseInt(e.target.value),
+                      )
+                    }
+                    min="1"
+                    max="50"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="session_timeout">
+                    Время жизни сессии (минуты)
+                  </Label>
+                  <Input
+                    id="session_timeout"
+                    type="number"
+                    value={settings.session_timeout}
+                    onChange={(e) =>
+                      updateSetting("session_timeout", parseInt(e.target.value))
+                    }
+                    min="5"
+                    max="1440"
+                  />
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>Режим отладки</Label>
+                  <p className="text-sm text-gray-600">
+                    Включить расширенное логирование
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.debug_mode}
+                  onCheckedChange={(checked) =>
+                    updateSetting("debug_mode", checked)
+                  }
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>Отчеты об ошибках</Label>
+                  <p className="text-sm text-gray-600">
+                    Автоматически отправлять отчеты об ошибках
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.error_reporting}
+                  onCheckedChange={(checked) =>
+                    updateSetting("error_reporting", checked)
+                  }
+                />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* Diagnostic Settings */}
-        <TabsContent value="diagnostic">
+        {/* Notifications Settings */}
+        <TabsContent value="notifications" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Database className="h-5 w-5 mr-2" />
-                Настройки диагностики
-              </CardTitle>
+              <CardTitle>Настройки уведомлений</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="autoAdvanceSteps">
-                      Автопереход между шагами
-                    </Label>
-                    <Switch
-                      id="autoAdvanceSteps"
-                      checked={settings.autoAdvanceSteps}
-                      onCheckedChange={(checked) =>
-                        updateSetting("autoAdvanceSteps", checked)
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="showHints">Показывать подсказки</Label>
-                    <Switch
-                      id="showHints"
-                      checked={settings.showHints}
-                      onCheckedChange={(checked) =>
-                        updateSetting("showHints", checked)
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="enableFeedback">
-                      Включить обратную связь
-                    </Label>
-                    <Switch
-                      id="enableFeedback"
-                      checked={settings.enableFeedback}
-                      onCheckedChange={(checked) =>
-                        updateSetting("enableFeedback", checked)
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="requireUserInfo">
-                      Требовать информацию о пользователе
-                    </Label>
-                    <Switch
-                      id="requireUserInfo"
-                      checked={settings.requireUserInfo}
-                      onCheckedChange={(checked) =>
-                        updateSetting("requireUserInfo", checked)
-                      }
-                    />
-                  </div>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>SMTP уведомления</Label>
+                  <p className="text-sm text-gray-600">
+                    Включить отправку email уведомлений
+                  </p>
                 </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="maxDiagnosticTime">
-                      Максимальное время диагностики (мин)
-                    </Label>
-                    <Input
-                      id="maxDiagnosticTime"
-                      type="number"
-                      min="5"
-                      max="120"
-                      value={settings.maxDiagnosticTime}
-                      onChange={(e) =>
-                        updateSetting(
-                          "maxDiagnosticTime",
-                          parseInt(e.target.value),
-                        )
-                      }
-                    />
-                  </div>
-                </div>
+                <Switch
+                  checked={settings.smtp_enabled}
+                  onCheckedChange={(checked) =>
+                    updateSetting("smtp_enabled", checked)
+                  }
+                />
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
 
-        {/* Notification Settings */}
-        <TabsContent value="notifications">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Bell className="h-5 w-5 mr-2" />
-                Настройки уведомлений
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="emailNotifications">
-                      Email уведомления
-                    </Label>
-                    <p className="text-sm text-gray-500">
-                      Отправлять уведомления по email
-                    </p>
+              {settings.smtp_enabled && (
+                <>
+                  <Separator />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="smtp_host">SMTP сервер</Label>
+                      <Input
+                        id="smtp_host"
+                        value={settings.smtp_host}
+                        onChange={(e) =>
+                          updateSetting("smtp_host", e.target.value)
+                        }
+                        placeholder="smtp.gmail.com"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="smtp_port">SMTP порт</Label>
+                      <Input
+                        id="smtp_port"
+                        type="number"
+                        value={settings.smtp_port}
+                        onChange={(e) =>
+                          updateSetting("smtp_port", parseInt(e.target.value))
+                        }
+                        placeholder="587"
+                      />
+                    </div>
                   </div>
-                  <Switch
-                    id="emailNotifications"
-                    checked={settings.emailNotifications}
-                    onCheckedChange={(checked) =>
-                      updateSetting("emailNotifications", checked)
-                    }
-                  />
-                </div>
 
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="systemAlerts">Системные оповещения</Label>
-                    <p className="text-sm text-gray-500">
-                      Уведомления о системных событиях
-                    </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="smtp_username">SMTP пользователь</Label>
+                      <Input
+                        id="smtp_username"
+                        value={settings.smtp_username}
+                        onChange={(e) =>
+                          updateSetting("smtp_username", e.target.value)
+                        }
+                        placeholder="your-email@gmail.com"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="smtp_password">SMTP пароль</Label>
+                      <div className="relative">
+                        <Input
+                          id="smtp_password"
+                          type={showPassword ? "text" : "password"}
+                          value={settings.smtp_password}
+                          onChange={(e) =>
+                            updateSetting("smtp_password", e.target.value)
+                          }
+                          placeholder="Пароль приложения"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="h-4 w-4" />
+                          ) : (
+                            <Eye className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
-                  <Switch
-                    id="systemAlerts"
-                    checked={settings.systemAlerts}
-                    onCheckedChange={(checked) =>
-                      updateSetting("systemAlerts", checked)
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="userActivityLogs">
-                      Логи активности пользователей
-                    </Label>
-                    <p className="text-sm text-gray-500">
-                      Записывать действия пользователей
-                    </p>
-                  </div>
-                  <Switch
-                    id="userActivityLogs"
-                    checked={settings.userActivityLogs}
-                    onCheckedChange={(checked) =>
-                      updateSetting("userActivityLogs", checked)
-                    }
-                  />
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div>
-                    <Label htmlFor="diagnosticReports">
-                      Отчеты диагностики
-                    </Label>
-                    <p className="text-sm text-gray-500">
-                      Еже��невные отчеты о диагностике
-                    </p>
-                  </div>
-                  <Switch
-                    id="diagnosticReports"
-                    checked={settings.diagnosticReports}
-                    onCheckedChange={(checked) =>
-                      updateSetting("diagnosticReports", checked)
-                    }
-                  />
-                </div>
-              </div>
+                </>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Security Settings */}
-        <TabsContent value="security">
+        <TabsContent value="security" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Shield className="h-5 w-5 mr-2" />
-                Настройки безопасности
-              </CardTitle>
+              <CardTitle>Настройки безопасности</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="sessionTimeout">Таймаут сессии (мин)</Label>
-                    <Input
-                      id="sessionTimeout"
-                      type="number"
-                      min="15"
-                      max="480"
-                      value={settings.sessionTimeout}
-                      onChange={(e) =>
-                        updateSetting(
-                          "sessionTimeout",
-                          parseInt(e.target.value),
-                        )
-                      }
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="passwordMinLength">
-                      Минимальная длина пароля
-                    </Label>
-                    <Input
-                      id="passwordMinLength"
-                      type="number"
-                      min="6"
-                      max="32"
-                      value={settings.passwordMinLength}
-                      onChange={(e) =>
-                        updateSetting(
-                          "passwordMinLength",
-                          parseInt(e.target.value),
-                        )
-                      }
-                    />
-                  </div>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>Разрешить регистрацию</Label>
+                  <p className="text-sm text-gray-600">
+                    Позволить новым пользователям регистрироваться
+                  </p>
                 </div>
+                <Switch
+                  checked={settings.allow_registration}
+                  onCheckedChange={(checked) =>
+                    updateSetting("allow_registration", checked)
+                  }
+                />
+              </div>
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="apiRateLimit">
-                      Лимит API запросов в минуту
-                    </Label>
-                    <Input
-                      id="apiRateLimit"
-                      type="number"
-                      min="10"
-                      max="1000"
-                      value={settings.apiRateLimit}
-                      onChange={(e) =>
-                        updateSetting("apiRateLimit", parseInt(e.target.value))
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label htmlFor="requireTwoFactor">
-                        Двухфакторная аутентификация
-                      </Label>
-                      <p className="text-sm text-gray-500">
-                        Обязательно для всех пользователей
-                      </p>
-                    </div>
-                    <Switch
-                      id="requireTwoFactor"
-                      checked={settings.requireTwoFactor}
-                      onCheckedChange={(checked) =>
-                        updateSetting("requireTwoFactor", checked)
-                      }
-                    />
-                  </div>
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>Подтверждение email</Label>
+                  <p className="text-sm text-gray-600">
+                    Требовать подтверждение email при регистрации
+                  </p>
                 </div>
+                <Switch
+                  checked={settings.require_email_verification}
+                  onCheckedChange={(checked) =>
+                    updateSetting("require_email_verification", checked)
+                  }
+                />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Appearance Settings */}
-        <TabsContent value="appearance">
+        <TabsContent value="appearance" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Palette className="h-5 w-5 mr-2" />
-                Настройки внешнего вида
-              </CardTitle>
+              <CardTitle>Настройки внешнего вида</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="theme">Тема</Label>
-                    <Select
-                      value={settings.theme}
-                      onValueChange={(value) => updateSetting("theme", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Светлая</SelectItem>
-                        <SelectItem value="dark">Темная</SelectItem>
-                        <SelectItem value="auto">Автоматически</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="default_theme">Тема по умолчанию</Label>
+                <Select
+                  value={settings.default_theme}
+                  onValueChange={(value) =>
+                    updateSetting("default_theme", value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">Светлая</SelectItem>
+                    <SelectItem value="dark">Темная</SelectItem>
+                    <SelectItem value="system">Системная</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="primaryColor">Основной цвет</Label>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        id="primaryColor"
-                        type="color"
-                        value={settings.primaryColor}
-                        onChange={(e) =>
-                          updateSetting("primaryColor", e.target.value)
-                        }
-                        className="w-16 h-10"
-                      />
-                      <Input
-                        value={settings.primaryColor}
-                        onChange={(e) =>
-                          updateSetting("primaryColor", e.target.value)
-                        }
-                        placeholder="#3b82f6"
-                      />
-                    </div>
-                  </div>
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>Аналитика</Label>
+                  <p className="text-sm text-gray-600">
+                    Включить сбор анонимной аналитики
+                  </p>
                 </div>
-
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="accentColor">Акцентный цвет</Label>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        id="accentColor"
-                        type="color"
-                        value={settings.accentColor}
-                        onChange={(e) =>
-                          updateSetting("accentColor", e.target.value)
-                        }
-                        className="w-16 h-10"
-                      />
-                      <Input
-                        value={settings.accentColor}
-                        onChange={(e) =>
-                          updateSetting("accentColor", e.target.value)
-                        }
-                        placeholder="#10b981"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="logoUrl">URL логотипа</Label>
-                    <Input
-                      id="logoUrl"
-                      value={settings.logoUrl}
-                      onChange={(e) => updateSetting("logoUrl", e.target.value)}
-                      placeholder="https://example.com/logo.png"
-                    />
-                  </div>
-                </div>
+                <Switch
+                  checked={settings.analytics_enabled}
+                  onCheckedChange={(checked) =>
+                    updateSetting("analytics_enabled", checked)
+                  }
+                />
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Backup Settings */}
-        <TabsContent value="backup">
+        <TabsContent value="backup" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center">
-                <Database className="h-5 w-5 mr-2" />
-                Резервное копирование
-              </CardTitle>
+              <CardTitle>Резервное копирование</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label htmlFor="autoBackup">
-                        Автоматическое резервное копирование
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label>Автоматическое резервное копирование</Label>
+                  <p className="text-sm text-gray-600">
+                    Создавать резервные копии автоматически
+                  </p>
+                </div>
+                <Switch
+                  checked={settings.auto_backup_enabled}
+                  onCheckedChange={(checked) =>
+                    updateSetting("auto_backup_enabled", checked)
+                  }
+                />
+              </div>
+
+              {settings.auto_backup_enabled && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="backup_frequency">
+                        Частота копирования
                       </Label>
-                      <p className="text-sm text-gray-500">
-                        Создавать резервные копии автоматически
-                      </p>
+                      <Select
+                        value={settings.auto_backup_frequency}
+                        onValueChange={(value) =>
+                          updateSetting("auto_backup_frequency", value)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="hourly">Каждый час</SelectItem>
+                          <SelectItem value="daily">Ежедневно</SelectItem>
+                          <SelectItem value="weekly">Еженедельно</SelectItem>
+                          <SelectItem value="monthly">Ежемесячно</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <Switch
-                      id="autoBackup"
-                      checked={settings.autoBackup}
-                      onCheckedChange={(checked) =>
-                        updateSetting("autoBackup", checked)
-                      }
-                    />
+                    <div className="space-y-2">
+                      <Label htmlFor="backup_retention">
+                        Хранить копии (дни)
+                      </Label>
+                      <Input
+                        id="backup_retention"
+                        type="number"
+                        value={settings.backup_retention_days}
+                        onChange={(e) =>
+                          updateSetting(
+                            "backup_retention_days",
+                            parseInt(e.target.value),
+                          )
+                        }
+                        min="1"
+                        max="365"
+                      />
+                    </div>
                   </div>
+                </>
+              )}
 
-                  <div className="space-y-2">
-                    <Label htmlFor="backupFrequency">
-                      Частота резервного копирования
-                    </Label>
-                    <Select
-                      value={settings.backupFrequency}
-                      onValueChange={(value) =>
-                        updateSetting("backupFrequency", value)
-                      }
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="hourly">Каждый час</SelectItem>
-                        <SelectItem value="daily">Ежедневно</SelectItem>
-                        <SelectItem value="weekly">Еженедельно</SelectItem>
-                        <SelectItem value="monthly">Ежемесячно</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
+              <Separator />
 
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="backupRetention">
-                      Хранить резервные копии (дни)
-                    </Label>
-                    <Input
-                      id="backupRetention"
-                      type="number"
-                      min="1"
-                      max="365"
-                      value={settings.backupRetention}
-                      onChange={(e) =>
-                        updateSetting(
-                          "backupRetention",
-                          parseInt(e.target.value),
-                        )
-                      }
-                    />
-                  </div>
-
-                  <div className="flex space-x-2">
-                    <Button variant="outline" className="flex-1">
-                      <Upload className="h-4 w-4 mr-2" />
-                      Создать резервную копию
-                    </Button>
-                    <Button variant="outline" className="flex-1">
-                      <Download className="h-4 w-4 mr-2" />
-                      Восстановить
-                    </Button>
-                  </div>
-                </div>
+              <div className="flex space-x-2">
+                <Button variant="outline" className="flex items-center">
+                  <Download className="h-4 w-4 mr-2" />
+                  Создать резервную копию
+                </Button>
+                <Button variant="outline" className="flex items-center">
+                  <Upload className="h-4 w-4 mr-2" />
+                  Восстановить из копии
+                </Button>
               </div>
             </CardContent>
           </Card>
