@@ -148,7 +148,12 @@ export class ApiClient {
           responseData?.error ||
           responseData?.message ||
           `HTTP ${response.status}`;
+
         console.error(`📡 HTTP Error ${response.status}: ${errorMessage}`);
+        console.error(`📡 Error details:`, responseData);
+        console.error(`📡 Request URL:`, url);
+        console.error(`📡 Request method:`, fetchOptions.method || "GET");
+
         throw new ApiError(
           `HTTP ${response.status}: ${errorMessage}`,
           response.status,
