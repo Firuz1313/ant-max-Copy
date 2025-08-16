@@ -5,7 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -95,7 +101,7 @@ const SystemSettings = () => {
     try {
       setLoading(true);
       const response = await apiClient.get("/settings");
-      
+
       if (response.success && response.data) {
         // Convert settings array to object
         const settingsObj = { ...defaultSettings };
@@ -104,9 +110,9 @@ const SystemSettings = () => {
             if (setting.key && setting.value !== undefined) {
               // Convert string values to proper types
               let value = setting.value;
-              if (setting.type === 'boolean') {
-                value = value === 'true' || value === true;
-              } else if (setting.type === 'number') {
+              if (setting.type === "boolean") {
+                value = value === "true" || value === true;
+              } else if (setting.type === "number") {
                 value = parseInt(value, 10);
               }
               (settingsObj as any)[setting.key] = value;
@@ -116,8 +122,8 @@ const SystemSettings = () => {
         setSettings(settingsObj);
       }
     } catch (error: any) {
-      console.error('Failed to load settings:', error);
-      toast.error('Не удалось загрузить настройки');
+      console.error("Failed to load settings:", error);
+      toast.error("Не удалось загрузить настройки");
     } finally {
       setLoading(false);
     }
@@ -126,7 +132,7 @@ const SystemSettings = () => {
   const saveSettings = async () => {
     try {
       setSaving(true);
-      
+
       // Update settings using individual PUT requests
       for (const [key, value] of Object.entries(settings)) {
         await apiClient.put(`/settings/${key}`, {
@@ -137,42 +143,62 @@ const SystemSettings = () => {
         });
       }
 
-      toast.success('Н��стройки успешно сохранены');
+      toast.success("Н��стройки успешно сохранены");
     } catch (error: any) {
-      console.error('Failed to save settings:', error);
-      toast.error('Не удалось сохранить настройки');
+      console.error("Failed to save settings:", error);
+      toast.error("Не удалось сохранить настройки");
     } finally {
       setSaving(false);
     }
   };
 
   const getCategoryForKey = (key: string): string => {
-    if (key.startsWith('site_') || key.includes('language') || key.includes('timezone')) return 'general';
-    if (key.includes('session') || key.includes('registration') || key.includes('verification')) return 'security';
-    if (key.includes('notification') || key.includes('smtp') || key.includes('email')) return 'notifications';
-    if (key.includes('theme') || key.includes('analytics')) return 'appearance';
-    if (key.includes('backup') || key.includes('retention')) return 'backup';
-    if (key.includes('debug') || key.includes('error') || key.includes('maintenance')) return 'diagnostics';
-    return 'general';
+    if (
+      key.startsWith("site_") ||
+      key.includes("language") ||
+      key.includes("timezone")
+    )
+      return "general";
+    if (
+      key.includes("session") ||
+      key.includes("registration") ||
+      key.includes("verification")
+    )
+      return "security";
+    if (
+      key.includes("notification") ||
+      key.includes("smtp") ||
+      key.includes("email")
+    )
+      return "notifications";
+    if (key.includes("theme") || key.includes("analytics")) return "appearance";
+    if (key.includes("backup") || key.includes("retention")) return "backup";
+    if (
+      key.includes("debug") ||
+      key.includes("error") ||
+      key.includes("maintenance")
+    )
+      return "diagnostics";
+    return "general";
   };
 
   const getDescriptionForKey = (key: string): string => {
     const descriptions: Record<string, string> = {
-      site_name: 'Название вашего сайта',
-      site_description: 'Краткое описание сайта',
-      default_language: 'Язык интерфейса по умолчанию',
-      timezone: 'Временная зона',
-      maintenance_mode: 'Режим технического обслуживания',
-      max_sessions_per_user: 'Максимальное количество сессий на пользователя',
-      session_timeout: 'Время жизни сессии в минутах',
-      notification_email: 'Email для системных уведомлений',
-      backup_retention_days: 'Количество дней хранения резервных копий',
+      site_name: "Название вашего сайта",
+      site_description: "Краткое описание сайта",
+      default_language: "Язык интерфейса по умолчанию",
+      timezone: "Временная зона",
+      maintenance_mode: "Режим технического обслуживания",
+      max_sessions_per_user: "Максимальное количество сессий на пользователя",
+      session_timeout: "Время жизни сессии в минутах",
+      notification_email: "Email для системных уведомлений",
+      backup_retention_days: "Количество дней хранения резервных копий",
     };
-    return descriptions[key] || '';
+    return descriptions[key] || "";
   };
 
   const updateSetting = (key: keyof SiteSettings, value: any) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+    setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
   useEffect(() => {
@@ -199,7 +225,11 @@ const SystemSettings = () => {
             Управление конфигурацией и параметрами системы
           </p>
         </div>
-        <Button onClick={saveSettings} disabled={saving} className="flex items-center">
+        <Button
+          onClick={saveSettings}
+          disabled={saving}
+          className="flex items-center"
+        >
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin mr-2" />
           ) : (
@@ -250,7 +280,7 @@ const SystemSettings = () => {
                   <Input
                     id="site_name"
                     value={settings.site_name}
-                    onChange={(e) => updateSetting('site_name', e.target.value)}
+                    onChange={(e) => updateSetting("site_name", e.target.value)}
                     placeholder="Введите название сайта"
                   />
                 </div>
@@ -258,7 +288,9 @@ const SystemSettings = () => {
                   <Label htmlFor="default_language">Язык по умолчанию</Label>
                   <Select
                     value={settings.default_language}
-                    onValueChange={(value) => updateSetting('default_language', value)}
+                    onValueChange={(value) =>
+                      updateSetting("default_language", value)
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -277,7 +309,9 @@ const SystemSettings = () => {
                 <Textarea
                   id="site_description"
                   value={settings.site_description}
-                  onChange={(e) => updateSetting('site_description', e.target.value)}
+                  onChange={(e) =>
+                    updateSetting("site_description", e.target.value)
+                  }
                   placeholder="Введите описание сайта"
                   rows={3}
                 />
@@ -288,26 +322,34 @@ const SystemSettings = () => {
                   <Label htmlFor="timezone">Часовой пояс</Label>
                   <Select
                     value={settings.timezone}
-                    onValueChange={(value) => updateSetting('timezone', value)}
+                    onValueChange={(value) => updateSetting("timezone", value)}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Europe/Moscow">Москва (UTC+3)</SelectItem>
+                      <SelectItem value="Europe/Moscow">
+                        Москва (UTC+3)
+                      </SelectItem>
                       <SelectItem value="Europe/Kiev">Киев (UTC+2)</SelectItem>
-                      <SelectItem value="Europe/Minsk">Минск (UTC+3)</SelectItem>
+                      <SelectItem value="Europe/Minsk">
+                        Минск (UTC+3)
+                      </SelectItem>
                       <SelectItem value="UTC">UTC (UTC+0)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="notification_email">Email для уведомлений</Label>
+                  <Label htmlFor="notification_email">
+                    Email для уведомлений
+                  </Label>
                   <Input
                     id="notification_email"
                     type="email"
                     value={settings.notification_email}
-                    onChange={(e) => updateSetting('notification_email', e.target.value)}
+                    onChange={(e) =>
+                      updateSetting("notification_email", e.target.value)
+                    }
                     placeholder="admin@example.com"
                   />
                 </div>
@@ -324,17 +366,23 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.maintenance_mode}
-                  onCheckedChange={(checked) => updateSetting('maintenance_mode', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("maintenance_mode", checked)
+                  }
                 />
               </div>
 
               {settings.maintenance_mode && (
                 <div className="space-y-2">
-                  <Label htmlFor="maintenance_message">Сообщение о обслуживании</Label>
+                  <Label htmlFor="maintenance_message">
+                    Сообщение о обслуживании
+                  </Label>
                   <Textarea
                     id="maintenance_message"
                     value={settings.maintenance_message}
-                    onChange={(e) => updateSetting('maintenance_message', e.target.value)}
+                    onChange={(e) =>
+                      updateSetting("maintenance_message", e.target.value)
+                    }
                     placeholder="Сообщение, которое увидят пользователи"
                     rows={2}
                   />
@@ -353,23 +401,34 @@ const SystemSettings = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="max_sessions">Максимум сессий на пользователя</Label>
+                  <Label htmlFor="max_sessions">
+                    Максимум сессий на пользователя
+                  </Label>
                   <Input
                     id="max_sessions"
                     type="number"
                     value={settings.max_sessions_per_user}
-                    onChange={(e) => updateSetting('max_sessions_per_user', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateSetting(
+                        "max_sessions_per_user",
+                        parseInt(e.target.value),
+                      )
+                    }
                     min="1"
                     max="50"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="session_timeout">Время жизни сессии (минуты)</Label>
+                  <Label htmlFor="session_timeout">
+                    Время жизни сессии (минуты)
+                  </Label>
                   <Input
                     id="session_timeout"
                     type="number"
                     value={settings.session_timeout}
-                    onChange={(e) => updateSetting('session_timeout', parseInt(e.target.value))}
+                    onChange={(e) =>
+                      updateSetting("session_timeout", parseInt(e.target.value))
+                    }
                     min="5"
                     max="1440"
                   />
@@ -387,7 +446,9 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.debug_mode}
-                  onCheckedChange={(checked) => updateSetting('debug_mode', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("debug_mode", checked)
+                  }
                 />
               </div>
 
@@ -400,7 +461,9 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.error_reporting}
-                  onCheckedChange={(checked) => updateSetting('error_reporting', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("error_reporting", checked)
+                  }
                 />
               </div>
             </CardContent>
@@ -423,7 +486,9 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.smtp_enabled}
-                  onCheckedChange={(checked) => updateSetting('smtp_enabled', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("smtp_enabled", checked)
+                  }
                 />
               </div>
 
@@ -436,7 +501,9 @@ const SystemSettings = () => {
                       <Input
                         id="smtp_host"
                         value={settings.smtp_host}
-                        onChange={(e) => updateSetting('smtp_host', e.target.value)}
+                        onChange={(e) =>
+                          updateSetting("smtp_host", e.target.value)
+                        }
                         placeholder="smtp.gmail.com"
                       />
                     </div>
@@ -446,7 +513,9 @@ const SystemSettings = () => {
                         id="smtp_port"
                         type="number"
                         value={settings.smtp_port}
-                        onChange={(e) => updateSetting('smtp_port', parseInt(e.target.value))}
+                        onChange={(e) =>
+                          updateSetting("smtp_port", parseInt(e.target.value))
+                        }
                         placeholder="587"
                       />
                     </div>
@@ -458,7 +527,9 @@ const SystemSettings = () => {
                       <Input
                         id="smtp_username"
                         value={settings.smtp_username}
-                        onChange={(e) => updateSetting('smtp_username', e.target.value)}
+                        onChange={(e) =>
+                          updateSetting("smtp_username", e.target.value)
+                        }
                         placeholder="your-email@gmail.com"
                       />
                     </div>
@@ -469,7 +540,9 @@ const SystemSettings = () => {
                           id="smtp_password"
                           type={showPassword ? "text" : "password"}
                           value={settings.smtp_password}
-                          onChange={(e) => updateSetting('smtp_password', e.target.value)}
+                          onChange={(e) =>
+                            updateSetting("smtp_password", e.target.value)
+                          }
                           placeholder="Пароль приложения"
                         />
                         <Button
@@ -510,7 +583,9 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.allow_registration}
-                  onCheckedChange={(checked) => updateSetting('allow_registration', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("allow_registration", checked)
+                  }
                 />
               </div>
 
@@ -523,7 +598,9 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.require_email_verification}
-                  onCheckedChange={(checked) => updateSetting('require_email_verification', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("require_email_verification", checked)
+                  }
                 />
               </div>
             </CardContent>
@@ -541,7 +618,9 @@ const SystemSettings = () => {
                 <Label htmlFor="default_theme">Тема по умолчанию</Label>
                 <Select
                   value={settings.default_theme}
-                  onValueChange={(value) => updateSetting('default_theme', value)}
+                  onValueChange={(value) =>
+                    updateSetting("default_theme", value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -565,7 +644,9 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.analytics_enabled}
-                  onCheckedChange={(checked) => updateSetting('analytics_enabled', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("analytics_enabled", checked)
+                  }
                 />
               </div>
             </CardContent>
@@ -588,7 +669,9 @@ const SystemSettings = () => {
                 </div>
                 <Switch
                   checked={settings.auto_backup_enabled}
-                  onCheckedChange={(checked) => updateSetting('auto_backup_enabled', checked)}
+                  onCheckedChange={(checked) =>
+                    updateSetting("auto_backup_enabled", checked)
+                  }
                 />
               </div>
 
@@ -596,10 +679,14 @@ const SystemSettings = () => {
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="backup_frequency">Частота копирования</Label>
+                      <Label htmlFor="backup_frequency">
+                        Частота копирования
+                      </Label>
                       <Select
                         value={settings.auto_backup_frequency}
-                        onValueChange={(value) => updateSetting('auto_backup_frequency', value)}
+                        onValueChange={(value) =>
+                          updateSetting("auto_backup_frequency", value)
+                        }
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -613,12 +700,19 @@ const SystemSettings = () => {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="backup_retention">Хранить копии (дни)</Label>
+                      <Label htmlFor="backup_retention">
+                        Хранить копии (дни)
+                      </Label>
                       <Input
                         id="backup_retention"
                         type="number"
                         value={settings.backup_retention_days}
-                        onChange={(e) => updateSetting('backup_retention_days', parseInt(e.target.value))}
+                        onChange={(e) =>
+                          updateSetting(
+                            "backup_retention_days",
+                            parseInt(e.target.value),
+                          )
+                        }
                         min="1"
                         max="365"
                       />

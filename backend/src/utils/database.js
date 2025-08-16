@@ -16,30 +16,33 @@ const { Pool, Client } = pkg;
 // PostgreSQL only - no mock database support
 
 // Конфигурация подключения к PostgreSQL
-const dbConfig = process.env.DATABASE_URL ? {
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-  // Настройки pool соединений
-  max: 20, // максимальное количество соединений в pool
-  min: 5, // минимальное количество соединений
-  idleTimeoutMillis: 30000, // время простоя перед закрытием соединения
-  connectionTimeoutMillis: 10000, // таймаут подключения
-  maxUses: 7500, // максимальное количество использований соединения
-} : {
-  host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT) || 5432,
-  database: process.env.DB_NAME || "ant_support",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "password",
-  ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
+const dbConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+      // Настройки pool соединений
+      max: 20, // максимальное количество соединений в pool
+      min: 5, // минимальное количество соединений
+      idleTimeoutMillis: 30000, // время простоя перед закрытием соединения
+      connectionTimeoutMillis: 10000, // таймаут подключения
+      maxUses: 7500, // максимальное количество использований соединения
+    }
+  : {
+      host: process.env.DB_HOST || "localhost",
+      port: parseInt(process.env.DB_PORT) || 5432,
+      database: process.env.DB_NAME || "ant_support",
+      user: process.env.DB_USER || "postgres",
+      password: process.env.DB_PASSWORD || "password",
+      ssl:
+        process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
 
-  // Настройки pool соединений
-  max: 20, // максимальное количество соединений в pool
-  min: 5, // минимальное количество соединений
-  idleTimeoutMillis: 30000, // время простоя перед закрытием соединения
-  connectionTimeoutMillis: 5000, // таймаут подключения
-  maxUses: 7500, // максимальное количество использований соединения
-};
+      // Настройки pool соединений
+      max: 20, // максимальное количество соединений в pool
+      min: 5, // минимальное количество соединений
+      idleTimeoutMillis: 30000, // время простоя перед закрытием соединения
+      connectionTimeoutMillis: 5000, // таймаут подключения
+      maxUses: 7500, // максимальное количество использований соединения
+    };
 
 // Создание pool соединений
 const pool = new Pool(dbConfig);

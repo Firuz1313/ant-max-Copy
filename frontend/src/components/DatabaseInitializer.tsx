@@ -6,7 +6,9 @@ import { Loader2, Database, CheckCircle, AlertCircle } from "lucide-react";
 import { apiClient } from "@/api/client";
 
 export const DatabaseInitializer = () => {
-  const [status, setStatus] = useState<"loading" | "ready" | "needs_init" | "error">("loading");
+  const [status, setStatus] = useState<
+    "loading" | "ready" | "needs_init" | "error"
+  >("loading");
   const [stats, setStats] = useState<any>(null);
   const [isInitializing, setIsInitializing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -15,14 +17,14 @@ export const DatabaseInitializer = () => {
     try {
       setStatus("loading");
       setError(null);
-      
+
       const response = await apiClient.get("/init/status");
-      
+
       if (response.success && response.connected) {
         const hasData = Object.values(response.stats).some(
-          (count: any) => typeof count === "number" && count > 0
+          (count: any) => typeof count === "number" && count > 0,
         );
-        
+
         if (hasData) {
           setStatus("ready");
           setStats(response.stats);
@@ -44,9 +46,9 @@ export const DatabaseInitializer = () => {
     try {
       setIsInitializing(true);
       setError(null);
-      
+
       const response = await apiClient.post("/init/init");
-      
+
       if (response.success) {
         setStatus("ready");
         setStats(response.stats);
@@ -96,18 +98,19 @@ export const DatabaseInitializer = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {stats && Object.entries(stats).map(([table, count]: [string, any]) => (
-              <div key={table} className="flex justify-between items-center">
-                <span className="capitalize">{table}:</span>
-                <Badge variant="outline">
-                  {typeof count === "number" ? count : count}
-                </Badge>
-              </div>
-            ))}
+            {stats &&
+              Object.entries(stats).map(([table, count]: [string, any]) => (
+                <div key={table} className="flex justify-between items-center">
+                  <span className="capitalize">{table}:</span>
+                  <Badge variant="outline">
+                    {typeof count === "number" ? count : count}
+                  </Badge>
+                </div>
+              ))}
           </div>
-          <Button 
-            onClick={checkStatus} 
-            className="w-full mt-4" 
+          <Button
+            onClick={checkStatus}
+            className="w-full mt-4"
             variant="outline"
           >
             Обновить статус
@@ -128,10 +131,11 @@ export const DatabaseInitializer = () => {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-gray-600 mb-4">
-            База данных подключена, но не содержит данных. Инициализируйте систему для начала работы.
+            База данных подключена, но не содержит данных. Инициализируйте
+            систему для начала работы.
           </p>
-          <Button 
-            onClick={initializeDatabase} 
+          <Button
+            onClick={initializeDatabase}
             disabled={isInitializing}
             className="w-full"
           >
@@ -164,11 +168,7 @@ export const DatabaseInitializer = () => {
         <p className="text-sm text-red-600 mb-4">
           {error || "Не удалось подключиться к базе данных"}
         </p>
-        <Button 
-          onClick={checkStatus} 
-          className="w-full" 
-          variant="outline"
-        >
+        <Button onClick={checkStatus} className="w-full" variant="outline">
           Повторить
         </Button>
       </CardContent>

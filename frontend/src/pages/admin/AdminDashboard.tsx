@@ -102,7 +102,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-6">
-
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -396,7 +395,7 @@ const AdminDashboard = () => {
               <Button
                 className="w-full justify-start"
                 variant="outline"
-                onClick={() => window.location.href = '/admin/devices'}
+                onClick={() => (window.location.href = "/admin/devices")}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Добавить устройство
@@ -404,7 +403,7 @@ const AdminDashboard = () => {
               <Button
                 className="w-full justify-start"
                 variant="outline"
-                onClick={() => window.location.href = '/admin/problems'}
+                onClick={() => (window.location.href = "/admin/problems")}
               >
                 <Plus className="h-4 w-4 mr-2" />
                 Создать проблему
@@ -413,13 +412,13 @@ const AdminDashboard = () => {
                 className="w-full justify-start"
                 variant="outline"
                 onClick={() => {
-                  const input = document.createElement('input');
-                  input.type = 'file';
-                  input.accept = '.json';
+                  const input = document.createElement("input");
+                  input.type = "file";
+                  input.accept = ".json";
                   input.onchange = (e) => {
                     const file = (e.target as HTMLInputElement).files?.[0];
                     if (file) {
-                      console.log('Import file selected:', file.name);
+                      console.log("Import file selected:", file.name);
                       // TODO: Implement import functionality
                     }
                   };
@@ -446,7 +445,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
-                  onClick={() => window.location.href = '/admin/settings'}
+                  onClick={() => (window.location.href = "/admin/settings")}
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Общие настройки
@@ -455,7 +454,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
-                  onClick={() => window.location.href = '/admin/users'}
+                  onClick={() => (window.location.href = "/admin/users")}
                 >
                   <Users className="h-4 w-4 mr-2" />
                   Управление пользователями
@@ -464,7 +463,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
-                  onClick={() => window.location.href = '/admin'}
+                  onClick={() => (window.location.href = "/admin")}
                 >
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Аналитика
@@ -486,7 +485,7 @@ const AdminDashboard = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => window.location.href = '/admin/problems'}
+              onClick={() => (window.location.href = "/admin/problems")}
             >
               <Eye className="h-4 w-4 mr-2" />
               Посмотреть все
