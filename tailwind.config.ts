@@ -1,4 +1,4 @@
-mport type { Config } from "tailwindcss";
+port type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
