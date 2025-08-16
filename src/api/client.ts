@@ -109,18 +109,23 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Ultra-simple approach: read response only once, immediately
+      // Read response only once and handle properly
       let responseData: any = null;
       let responseText = "";
 
-      try {
-        responseText = await response.text();
-        console.log(
-          `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
-        );
-      } catch (textError) {
-        console.error(`📡 Failed to read response text:`, textError);
-        responseText = "";
+      // Check if response body exists and read it only once
+      if (response.body && !response.bodyUsed) {
+        try {
+          responseText = await response.text();
+          console.log(
+            `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
+          );
+        } catch (textError) {
+          console.error(`📡 Failed to read response text:`, textError);
+          responseText = "";
+        }
+      } else {
+        console.log(`📡 Response body already used or empty`);
       }
 
       // Try to parse JSON if we have text
