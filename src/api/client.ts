@@ -109,49 +109,46 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Create a single clone for potential error handling
-      const responseClone = response.clone();
+      // Read response body safely - always use .text() first, then parse
       let responseData: any = null;
       let responseText = "";
 
       try {
-        // Read the response body only once
+        // Always read as text first to avoid stream consumption issues
         responseText = await response.text();
         console.log(
           `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
         );
-      } catch (textError) {
-        console.error(`📡 Failed to read response text:`, textError);
 
-        // If we can't read the original, try the clone
-        try {
-          responseText = await responseClone.text();
-          console.log(`📡 Successfully read from clone`);
-        } catch (cloneError) {
-          console.error(`📡 Failed to read clone as well:`, cloneError);
-          responseText = "";
+        // Try to parse as JSON
+        if (responseText.trim()) {
+          try {
+            responseData = JSON.parse(responseText);
+            console.log(`📡 Successfully parsed JSON response`);
+          } catch (parseError) {
+            console.log(`📡 Response is not JSON, treating as text`);
+            responseData = { message: responseText };
+          }
+        } else {
+          console.log(`📡 Empty response body`);
+          responseData = {};
         }
+      } catch (readError) {
+        console.error(`📡 Failed to read response:`, readError);
+        // If we can't read the response at all, create a minimal error response
+        responseData = {
+          error: "Failed to read response",
+          details: readError.message
+        };
+        responseText = JSON.stringify(responseData);
       }
 
-      // Try to parse JSON if we have text
-      if (responseText.trim()) {
-        try {
-          responseData = JSON.parse(responseText);
-          console.log(`📡 Successfully parsed JSON`);
-        } catch (parseError) {
-          console.log(`📡 Not JSON, using as text`);
-          responseData = { message: responseText };
-        }
-      } else {
-        console.log(`📡 Empty response`);
-        responseData = {};
-      }
-
-      // Check for HTTP errors AFTER reading the body
+      // Check for HTTP errors AFTER successfully reading the body
       if (!response.ok) {
         const errorMessage =
           responseData?.error ||
           responseData?.message ||
+          responseText ||
           `HTTP ${response.status}`;
         console.error(`📡 HTTP Error ${response.status}: ${errorMessage}`);
         throw new ApiError(
