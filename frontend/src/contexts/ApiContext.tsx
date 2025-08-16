@@ -587,18 +587,15 @@ export const useData = () => {
   const loadRemotes = useCallback(async () => {
     try {
       setLoading(true);
-      // Backend doesn't have remotes endpoint yet, use empty array
-      console.warn(
-        "Remotes endpoint not implemented in backend, using empty array",
-      );
-      setRemotes([]);
+      const remoteData = await api.getRemotes();
+      setRemotes(remoteData);
     } catch (error) {
       setError(error instanceof Error ? error.message : "Unknown error");
       setRemotes([]);
     } finally {
       setLoading(false);
     }
-  }, [setLoading, setError]);
+  }, [api, setLoading, setError]);
 
   const loadSessions = useCallback(async () => {
     try {
