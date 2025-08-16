@@ -380,6 +380,33 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
     setError,
   };
 
+  useEffect(() => {
+    const initializeDatabase = async () => {
+      try {
+        console.log('Checking database status...');
+        const statusResponse = await apiClient.get('/init/status');
+
+        if (statusResponse.success && statusResponse.connected) {
+          const hasData = Object.values(statusResponse.stats).some(
+            (count: any) => typeof count === "number" && count > 0
+          );
+
+          if (!hasData) {
+            console.log('Database is empty, initializing...');
+            await apiClient.post('/init/init');
+            console.log('Database initialized with sample data');
+          } else {
+            console.log('Database already contains data:', statusResponse.stats);
+          }
+        }
+      } catch (error) {
+        console.warn('Database initialization check failed:', error);
+      }
+    };
+
+    initializeDatabase();
+  }, []);
+
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;
 };
 
