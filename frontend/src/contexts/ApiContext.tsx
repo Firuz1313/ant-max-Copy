@@ -52,7 +52,7 @@ class APIService {
       }
 
       // Handle backend response format: { success: true, data: [...] }
-      if (response && typeof response === 'object' && 'success' in response) {
+      if (response && typeof response === "object" && "success" in response) {
         return response.data || response;
       }
 

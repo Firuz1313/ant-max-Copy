@@ -23,7 +23,10 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/select-device" element={<SelectDevicePage />} />
             <Route path="/device/:deviceId" element={<DeviceRemotePage />} />
-            <Route path="/diagnostic/:deviceId/:problemId" element={<DiagnosticPage />} />
+            <Route
+              path="/diagnostic/:deviceId/:problemId"
+              element={<DiagnosticPage />}
+            />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -124,7 +124,7 @@ const UsersManager = () => {
         console.error("Missing required fields:", {
           username: !formData.username,
           email: !formData.email,
-          password: !formData.password
+          password: !formData.password,
         });
         return;
       }

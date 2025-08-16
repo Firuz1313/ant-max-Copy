@@ -138,7 +138,7 @@ export class ApiClient {
         // If we can't read the response at all, create a minimal error response
         responseData = {
           error: "Failed to read response",
-          details: readError.message
+          details: readError.message,
         };
         responseText = JSON.stringify(responseData);
       }
@@ -182,7 +182,9 @@ export class ApiClient {
           error.message.includes("body stream") ||
           error.message.includes("already read")
         ) {
-          console.warn("📡 Body stream error detected, returning empty response");
+          console.warn(
+            "📡 Body stream error detected, returning empty response",
+          );
           // Return a safe fallback instead of throwing
           return {} as T;
         }
