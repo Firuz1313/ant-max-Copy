@@ -152,6 +152,14 @@ class APIService {
     });
   }
 
+  async reorderSteps(problemId: string, stepIds: string[]): Promise<Step[]> {
+    const response = await this.request<{ data: Step[] }>("/steps/reorder", {
+      method: "PUT",
+      body: JSON.stringify({ problem_id: problemId, step_ids: stepIds }),
+    });
+    return response.data;
+  }
+
   // Remotes (not implemented in backend yet)
   async getRemotes(): Promise<Remote[]> {
     console.warn("Remotes endpoint not implemented in backend");
