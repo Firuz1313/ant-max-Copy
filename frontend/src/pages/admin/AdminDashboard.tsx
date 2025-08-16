@@ -103,6 +103,11 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-6">
+      {/* Database Status */}
+      <div className="mb-6">
+        <DatabaseInitializer />
+      </div>
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -303,7 +308,7 @@ const AdminDashboard = () => {
                   className="bg-yellow-100 text-yellow-800"
                 >
                   <Clock className="h-3 w-3 mr-1" />
-                  Обновляется
+                  Обновляетс��
                 </Badge>
               </div>
 
