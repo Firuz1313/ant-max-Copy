@@ -119,9 +119,29 @@ const UsersManager = () => {
 
   const handleCreate = async () => {
     try {
+      // Validate required fields
+      if (!formData.username || !formData.email || !formData.password) {
+        console.error("Missing required fields:", {
+          username: !formData.username,
+          email: !formData.email,
+          password: !formData.password
+        });
+        return;
+      }
+
+      if (formData.username.length < 3) {
+        console.error("Username too short");
+        return;
+      }
+
+      if (formData.password.length < 6) {
+        console.error("Password too short");
+        return;
+      }
+
       const userData = {
-        username: formData.username,
-        email: formData.email,
+        username: formData.username.trim(),
+        email: formData.email.trim(),
         password: formData.password,
         role: formData.role,
         bio: "",
@@ -129,7 +149,7 @@ const UsersManager = () => {
       };
       console.log("Creating user with data:", userData);
 
-      // Create through API (not implemented yet)
+      // Create through API
       await api.createUser?.(userData);
       setIsCreateDialogOpen(false);
       resetForm();
