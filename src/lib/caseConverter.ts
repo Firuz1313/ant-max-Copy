@@ -133,7 +133,12 @@ export function transformToFrontend<T = any>(data: any): T {
 export function transformToBackend<T = any>(data: any): T {
   if (!data) return data;
 
-  return convertObjectKeys(data, (key: string) => {
+  // First filter out undefined values
+  const filteredData = Object.fromEntries(
+    Object.entries(data).filter(([_, value]) => value !== undefined)
+  );
+
+  return convertObjectKeys(filteredData, (key: string) => {
     return (
       FIELD_MAPPINGS.frontend_to_backend[
         key as keyof typeof FIELD_MAPPINGS.frontend_to_backend
