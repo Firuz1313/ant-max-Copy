@@ -57,7 +57,7 @@ class ChangeLog extends BaseModel {
       `;
 
       const result = await query(sql, [entityType, entityId]);
-      return result.rows.map(this.formatChangeLog);
+      return result.rows.map((log) => this.formatChangeLog(log));
     } catch (error) {
       console.error("Ошибка получения журнала по сущности:", error.message);
       throw error;
@@ -83,7 +83,7 @@ class ChangeLog extends BaseModel {
       `;
 
       const result = await query(sql, [userId]);
-      return result.rows.map(this.formatChangeLog);
+      return result.rows.map((log) => this.formatChangeLog(log));
     } catch (error) {
       console.error("Ошибка получения журнала по пользователю:", error.message);
       throw error;
@@ -109,7 +109,7 @@ class ChangeLog extends BaseModel {
       `;
 
       const result = await query(sql, [action]);
-      return result.rows.map(this.formatChangeLog);
+      return result.rows.map((log) => this.formatChangeLog(log));
     } catch (error) {
       console.error("Ошибка получения журнала по действию:", error.message);
       throw error;
@@ -136,9 +136,9 @@ class ChangeLog extends BaseModel {
       `;
 
       const result = await query(sql, [limit]);
-      return result.rows.map(this.formatChangeLog);
+      return result.rows.map((log) => this.formatChangeLog(log));
     } catch (error) {
-      console.error("Ошибка получения последних изменений:", error.message);
+      console.error("Ошибка получения ��оследних изменений:", error.message);
       throw error;
     }
   }
