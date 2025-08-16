@@ -94,6 +94,7 @@ export const getUserById = async (req, res) => {
 export const createUser = async (req, res) => {
   try {
     const userData = req.body;
+    console.log("🔍 createUser called with data:", userData);
 
     // Валидация обяз��тельных полей
     if (!userData.username || !userData.email || !userData.password) {
@@ -377,7 +378,7 @@ export const searchUsers = async (req, res) => {
     console.error("Ошибка при поиске пользователей:", error);
     res.status(500).json({
       success: false,
-      error: "Внутренняя ошибка сервера п��и поиске пользователей",
+      error: "Внутренняя ошибка серве��а п��и поиске пользователей",
       errorType: "DATABASE_ERROR",
       details: error.message,
       timestamp: new Date().toISOString(),
