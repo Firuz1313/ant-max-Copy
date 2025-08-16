@@ -8,7 +8,7 @@ class User extends BaseModel {
   }
 
   /**
-   * Получить всех пользователей
+   * Полу��ить всех пользователей
    */
   async getAllUsers(filters = {}) {
     console.log("🔍 User.getAllUsers called with filters:", filters);
@@ -64,7 +64,7 @@ class User extends BaseModel {
     const result = await query(queryText, params);
     console.log("📊 User.getAllUsers result rows:", result.rows.length);
 
-    return result.rows.map(this.formatUser);
+    return result.rows.map((user) => this.formatUser(user));
   }
 
   /**

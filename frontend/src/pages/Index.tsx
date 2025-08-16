@@ -71,8 +71,8 @@ const Index = () => {
     navigate("/devices");
   };
 
-  const activeDevices = devices.filter((d) => d.isActive);
-  const activeProblems = problems.filter((p) => p.isActive);
+  const activeDevices = devices?.filter((d) => d.isActive) || [];
+  const activeProblems = problems?.filter((p) => p.isActive) || [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 relative overflow-hidden">
@@ -276,7 +276,7 @@ const Index = () => {
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
                 Создавайте и управляйте интерфейсами ТВ-приставок для точной
                 диагностики. Загружайте скриншоты, отмечайте интерактивные
-                области и интегрируйте с процессом диагностики.
+                области и интегрируйте с процессом диаг��остики.
               </p>
             </div>
 
