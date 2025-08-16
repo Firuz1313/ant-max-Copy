@@ -412,7 +412,19 @@ const AdminDashboard = () => {
               <Button
                 className="w-full justify-start"
                 variant="outline"
-                onClick={handleExport}
+                onClick={() => {
+                  const input = document.createElement('input');
+                  input.type = 'file';
+                  input.accept = '.json';
+                  input.onchange = (e) => {
+                    const file = (e.target as HTMLInputElement).files?.[0];
+                    if (file) {
+                      console.log('Import file selected:', file.name);
+                      // TODO: Implement import functionality
+                    }
+                  };
+                  input.click();
+                }}
               >
                 <Upload className="h-4 w-4 mr-2" />
                 Импорт данных
