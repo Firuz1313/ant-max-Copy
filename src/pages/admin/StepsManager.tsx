@@ -621,24 +621,32 @@ const StepsManager = () => {
   const handleEdit = async () => {
     if (!selectedStep) return;
 
-    const updatedFormData = {
-      ...formData,
-      highlightRemoteButton:
-        formData.highlightRemoteButton === "none"
-          ? undefined
-          : formData.highlightRemoteButton,
-      highlightTVArea:
-        formData.highlightTVArea === "none"
-          ? undefined
-          : formData.highlightTVArea,
-      remoteId: formData.remoteId === "none" ? undefined : formData.remoteId,
-      tvInterfaceId:
-        formData.tvInterfaceId === "none" ? undefined : formData.tvInterfaceId,
-      buttonPosition:
-        formData.buttonPosition.x === 0 && formData.buttonPosition.y === 0
-          ? undefined
-          : formData.buttonPosition,
-    };
+    // Clean form data by removing undefined and empty values
+    const cleanedData = { ...formData };
+
+    // Handle "none" selections by setting to undefined
+    if (cleanedData.highlightRemoteButton === "none" || !cleanedData.highlightRemoteButton) {
+      cleanedData.highlightRemoteButton = undefined;
+    }
+    if (cleanedData.highlightTVArea === "none" || !cleanedData.highlightTVArea) {
+      cleanedData.highlightTVArea = undefined;
+    }
+    if (cleanedData.remoteId === "none" || !cleanedData.remoteId) {
+      cleanedData.remoteId = undefined;
+    }
+    if (cleanedData.tvInterfaceId === "none" || !cleanedData.tvInterfaceId) {
+      cleanedData.tvInterfaceId = undefined;
+    }
+
+    // Handle button position (remove if both x and y are 0)
+    if (cleanedData.buttonPosition?.x === 0 && cleanedData.buttonPosition?.y === 0) {
+      cleanedData.buttonPosition = undefined;
+    }
+
+    // Remove undefined values entirely
+    const updatedFormData = Object.fromEntries(
+      Object.entries(cleanedData).filter(([_, value]) => value !== undefined)
+    );
 
     try {
       await updateStep(selectedStep.id, updatedFormData);
