@@ -109,46 +109,39 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Read response body safely - always use .text() first, then parse
+      // Ultra-simple approach: read response only once, immediately
       let responseData: any = null;
       let responseText = "";
 
       try {
-        // Always read as text first to avoid stream consumption issues
         responseText = await response.text();
         console.log(
           `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
         );
-
-        // Try to parse as JSON
-        if (responseText.trim()) {
-          try {
-            responseData = JSON.parse(responseText);
-            console.log(`📡 Successfully parsed JSON response`);
-          } catch (parseError) {
-            console.log(`📡 Response is not JSON, treating as text`);
-            responseData = { message: responseText };
-          }
-        } else {
-          console.log(`📡 Empty response body`);
-          responseData = {};
-        }
-      } catch (readError) {
-        console.error(`📡 Failed to read response:`, readError);
-        // If we can't read the response at all, create a minimal error response
-        responseData = {
-          error: "Failed to read response",
-          details: readError.message,
-        };
-        responseText = JSON.stringify(responseData);
+      } catch (textError) {
+        console.error(`📡 Failed to read response text:`, textError);
+        responseText = "";
       }
 
-      // Check for HTTP errors AFTER successfully reading the body
+      // Try to parse JSON if we have text
+      if (responseText.trim()) {
+        try {
+          responseData = JSON.parse(responseText);
+          console.log(`📡 Successfully parsed JSON`);
+        } catch (parseError) {
+          console.log(`📡 Not JSON, using as text`);
+          responseData = { message: responseText };
+        }
+      } else {
+        console.log(`📡 Empty response`);
+        responseData = {};
+      }
+
+      // Check for HTTP errors AFTER reading the body
       if (!response.ok) {
         const errorMessage =
           responseData?.error ||
           responseData?.message ||
-          responseText ||
           `HTTP ${response.status}`;
         console.error(`📡 HTTP Error ${response.status}: ${errorMessage}`);
         throw new ApiError(
@@ -177,16 +170,12 @@ export class ApiClient {
           throw new ApiError("Request timeout", 408);
         }
 
-        // Handle specific body stream errors more gracefully
+        // Handle specific body stream errors
         if (
           error.message.includes("body stream") ||
           error.message.includes("already read")
         ) {
-          console.warn(
-            "📡 Body stream error detected, returning empty response",
-          );
-          // Return a safe fallback instead of throwing
-          return {} as T;
+          throw new ApiError("Response reading error - please try again", 0);
         }
 
         throw new ApiError(error.message, 0);
