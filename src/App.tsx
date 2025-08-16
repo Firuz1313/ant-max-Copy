@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import SelectDevicePage from "./pages/SelectDevicePage";
 import DeviceRemotePage from "./pages/DeviceRemotePage";
+import DiagnosticPage from "./pages/DiagnosticPage";
 
 const queryClient = new QueryClient();
 
