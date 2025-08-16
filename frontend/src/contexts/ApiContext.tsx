@@ -160,30 +160,37 @@ class APIService {
     return response.data;
   }
 
-  // Remotes (not implemented in backend yet)
+  // Remotes
   async getRemotes(): Promise<Remote[]> {
-    console.warn("Remotes endpoint not implemented in backend");
-    return [];
+    const response = await this.request<{ data: Remote[] }>("/remotes");
+    return response.data || [];
   }
 
   async getRemote(id: string): Promise<Remote> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    const response = await this.request<{ data: Remote }>(`/remotes/${id}`);
+    return response.data;
   }
 
   async createRemote(data: Partial<Remote>): Promise<Remote> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    const response = await this.request<{ data: Remote }>("/remotes", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return response.data;
   }
 
   async updateRemote(id: string, data: Partial<Remote>): Promise<Remote> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    const response = await this.request<{ data: Remote }>(`/remotes/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    return response.data;
   }
 
   async deleteRemote(id: string): Promise<void> {
-    console.warn("Remotes endpoint not implemented in backend");
-    throw new Error("Remotes endpoint not implemented");
+    await this.request<void>(`/remotes/${id}`, {
+      method: "DELETE",
+    });
   }
 
   // TV Interfaces
