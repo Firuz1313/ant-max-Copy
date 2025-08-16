@@ -145,17 +145,17 @@ export const stepValidation = {
   }),
 
   update: Joi.object({
-    problem_id: commonSchemas.id,
-    device_id: commonSchemas.id,
+    problem_id: Joi.string().min(1).max(255),
+    device_id: Joi.string().min(1).max(255),
     step_number: commonSchemas.positiveInteger,
     title: Joi.string().min(1).max(500),
     description: commonSchemas.longText,
     instruction: commonSchemas.longText,
     estimated_time: commonSchemas.positiveInteger,
-    highlight_remote_button: Joi.string().max(255),
-    highlight_tv_area: Joi.string().max(255),
-    tv_interface_id: commonSchemas.id,
-    remote_id: commonSchemas.id,
+    highlight_remote_button: Joi.string().max(255).allow(null, ''),
+    highlight_tv_area: Joi.string().max(255).allow(null, ''),
+    tv_interface_id: Joi.string().min(1).max(255).allow(null, ''),
+    remote_id: Joi.string().min(1).max(255).allow(null, ''),
     action_type: Joi.string().valid(
       "button_press",
       "navigation",
