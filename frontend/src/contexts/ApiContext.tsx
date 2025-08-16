@@ -515,6 +515,10 @@ export const useData = () => {
     [remotes],
   );
 
+  const getDefaultRemote = useCallback((): Remote | undefined => {
+    return remotes.find((r) => r.isDefault && r.isActive);
+  }, [remotes]);
+
   const getActiveSessions = useCallback((): DiagnosticSession[] => {
     return sessions.filter((s) => s.isActive && !s.endTime);
   }, [sessions]);
