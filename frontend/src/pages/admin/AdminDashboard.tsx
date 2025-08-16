@@ -190,7 +190,7 @@ const AdminDashboard = () => {
 
         <Card className="border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Шаги</CardTitle>
+            <CardTitle className="text-sm font-medium">Ша��и</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
@@ -392,19 +392,35 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => window.location.href = '/admin/devices'}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Добавить устройство
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => window.location.href = '/admin/problems'}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Создать проблему
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={handleExport}
+              >
                 <Upload className="h-4 w-4 mr-2" />
                 Импорт данных
               </Button>
-              <Button className="w-full justify-start" variant="outline">
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={handleExport}
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Экспорт резервной копии
               </Button>
@@ -417,6 +433,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
+                  onClick={() => window.location.href = '/admin/settings'}
                 >
                   <Settings className="h-4 w-4 mr-2" />
                   Общие настройки
@@ -425,6 +442,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
+                  onClick={() => window.location.href = '/admin/users'}
                 >
                   <Users className="h-4 w-4 mr-2" />
                   Управление пользователями
@@ -433,6 +451,7 @@ const AdminDashboard = () => {
                   className="w-full justify-start"
                   variant="ghost"
                   size="sm"
+                  onClick={() => window.location.href = '/admin'}
                 >
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Аналитика
