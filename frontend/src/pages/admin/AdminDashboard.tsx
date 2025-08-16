@@ -190,7 +190,7 @@ const AdminDashboard = () => {
 
         <Card className="border border-gray-200 dark:border-gray-700">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ша��и</CardTitle>
+            <CardTitle className="text-sm font-medium">Шаги</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
@@ -470,7 +470,11 @@ const AdminDashboard = () => {
               <AlertTriangle className="h-5 w-5 mr-2" />
               Последние проблемы
             </CardTitle>
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.location.href = '/admin/problems'}
+            >
               <Eye className="h-4 w-4 mr-2" />
               Посмотреть все
             </Button>
