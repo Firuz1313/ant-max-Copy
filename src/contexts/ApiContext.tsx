@@ -763,6 +763,7 @@ export const useData = () => {
     createStep: api.createStep.bind(api),
     updateStep: api.updateStep.bind(api),
     deleteStep: api.deleteStep.bind(api),
+    reorderSteps: api.reorderSteps.bind(api),
     createRemote: api.createRemote.bind(api),
     updateRemote: api.updateRemote.bind(api),
     deleteRemote: api.deleteRemote.bind(api),
