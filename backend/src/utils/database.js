@@ -22,7 +22,7 @@ const dbConfig = process.env.DATABASE_URL ? {
   // Настройки pool соединений
   max: 20, // максимальное количество соединений в pool
   min: 5, // минимальное количество соединений
-  idleTimeoutMillis: 30000, // врем�� простоя перед закрытием соединения
+  idleTimeoutMillis: 30000, // время простоя перед закрытием соединения
   connectionTimeoutMillis: 10000, // таймаут подключения
   maxUses: 7500, // максимальное количество использований соединения
 } : {
@@ -88,7 +88,7 @@ export async function testConnection() {
       version: result.rows[0].postgres_version,
     };
   } catch (error) {
-    console.error("❌ Ошибка подключе��ия к PostgreSQL:", error.message);
+    console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
 
     // NO AUTOMATIC FALLBACK - Force use of PostgreSQL only
     console.error(
@@ -193,6 +193,12 @@ export async function transaction(callback) {
 
 // Функция создания базы данных (если не существует)
 export async function createDatabase() {
+  // Skip database creation for Neon as it's already created
+  if (process.env.DATABASE_URL) {
+    console.log("📊 Using Neon database - skipping database creation");
+    return;
+  }
+
   const adminConfig = {
     ...dbConfig,
     database: "postgres", // подключаемся к системной БД для создания новой
@@ -236,7 +242,7 @@ export async function runMigrations() {
   try {
     console.log("🔄 Запуск миграций базы данных...");
 
-    // Создаем таб��ицу для отслеживания миграций
+    // Создаем т��б��ицу для отслеживания миграций
     await query(`
       CREATE TABLE IF NOT EXISTS migrations (
         id SERIAL PRIMARY KEY,

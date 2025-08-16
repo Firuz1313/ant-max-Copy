@@ -78,18 +78,6 @@ const adminMenuItems: AdminMenuItem[] = [
     icon: Settings,
     description: "Конфигурация и\nсистемные настройки",
   },
-  {
-    title: "База данных",
-    path: "/admin/database",
-    icon: Database,
-    description: "Инициализация и\nуправление БД",
-  },
-  {
-    title: "Тест API",
-    path: "/admin/api-test",
-    icon: Settings,
-    description: "Проверка подключения\nк API",
-  },
 ];
 
 interface AdminLayoutProps {
