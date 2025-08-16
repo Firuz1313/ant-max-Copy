@@ -83,9 +83,20 @@ router.post("/init", async (req, res) => {
   }
 });
 
+// Cache for status endpoint (5 minute cache)
+let statusCache = null;
+let statusCacheTime = 0;
+const STATUS_CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 // Check database status
 router.get("/status", async (req, res) => {
   try {
+    // Return cached result if still valid
+    const now = Date.now();
+    if (statusCache && now - statusCacheTime < STATUS_CACHE_DURATION) {
+      return res.json(statusCache);
+    }
+
     const testResult = await db.testConnection();
 
     if (!testResult.success) {
@@ -96,48 +107,70 @@ router.get("/status", async (req, res) => {
       });
     }
 
-    // Check if tables exist
-    const tablesResult = await db.query(`
-      SELECT table_name 
-      FROM information_schema.tables 
-      WHERE table_schema = 'public' 
-      ORDER BY table_name
+    // Get tables and stats in a single optimized query
+    const result = await db.query(`
+      WITH table_info AS (
+        SELECT table_name
+        FROM information_schema.tables
+        WHERE table_schema = 'public'
+        ORDER BY table_name
+      ),
+      table_counts AS (
+        SELECT
+          'devices' as table_name,
+          (SELECT COUNT(*) FROM devices) as count
+        WHERE EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'devices' AND table_schema = 'public')
+        UNION ALL
+        SELECT
+          'problems' as table_name,
+          (SELECT COUNT(*) FROM problems) as count
+        WHERE EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'problems' AND table_schema = 'public')
+        UNION ALL
+        SELECT
+          'diagnostic_steps' as table_name,
+          (SELECT COUNT(*) FROM diagnostic_steps) as count
+        WHERE EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'diagnostic_steps' AND table_schema = 'public')
+        UNION ALL
+        SELECT
+          'remotes' as table_name,
+          (SELECT COUNT(*) FROM remotes) as count
+        WHERE EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'remotes' AND table_schema = 'public')
+        UNION ALL
+        SELECT
+          'tv_interfaces' as table_name,
+          (SELECT COUNT(*) FROM tv_interfaces) as count
+        WHERE EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'tv_interfaces' AND table_schema = 'public')
+        UNION ALL
+        SELECT
+          'users' as table_name,
+          (SELECT COUNT(*) FROM users) as count
+        WHERE EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'users' AND table_schema = 'public')
+      )
+      SELECT
+        json_agg(DISTINCT ti.table_name ORDER BY ti.table_name) as tables,
+        json_object_agg(tc.table_name, tc.count) as stats
+      FROM table_info ti
+      LEFT JOIN table_counts tc ON true
     `);
 
-    const tables = tablesResult.rows.map((r) => r.table_name);
+    const tables = result.rows[0].tables || [];
+    const stats = result.rows[0].stats || {};
 
-    // Count data in main tables
-    const stats = {};
-    const mainTables = [
-      "devices",
-      "problems",
-      "diagnostic_steps",
-      "remotes",
-      "tv_interfaces",
-    ];
-
-    for (const table of mainTables) {
-      if (tables.includes(table)) {
-        try {
-          const countResult = await db.query(
-            `SELECT COUNT(*) as count FROM ${table}`,
-          );
-          stats[table] = parseInt(countResult.rows[0].count);
-        } catch {
-          stats[table] = "error";
-        }
-      } else {
-        stats[table] = "missing";
-      }
-    }
-
-    res.json({
+    const response = {
       success: true,
       connected: true,
       tables: tables,
       stats: stats,
       database: testResult,
-    });
+      cached: false,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Cache the response
+    statusCache = response;
+    statusCacheTime = now;
+
+    res.json(response);
   } catch (error) {
     console.error("❌ Database status check failed:", error.message);
     res.status(500).json({
