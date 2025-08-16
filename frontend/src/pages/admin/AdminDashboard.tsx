@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useData } from "@/contexts/ApiContext";
-import DatabaseInitializer from "@/components/DatabaseInitializer";
 import {
   BarChart3,
   TrendingUp,
@@ -103,10 +102,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Database Status */}
-      <div className="mb-6">
-        <DatabaseInitializer />
-      </div>
 
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -308,13 +303,13 @@ const AdminDashboard = () => {
                   className="bg-yellow-100 text-yellow-800"
                 >
                   <Clock className="h-3 w-3 mr-1" />
-                  Обновляетс��
+                  Обновляется
                 </Badge>
               </div>
 
               <div className="pt-4 border-t">
                 <div className="text-sm text-gray-600 mb-2">
-                  Использование хранилища
+                  Испо��ьзование хранилища
                 </div>
                 <Progress value={67} className="h-2" />
                 <div className="text-xs text-gray-500 mt-1">
