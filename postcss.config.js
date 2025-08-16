@@ -1,4 +1,4 @@
-xport default {
+port default {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
