@@ -625,10 +625,16 @@ const StepsManager = () => {
     const cleanedData = { ...formData };
 
     // Handle "none" selections by setting to undefined
-    if (cleanedData.highlightRemoteButton === "none" || !cleanedData.highlightRemoteButton) {
+    if (
+      cleanedData.highlightRemoteButton === "none" ||
+      !cleanedData.highlightRemoteButton
+    ) {
       cleanedData.highlightRemoteButton = undefined;
     }
-    if (cleanedData.highlightTVArea === "none" || !cleanedData.highlightTVArea) {
+    if (
+      cleanedData.highlightTVArea === "none" ||
+      !cleanedData.highlightTVArea
+    ) {
       cleanedData.highlightTVArea = undefined;
     }
     if (cleanedData.remoteId === "none" || !cleanedData.remoteId) {
@@ -639,13 +645,16 @@ const StepsManager = () => {
     }
 
     // Handle button position (remove if both x and y are 0)
-    if (cleanedData.buttonPosition?.x === 0 && cleanedData.buttonPosition?.y === 0) {
+    if (
+      cleanedData.buttonPosition?.x === 0 &&
+      cleanedData.buttonPosition?.y === 0
+    ) {
       cleanedData.buttonPosition = undefined;
     }
 
     // Remove undefined values entirely
     const updatedFormData = Object.fromEntries(
-      Object.entries(cleanedData).filter(([_, value]) => value !== undefined)
+      Object.entries(cleanedData).filter(([_, value]) => value !== undefined),
     );
 
     try {

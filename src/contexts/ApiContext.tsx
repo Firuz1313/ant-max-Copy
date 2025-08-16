@@ -546,7 +546,9 @@ export const useData = () => {
 
   const getDefaultRemoteForDevice = useCallback(
     (deviceId: string): Remote | undefined => {
-      return remotes.find((r) => r.deviceId === deviceId && r.isDefault && r.isActive);
+      return remotes.find(
+        (r) => r.deviceId === deviceId && r.isDefault && r.isActive,
+      );
     },
     [remotes],
   );

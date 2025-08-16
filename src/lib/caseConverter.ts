@@ -135,7 +135,7 @@ export function transformToBackend<T = any>(data: any): T {
 
   // First filter out undefined values
   const filteredData = Object.fromEntries(
-    Object.entries(data).filter(([_, value]) => value !== undefined)
+    Object.entries(data).filter(([_, value]) => value !== undefined),
   );
 
   return convertObjectKeys(filteredData, (key: string) => {
