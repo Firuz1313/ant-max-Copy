@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useData } from "@/contexts/ApiContext";
+import DatabaseInitializer from "@/components/DatabaseInitializer";
 import {
   BarChart3,
   TrendingUp,
