@@ -16,7 +16,16 @@ const { Pool, Client } = pkg;
 // PostgreSQL only - no mock database support
 
 // Конфигурация подключения к PostgreSQL
-const dbConfig = {
+const dbConfig = process.env.DATABASE_URL ? {
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+  // Настройки pool соединений
+  max: 20, // максимальное количество соединений в pool
+  min: 5, // минимальное количество соединений
+  idleTimeoutMillis: 30000, // врем�� простоя перед закрытием соединения
+  connectionTimeoutMillis: 10000, // таймаут подключения
+  maxUses: 7500, // максимальное количество использований соединения
+} : {
   host: process.env.DB_HOST || "localhost",
   port: parseInt(process.env.DB_PORT) || 5432,
   database: process.env.DB_NAME || "ant_support",
@@ -79,7 +88,7 @@ export async function testConnection() {
       version: result.rows[0].postgres_version,
     };
   } catch (error) {
-    console.error("❌ Ошибка подключения к PostgreSQL:", error.message);
+    console.error("❌ Ошибка подключе��ия к PostgreSQL:", error.message);
 
     // NO AUTOMATIC FALLBACK - Force use of PostgreSQL only
     console.error(
