@@ -501,6 +501,13 @@ export const useData = () => {
     return remotes.filter((r) => r.isActive);
   }, [remotes]);
 
+  const getDefaultRemoteForDevice = useCallback(
+    (deviceId: string): Remote | undefined => {
+      return remotes.find((r) => r.deviceId === deviceId && r.isActive);
+    },
+    [remotes],
+  );
+
   const getActiveSessions = useCallback((): DiagnosticSession[] => {
     return sessions.filter((s) => s.isActive && !s.endTime);
   }, [sessions]);
