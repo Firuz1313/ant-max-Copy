@@ -355,7 +355,7 @@ class APIService {
     console.warn("Settings endpoint not implemented in backend");
     return {
       siteName: "ANT Support",
-      siteDescription: "Сист��ма диагностики ТВ приставок",
+      siteDescription: "Система диагностики ТВ приставок",
       version: "1.0.0",
       maintenanceMode: false,
       debugMode: false,
@@ -755,6 +755,7 @@ export const useData = () => {
     createStep: api.createStep.bind(api),
     updateStep: api.updateStep.bind(api),
     deleteStep: api.deleteStep.bind(api),
+    reorderSteps: api.reorderSteps.bind(api),
     createRemote: api.createRemote.bind(api),
     updateRemote: api.updateRemote.bind(api),
     deleteRemote: api.deleteRemote.bind(api),
