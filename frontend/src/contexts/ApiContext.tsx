@@ -475,6 +475,10 @@ export const useData = () => {
     [problems],
   );
 
+  const getAvailableProblems = useCallback((): Problem[] => {
+    return problems.filter((p) => p.isActive);
+  }, [problems]);
+
   const getStepsForProblem = useCallback(
     (problemId: string): Step[] => {
       return steps
