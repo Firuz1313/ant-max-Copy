@@ -61,7 +61,17 @@ export const DatabaseInitializer = () => {
   };
 
   useEffect(() => {
-    checkStatus();
+    const autoInitialize = async () => {
+      await checkStatus();
+
+      // Auto-initialize if database is connected but empty
+      if (status === "needs_init") {
+        console.log("Auto-initializing database...");
+        await initializeDatabase();
+      }
+    };
+
+    autoInitialize();
   }, []);
 
   if (status === "loading") {
