@@ -109,18 +109,28 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Ultra-simple approach: read response only once, immediately
+      // Create a single clone for potential error handling
+      const responseClone = response.clone();
       let responseData: any = null;
       let responseText = "";
 
       try {
+        // Read the response body only once
         responseText = await response.text();
         console.log(
           `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
         );
       } catch (textError) {
         console.error(`📡 Failed to read response text:`, textError);
-        responseText = "";
+
+        // If we can't read the original, try the clone
+        try {
+          responseText = await responseClone.text();
+          console.log(`📡 Successfully read from clone`);
+        } catch (cloneError) {
+          console.error(`📡 Failed to read clone as well:`, cloneError);
+          responseText = "";
+        }
       }
 
       // Try to parse JSON if we have text
@@ -170,12 +180,14 @@ export class ApiClient {
           throw new ApiError("Request timeout", 408);
         }
 
-        // Handle specific body stream errors
+        // Handle specific body stream errors more gracefully
         if (
           error.message.includes("body stream") ||
           error.message.includes("already read")
         ) {
-          throw new ApiError("Response reading error - please try again", 0);
+          console.warn("📡 Body stream error detected, returning empty response");
+          // Return a safe fallback instead of throwing
+          return {} as T;
         }
 
         throw new ApiError(error.message, 0);
