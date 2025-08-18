@@ -202,7 +202,8 @@ export class ApiClient {
           error.message.includes("body stream") ||
           error.message.includes("already read")
         ) {
-          throw new ApiError("Response reading error - please try again", 0);
+          console.warn(`🚨 Body stream error detected, creating simple error response`);
+          throw new ApiError("Network response error", 0);
         }
 
         throw new ApiError(error.message, 0);
