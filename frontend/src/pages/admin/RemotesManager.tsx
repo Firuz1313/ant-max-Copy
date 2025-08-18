@@ -58,7 +58,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 
-// Безопасный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
+// Безопа��ный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
   // Логирование для отла��ки
   if (!value || value === "" || value === null || value === undefined) {
@@ -128,6 +128,100 @@ const RemotesManager = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  // Handle image upload for create form
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Ошибка",
+        description: "Пожалуйста, выберите файл изображения",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Ошибка",
+        description: "Размер файла не должен превышать 5 МБ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      setFormData(prev => ({ ...prev, image_url: base64String }));
+      setPreviewImageUrl(base64String);
+      toast({
+        title: "Изображение загружено",
+        description: `Файл: ${file.name}`,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Handle image upload for edit form
+  const handleEditImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Ошибка",
+        description: "П��жалуйста, выберите файл изображения",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Ошибка",
+        description: "Размер файла не должен превышать 5 МБ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      setFormData(prev => ({ ...prev, image_url: base64String }));
+      setEditPreviewImageUrl(base64String);
+      toast({
+        title: "Изображение загружено",
+        description: `Файл: ${file.name}`,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Remove uploaded image from create form
+  const removeImage = () => {
+    setFormData(prev => ({ ...prev, image_url: "" }));
+    setPreviewImageUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // Remove uploaded image from edit form
+  const removeEditImage = () => {
+    setFormData(prev => ({ ...prev, image_url: "" }));
+    setEditPreviewImageUrl(null);
+    if (editFileInputRef.current) {
+      editFileInputRef.current.value = "";
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -708,7 +802,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout
                 ? "Попробуйте изменить параметры поиска или фильтрации"
-                : "Начните с создания первого пу��ьта дистанционного управления"}
+                : "Начните с создания первого пульта дистанционного управления"}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
