@@ -56,7 +56,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 
-// Безопасный компон��нт для SelectItem, который не ре��д��рится с пустыми значе��иями
+// Безопасный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
   // Логирование для отладки
   if (!value || value === "" || value === null || value === undefined) {
@@ -185,7 +185,7 @@ const RemotesManager = () => {
       resetForm();
       loadData();
     } catch (error: any) {
-      console.error("Ошибка при создании пул��та:", error);
+      console.error("Ошибка при создании пульта:", error);
       toast({
         title: "Ошибка",
         description: error.message || "Не удалось создать пульт",
@@ -227,7 +227,7 @@ const RemotesManager = () => {
       await api.deleteRemote(id);
       toast({
         title: "Успех",
-        description: "Пульт успешно удален",
+        description: "Пульт успешно удале��",
       });
       loadData();
     } catch (error: any) {
@@ -596,6 +596,46 @@ const RemotesManager = () => {
                     </div>
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="image_url" className="flex items-center gap-2">
+                      <ImageIcon className="h-4 w-4" />
+                      Изображение пульта
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="image_url"
+                        value={formData.image_url}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            image_url: e.target.value,
+                          })
+                        }
+                        placeholder="URL изображения пульта"
+                        className="flex-1"
+                      />
+                      <Button type="button" variant="outline" size="icon">
+                        <Upload className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    {formData.image_url && (
+                      <div className="mt-2">
+                        <img
+                          src={formData.image_url}
+                          alt="Предпросмотр пульта"
+                          className="max-w-xs max-h-32 object-contain border rounded"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Введите URL изображения пульта или нажмите кнопку загрузки
+                    </p>
+                  </div>
+
                   <div className="flex items-center space-x-2">
                     <Switch
                       id="is_default"
@@ -881,7 +921,7 @@ const RemotesManager = () => {
                   }
                 />
                 <Label htmlFor="edit-is_default">
-                  ��ул��т по умолчанию для устройства
+                  ��ульт по умолчанию для устройства
                 </Label>
               </div>
 
