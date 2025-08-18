@@ -705,7 +705,7 @@ const RemotesManager = () => {
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Создат�� первый пульт
+                Создать первый пульт
               </Button>
             )}
           </CardContent>
@@ -735,7 +735,7 @@ const RemotesManager = () => {
                       {remote.isDefault && (
                         <Badge variant="default">
                           <Star className="h-3 w-3 mr-1" />
-                          По умолчанию
+                          По умо��чанию
                         </Badge>
                       )}
                       <Badge variant="outline">
@@ -968,7 +968,33 @@ const RemotesManager = () => {
                   placeholder="URL изображения пульта"
                   className="flex-1"
                 />
-                <Button type="button" variant="outline" size="icon">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  id="edit-image-upload"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      // Создаем временный URL для предпросмотра
+                      const imageUrl = URL.createObjectURL(file);
+                      setFormData({
+                        ...formData,
+                        image_url: imageUrl,
+                      });
+                      toast({
+                        title: "Изображение выбрано",
+                        description: `Файл: ${file.name}`,
+                      });
+                    }
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={() => document.getElementById('edit-image-upload')?.click()}
+                >
                   <Upload className="h-4 w-4" />
                 </Button>
               </div>
