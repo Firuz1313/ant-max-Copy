@@ -13,6 +13,7 @@
     "db:migrate:status": "node src/utils/runMigrations.js status",
     "db:migrate:rollback": "node src/utils/runMigrations.js rollback",
     "db:seed": "node src/utils/seedData.js",
+    "db:reset": "node reset-database.js",
     "test": "jest",
     "lint": "eslint src --ext .js",
     "format": "prettier --write src"
