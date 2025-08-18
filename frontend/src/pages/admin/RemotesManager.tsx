@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useApi } from "@/contexts/ApiContext";
 import { Remote, Device } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,8 @@ import {
   Star,
   Upload,
   Image as ImageIcon,
+  X,
+  FolderOpen,
 } from "lucide-react";
 
 // Безопасный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
@@ -102,6 +104,12 @@ const RemotesManager = () => {
   const [filterDevice, setFilterDevice] = useState<string>("all");
   const [filterLayout, setFilterLayout] = useState<string>("all");
   const [stats, setStats] = useState<any>(null);
+
+  // Image upload states
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const [editPreviewImageUrl, setEditPreviewImageUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const editFileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -700,7 +708,7 @@ const RemotesManager = () => {
             <p className="text-muted-foreground text-center mb-4">
               {searchQuery || filterDevice || filterLayout
                 ? "Попробуйте изменить параметры поиска или фильтрации"
-                : "Начните с создания первого пульта дистанционного управления"}
+                : "Начните с создания первого пу��ьта дистанционного управления"}
             </p>
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
@@ -735,7 +743,7 @@ const RemotesManager = () => {
                       {remote.isDefault && (
                         <Badge variant="default">
                           <Star className="h-3 w-3 mr-1" />
-                          По умо��чанию
+                          По умолчанию
                         </Badge>
                       )}
                       <Badge variant="outline">
