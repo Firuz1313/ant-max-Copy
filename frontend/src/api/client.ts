@@ -240,6 +240,11 @@ export class ApiClient {
     // Transform camelCase to snake_case for backend
     const transformedData = data ? transformToBackend(data) : undefined;
 
+    console.log(`🔄 PUT ${endpoint}:`, {
+      originalData: data,
+      transformedData: transformedData
+    });
+
     return this.makeRequest<T>(endpoint, {
       ...options,
       method: "PUT",
