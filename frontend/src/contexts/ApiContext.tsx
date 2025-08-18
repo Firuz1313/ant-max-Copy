@@ -17,6 +17,7 @@ import {
   SiteSettings,
 } from "@/types";
 import { apiClient } from "@/api/client";
+import { simpleApiClient } from "@/api/simpleClient";
 
 // Use unified API client instead of custom APIService
 class APIService {
