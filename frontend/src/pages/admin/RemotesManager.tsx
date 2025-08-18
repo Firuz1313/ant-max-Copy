@@ -69,7 +69,7 @@ const SafeSelectItem = ({ value, children, ...props }: any) => {
 
   // Дополнительные проверк��
   if (typeof value !== "string") {
-    console.warn("SafeSelectItem: блокировка нестрокового значения:", {
+    console.warn("SafeSelectItem: блокировка нестрокового з��ачения:", {
       value,
       type: typeof value,
     });
@@ -323,7 +323,7 @@ const RemotesManager = () => {
     devices.map((d) => ({ id: d.id, type: typeof d.id, brand: d.brand })),
   );
 
-  // Защита от рендеринга с некорректными данными и д��блирующихся ID
+  // Защита от рен��еринга с некорректными данными и д��блирующихся ID
   const safeDevices = devices.filter((device, index, array) => {
     const isValid =
       device &&
@@ -361,7 +361,7 @@ const RemotesManager = () => {
         <div>
           <h1 className="text-3xl font-bold">Управление пультами</h1>
           <p className="text-muted-foreground mt-2">
-            Управление пультами дистанционного управления для диагности��и
+            Управлен��е пультами дистанционного управления для диагности��и
           </p>
         </div>
 
@@ -690,6 +690,19 @@ const RemotesManager = () => {
             <Card key={remote.id}>
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                  {remote.imageUrl && (
+                    <div className="flex-shrink-0">
+                      <img
+                        src={remote.imageUrl}
+                        alt={`Пульт ${remote.name}`}
+                        className="w-20 h-20 object-contain border rounded"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="text-lg font-semibold">{remote.name}</h3>
@@ -709,7 +722,7 @@ const RemotesManager = () => {
 
                     <div className="text-sm text-muted-foreground space-y-1">
                       <p>
-                        <strong>Производитель:</strong> {remote.manufacturer}
+                        <strong>Производи��ель:</strong> {remote.manufacturer}
                       </p>
                       <p>
                         <strong>Модель:</strong> {remote.model}
