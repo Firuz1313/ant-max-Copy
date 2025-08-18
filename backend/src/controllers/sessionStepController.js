@@ -5,7 +5,7 @@ const sessionStepModel = new SessionStep();
 /**
  * Получить шаги по сессии
  */
-export const getSessionSteps = async (req, res) => {
+export const getSessionSteps = async (req, res, next) => {
   try {
     const { sessionId } = req.params;
     const steps = await sessionStepModel.findBySession(sessionId);
@@ -16,19 +16,14 @@ export const getSessionSteps = async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-      errorType: "DATABASE_ERROR",
-      timestamp: new Date().toISOString(),
-    });
+    next(error);
   }
 };
 
 /**
  * Создать новый шаг сессии
  */
-export const createSessionStep = async (req, res) => {
+export const createSessionStep = async (req, res, next) => {
   try {
     const stepData = req.body;
     const newStep = await sessionStepModel.createSessionStep(stepData);
@@ -40,12 +35,7 @@ export const createSessionStep = async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      error: error.message,
-      errorType: "VALIDATION_ERROR",
-      timestamp: new Date().toISOString(),
-    });
+    next(error);
   }
 };
 
