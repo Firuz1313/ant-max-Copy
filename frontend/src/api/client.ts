@@ -303,25 +303,24 @@ const getApiBaseUrl = (): string => {
 
     console.log("🌐 Current location:", window.location.href);
 
-    // В облачной среде fly.dev/builder.codes
+    // В облачной среде fly.dev/builder.codes - используем прокси через Vite
     if (hostname.includes("builder.codes") || hostname.includes("fly.dev")) {
-      // Сначала пробуем proxy
       const proxyUrl = "/api/v1";
-      console.log("🌩️ Cloud environment - trying proxy URL:", proxyUrl);
+      console.log("🌩️ Cloud environment - using proxy URL:", proxyUrl);
       return proxyUrl;
     }
 
-    // Локальн��я разработка - прямое подклю��ение к бэкенду
+    // Локальная разработка - используем прокси через Vite
     if (hostname === "localhost" && port === "8080") {
-      const directUrl = "http://localhost:3001/api/v1";
-      console.log("🏠 Local development - using direct connection:", directUrl);
-      return directUrl;
+      const proxyUrl = "/api/v1";
+      console.log("🏠 Local development - using Vite proxy:", proxyUrl);
+      return proxyUrl;
     }
   }
 
-  // Default fallback
+  // Default fallback - always use proxy
   const defaultUrl = "/api/v1";
-  console.log("🔄 Using default API URL:", defaultUrl);
+  console.log("🔄 Using default proxy URL:", defaultUrl);
   return defaultUrl;
 };
 
