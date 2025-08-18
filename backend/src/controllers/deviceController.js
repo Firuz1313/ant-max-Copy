@@ -49,7 +49,7 @@ class DeviceController {
         devices = await deviceModel.findAll(filters, options);
       }
 
-      // Подсчет общего количества для пагинации
+      // Подсчет об��его количества для пагинации
       const total = await deviceModel.count(filters);
       const totalPages = Math.ceil(total / options.limit);
 
@@ -113,22 +113,6 @@ class DeviceController {
   async createDevice(req, res, next) {
     try {
       const deviceData = req.body;
-
-      // Проверяем уникальность названия для активных устройств
-      const existingDevice = await deviceModel.findOne({
-        name: deviceData.name,
-        is_active: true
-      });
-
-      if (existingDevice) {
-        return res.status(409).json({
-          success: false,
-          error: 'Устройство с таким названием уже существует',
-          errorType: 'DUPLICATE_ERROR',
-          timestamp: new Date().toISOString()
-        });
-      }
-
       const newDevice = await deviceModel.create(deviceData);
 
       res.status(201).json({
