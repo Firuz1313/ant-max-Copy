@@ -109,14 +109,15 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Clone the response to safely read it multiple times if needed
-      const responseClone = response.clone();
+      // Single read approach - read response only once
       let responseData: any = null;
       let responseText = "";
+      let readSuccess = false;
 
-      // Read response text from clone
+      // Attempt to read response text (only once)
       try {
-        responseText = await responseClone.text();
+        responseText = await response.text();
+        readSuccess = true;
         console.log(
           `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
         );
@@ -136,14 +137,13 @@ export class ApiClient {
         }
       } catch (textError) {
         console.error(`📡 Failed to read response text:`, textError);
-        // Fallback: try to read from original response
-        try {
-          const fallbackText = await response.text();
-          responseData = fallbackText ? JSON.parse(fallbackText) : {};
-        } catch (fallbackError) {
-          console.error(`📡 Fallback read also failed:`, fallbackError);
-          responseData = { error: "Failed to read response" };
-        }
+        readSuccess = false;
+
+        // Only set error data if we couldn't read the response at all
+        responseData = {
+          error: "Failed to read response",
+          originalError: textError.message
+        };
       }
 
       // Check for HTTP errors AFTER reading the body
