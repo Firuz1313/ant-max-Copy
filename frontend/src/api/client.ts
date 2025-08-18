@@ -115,16 +115,18 @@ export class ApiClient {
 
       try {
         // Check content type to determine how to read response
-        const contentType = response.headers.get('content-type') || '';
+        const contentType = response.headers.get("content-type") || "";
 
-        if (contentType.includes('application/json')) {
+        if (contentType.includes("application/json")) {
           // For JSON responses, use response.json()
           responseData = await response.json();
           console.log(`📡 Successfully parsed JSON response`);
         } else {
           // For non-JSON responses, read as text
           const responseText = await response.text();
-          console.log(`📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`);
+          console.log(
+            `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
+          );
 
           // Try to parse as JSON anyway, fallback to text
           if (responseText.trim()) {
@@ -148,17 +150,18 @@ export class ApiClient {
         responseData = {
           error: "Failed to read response",
           details: readError.message,
-          status: response.status
+          status: response.status,
         };
       }
 
       // Check for HTTP errors
       if (!response.ok) {
-        const errorMessage = !errorOccurred && responseData?.error
-          ? responseData.error
-          : !errorOccurred && responseData?.message
-          ? responseData.message
-          : `HTTP ${response.status}`;
+        const errorMessage =
+          !errorOccurred && responseData?.error
+            ? responseData.error
+            : !errorOccurred && responseData?.message
+              ? responseData.message
+              : `HTTP ${response.status}`;
 
         console.error(`📡 HTTP Error ${response.status}: ${errorMessage}`);
         throw new ApiError(
@@ -202,7 +205,9 @@ export class ApiClient {
           error.message.includes("body stream") ||
           error.message.includes("already read")
         ) {
-          console.warn(`🚨 Body stream error detected, creating simple error response`);
+          console.warn(
+            `🚨 Body stream error detected, creating simple error response`,
+          );
           throw new ApiError("Network response error", 0);
         }
 
@@ -243,7 +248,7 @@ export class ApiClient {
 
     console.log(`🔄 PUT ${endpoint}:`, {
       originalData: data,
-      transformedData: transformedData
+      transformedData: transformedData,
     });
 
     return this.makeRequest<T>(endpoint, {

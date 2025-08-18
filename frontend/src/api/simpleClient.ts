@@ -25,9 +25,12 @@ class SimpleApiClient {
     this.baseUrl = baseUrl.replace(/\/$/, "");
   }
 
-  private async safeFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
+  private async safeFetch<T>(
+    url: string,
+    options: RequestInit = {},
+  ): Promise<T> {
     console.log(`🚀 Simple fetch: ${options.method || "GET"} ${url}`);
-    
+
     const response = await fetch(url, {
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +44,7 @@ class SimpleApiClient {
     // Single response read - use arrayBuffer for safety
     const buffer = await response.arrayBuffer();
     const text = new TextDecoder().decode(buffer);
-    
+
     console.log(`📡 Response length: ${text.length} chars`);
 
     let data: any = {};
@@ -54,7 +57,8 @@ class SimpleApiClient {
     }
 
     if (!response.ok) {
-      const errorMessage = data?.error || data?.message || `HTTP ${response.status}`;
+      const errorMessage =
+        data?.error || data?.message || `HTTP ${response.status}`;
       throw new SimpleApiError(errorMessage, response.status, data);
     }
 
@@ -69,9 +73,12 @@ class SimpleApiClient {
   async put<T>(endpoint: string, data?: any): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const transformedData = data ? transformToBackend(data) : undefined;
-    
-    console.log(`🔄 PUT data:`, { original: data, transformed: transformedData });
-    
+
+    console.log(`🔄 PUT data:`, {
+      original: data,
+      transformed: transformedData,
+    });
+
     return this.safeFetch<T>(url, {
       method: "PUT",
       body: transformedData ? JSON.stringify(transformedData) : undefined,
@@ -81,7 +88,7 @@ class SimpleApiClient {
   async post<T>(endpoint: string, data?: any): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const transformedData = data ? transformToBackend(data) : undefined;
-    
+
     return this.safeFetch<T>(url, {
       method: "POST",
       body: transformedData ? JSON.stringify(transformedData) : undefined,

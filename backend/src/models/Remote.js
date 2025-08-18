@@ -73,7 +73,7 @@ class Remote extends BaseModel {
     }
 
     const result = await query(queryText, params);
-    return result.rows.map(row => this.formatRemote(row));
+    return result.rows.map((row) => this.formatRemote(row));
   }
 
   /**
@@ -117,7 +117,7 @@ class Remote extends BaseModel {
     `;
 
     const result = await query(queryText, [deviceId]);
-    return result.rows.map(row => this.formatRemote(row));
+    return result.rows.map((row) => this.formatRemote(row));
   }
 
   /**
@@ -454,7 +454,7 @@ class Remote extends BaseModel {
     `;
 
     const result = await query(queryText, [limit]);
-    return result.rows.map(row => this.formatRemote(row));
+    return result.rows.map((row) => this.formatRemote(row));
   }
 
   /**

@@ -1,13 +1,13 @@
-import { query } from './src/utils/database.js';
-import dotenv from 'dotenv';
+import { query } from "./src/utils/database.js";
+import dotenv from "dotenv";
 
 // Load environment variables
 dotenv.config();
 
 async function cleanupDuplicates() {
   try {
-    console.log('🧹 Cleaning up duplicate devices...');
-    
+    console.log("🧹 Cleaning up duplicate devices...");
+
     // Find duplicate device names
     const duplicates = await query(`
       SELECT name, COUNT(*) as count, array_agg(id) as ids
@@ -22,14 +22,17 @@ async function cleanupDuplicates() {
     for (const dup of duplicates.rows) {
       console.log(`- "${dup.name}": ${dup.count} devices`);
       const ids = dup.ids;
-      
+
       // Keep the first one, deactivate the rest
       for (let i = 1; i < ids.length; i++) {
-        await query(`
+        await query(
+          `
           UPDATE devices 
           SET is_active = false, name = name || ' (duplicate-' || $1 || ')'
           WHERE id = $2
-        `, [i, ids[i]]);
+        `,
+          [i, ids[i]],
+        );
         console.log(`  Deactivated duplicate: ${ids[i]}`);
       }
     }
@@ -38,16 +41,16 @@ async function cleanupDuplicates() {
     const activeDevices = await query(`
       SELECT id, name FROM devices WHERE is_active = true ORDER BY name
     `);
-    
-    console.log('\\n✅ Active devices after cleanup:');
-    activeDevices.rows.forEach(device => {
+
+    console.log("\\n✅ Active devices after cleanup:");
+    activeDevices.rows.forEach((device) => {
       console.log(`- ${device.id}: ${device.name}`);
     });
 
-    console.log('\\n🎉 Cleanup completed successfully!');
+    console.log("\\n🎉 Cleanup completed successfully!");
     process.exit(0);
   } catch (error) {
-    console.error('❌ Cleanup failed:', error.message);
+    console.error("❌ Cleanup failed:", error.message);
     process.exit(1);
   }
 }

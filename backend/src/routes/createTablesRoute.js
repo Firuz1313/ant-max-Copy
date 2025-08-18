@@ -1,5 +1,5 @@
-import express from 'express';
-import { query } from '../utils/database.js';
+import express from "express";
+import { query } from "../utils/database.js";
 
 const router = express.Router();
 
@@ -7,10 +7,10 @@ const router = express.Router();
  * Create missing tables
  * GET /api/v1/create-tables
  */
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    console.log('🔧 Creating missing tables...');
-    
+    console.log("🔧 Creating missing tables...");
+
     // Create site_settings table
     await query(`
       CREATE TABLE IF NOT EXISTS site_settings (
@@ -50,21 +50,21 @@ router.get('/', async (req, res) => {
       ) ON CONFLICT (id) DO NOTHING
     `);
 
-    console.log('✅ Tables created successfully!');
-    
+    console.log("✅ Tables created successfully!");
+
     res.json({
       success: true,
-      message: 'Missing tables created successfully',
-      tablesCreated: ['site_settings'],
-      timestamp: new Date().toISOString()
+      message: "Missing tables created successfully",
+      tablesCreated: ["site_settings"],
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('❌ Table creation failed:', error.message);
+    console.error("❌ Table creation failed:", error.message);
     res.status(500).json({
       success: false,
-      error: 'Table creation failed',
+      error: "Table creation failed",
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });

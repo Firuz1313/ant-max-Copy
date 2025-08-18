@@ -1,13 +1,13 @@
-import { query } from './src/utils/database.js';
-import dotenv from 'dotenv';
+import { query } from "./src/utils/database.js";
+import dotenv from "dotenv";
 
 // Load environment variables
 dotenv.config();
 
 async function createRemotesTable() {
   try {
-    console.log('🚀 Creating remotes table...');
-    
+    console.log("🚀 Creating remotes table...");
+
     // Create remotes table
     await query(`
       CREATE TABLE IF NOT EXISTS remotes (
@@ -42,10 +42,10 @@ async function createRemotesTable() {
       ON CONFLICT (id) DO NOTHING
     `);
 
-    console.log('✅ Remotes table created successfully!');
+    console.log("✅ Remotes table created successfully!");
     process.exit(0);
   } catch (error) {
-    console.error('❌ Failed to create remotes table:', error.message);
+    console.error("❌ Failed to create remotes table:", error.message);
     process.exit(1);
   }
 }

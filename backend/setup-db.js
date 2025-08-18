@@ -1,23 +1,23 @@
-import { testConnection, query } from './src/utils/database.js';
-import dotenv from 'dotenv';
+import { testConnection, query } from "./src/utils/database.js";
+import dotenv from "dotenv";
 
 // Load environment variables
 dotenv.config();
 
 async function setupDatabase() {
   try {
-    console.log('🚀 Setting up database...');
-    
+    console.log("🚀 Setting up database...");
+
     // Test connection first
     const connectionTest = await testConnection();
     if (!connectionTest.success) {
-      console.error('❌ Database connection failed');
+      console.error("❌ Database connection failed");
       process.exit(1);
     }
 
     // Create basic tables if they don't exist
-    console.log('📊 Creating basic tables...');
-    
+    console.log("📊 Creating basic tables...");
+
     // Create devices table
     await query(`
       CREATE TABLE IF NOT EXISTS devices (
@@ -149,10 +149,10 @@ async function setupDatabase() {
       ) ON CONFLICT (id) DO NOTHING
     `);
 
-    console.log('✅ Database setup completed successfully!');
+    console.log("✅ Database setup completed successfully!");
     process.exit(0);
   } catch (error) {
-    console.error('❌ Database setup failed:', error.message);
+    console.error("❌ Database setup failed:", error.message);
     process.exit(1);
   }
 }
