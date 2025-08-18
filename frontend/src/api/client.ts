@@ -148,15 +148,16 @@ export class ApiClient {
 
       // Check for HTTP errors AFTER reading the body
       if (!response.ok) {
-        const errorMessage =
-          responseData?.error ||
-          responseData?.message ||
-          `HTTP ${response.status}`;
+        // Only use responseData if we successfully read it
+        const errorMessage = readSuccess
+          ? (responseData?.error || responseData?.message || `HTTP ${response.status}`)
+          : `HTTP ${response.status}`;
+
         console.error(`📡 HTTP Error ${response.status}: ${errorMessage}`);
         throw new ApiError(
           `HTTP ${response.status}: ${errorMessage}`,
           response.status,
-          responseData,
+          readSuccess ? responseData : null,
         );
       }
 
