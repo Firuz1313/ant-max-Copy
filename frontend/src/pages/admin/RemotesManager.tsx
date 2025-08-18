@@ -614,7 +614,33 @@ const RemotesManager = () => {
                         placeholder="URL изображения пульта"
                         className="flex-1"
                       />
-                      <Button type="button" variant="outline" size="icon">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        id="image-upload"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            // Создаем временный URL для предпросмотра
+                            const imageUrl = URL.createObjectURL(file);
+                            setFormData({
+                              ...formData,
+                              image_url: imageUrl,
+                            });
+                            toast({
+                              title: "Изображение выбрано",
+                              description: `Файл: ${file.name}`,
+                            });
+                          }
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => document.getElementById('image-upload')?.click()}
+                      >
                         <Upload className="h-4 w-4" />
                       </Button>
                     </div>
@@ -679,7 +705,7 @@ const RemotesManager = () => {
             {!searchQuery && !filterDevice && !filterLayout && (
               <Button onClick={() => setIsCreateDialogOpen(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Создать первый пульт
+                Создат�� первый пульт
               </Button>
             )}
           </CardContent>
