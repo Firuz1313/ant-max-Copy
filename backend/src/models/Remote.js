@@ -44,7 +44,7 @@ class Remote extends BaseModel {
       paramIndex++;
     }
 
-    // Фильтрация по default статусу
+    // Филь��рация по default статусу
     if (filters.is_default !== undefined) {
       queryText += ` AND r.is_default = $${paramIndex}`;
       params.push(filters.is_default);
@@ -73,7 +73,7 @@ class Remote extends BaseModel {
     }
 
     const result = await query(queryText, params);
-    return result.rows.map(this.formatRemote);
+    return result.rows.map(row => this.formatRemote(row));
   }
 
   /**
@@ -117,7 +117,7 @@ class Remote extends BaseModel {
     `;
 
     const result = await query(queryText, [deviceId]);
-    return result.rows.map(this.formatRemote);
+    return result.rows.map(row => this.formatRemote(row));
   }
 
   /**
@@ -454,7 +454,7 @@ class Remote extends BaseModel {
     `;
 
     const result = await query(queryText, [limit]);
-    return result.rows.map(this.formatRemote);
+    return result.rows.map(row => this.formatRemote(row));
   }
 
   /**
