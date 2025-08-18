@@ -109,32 +109,41 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Ultra-simple approach: read response only once, immediately
+      // Clone the response to safely read it multiple times if needed
+      const responseClone = response.clone();
       let responseData: any = null;
       let responseText = "";
 
+      // Read response text from clone
       try {
-        responseText = await response.text();
+        responseText = await responseClone.text();
         console.log(
           `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
         );
+
+        // Parse JSON if possible
+        if (responseText.trim()) {
+          try {
+            responseData = JSON.parse(responseText);
+            console.log(`📡 Successfully parsed JSON`);
+          } catch (parseError) {
+            console.log(`📡 Not JSON, using as text`);
+            responseData = { message: responseText };
+          }
+        } else {
+          console.log(`📡 Empty response`);
+          responseData = {};
+        }
       } catch (textError) {
         console.error(`📡 Failed to read response text:`, textError);
-        responseText = "";
-      }
-
-      // Try to parse JSON if we have text
-      if (responseText.trim()) {
+        // Fallback: try to read from original response
         try {
-          responseData = JSON.parse(responseText);
-          console.log(`📡 Successfully parsed JSON`);
-        } catch (parseError) {
-          console.log(`📡 Not JSON, using as text`);
-          responseData = { message: responseText };
+          const fallbackText = await response.text();
+          responseData = fallbackText ? JSON.parse(fallbackText) : {};
+        } catch (fallbackError) {
+          console.error(`📡 Fallback read also failed:`, fallbackError);
+          responseData = { error: "Failed to read response" };
         }
-      } else {
-        console.log(`📡 Empty response`);
-        responseData = {};
       }
 
       // Check for HTTP errors AFTER reading the body
