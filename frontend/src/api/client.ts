@@ -114,6 +114,9 @@ export class ApiClient {
       let errorOccurred = false;
 
       try {
+        // Clone response to prevent body stream issues
+        const responseClone = response.clone();
+
         // Check content type to determine how to read response
         const contentType = response.headers.get("content-type") || "";
 
@@ -146,12 +149,21 @@ export class ApiClient {
         console.error(`📡 Response read error:`, readError);
         errorOccurred = true;
 
-        // Create error response data
-        responseData = {
-          error: "Failed to read response",
-          details: readError.message,
-          status: response.status,
-        };
+        // Try to use the cloned response as fallback
+        try {
+          const fallbackText = await responseClone.text();
+          responseData = {
+            error: fallbackText || "Failed to read response",
+            details: readError.message,
+            status: response.status,
+          };
+        } catch (fallbackError) {
+          responseData = {
+            error: "Failed to read response",
+            details: readError.message,
+            status: response.status,
+          };
+        }
       }
 
       // Check for HTTP errors
@@ -303,25 +315,24 @@ const getApiBaseUrl = (): string => {
 
     console.log("🌐 Current location:", window.location.href);
 
-    // В облачной среде fly.dev/builder.codes
+    // В облачной среде fly.dev/builder.codes - используем прокси через Vite
     if (hostname.includes("builder.codes") || hostname.includes("fly.dev")) {
-      // Сначала пробуем proxy
       const proxyUrl = "/api/v1";
-      console.log("🌩️ Cloud environment - trying proxy URL:", proxyUrl);
+      console.log("🌩️ Cloud environment - using proxy URL:", proxyUrl);
       return proxyUrl;
     }
 
-    // Локальн��я разработка - прямое подклю��ение к бэкенду
+    // Локальная разработка - используем прокси через Vite
     if (hostname === "localhost" && port === "8080") {
-      const directUrl = "http://localhost:3000/api/v1";
-      console.log("🏠 Local development - using direct connection:", directUrl);
-      return directUrl;
+      const proxyUrl = "/api/v1";
+      console.log("🏠 Local development - using Vite proxy:", proxyUrl);
+      return proxyUrl;
     }
   }
 
-  // Default fallback
+  // Default fallback - always use proxy
   const defaultUrl = "/api/v1";
-  console.log("🔄 Using default API URL:", defaultUrl);
+  console.log("🔄 Using default proxy URL:", defaultUrl);
   return defaultUrl;
 };
 
