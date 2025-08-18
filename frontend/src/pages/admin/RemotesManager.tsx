@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useApi } from "@/contexts/ApiContext";
 import { Remote, Device } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -52,11 +52,15 @@ import {
   BarChart3,
   Smartphone,
   Star,
+  Upload,
+  Image as ImageIcon,
+  X,
+  FolderOpen,
 } from "lucide-react";
 
-// Безопасный компон��нт для SelectItem, который не ренд��рится с пустыми значе��иями
+// Безопасный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
-  // Логирование для отладки
+  // Логирование для отла��ки
   if (!value || value === "" || value === null || value === undefined) {
     console.warn("SafeSelectItem: блокировка пустого значения:", {
       value,
@@ -67,7 +71,7 @@ const SafeSelectItem = ({ value, children, ...props }: any) => {
 
   // Дополнительные проверк��
   if (typeof value !== "string") {
-    console.warn("SafeSelectItem: блокировка нестрокового значения:", {
+    console.warn("SafeSelectItem: блокировка нестрокового з��ачения:", {
       value,
       type: typeof value,
     });
@@ -101,6 +105,14 @@ const RemotesManager = () => {
   const [filterLayout, setFilterLayout] = useState<string>("all");
   const [stats, setStats] = useState<any>(null);
 
+  // Image upload states
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const [editPreviewImageUrl, setEditPreviewImageUrl] = useState<string | null>(
+    null,
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const editFileInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState({
     name: "",
     manufacturer: "",
@@ -119,6 +131,102 @@ const RemotesManager = () => {
     loadData();
   }, []);
 
+  // Handle image upload for create form
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Ошибка",
+        description: "Пожалуйста, выберите файл изображения",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Ошибка",
+        description: "Размер файла не должен превышать 5 МБ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      setFormData((prev) => ({ ...prev, image_url: base64String }));
+      setPreviewImageUrl(base64String);
+      toast({
+        title: "Изображение загружено",
+        description: `Файл: ${file.name}`,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Handle image upload for edit form
+  const handleEditImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Ошибка",
+        description: "Пожалуйста, выберите файл изображения",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Ошибка",
+        description: "Размер файла не должен превышать 5 МБ",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      setFormData((prev) => ({ ...prev, image_url: base64String }));
+      setEditPreviewImageUrl(base64String);
+      toast({
+        title: "Изображение загружено",
+        description: `Файл: ${file.name}`,
+      });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Remove uploaded image from create form
+  const removeImage = () => {
+    setFormData((prev) => ({ ...prev, image_url: "" }));
+    setPreviewImageUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  // Remove uploaded image from edit form
+  const removeEditImage = () => {
+    setFormData((prev) => ({ ...prev, image_url: "" }));
+    setEditPreviewImageUrl(null);
+    if (editFileInputRef.current) {
+      editFileInputRef.current.value = "";
+    }
+  };
+
   const loadData = async () => {
     try {
       setLoading(true);
@@ -131,7 +239,7 @@ const RemotesManager = () => {
       setDevices(devicesData);
       setStats(statsData);
     } catch (error) {
-      console.error("Ошибка при загрузке данных:", error);
+      console.error("Ошибк�� при загрузке данных:", error);
       toast({
         title: "Ошибка",
         description: "Не удалось загрузить данные пультов",
@@ -156,6 +264,14 @@ const RemotesManager = () => {
       is_default: false,
       is_active: true,
     });
+    setPreviewImageUrl(null);
+    setEditPreviewImageUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    if (editFileInputRef.current) {
+      editFileInputRef.current.value = "";
+    }
   };
 
   const handleCreateRemote = async () => {
@@ -225,7 +341,7 @@ const RemotesManager = () => {
       await api.deleteRemote(id);
       toast({
         title: "Успех",
-        description: "Пульт успешно удален",
+        description: "Пульт успешно удале��",
       });
       loadData();
     } catch (error: any) {
@@ -271,6 +387,8 @@ const RemotesManager = () => {
       is_default: remote.isDefault,
       is_active: remote.isActive,
     });
+    // Set preview image if exists
+    setEditPreviewImageUrl(remote.imageUrl || null);
     setIsEditDialogOpen(true);
   };
 
@@ -321,7 +439,7 @@ const RemotesManager = () => {
     devices.map((d) => ({ id: d.id, type: typeof d.id, brand: d.brand })),
   );
 
-  // Защита от рендеринга с некорректными данными и д��блирующихся ID
+  // Защита от рен��еринга с некорректными данными и д��блирующихся ID
   const safeDevices = devices.filter((device, index, array) => {
     const isValid =
       device &&
@@ -359,7 +477,7 @@ const RemotesManager = () => {
         <div>
           <h1 className="text-3xl font-bold">Управление пультами</h1>
           <p className="text-muted-foreground mt-2">
-            Управление пультами дистанционного управления для диагности��и
+            Управлен��е пультами дистанционного управления для диагности��и
           </p>
         </div>
 
@@ -594,6 +712,65 @@ const RemotesManager = () => {
                     </div>
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="image_url">Изображение пульта</Label>
+                    <div className="space-y-4">
+                      <div className="flex items-center space-x-2">
+                        <Input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Загрузить файл
+                        </Button>
+                        <div className="text-sm text-muted-foreground">или</div>
+                        <Input
+                          value={formData.image_url || ""}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              image_url: e.target.value,
+                            })
+                          }
+                          placeholder="Введите URL изображения"
+                          className="flex-1"
+                        />
+                        {(previewImageUrl || formData.image_url) && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={removeImage}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
+
+                      {(previewImageUrl || formData.image_url) && (
+                        <div className="border rounded-lg p-4">
+                          <img
+                            src={previewImageUrl || formData.image_url}
+                            alt="Предпросмотр пульта"
+                            className="max-w-full h-48 object-contain mx-auto rounded"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = "none";
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="flex items-center space-x-2">
                     <Switch
                       id="is_default"
@@ -615,7 +792,7 @@ const RemotesManager = () => {
                   >
                     Отмена
                   </Button>
-                  <Button onClick={handleCreateRemote}>Создать пульт</Button>
+                  <Button onClick={handleCreateRemote}>Создать п��льт</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -648,6 +825,19 @@ const RemotesManager = () => {
             <Card key={remote.id}>
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
+                  {remote.imageUrl && (
+                    <div className="flex-shrink-0">
+                      <img
+                        src={remote.imageUrl}
+                        alt={`Пульт ${remote.name}`}
+                        className="w-20 h-20 object-contain border rounded"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = "none";
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="flex-1 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="text-lg font-semibold">{remote.name}</h3>
@@ -667,7 +857,7 @@ const RemotesManager = () => {
 
                     <div className="text-sm text-muted-foreground space-y-1">
                       <p>
-                        <strong>Производитель:</strong> {remote.manufacturer}
+                        <strong>Производи��ель:</strong> {remote.manufacturer}
                       </p>
                       <p>
                         <strong>Модель:</strong> {remote.model}
@@ -866,6 +1056,65 @@ const RemotesManager = () => {
                     setFormData({ ...formData, color_scheme: e.target.value })
                   }
                 />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-image_url">Изображение пульта</Label>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <Input
+                    ref={editFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleEditImageUpload}
+                    className="hidden"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => editFileInputRef.current?.click()}
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Загрузить файл
+                  </Button>
+                  <div className="text-sm text-muted-foreground">или</div>
+                  <Input
+                    value={formData.image_url || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        image_url: e.target.value,
+                      })
+                    }
+                    placeholder="Введите URL изображения"
+                    className="flex-1"
+                  />
+                  {(editPreviewImageUrl || formData.image_url) && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={removeEditImage}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+
+                {(editPreviewImageUrl || formData.image_url) && (
+                  <div className="border rounded-lg p-4">
+                    <img
+                      src={editPreviewImageUrl || formData.image_url}
+                      alt="Предпросмотр пульта"
+                      className="max-w-full h-48 object-contain mx-auto rounded"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = "none";
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
