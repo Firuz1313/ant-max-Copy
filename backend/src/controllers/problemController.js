@@ -114,38 +114,6 @@ class ProblemController {
   async createProblem(req, res, next) {
     try {
       const problemData = req.body;
-
-      // Проверяем существование устройства
-      if (problemData.device_id) {
-        const device = await deviceModel.findById(problemData.device_id);
-        if (!device || !device.is_active) {
-          return res.status(400).json({
-            success: false,
-            error: 'Указанное устройство не найдено или неактивно',
-            errorType: 'VALIDATION_ERROR',
-            timestamp: new Date().toISOString()
-          });
-        }
-      }
-
-      // Проверяем уникальность названия для устройства
-      if (problemData.device_id && problemData.title) {
-        const existingProblem = await problemModel.findOne({
-          title: problemData.title,
-          device_id: problemData.device_id,
-          is_active: true
-        });
-
-        if (existingProblem) {
-          return res.status(409).json({
-            success: false,
-            error: 'Проблема с таким названием уже существует для данного устройства',
-            errorType: 'DUPLICATE_ERROR',
-            timestamp: new Date().toISOString()
-          });
-        }
-      }
-
       const newProblem = await problemModel.create(problemData);
 
       res.status(201).json({
@@ -168,9 +136,9 @@ class ProblemController {
       const { id } = req.params;
       const updateData = req.body;
 
-      // Проверяем существование проблемы
-      const existingProblem = await problemModel.findById(id);
-      if (!existingProblem) {
+      const updatedProblem = await problemModel.updateById(id, updateData);
+
+      if (!updatedProblem) {
         return res.status(404).json({
           success: false,
           error: 'Проблема не найдена',
@@ -178,40 +146,6 @@ class ProblemController {
           timestamp: new Date().toISOString()
         });
       }
-
-      // Проверяем существование устройства при изменении
-      if (updateData.device_id && updateData.device_id !== existingProblem.device_id) {
-        const device = await deviceModel.findById(updateData.device_id);
-        if (!device || !device.is_active) {
-          return res.status(400).json({
-            success: false,
-            error: 'Указанное устройство не найдено или неактивно',
-            errorType: 'VALIDATION_ERROR',
-            timestamp: new Date().toISOString()
-          });
-        }
-      }
-
-      // Проверяем уникальность названия при изменении
-      if (updateData.title && updateData.title !== existingProblem.title) {
-        const deviceIdToCheck = updateData.device_id || existingProblem.device_id;
-        const duplicateProblem = await problemModel.findOne({
-          title: updateData.title,
-          device_id: deviceIdToCheck,
-          is_active: true
-        });
-
-        if (duplicateProblem && duplicateProblem.id !== id) {
-          return res.status(409).json({
-            success: false,
-            error: 'Проблема с таким названием уже существует для данного устройства',
-            errorType: 'DUPLICATE_ERROR',
-            timestamp: new Date().toISOString()
-          });
-        }
-      }
-
-      const updatedProblem = await problemModel.updateById(id, updateData);
 
       res.json({
         success: true,
@@ -259,7 +193,7 @@ class ProblemController {
 
       let deletedProblem;
       if (force === 'true') {
-        // Жесткое удаление (осторожно!)
+        // Жесткое удаление (о��торожно!)
         deletedProblem = await problemModel.delete(id);
       } else {
         // Мягкое удаление
@@ -404,7 +338,7 @@ class ProblemController {
   }
 
   /**
-   * Получение проблем по категории
+   * Получ��ние проблем по категории
    * GET /api/v1/problems/category/:category
    */
   async getProblemsByCategory(req, res, next) {
@@ -638,7 +572,7 @@ class ProblemController {
   }
 }
 
-// Создаем экземпляр контроллера
+// Создаем экземпляр контроллер��
 const problemController = new ProblemController();
 
 // Применяем валидацию к методам

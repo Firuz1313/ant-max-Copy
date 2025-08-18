@@ -49,7 +49,7 @@ class DeviceController {
         devices = await deviceModel.findAll(filters, options);
       }
 
-      // Подсчет общего количества для пагинации
+      // Подсчет об��его количества для пагинации
       const total = await deviceModel.count(filters);
       const totalPages = Math.ceil(total / options.limit);
 
@@ -118,7 +118,7 @@ class DeviceController {
       res.status(201).json({
         success: true,
         data: newDevice,
-        message: 'Устройство успешн�� создано',
+        message: 'Устройство успешно создано',
         timestamp: new Date().toISOString()
       });
     } catch (error) {
@@ -135,9 +135,9 @@ class DeviceController {
       const { id } = req.params;
       const updateData = req.body;
 
-      const updatedDevice = await deviceModel.updateById(id, updateData);
-      
-      if (!updatedDevice) {
+      // Проверяем существование устройства
+      const existingDevice = await deviceModel.findById(id);
+      if (!existingDevice) {
         return res.status(404).json({
           success: false,
           error: 'Устройство не найдено',
@@ -145,6 +145,26 @@ class DeviceController {
           timestamp: new Date().toISOString()
         });
       }
+
+      // Проверяем уникальность названия при изменении
+      if (updateData.name && updateData.name !== existingDevice.name) {
+        const duplicateDevice = await deviceModel.findOne({
+          name: updateData.name,
+          is_active: true
+        });
+
+        // Only check for duplicates if the found device is not the current device
+        if (duplicateDevice && duplicateDevice.id !== id) {
+          return res.status(409).json({
+            success: false,
+            error: 'Устройство с таким названием уже существуе��',
+            errorType: 'DUPLICATE_ERROR',
+            timestamp: new Date().toISOString()
+          });
+        }
+      }
+
+      const updatedDevice = await deviceModel.updateById(id, updateData);
 
       res.json({
         success: true,
@@ -351,7 +371,7 @@ class DeviceController {
       if (!Array.isArray(updates) || updates.length === 0) {
         return res.status(400).json({
           success: false,
-          error: 'Необходимо предо��тавить массив обновлений',
+          error: 'Необходимо предоставить массив обновлений',
           errorType: 'VALIDATION_ERROR',
           timestamp: new Date().toISOString()
         });
