@@ -235,7 +235,7 @@ const RemotesManager = () => {
       setDevices(devicesData);
       setStats(statsData);
     } catch (error) {
-      console.error("Ошибка при загрузке данных:", error);
+      console.error("Ошибк�� при загрузке данных:", error);
       toast({
         title: "Ошибка",
         description: "Не удалось загрузить данные пультов",
@@ -424,7 +424,7 @@ const RemotesManager = () => {
 
   const layoutNames = {
     standard: "Стандартный",
-    compact: "Компак��ный",
+    compact: "Компактный",
     smart: "Умный",
     custom: "Настраиваемый",
   };
@@ -468,7 +468,7 @@ const RemotesManager = () => {
 
   return (
     <div className="space-y-6">
-      {/* Заголовок и с��атистика */}
+      {/* Заголовок и статистика */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold">Управление пультами</h1>
@@ -1056,69 +1056,62 @@ const RemotesManager = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-image_url" className="flex items-center gap-2">
-                <ImageIcon className="h-4 w-4" />
-                Изображение пульта
-              </Label>
-              <div className="flex gap-2">
-                <Input
-                  id="edit-image_url"
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      image_url: e.target.value,
-                    })
-                  }
-                  placeholder="URL изображения пульта"
-                  className="flex-1"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  id="edit-image-upload"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      // Создаем временный URL для предпросмотра
-                      const imageUrl = URL.createObjectURL(file);
+              <Label htmlFor="edit-image_url">Изображение пульта</Label>
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <Input
+                    ref={editFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleEditImageUpload}
+                    className="hidden"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => editFileInputRef.current?.click()}
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Загрузить файл
+                  </Button>
+                  <div className="text-sm text-muted-foreground">или</div>
+                  <Input
+                    value={formData.image_url || ""}
+                    onChange={(e) =>
                       setFormData({
                         ...formData,
-                        image_url: imageUrl,
-                      });
-                      toast({
-                        title: "Изображение выбрано",
-                        description: `Файл: ${file.name}`,
-                      });
+                        image_url: e.target.value,
+                      })
                     }
-                  }}
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  onClick={() => document.getElementById('edit-image-upload')?.click()}
-                >
-                  <Upload className="h-4 w-4" />
-                </Button>
-              </div>
-              {formData.image_url && (
-                <div className="mt-2">
-                  <img
-                    src={formData.image_url}
-                    alt="Предпросмотр пульта"
-                    className="max-w-xs max-h-32 object-contain border rounded"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                    }}
+                    placeholder="Введите URL изображения"
+                    className="flex-1"
                   />
+                  {(editPreviewImageUrl || formData.image_url) && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={removeEditImage}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
-              )}
-              <p className="text-xs text-muted-foreground">
-                Введите URL изображения пульта или нажмите кнопку загрузки
-              </p>
+
+                {(editPreviewImageUrl || formData.image_url) && (
+                  <div className="border rounded-lg p-4">
+                    <img
+                      src={editPreviewImageUrl || formData.image_url}
+                      alt="Предпросмотр пульта"
+                      className="max-w-full h-48 object-contain mx-auto rounded"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="space-y-4">
