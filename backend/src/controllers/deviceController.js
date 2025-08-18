@@ -169,10 +169,11 @@ class DeviceController {
           is_active: true
         });
 
+        // Only check for duplicates if the found device is not the current device
         if (duplicateDevice && duplicateDevice.id !== id) {
           return res.status(409).json({
             success: false,
-            error: 'Устройство с таким названием уже существует',
+            error: 'Устройство с таким названием уже существуе��',
             errorType: 'DUPLICATE_ERROR',
             timestamp: new Date().toISOString()
           });
