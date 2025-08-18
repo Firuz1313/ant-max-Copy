@@ -114,6 +114,9 @@ export class ApiClient {
       let errorOccurred = false;
 
       try {
+        // Clone response to prevent body stream issues
+        const responseClone = response.clone();
+
         // Check content type to determine how to read response
         const contentType = response.headers.get("content-type") || "";
 
@@ -146,12 +149,21 @@ export class ApiClient {
         console.error(`📡 Response read error:`, readError);
         errorOccurred = true;
 
-        // Create error response data
-        responseData = {
-          error: "Failed to read response",
-          details: readError.message,
-          status: response.status,
-        };
+        // Try to use the cloned response as fallback
+        try {
+          const fallbackText = await responseClone.text();
+          responseData = {
+            error: fallbackText || "Failed to read response",
+            details: readError.message,
+            status: response.status,
+          };
+        } catch (fallbackError) {
+          responseData = {
+            error: "Failed to read response",
+            details: readError.message,
+            status: response.status,
+          };
+        }
       }
 
       // Check for HTTP errors
