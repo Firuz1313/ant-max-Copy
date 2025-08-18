@@ -7,7 +7,7 @@ INSERT INTO users (id, username, email, password_hash, first_name, last_name, ro
 ('usr-support-001', 'tech_support', 'support@antsupport.com', '$2b$10$dummy.hash.value.for.demo', 'Алексей', 'Техник', 'support', '["diagnostics", "users"]'::jsonb, true, true),
 ('usr-support-002', 'maria_support', 'maria@antsupport.com', '$2b$10$dummy.hash.value.for.demo', 'Мария', 'Соколова', 'support', '["diagnostics"]'::jsonb, true, true),
 ('usr-moderator-001', 'moderator', 'moderator@antsupport.com', '$2b$10$dummy.hash.value.for.demo', 'Дмитрий', 'Модератор', 'moderator', '["content", "users"]'::jsonb, true, true),
-('usr-moderator-002', 'elena_mod', 'elena@antsupport.com', '$2b$10$dummy.hash.value.for.demo', 'Елена', 'Кузнецова', 'moderator', '["content"]'::jsonb, true, true),
+('usr-moderator-002', 'elena_mod', 'elena@antsupport.com', '$2b$10$dummy.hash.value.for.demo', 'Елена', 'Кузнецо��а', 'moderator', '["content"]'::jsonb, true, true),
 ('usr-user-001', 'client_ivan', 'ivan@example.com', '$2b$10$dummy.hash.value.for.demo', 'Иван', 'Петров', 'user', '[]'::jsonb, true, true),
 ('usr-user-002', 'client_anna', 'anna@example.com', '$2b$10$dummy.hash.value.for.demo', 'Анна', 'Сидорова', 'user', '[]'::jsonb, true, true),
 ('usr-user-003', 'client_sergey', 'sergey@example.com', '$2b$10$dummy.hash.value.for.demo', 'Сергей', 'Волков', 'user', '[]'::jsonb, false, true),
@@ -27,15 +27,15 @@ INSERT INTO devices (id, name, brand, model, description, image_url, logo_url, c
 -- 3. Insert TV Interfaces (12 screens for different device types)
 INSERT INTO tv_interfaces (id, device_id, name, description, type, screenshot_url, dimensions, order_index, is_active) VALUES
 ('tvi-android-home', 'dev-android-001', 'Android TV Главный экран', 'Главное меню Android TV с рекомендациями и приложениями', 'home', 'https://images.pexels.com/photos/3807747/pexels-photo-3807747.jpeg', '{"width": 1920, "height": 1080}'::jsonb, 1, true),
-('tvi-android-apps', 'dev-android-001', 'Android TV Прилож��ния', 'Экран всех установленных приложений', 'apps', 'https://images.pexels.com/photos/5077068/pexels-photo-5077068.jpeg', '{"width": 1920, "height": 1080}'::jsonb, 2, true),
+('tvi-android-apps', 'dev-android-001', 'Android TV Приложения', 'Экран всех установленных приложений', 'apps', 'https://images.pexels.com/photos/5077068/pexels-photo-5077068.jpeg', '{"width": 1920, "height": 1080}'::jsonb, 2, true),
 ('tvi-android-settings', 'dev-android-001', 'Android TV Настройки', 'Меню настроек системы Android TV', 'settings', 'https://images.pexels.com/photos/33242735/pexels-photo-33242735.jpeg', '{"width": 1920, "height": 1080}'::jsonb, 3, true),
 ('tvi-iptv-channels', 'dev-iptv-001', 'IPTV Список каналов', 'Электронная программа передач IPTV', 'channels', NULL, '{"width": 1920, "height": 1080}'::jsonb, 4, true),
 ('tvi-iptv-guide', 'dev-iptv-001', 'IPTV Телегид', 'Программа передач с возможностью записи', 'guide', NULL, '{"width": 1920, "height": 1080}'::jsonb, 5, true),
 ('tvi-iptv-settings', 'dev-iptv-001', 'IPTV Настройки', 'Настройки IPTV ресивера', 'settings', NULL, '{"width": 1920, "height": 1080}'::jsonb, 6, true),
 ('tvi-sat-channels', 'dev-satellite-001', 'Satellite Каналы', 'Список спутниковых каналов', 'channels', NULL, '{"width": 1920, "height": 1080}'::jsonb, 7, true),
-('tvi-sat-search', 'dev-satellite-001', 'Satellite П��иск', 'Автоматический поиск каналов', 'custom', NULL, '{"width": 1920, "height": 1080}'::jsonb, 8, true),
+('tvi-sat-search', 'dev-satellite-001', 'Satellite Поиск', 'Автоматический поиск каналов', 'custom', NULL, '{"width": 1920, "height": 1080}'::jsonb, 8, true),
 ('tvi-cable-home', 'dev-cable-001', 'Cable Главная', 'Главный экран кабельного ресивера', 'home', NULL, '{"width": 1920, "height": 1080}'::jsonb, 9, true),
-('tvi-cable-vod', 'dev-cable-001', 'Cable Видео по запросу', 'Библиотека фильмов и сериалов', 'custom', NULL, '{"width": 1920, "height": 1080}'::jsonb, 10, true),
+('tvi-cable-vod', 'dev-cable-001', 'Cable Ви��ео по запросу', 'Библиотека фильмов и сериалов', 'custom', NULL, '{"width": 1920, "height": 1080}'::jsonb, 10, true),
 ('tvi-error-screen', NULL, 'Экран ошибки', 'Универсальный экран ошибки подключения', 'error', NULL, '{"width": 1920, "height": 1080}'::jsonb, 11, true),
 ('tvi-no-signal', NULL, 'Нет сигнала', 'Экран отсутствия сигнала', 'no-signal', NULL, '{"width": 1920, "height": 1080}'::jsonb, 12, true);
 
@@ -50,17 +50,17 @@ INSERT INTO remotes (id, device_id, name, manufacturer, model, description, layo
 
 -- 5. Insert Problems (11 categorized problems)
 INSERT INTO problems (id, device_id, title, description, category, subcategory, icon, color, tags, priority, estimated_time, difficulty, success_rate, status, is_active) VALUES
-('prob-001', 'dev-android-001', 'Не включается приставка', 'Приставка не реагирует на нажатие кнопки питания на пульте или корпусе', 'critical', 'Питание', 'Power', 'from-red-500 to-red-700', '["power", "startup", "critical"]'::jsonb, 5, 10, 'beginner', 95, 'published', true),
+('prob-001', 'dev-android-001', 'Не включается приставка', 'Приставка не реагирует на нажатие кнопки питания на пульте или корпусе', 'critical', 'Питан��е', 'Power', 'from-red-500 to-red-700', '["power", "startup", "critical"]'::jsonb, 5, 10, 'beginner', 95, 'published', true),
 ('prob-002', 'dev-android-001', 'Нет изображения на экране', 'Приставка включается, но на телевизоре нет изображения', 'critical', 'Видео', 'Monitor', 'from-red-500 to-red-600', '["video", "display", "hdmi"]'::jsonb, 5, 15, 'intermediate', 90, 'published', true),
 ('prob-003', 'dev-android-001', 'Нет звука', 'Есть изображение, но отсутствует звук', 'moderate', 'Аудио', 'Volume2', 'from-yellow-500 to-yellow-600', '["audio", "sound"]'::jsonb, 3, 8, 'beginner', 98, 'published', true),
 ('prob-004', 'dev-iptv-001', 'Медленная загрузка каналов', 'IPTV каналы долго загружаются или буферизуются', 'moderate', 'Сеть', 'Wifi', 'from-orange-500 to-orange-600', '["iptv", "buffering", "network"]'::jsonb, 3, 12, 'intermediate', 85, 'published', true),
 ('prob-005', 'dev-iptv-001', 'Каналы не загружаются', 'Полное отсутствие IPTV каналов в списке', 'critical', 'Сеть', 'WifiOff', 'from-red-600 to-red-700', '["iptv", "channels", "network"]'::jsonb, 4, 20, 'advanced', 80, 'published', true),
 ('prob-006', 'dev-satellite-001', 'Слабый сигнал спутника', 'Низкое качество сигнала, помехи в изображении', 'moderate', 'Антенна', 'Satellite', 'from-yellow-600 to-orange-500', '["satellite", "signal", "antenna"]'::jsonb, 3, 25, 'advanced', 75, 'published', true),
-('prob-007', NULL, 'Пульт не работает', 'Пульт дистанционного управления не реагирует на нажатия', 'moderate', 'Пульт', 'Gamepad2', 'from-blue-500 to-blue-600', '["remote", "control"]'::jsonb, 2, 5, 'beginner', 99, 'published', true),
-('prob-008', NULL, 'Зависание системы', 'Приставка периодически зависает и требует перезагрузки', 'moderate', 'Система', 'RotateCcw', 'from-purple-500 to-purple-600', '["freeze", "system", "reboot"]'::jsonb, 3, 15, 'intermediate', 88, 'published', true),
+('prob-007', 'dev-android-001', 'Пульт не работает', 'Пульт дистанционного управления не реагирует на нажатия', 'moderate', 'Пульт', 'Gamepad2', 'from-blue-500 to-blue-600', '["remote", "control"]'::jsonb, 2, 5, 'beginner', 99, 'published', true),
+('prob-008', 'dev-android-002', 'Зависание системы', 'Приставка периодически зависает и требует перезагрузки', 'moderate', 'Система', 'RotateCcw', 'from-purple-500 to-purple-600', '["freeze", "system", "reboot"]'::jsonb, 3, 15, 'intermediate', 88, 'published', true),
 ('prob-009', 'dev-android-001', 'Приложения не запускаются', 'Установленные приложения не открываются или вылетают', 'moderate', 'Приложения', 'Smartphone', 'from-indigo-500 to-indigo-600', '["apps", "crash", "android"]'::jsonb, 2, 10, 'intermediate', 92, 'published', true),
-('prob-010', NULL, 'Медленная работа интерфейса', 'Меню и интерфейс работают медленно, долгий отклик', 'minor', 'Производительность', 'Gauge', 'from-gray-500 to-gray-600', '["performance", "slow", "ui"]'::jsonb, 1, 12, 'intermediate', 90, 'published', true),
-('prob-011', NULL, 'Проблемы с Wi-Fi подключением', 'Нестабильное или отсутствующее Wi-Fi соединение', 'moderate', 'Сеть', 'Wifi', 'from-teal-500 to-teal-600', '["wifi", "network", "connection"]'::jsonb, 3, 18, 'intermediate', 87, 'published', true);
+('prob-010', 'dev-iptv-002', 'Медленная работа интерфейса', 'Меню и интерфейс работают медленно, долгий отклик', 'minor', 'Производительность', 'Gauge', 'from-gray-500 to-gray-600', '["performance", "slow", "ui"]'::jsonb, 1, 12, 'intermediate', 90, 'published', true),
+('prob-011', 'dev-android-001', 'Проблемы с Wi-Fi подключением', 'Нестабильное или отсутствующее Wi-Fi соединение', 'moderate', 'Сеть', 'Wifi', 'from-teal-500 to-teal-600', '["wifi", "network", "connection"]'::jsonb, 3, 18, 'intermediate', 87, 'published', true);
 
 -- 6. Insert Diagnostic Steps (15 steps with instructions for various problems)
 INSERT INTO diagnostic_steps (id, problem_id, title, description, instruction, step_number, type, estimated_time, expected_result, tips, is_active) VALUES
@@ -70,7 +70,7 @@ INSERT INTO diagnostic_steps (id, problem_id, title, description, instruction, s
 ('step-001-03', 'prob-001', 'Нажатие кнопки питания на пульте', 'Включаем приставку пультом', 'Направьте пульт на приставку и нажмите кнопку питания', 3, 'remote', 10, 'Приставка включается', 'Убедитесь, что батарейки в пульте не разряжены', true),
 
 -- Steps for "Нет изображения на экране"
-('step-002-01', 'prob-002', 'Проверка HDMI кабеля', 'Проверяем подключение HDMI', 'Убедитесь, что HDMI кабель надежно подключен к приставке и телевизору', 1, 'check', 30, 'HDMI кабель подключен к обоим устройствам', 'Попробуйте отключить и снова подключить кабель', true),
+('step-002-01', 'prob-002', 'Проверка HDMI кабеля', 'Проверяем подключение HDMI', 'Убедитесь, что HDMI кабель надежно подключен к приставке и телевизору', 1, 'check', 30, 'HDMI кабель подключен к обоим устройствам', 'Попробуйте отключить и снов�� подключить кабель', true),
 ('step-002-02', 'prob-002', 'Выбор правильного входа на телевизоре', 'Переключаем вход на ТВ', 'На пульте телевизора нажмите кнопку INPUT/SOURCE и выберите правильный HDMI вход', 2, 'interface', 20, 'На экране появляется интерфейс приставки', 'Обычно приставки подключают к HDMI1 или HDMI2', true),
 ('step-002-03', 'prob-002', 'Проверка разрешения выхода', 'Настраиваем разрешение', 'В настройках приставки выберите подходящее разрешение для вашего телевизора', 3, 'interface', 60, 'Изображение появляется в правильном разрешении', 'Начните с разрешения 1080p, затем попробуйте другие', true),
 
@@ -79,7 +79,7 @@ INSERT INTO diagnostic_steps (id, problem_id, title, description, instruction, s
 ('step-003-02', 'prob-003', 'Проверка аудио настроек приставки', 'Настраиваем звук в приставке', 'Зайдите в настройки звука приставки и проверьте выбранный аудио выход', 2, 'interface', 45, 'Звук настроен правильно', 'Попробуйте разные режимы: Стерео, Dolby Digital', true),
 
 -- Steps for "Медленная загрузка каналов IPTV"
-('step-004-01', 'prob-004', 'Проверка скорости интернета', 'Тестируем соединение', 'Проверьте скорость интернет-соединения в настройках сети приставки', 1, 'interface', 60, 'Скорость соединения до��таточная (>10 Мбит/с)', 'Для HD каналов нужно минимум 8-10 Мбит/с', true),
+('step-004-01', 'prob-004', 'Проверка скорости интернета', 'Тестируем соединение', 'Проверьте скорость интернет-соединения в настройках сети приставки', 1, 'interface', 60, 'Скорость соединения достаточная (>10 Мбит/с)', 'Для HD каналов нужно минимум 8-10 Мбит/с', true),
 ('step-004-02', 'prob-004', 'Очистка кэша IPTV', 'Очищаем временные файлы', 'В настройках IPTV приложения найдите опцию очистки кэша и выполните её', 2, 'interface', 30, 'Кэш очищен успешно', 'После очистки кэша перезагрузите приставку', true),
 
 -- Steps for "Каналы не загружаются IPTV"
@@ -113,7 +113,7 @@ INSERT INTO tv_interface_marks (id, tv_interface_id, name, description, type, sh
 -- Android TV Home Screen marks
 ('tim-and-home-001', 'tvi-android-home', 'Рекомендации', 'Блок рекомендованного контента', 'clickable', 'rectangle', '{"x": 100, "y": 200, "width": 800, "height": 300}'::jsonb, '#3b82f6', 'click', 'recommendations', true),
 ('tim-and-home-002', 'tvi-android-home', 'Приложения', 'Строка с приложениями', 'clickable', 'rectangle', '{"x": 100, "y": 550, "width": 1720, "height": 150}'::jsonb, '#10b981', 'click', 'apps_row', true),
-('tim-and-home-003', 'tvi-android-home', 'Настройки', 'Иконка настроек в правом верхнем углу', 'clickable', 'circle', '{"x": 1800, "y": 100, "radius": 30}'::jsonb, '#6366f1', 'click', 'settings', true),
+('tim-and-home-003', 'tvi-android-home', 'Настройки', 'Иконка настроек в правом в��рхнем углу', 'clickable', 'circle', '{"x": 1800, "y": 100, "radius": 30}'::jsonb, '#6366f1', 'click', 'settings', true),
 ('tim-and-home-004', 'tvi-android-home', 'Поиск', 'Кнопка поиска', 'clickable', 'rectangle', '{"x": 100, "y": 100, "width": 200, "height": 60}'::jsonb, '#f59e0b', 'click', 'search', true),
 
 -- Android TV Apps Screen marks
@@ -145,7 +145,7 @@ INSERT INTO tv_interface_marks (id, tv_interface_id, name, description, type, sh
 INSERT INTO site_settings (id, key, value, description, category, is_public) VALUES
 ('set-001', 'site_name', '"ANT Support"'::jsonb, 'Название сайта', 'general', true),
 ('set-002', 'site_description', '"Система диагностики ТВ приставок ANT"'::jsonb, 'Описание сайта', 'general', true),
-('set-003', 'version', '"1.0.0"'::jsonb, 'Версия системы', 'general', true),
+('set-003', 'version', '"1.0.0"'::jsonb, 'Версия систе��ы', 'general', true),
 ('set-004', 'maintenance_mode', 'false'::jsonb, 'Режим обслуживания', 'system', false),
 ('set-005', 'debug_mode', 'false'::jsonb, 'Режим отладки', 'system', false),
 ('set-006', 'max_session_duration', '3600'::jsonb, 'Максимальная длительность сессии (сек)', 'diagnostics', false),
