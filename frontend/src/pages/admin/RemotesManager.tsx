@@ -58,7 +58,7 @@ import {
 
 // Безопасный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
-  // Логирование для отладки
+  // Логирование для отла��ки
   if (!value || value === "" || value === null || value === undefined) {
     console.warn("SafeSelectItem: блокировка пустого значения:", {
       value,
@@ -657,7 +657,7 @@ const RemotesManager = () => {
                   >
                     Отмена
                   </Button>
-                  <Button onClick={handleCreateRemote}>Создать пульт</Button>
+                  <Button onClick={handleCreateRemote}>Создать п��льт</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -909,6 +909,46 @@ const RemotesManager = () => {
                   }
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-image_url" className="flex items-center gap-2">
+                <ImageIcon className="h-4 w-4" />
+                Изображение пульта
+              </Label>
+              <div className="flex gap-2">
+                <Input
+                  id="edit-image_url"
+                  value={formData.image_url}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      image_url: e.target.value,
+                    })
+                  }
+                  placeholder="URL изображения пульта"
+                  className="flex-1"
+                />
+                <Button type="button" variant="outline" size="icon">
+                  <Upload className="h-4 w-4" />
+                </Button>
+              </div>
+              {formData.image_url && (
+                <div className="mt-2">
+                  <img
+                    src={formData.image_url}
+                    alt="Предпросмотр пульта"
+                    className="max-w-xs max-h-32 object-contain border rounded"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Введите URL изображения пульта или нажмите кнопку загрузки
+              </p>
             </div>
 
             <div className="space-y-4">
