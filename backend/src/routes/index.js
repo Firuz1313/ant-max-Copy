@@ -16,6 +16,7 @@ import initRoutes from "./initRoutes.js";
 import quickDbCheck from "./quickDbCheck.js";
 import debugRoutes from "./debugRoutes.js";
 import createTablesRoute from "./createTablesRoute.js";
+import migrationRoutes from "./migrationRoutes.js";
 
 const router = express.Router();
 
@@ -92,7 +93,7 @@ router.get("/docs", (req, res) => {
           routes: {
             "GET /devices": "Получени�� списка устройств",
             "GET /devices/:id": "Получение устройства по ID",
-            "POST /devices": "��оздание нового устройства",
+            "POST /devices": "��оздание нового уст��ойства",
             "PUT /devices/:id": "Обновление устройства",
             "DELETE /devices/:id": "Удаление устройства",
             "GET /devices/search": "Поиск устройств",
@@ -131,7 +132,7 @@ router.get("/docs", (req, res) => {
           description: "Управление диагностическими шагами",
           routes: {
             "GET /steps": "Получение списка шагов",
-            "GET /steps/:id": "Получение шага по ID",
+            "GET /steps/:id": "Получени�� шага по ID",
             "POST /steps": "Создание нового шага",
             "PUT /steps/:id": "��бновление шага",
             "DELETE /steps/:id": "Удаление шага",
@@ -188,7 +189,7 @@ router.get("/docs", (req, res) => {
           description: "Управление пользователями системы",
           routes: {
             "GET /users": "Получение списка пользователей",
-            "GET /users/:id": "Получение пользователя по ID",
+            "GET /users/:id": "П��лучение пользователя по ID",
             "POST /users": "Создание нового пользователя",
             "PUT /users/:id": "Обновление пользователя",
             "DELETE /users/:id": "Удаление пользователя",
@@ -273,6 +274,7 @@ router.use(`${API_V1_PREFIX}/init`, initRoutes);
 router.use(`${API_V1_PREFIX}/db-check`, quickDbCheck);
 router.use(`${API_V1_PREFIX}/debug`, debugRoutes);
 router.use(`${API_V1_PREFIX}/create-tables`, createTablesRoute);
+router.use(`${API_V1_PREFIX}/migrations`, migrationRoutes);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {
