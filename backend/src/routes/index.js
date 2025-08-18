@@ -15,6 +15,7 @@ import siteSettingRoutes from "./siteSettingRoutes.js";
 import initRoutes from "./initRoutes.js";
 import quickDbCheck from "./quickDbCheck.js";
 import debugRoutes from "./debugRoutes.js";
+import createTablesRoute from "./createTablesRoute.js";
 
 const router = express.Router();
 
@@ -132,7 +133,7 @@ router.get("/docs", (req, res) => {
             "GET /steps": "Получение списка шагов",
             "GET /steps/:id": "Получение шага по ID",
             "POST /steps": "Создание нового шага",
-            "PUT /steps/:id": "Обновление шага",
+            "PUT /steps/:id": "��бновление шага",
             "DELETE /steps/:id": "Удаление шага",
             "GET /steps/search": "Поиск шагов",
             "GET /steps/problem/:problemId": "Шаги по проблеме",
@@ -151,7 +152,7 @@ router.get("/docs", (req, res) => {
           description: "Управление диагностическими сессиями",
           routes: {
             "GET /sessions": "Получение списка сессий",
-            "GET /sessions/:id": "Получение сессии по ID",
+            "GET /sessions/:id": "Получение сес��ии по ID",
             "POST /sessions": "Создание новой сессии",
             "PUT /sessions/:id": "Обновление сессии",
             "DELETE /sessions/:id": "Удаление сессии",
@@ -208,7 +209,7 @@ router.get("/docs", (req, res) => {
             "DELETE /remotes/:id": "Удаление пульта",
             "GET /remotes/stats": "Статистика пультов",
             "GET /remotes/popular": "Популярные пульты",
-            "GET /remotes/search": "Поиск пультов",
+            "GET /remotes/search": "Поиск п��льтов",
             "GET /remotes/device/:deviceId": "Пульты по устройству",
             "GET /remotes/device/:deviceId/default": "Пульт по умолчанию",
             "POST /remotes/:id/duplicate": "Дублирование пу��ьта",
@@ -271,6 +272,7 @@ router.use(`${API_V1_PREFIX}/settings`, siteSettingRoutes);
 router.use(`${API_V1_PREFIX}/init`, initRoutes);
 router.use(`${API_V1_PREFIX}/db-check`, quickDbCheck);
 router.use(`${API_V1_PREFIX}/debug`, debugRoutes);
+router.use(`${API_V1_PREFIX}/create-tables`, createTablesRoute);
 
 // Обработчик для несуществующих эндпоинтов API
 router.use("*", (req, res) => {

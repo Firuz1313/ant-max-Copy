@@ -109,43 +109,73 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Ultra-simple approach: read response only once, immediately
+      // Defensive response handling - prevent any double reads
       let responseData: any = null;
-      let responseText = "";
+      let errorOccurred = false;
 
       try {
-        responseText = await response.text();
-        console.log(
-          `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
-        );
-      } catch (textError) {
-        console.error(`📡 Failed to read response text:`, textError);
-        responseText = "";
-      }
+        // Check content type to determine how to read response
+        const contentType = response.headers.get("content-type") || "";
 
-      // Try to parse JSON if we have text
-      if (responseText.trim()) {
-        try {
-          responseData = JSON.parse(responseText);
-          console.log(`📡 Successfully parsed JSON`);
-        } catch (parseError) {
-          console.log(`📡 Not JSON, using as text`);
-          responseData = { message: responseText };
+        if (contentType.includes("application/json")) {
+          // For JSON responses, use response.json()
+          responseData = await response.json();
+          console.log(`📡 Successfully parsed JSON response`);
+        } else {
+          // For non-JSON responses, read as text
+          const responseText = await response.text();
+          console.log(
+            `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
+          );
+
+          // Try to parse as JSON anyway, fallback to text
+          if (responseText.trim()) {
+            try {
+              responseData = JSON.parse(responseText);
+              console.log(`📡 Parsed non-JSON content-type as JSON`);
+            } catch (parseError) {
+              responseData = { message: responseText };
+              console.log(`📡 Using text response`);
+            }
+          } else {
+            responseData = {};
+            console.log(`📡 Empty response`);
+          }
         }
-      } else {
-        console.log(`📡 Empty response`);
-        responseData = {};
+      } catch (readError) {
+        console.error(`📡 Response read error:`, readError);
+        errorOccurred = true;
+
+        // Create error response data
+        responseData = {
+          error: "Failed to read response",
+          details: readError.message,
+          status: response.status,
+        };
       }
 
-      // Check for HTTP errors AFTER reading the body
+      // Check for HTTP errors
       if (!response.ok) {
         const errorMessage =
-          responseData?.error ||
-          responseData?.message ||
-          `HTTP ${response.status}`;
+          !errorOccurred && responseData?.error
+            ? responseData.error
+            : !errorOccurred && responseData?.message
+              ? responseData.message
+              : `HTTP ${response.status}`;
+
         console.error(`📡 HTTP Error ${response.status}: ${errorMessage}`);
         throw new ApiError(
           `HTTP ${response.status}: ${errorMessage}`,
+          response.status,
+          responseData,
+        );
+      }
+
+      // Additional error check for response read failures
+      if (errorOccurred) {
+        console.error(`📡 Response processing failed`);
+        throw new ApiError(
+          "Failed to process response",
           response.status,
           responseData,
         );
@@ -175,7 +205,10 @@ export class ApiClient {
           error.message.includes("body stream") ||
           error.message.includes("already read")
         ) {
-          throw new ApiError("Response reading error - please try again", 0);
+          console.warn(
+            `🚨 Body stream error detected, creating simple error response`,
+          );
+          throw new ApiError("Network response error", 0);
         }
 
         throw new ApiError(error.message, 0);
@@ -212,6 +245,11 @@ export class ApiClient {
   ): Promise<T> {
     // Transform camelCase to snake_case for backend
     const transformedData = data ? transformToBackend(data) : undefined;
+
+    console.log(`🔄 PUT ${endpoint}:`, {
+      originalData: data,
+      transformedData: transformedData,
+    });
 
     return this.makeRequest<T>(endpoint, {
       ...options,

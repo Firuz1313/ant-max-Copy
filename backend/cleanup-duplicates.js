@@ -1,13 +1,10 @@
-import express from "express";
-import { query } from "../utils/database.js";
+import { query } from "./src/utils/database.js";
+import dotenv from "dotenv";
 
-const router = express.Router();
+// Load environment variables
+dotenv.config();
 
-/**
- * Clean up duplicate devices
- * GET /api/v1/cleanup/devices
- */
-router.get("/devices", async (req, res) => {
+async function cleanupDuplicates() {
   try {
     console.log("🧹 Cleaning up duplicate devices...");
 
@@ -21,7 +18,6 @@ router.get("/devices", async (req, res) => {
     `);
 
     console.log(`Found ${duplicates.rows.length} duplicate device names`);
-    const results = [];
 
     for (const dup of duplicates.rows) {
       console.log(`- "${dup.name}": ${dup.count} devices`);
@@ -38,7 +34,6 @@ router.get("/devices", async (req, res) => {
           [i, ids[i]],
         );
         console.log(`  Deactivated duplicate: ${ids[i]}`);
-        results.push(`Deactivated duplicate: ${ids[i]}`);
       }
     }
 
@@ -47,24 +42,17 @@ router.get("/devices", async (req, res) => {
       SELECT id, name FROM devices WHERE is_active = true ORDER BY name
     `);
 
-    res.json({
-      success: true,
-      message: "Device cleanup completed",
-      duplicatesFound: duplicates.rows.length,
-      duplicatesFixed: results.length,
-      activeDevices: activeDevices.rows,
-      details: results,
-      timestamp: new Date().toISOString(),
+    console.log("\\n✅ Active devices after cleanup:");
+    activeDevices.rows.forEach((device) => {
+      console.log(`- ${device.id}: ${device.name}`);
     });
+
+    console.log("\\n🎉 Cleanup completed successfully!");
+    process.exit(0);
   } catch (error) {
     console.error("❌ Cleanup failed:", error.message);
-    res.status(500).json({
-      success: false,
-      error: "Cleanup failed",
-      details: error.message,
-      timestamp: new Date().toISOString(),
-    });
+    process.exit(1);
   }
-});
+}
 
-export default router;
+cleanupDuplicates();

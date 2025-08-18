@@ -17,6 +17,7 @@ import {
   SiteSettings,
 } from "@/types";
 import { apiClient } from "@/api/client";
+import { simpleApiClient } from "@/api/simpleClient";
 
 // Use unified API client instead of custom APIService
 class APIService {
@@ -73,23 +74,20 @@ class APIService {
   }
 
   async createDevice(data: Partial<Device>): Promise<Device> {
-    return this.request<Device>("/devices", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    console.log(`🔧 Using simple client for device create`);
+    const response = await simpleApiClient.post<any>("/devices", data);
+    return response.data;
   }
 
   async updateDevice(id: string, data: Partial<Device>): Promise<Device> {
-    return this.request<Device>(`/devices/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
+    console.log(`🔧 Using simple client for device update`);
+    const response = await simpleApiClient.put<any>(`/devices/${id}`, data);
+    return response.data;
   }
 
   async deleteDevice(id: string): Promise<void> {
-    return this.request<void>(`/devices/${id}`, {
-      method: "DELETE",
-    });
+    console.log(`🔧 Using simple client for device delete`);
+    await simpleApiClient.delete<any>(`/devices/${id}`);
   }
 
   // Problems

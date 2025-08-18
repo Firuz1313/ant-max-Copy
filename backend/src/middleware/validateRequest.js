@@ -6,7 +6,11 @@ const commonSchemas = {
   uuid: Joi.string().uuid().required(),
   email: Joi.string().email().max(320).required(),
   password: Joi.string().min(6).max(255).required(),
-  url: Joi.string().uri().max(500),
+  url: Joi.string()
+    .max(500)
+    .allow("")
+    .allow(null)
+    .pattern(/^(https?:\/\/|\/)/),
   text: Joi.string().max(1000),
   longText: Joi.string().max(10000),
   boolean: Joi.boolean(),
