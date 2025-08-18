@@ -58,7 +58,7 @@ import {
   FolderOpen,
 } from "lucide-react";
 
-// Безопа��ный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
+// Безопасный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
   // Логирование для отла��ки
   if (!value || value === "" || value === null || value === undefined) {
@@ -176,7 +176,7 @@ const RemotesManager = () => {
     if (!file.type.startsWith("image/")) {
       toast({
         title: "Ошибка",
-        description: "П��жалуйста, выберите файл изображения",
+        description: "Пожалуйста, выберите файл изображения",
         variant: "destructive",
       });
       return;
@@ -260,6 +260,14 @@ const RemotesManager = () => {
       is_default: false,
       is_active: true,
     });
+    setPreviewImageUrl(null);
+    setEditPreviewImageUrl(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    if (editFileInputRef.current) {
+      editFileInputRef.current.value = "";
+    }
   };
 
   const handleCreateRemote = async () => {
@@ -932,7 +940,7 @@ const RemotesManager = () => {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="edit-name">Название *</Label>
+                <Label htmlFor="edit-name">На��вание *</Label>
                 <Input
                   id="edit-name"
                   value={formData.name}
