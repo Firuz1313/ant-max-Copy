@@ -107,7 +107,9 @@ const RemotesManager = () => {
 
   // Image upload states
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
-  const [editPreviewImageUrl, setEditPreviewImageUrl] = useState<string | null>(null);
+  const [editPreviewImageUrl, setEditPreviewImageUrl] = useState<string | null>(
+    null,
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -157,7 +159,7 @@ const RemotesManager = () => {
     const reader = new FileReader();
     reader.onload = () => {
       const base64String = reader.result as string;
-      setFormData(prev => ({ ...prev, image_url: base64String }));
+      setFormData((prev) => ({ ...prev, image_url: base64String }));
       setPreviewImageUrl(base64String);
       toast({
         title: "Изображение загружено",
@@ -168,7 +170,9 @@ const RemotesManager = () => {
   };
 
   // Handle image upload for edit form
-  const handleEditImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleEditImageUpload = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -195,7 +199,7 @@ const RemotesManager = () => {
     const reader = new FileReader();
     reader.onload = () => {
       const base64String = reader.result as string;
-      setFormData(prev => ({ ...prev, image_url: base64String }));
+      setFormData((prev) => ({ ...prev, image_url: base64String }));
       setEditPreviewImageUrl(base64String);
       toast({
         title: "Изображение загружено",
@@ -207,7 +211,7 @@ const RemotesManager = () => {
 
   // Remove uploaded image from create form
   const removeImage = () => {
-    setFormData(prev => ({ ...prev, image_url: "" }));
+    setFormData((prev) => ({ ...prev, image_url: "" }));
     setPreviewImageUrl(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -216,7 +220,7 @@ const RemotesManager = () => {
 
   // Remove uploaded image from edit form
   const removeEditImage = () => {
-    setFormData(prev => ({ ...prev, image_url: "" }));
+    setFormData((prev) => ({ ...prev, image_url: "" }));
     setEditPreviewImageUrl(null);
     if (editFileInputRef.current) {
       editFileInputRef.current.value = "";
@@ -759,7 +763,7 @@ const RemotesManager = () => {
                             className="max-w-full h-48 object-contain mx-auto rounded"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
+                              target.style.display = "none";
                             }}
                           />
                         </div>
@@ -829,7 +833,7 @@ const RemotesManager = () => {
                         className="w-20 h-20 object-contain border rounded"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
+                          target.style.display = "none";
                         }}
                       />
                     </div>
@@ -1106,7 +1110,7 @@ const RemotesManager = () => {
                       className="max-w-full h-48 object-contain mx-auto rounded"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.style.display = 'none';
+                        target.style.display = "none";
                       }}
                     />
                   </div>
