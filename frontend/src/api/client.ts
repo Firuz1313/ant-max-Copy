@@ -109,55 +109,72 @@ export class ApiClient {
       console.log(`📡 Fetch completed with status: ${response.status}`);
       clearTimeout(timeoutId);
 
-      // Single read approach - read response only once
+      // Defensive response handling - prevent any double reads
       let responseData: any = null;
-      let responseText = "";
-      let readSuccess = false;
+      let errorOccurred = false;
 
-      // Attempt to read response text (only once)
       try {
-        responseText = await response.text();
-        readSuccess = true;
-        console.log(
-          `📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`,
-        );
+        // Check content type to determine how to read response
+        const contentType = response.headers.get('content-type') || '';
 
-        // Parse JSON if possible
-        if (responseText.trim()) {
-          try {
-            responseData = JSON.parse(responseText);
-            console.log(`📡 Successfully parsed JSON`);
-          } catch (parseError) {
-            console.log(`📡 Not JSON, using as text`);
-            responseData = { message: responseText };
-          }
+        if (contentType.includes('application/json')) {
+          // For JSON responses, use response.json()
+          responseData = await response.json();
+          console.log(`📡 Successfully parsed JSON response`);
         } else {
-          console.log(`📡 Empty response`);
-          responseData = {};
-        }
-      } catch (textError) {
-        console.error(`📡 Failed to read response text:`, textError);
-        readSuccess = false;
+          // For non-JSON responses, read as text
+          const responseText = await response.text();
+          console.log(`📡 Response text (first 100 chars): ${responseText.substring(0, 100)}`);
 
-        // Only set error data if we couldn't read the response at all
+          // Try to parse as JSON anyway, fallback to text
+          if (responseText.trim()) {
+            try {
+              responseData = JSON.parse(responseText);
+              console.log(`📡 Parsed non-JSON content-type as JSON`);
+            } catch (parseError) {
+              responseData = { message: responseText };
+              console.log(`📡 Using text response`);
+            }
+          } else {
+            responseData = {};
+            console.log(`📡 Empty response`);
+          }
+        }
+      } catch (readError) {
+        console.error(`📡 Response read error:`, readError);
+        errorOccurred = true;
+
+        // Create error response data
         responseData = {
           error: "Failed to read response",
-          originalError: textError.message
+          details: readError.message,
+          status: response.status
         };
       }
 
-      // Check for HTTP errors AFTER reading the body
+      // Check for HTTP errors
       if (!response.ok) {
-        // Only use responseData if we successfully read it
-        const errorMessage = readSuccess
-          ? (responseData?.error || responseData?.message || `HTTP ${response.status}`)
+        const errorMessage = !errorOccurred && responseData?.error
+          ? responseData.error
+          : !errorOccurred && responseData?.message
+          ? responseData.message
           : `HTTP ${response.status}`;
 
         console.error(`📡 HTTP Error ${response.status}: ${errorMessage}`);
         throw new ApiError(
           `HTTP ${response.status}: ${errorMessage}`,
           response.status,
-          readSuccess ? responseData : null,
+          responseData,
+        );
+      }
+
+      // Additional error check for response read failures
+      if (errorOccurred) {
+        console.error(`📡 Response processing failed`);
+        throw new ApiError(
+          "Failed to process response",
+          response.status,
+          responseData,
         );
       }
 
