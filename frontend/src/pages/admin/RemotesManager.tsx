@@ -52,9 +52,11 @@ import {
   BarChart3,
   Smartphone,
   Star,
+  Upload,
+  Image as ImageIcon,
 } from "lucide-react";
 
-// Безопасный компон��нт для SelectItem, который не ренд��рится с пустыми значе��иями
+// Безопасный компон��нт для SelectItem, который не ре��д��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
   // Логирование для отладки
   if (!value || value === "" || value === null || value === undefined) {
@@ -183,7 +185,7 @@ const RemotesManager = () => {
       resetForm();
       loadData();
     } catch (error: any) {
-      console.error("Ошибка при создании пульта:", error);
+      console.error("Ошибка при создании пул��та:", error);
       toast({
         title: "Ошибка",
         description: error.message || "Не удалось создать пульт",
@@ -879,7 +881,7 @@ const RemotesManager = () => {
                   }
                 />
                 <Label htmlFor="edit-is_default">
-                  ��ульт по умолчанию для устройства
+                  ��ул��т по умолчанию для устройства
                 </Label>
               </div>
 
