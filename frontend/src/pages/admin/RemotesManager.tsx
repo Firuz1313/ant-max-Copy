@@ -60,7 +60,7 @@ import {
 
 // Безопасный компон����т для SelectItem, который не ренд��рится с пустыми значе��иями
 const SafeSelectItem = ({ value, children, ...props }: any) => {
-  // Логирование для отла��ки
+  // Логирование дл�� отла��ки
   if (!value || value === "" || value === null || value === undefined) {
     console.warn("SafeSelectItem: блокировка пустого значения:", {
       value,
@@ -383,6 +383,8 @@ const RemotesManager = () => {
       is_default: remote.isDefault,
       is_active: remote.isActive,
     });
+    // Set preview image if exists
+    setEditPreviewImageUrl(remote.imageUrl || null);
     setIsEditDialogOpen(true);
   };
 
@@ -512,7 +514,7 @@ const RemotesManager = () => {
               onValueChange={setFilterDevice}
             >
               <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="Фильтр по устройс��ву" />
+                <SelectValue placeholder="Фильтр по ��стройс��ву" />
               </SelectTrigger>
               <SelectContent>
                 <SafeSelectItem value="all">Все устройства</SafeSelectItem>
@@ -940,7 +942,7 @@ const RemotesManager = () => {
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="edit-name">На��вание *</Label>
+                <Label htmlFor="edit-name">Название *</Label>
                 <Input
                   id="edit-name"
                   value={formData.name}
