@@ -74,10 +74,9 @@ class APIService {
   }
 
   async createDevice(data: Partial<Device>): Promise<Device> {
-    return this.request<Device>("/devices", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+    console.log(`🔧 Using simple client for device create`);
+    const response = await simpleApiClient.post<any>("/devices", data);
+    return response.data;
   }
 
   async updateDevice(id: string, data: Partial<Device>): Promise<Device> {
@@ -87,9 +86,8 @@ class APIService {
   }
 
   async deleteDevice(id: string): Promise<void> {
-    return this.request<void>(`/devices/${id}`, {
-      method: "DELETE",
-    });
+    console.log(`🔧 Using simple client for device delete`);
+    await simpleApiClient.delete<any>(`/devices/${id}`);
   }
 
   // Problems
